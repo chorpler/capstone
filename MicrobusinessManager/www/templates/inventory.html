@@ -1,6 +1,6 @@
 <ion-view view-title="Inventory">
 	<ion-nav-buttons side="right">
-		<button class="button button-clear button-positive">Add New Item</button>
+		<button class="button button-clear button-positive" ng-click="inventory.addNewItem()">Add New Item</button>
 	</ion-nav-buttons>
 	<ion-content class="inventory">
 		<div class="row header">
@@ -8,12 +8,21 @@
 			<div class="col">Stock</div>
 			<div class="col">Cost Per Unit</div>
 			<div class="col">Total Cost</div>
+			<div class="col col-10"></div>
 		</div>
 		<div class="row" ng-repeat="item in inventory.items">
-			<div class="col">{{item.name}}</div>
-			<div class="col">{{item.quantity}}</div>
-			<div class="col">${{item.costPerUnit}}</div>
-			<div class="col">${{item.totalCost}}</div>
+			<div class="col"><p>{{item.name}}</p></div>
+			<div class="col"><p>{{item.quantity}}</p></div>
+			<div class="col"><p>{{item.unitCost | currency}}</p></div>
+			<div class="col"><p>{{item.quantity * item.unitCost | currency}}</p></div>
+			<div class="col col-10">
+				<a class="icon ion-edit" ng-click="inventory.editItem(item)"></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col col-33"></div>
+			<div class="col">Total Assets:</div>
+			<div class="col">{{inventory.totalAssets | currency}}</div>
 		</div>
 	</ion-content>
 </ion-view>

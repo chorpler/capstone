@@ -7,3 +7,8 @@
 .inventory .row:nth-child(even) {
 	background-color: rgba(0,0,0,0.4);
 }
+
+.inventory .icon.ion-edit {
+	color: black;
+	font-size: 20px;
+}
