@@ -21,7 +21,14 @@
     }
 
     function InventoryController () {
+        var vm = this;
 
+        vm.items = [{
+            name: 'Soda',
+            quantity: '100',
+            costPerUnit: '1.20',
+            totalCost: '120'
+        }]
     }
 
     function ExpensesController () {

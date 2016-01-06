@@ -1,1 +1,9 @@
 /* Empty. Add your own CSS if you like */
+
+.inventory .header {
+	font-weight: 700;
+}
+
+.inventory .row:nth-child(even) {
+	background-color: rgba(0,0,0,0.4);
+}
