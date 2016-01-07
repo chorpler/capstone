@@ -1,0 +1,28 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">{{inventory.activeItem ? 'Edit' : 'New'}} Inventory Item</h1>
+	</ion-header-bar>
+	<ion-content>
+		<div class="list">
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Name</span>
+				<input type="text" placeholder="Name" ng-model="inventory.activeItem.name">
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Quantity</span>
+				<input type="number" placeholder="Quantity" ng-model="inventory.activeItem.quantity">
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Cost Per Unit</span>
+				<input type="number" placeholder="Cost Per Unit" ng-model="inventory.activeItem.unitCost" step="0.01">
+			</label>
+			<ion-checkbox ng-model="inventory.activeItem.linkInventory">Make Product</ion-checkbox>
+			<label class="item item-input item-floating-label" ng-show="inventory.activeItem.linkInventory">
+				<span class="input-label">Sales Price</span>
+				<input type="number" placeholder="Sales Price" ng-model="inventory.activeItem.salesPrice">
+			</label>
+		</div>
+		<button class="button button-block button-balanced" ng-click="inventory.save(item)">Save</button>
+		<button class="button button-block button-assertive" ng-click="inventory.cancel(item)">Cancel</button>
+	</ion-content>
+</ion-modal-view>

@@ -60,7 +60,7 @@
 			views: {
 				'menuContent': {
 					templateUrl: 'templates/expenses.html',
-					controller: 'ExpensesCtrl',
+					controller: 'ExpensesController',
 					controllerAs: 'expenses'
 				}
 			}
@@ -70,7 +70,7 @@
 			views: {
 				'menuContent': {
 					templateUrl: 'templates/reports.html',
-					controller: 'ReportsCtrl',
+					controller: 'ReportsController',
 					controllerAs: 'reports'
 				}
 			}
@@ -80,13 +80,13 @@
 			views: {
 				'menuContent': {
 					templateUrl: 'templates/settings.html',
-					controller: 'SettingsCtrl',
+					controller: 'SettingsController',
 					controllerAs: 'settings'
 				}
 			}
 		});
 
 		// if none of the above states are matched, use this as the fallback
-		$urlRouterProvider.otherwise('app/sales');
+		$urlRouterProvider.otherwise('app/inventory');
 	}
 })();
