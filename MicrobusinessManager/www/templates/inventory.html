@@ -15,8 +15,8 @@
 			<div class="col"><p>{{item.quantity}}</p></div>
 			<div class="col"><p>{{item.unitCost | currency}}</p></div>
 			<div class="col"><p>{{item.quantity * item.unitCost | currency}}</p></div>
-			<div class="col col-10">
-				<a class="icon ion-edit" ng-click="inventory.editItem(item)"></a>
+			<div class="col col-10" ng-click="inventory.editItem(item)">
+				<a class="icon ion-edit"></a>
 			</div>
 		</div>
 		<div class="row">
