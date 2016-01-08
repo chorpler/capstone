@@ -67,7 +67,7 @@
         }
 
         function save (item) {
-            vm.totalAssets += (vm.activeItem.quantity * vm.activeItem.unitCost) 
+            vm.totalAssets += (vm.activeItem.quantity * vm.activeItem.unitCost)
 
             if (tempItem)
                 vm.totalAssets -= (tempItem.quantity * tempItem.unitCost);
@@ -99,8 +99,79 @@
         init();
     }
 
-    function ExpensesController () {
+    function ExpensesController ($scope, $ionicModal) {
+      var vm = this;
 
+      vm.log = [];
+      vm.activeExpense = null;
+      vm.totalExpenses = 0;
+      vm.editModal = null;
+
+      vm.editExpense = editExpense;
+      vm.save = save;
+      vm.cancel = cancel;
+      vm.addNewExpense = addNewExpense;
+
+      var tempExpense = null;
+
+      function init () {
+          vm.log = [{
+              id: '1',
+              name: 'Rent',
+              amount: 1500
+          }, {
+              id: '2',
+              name: 'Power',
+              amount: 50
+          }];
+
+          vm.totalExpenses = vm.log.reduce(function (previousValue, currentExpense) {
+              return previousValue + currentExpense.amount;
+          }, 0);
+
+          $ionicModal.fromTemplateUrl('templates/expensesEditModal.html', {
+              scope: $scope,
+              animation: 'slide-in-up'
+          }).then(function (modal) {
+              vm.editModal = modal;
+          });
+      }
+
+      function editExpense (expense) {
+          vm.activeExpense = expense;
+          tempExpense = angular.copy(expense);
+          vm.editModal.show();
+      }
+
+      function save (expense) {
+          vm.totalExpenses += vm.activeExpense.amount
+
+          if (tempExpense)
+              vm.totalExpenses -= tempExpense.amount;
+
+          if (!vm.activeExpense.id) {
+              vm.activeExpense.id = Math.random() * 100;
+              vm.log.push(vm.activeExpense);
+          }
+          vm.activeExpense = null;
+          vm.editModal.hide();
+      }
+
+      function cancel () {
+          if (vm.activeExpense) {
+              vm.activeExpense.name = tempExpense.name;
+              vm.activeExpense.amount = tempExpense.amount;
+              vm.activeExpense = null;
+          }
+
+          vm.editModal.hide();
+      }
+
+      function addNewExpense () {
+          vm.editModal.show();
+      }
+
+      init();
     }
 
     function ReportsController () {
@@ -111,4 +182,3 @@
 
     }
 })();
-

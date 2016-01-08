@@ -1,0 +1,24 @@
+<ion-view view-title="Expenses Log">
+	<ion-nav-buttons side="right">
+		<button class="button button-clear button-positive" ng-click="expenses.addNewExpense()">Add Expense</button>
+	</ion-nav-buttons>
+	<ion-content class="expenses">
+		<div class="row header">
+			<div class="col">Name</div>
+			<div class="col">Amount</div>
+			<div class="col col-10"></div>
+		</div>
+		<div class="row" ng-repeat="expense in expenses.log">
+			<div class="col"><p>{{expense.name}}</p></div>
+			<div class="col"><p>{{expense.amount | currency}}</p></div>
+			<div class="col col-10" ng-click="expenses.editExpense(expense)">
+				<a class="icon ion-edit"></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col col-33"></div>
+			<div class="col">Total Expenses:</div>
+			<div class="col">{{expenses.totalExpenses | currency}}</div>
+		</div>
+	</ion-content>
+</ion-view>
