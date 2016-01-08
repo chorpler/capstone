@@ -13,7 +13,7 @@
             if (window.StatusBar) {
                 StatusBar.styleDefault();
             }
-        })
+        });
     }
 
     function config ($stateProvider, $urlRouterProvider) {
