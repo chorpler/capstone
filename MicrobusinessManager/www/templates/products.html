@@ -1,0 +1,23 @@
+<ion-view view-title="Products">
+	<ion-nav-buttons side="right">
+		<button class="button button-clear button-positive" ng-click="products.addNewItem()">Add New Product</button>
+	</ion-nav-buttons>
+	<ion-content class="products">
+		<div class="row header">
+			<div class="col">Product</div>
+			<div class="col">Sales Price</div>
+			<div class="col col-10"></div>
+			<div class="col col-10"></div>
+		</div>
+		<div class="row" ng-repeat="item in products.items">
+			<div class="col"><p>{{item.name}}</p></div>
+			<div class="col"><p>{{item.salesPrice}}</p></div>
+			<div class="col col-10" ng-click="products.editItem(item)">
+				<a class="icon ion-edit"></a>
+			</div>
+			<div class="col col-10" ng-click="products.deleteItem(item)">
+				<a class="icon ion-trash-a"></a>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

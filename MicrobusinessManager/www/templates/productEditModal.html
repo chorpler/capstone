@@ -1,0 +1,28 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">{{products.activeItem ? 'Edit' : 'New'}} Product</h1>
+	</ion-header-bar>
+	<ion-content>
+		<div class="list">
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Name</span>
+				<input type="text" placeholder="Name" ng-model="products.activeItem.name">
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Sales Price</span>
+				<input type="number" placeholder="Sales Price" ng-model="products.activeItem.salesPrice">
+			</label>
+			<ion-checkbox ng-model="products.activeItem.linkInventory">Add Inventory</ion-checkbox>
+			<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
+				<span class="input-label">Quantity</span>
+				<input type="number" placeholder="Quantity" ng-model="products.activeItem.quantity">
+			</label>
+			<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
+				<span class="input-label">Cost Per Unit</span>
+				<input type="number" placeholder="Cost Per Unit" ng-model="products.activeItem.unitCost">
+			</label>
+		</div>
+		<button class="button button-block button-balanced" ng-click="products.save(item)">Save</button>
+		<button class="button button-block button-assertive" ng-click="products.cancel(item)">Cancel</button>
+	</ion-content>
+</ion-modal-view>
