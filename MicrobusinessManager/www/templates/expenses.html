@@ -20,5 +20,28 @@
 			<div class="col">Total Expenses:</div>
 			<div class="col">{{expenses.totalExpenses | currency}}</div>
 		</div>
+    <div class="row">
+      <div class="col col">
+        <div class="list card">
+          <div class="item item-divider">
+            {{expenses.date | date:'mediumDate'}}
+          </div>
+          <div ng-repeat="expense in expenses.log">
+            <div class="row">
+              <div class="col"><a ng-click="expenses.editExpense(expense)"
+                class="item item-icon-right">
+                <i class="icon ion-arrow-right-c"></i>
+                  <div class="col">
+                    {{expense.name}}
+                  </div>
+                  <div class="col">
+                    {{expense.amount | currency}}
+                  </div>
+              </a></div>
+            </div>  
+          </div>
+        </div>
+      </div>
+    </div>
 	</ion-content>
 </ion-view>

@@ -106,6 +106,7 @@
       vm.activeExpense = null;
       vm.totalExpenses = 0;
       vm.editModal = null;
+      vm.date = Date.now();
 
       vm.editExpense = editExpense;
       vm.save = save;
@@ -118,11 +119,13 @@
           vm.log = [{
               id: '1',
               name: 'Rent',
-              amount: 1500
+              amount: 1500,
+              comments: 'Jan Rent'
           }, {
               id: '2',
               name: 'Power',
-              amount: 50
+              amount: 50,
+              comments: 'I just paid half'
           }];
 
           vm.totalExpenses = vm.log.reduce(function (previousValue, currentExpense) {
@@ -161,6 +164,7 @@
           if (vm.activeExpense) {
               vm.activeExpense.name = tempExpense.name;
               vm.activeExpense.amount = tempExpense.amount;
+              vm.activeExpense.comments = tempExpense.comments;
               vm.activeExpense = null;
           }
 

@@ -12,6 +12,10 @@
 				<span class="input-label">Amount</span>
 				<input type="number" placeholder="Amount" ng-model="expenses.activeExpense.amount">
 			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label">Comments</span>
+    		<textarea placeholder="Comments" ng-model="expenses.activeExpense.comments"></textarea>
+  		</label>
 		</div>
 		<button class="button button-block button-balanced" ng-click="expenses.save(expense)">Save</button>
 		<button class="button button-block button-assertive" ng-click="expenses.cancel(expense)">Cancel</button>

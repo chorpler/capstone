@@ -17,9 +17,9 @@
 	font-weight: 700;
 }
 
-.expenses .row:nth-child(even) {
+/*.expenses .row:nth-child(even) {
 	background-color: rgba(0,0,0,0.4);
-}
+}*/
 
 .expenses .icon.ion-edit {
 	color: black;
