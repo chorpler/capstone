@@ -183,7 +183,7 @@
 
       vm.userAccount = {};
 
-      $ionicModal.fromTemplateUrl('templates/login.html'), {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope
       }).then(function(modal) {
         vm.loginModal = modal;
@@ -197,17 +197,26 @@
         vm.loginModal.show();
       };
 
-      vm.submitLoginRequest = function(username, password) {
+      vm.submitLoginRequest = function() {
         $http.post('http://localhost:8000/api/login', {
-          username: username,
-          password: password
+          username: vm.userAccount.username,
+          password: vm.userAccount.password
         })
         .then(
           function success(response) {
-            vm.userAccount.token = response.token;
+            console.log('REQUEST SUCCESS! ', response);
+            if(response.data.error) {
+              vm.userAccount.error = response.data.error.message;
+            }
+            else {
+              vm.userAccount.token = response.token;
+              vm.userAccount.error = null;
+              vm.closeLogin();
+            }
           },
           function error(response) {
-            console.log('LOGIN ERROR ', response.message);
+            console.log('LOGIN ERROR ', response);
+            vm.userAccount.error = response.data.message;
           }
         );
       }
