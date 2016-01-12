@@ -3,38 +3,32 @@
 		<button class="button button-clear button-positive" ng-click="expenses.addNewExpense()">Add Expense</button>
 	</ion-nav-buttons>
 	<ion-content class="expenses">
-		<div class="row header">
-			<div class="col">Name</div>
-			<div class="col">Amount</div>
-			<div class="col col-10"></div>
+		<div class="list card">
+      <div ng-repeat="(date, records) in expenses.reformattedList">
+  			<div class="item item-divider">
+  				{{date | date:'mediumDate'}}
+  			</div>
+  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in records">
+          <div class="card-container">
+    				<a class="item item-icon-right">
+    				  <i class="icon ion-chevron-right"></i>
+              <div class="row">
+                <div class="col">
+                  <span class="name-container">{{expense.name}}</span>
+                </div>
+                <div class="col">
+                  <span class="amount-container">{{expense.amount | currency}}</span>
+                </div>
+              </div>
+    				</a>
+          </div>
+  			</ion-item>
+      </div>
 		</div>
-		<div class="row" ng-repeat="expense in expenses.log">
-			<div class="col"><p>{{expense.name}}</p></div>
-			<div class="col"><p>{{expense.amount | currency}}</p></div>
-			<div class="col col-10" ng-click="expenses.editExpense(expense)">
-				<a class="icon ion-edit"></a>
-			</div>
-		</div>
-		<div class="row">
+    <div class="row">
 			<div class="col col-33"></div>
 			<div class="col">Total Expenses:</div>
 			<div class="col">{{expenses.totalExpenses | currency}}</div>
-		</div>
-		<div class="list card">
-			<div class="item item-divider">
-				{{expenses.date | date:'mediumDate'}}
-			</div>
-			<ion-item ng-repeat="expense in expenses.log">
-				<a ng-click="expenses.editExpense(expense)" class="item item-icon-right">
-				  <i class="icon ion-chevron-right"></i>
-					<div class="col col-40">
-						<span>{{expense.name}}</span>
-					</div>
-					<div class="col col-40">
-						{{expense.amount | currency}}
-					</div>
-				</a>
-			</ion-item>
 		</div>
 	</ion-content>
 </ion-view>

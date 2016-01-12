@@ -20,11 +20,47 @@
 /*.expenses .row:nth-child(even) {
 	background-color: rgba(0,0,0,0.4);
 }*/
+
+.expenses .card-container {
+	margin-top: -20px;
+	margin-bottom: -20px;
+	width: 110%;
+	margin-left: -16px;
+}
+
 .expenses .icon.ion-chevron-right {
 	font-size: 14px;
 }
 
+.expenses .name-container {
+	font-size: 17px;
+}
+
+.expenses .amount-container {
+	font-weight: bold;
+	font-size: 16px;
+}
+
 .expenses .icon.ion-edit {
-	color: black;
-	font-size: 20px;
+	font-size: 14px;
+}
+
+.slide-in-right {
+  -webkit-transform: translateX(100%);
+    transform: translateX(100%); }
+
+.slide-in-right.ng-enter, .slide-in-right > .ng-enter {
+  -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
+
+.slide-in-right.ng-enter-active, .slide-in-right > .ng-enter-active {
+  -webkit-transform: translateX(0);
+    transform: translateX(0); }
+
+.slide-in-right.ng-leave, .slide-in-right > .ng-leave {
+  -webkit-transition: all ease-in-out 250ms;
+  transition: all ease-in-out 250ms; }
+
+.blabla .dateColor {
+	color: red;
 }

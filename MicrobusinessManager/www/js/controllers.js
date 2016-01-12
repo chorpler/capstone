@@ -67,7 +67,7 @@
         }
 
         function save (item) {
-            vm.totalAssets += (vm.activeItem.quantity * vm.activeItem.unitCost)
+            vm.totalAssets += (vm.activeItem.quantity * vm.activeItem.unitCost);
 
             if (tempItem)
                 vm.totalAssets -= (tempItem.quantity * tempItem.unitCost);
@@ -99,7 +99,7 @@
         init();
     }
 
-    function ExpensesController ($scope, $ionicModal) {
+    function ExpensesController ($scope, $ionicModal, $filter) {
       var vm = this;
 
       vm.log = [];
@@ -120,12 +120,14 @@
               id: '1',
               name: 'Rent',
               amount: 1500,
-              comments: 'Jan Rent'
+              comments: 'Jan Rent',
+              dateExpense: new Date("2016-01-11")
           }, {
               id: '2',
               name: 'Power',
               amount: 50,
-              comments: 'I just paid half'
+              comments: 'I just paid half',
+              dateExpense: new Date("2016-01-11")
           }];
 
           vm.totalExpenses = vm.log.reduce(function (previousValue, currentExpense) {
@@ -134,9 +136,17 @@
 
           $ionicModal.fromTemplateUrl('templates/expensesEditModal.html', {
               scope: $scope,
-              animation: 'slide-in-up'
+              animation: 'slide-in-right'
           }).then(function (modal) {
               vm.editModal = modal;
+          });
+
+          vm.reformattedList = {};
+
+          vm.log.forEach(function (record) {
+            var key = $filter('date')(record.dateExpense, 'mediumDate');
+            vm.reformattedList[key] = vm.reformattedList[key] || [];
+            vm.reformattedList[key].push(record);
           });
       }
 
@@ -147,14 +157,18 @@
       }
 
       function save (expense) {
-          vm.totalExpenses += vm.activeExpense.amount
+        console.log(vm.activeExpense);
+        console.log($filter('date')(vm.activeExpense.dateExpense, 'mediumDate'));
+        var key = $filter('date')(vm.activeExpense.dateExpense, 'mediumDate');
+          vm.totalExpenses += vm.activeExpense.amount;
 
           if (tempExpense)
               vm.totalExpenses -= tempExpense.amount;
 
           if (!vm.activeExpense.id) {
               vm.activeExpense.id = Math.random() * 100;
-              vm.log.push(vm.activeExpense);
+              vm.reformattedList[key] = vm.reformattedList[key] || [];
+              vm.reformattedList[key].push(vm.activeExpense);
           }
           vm.activeExpense = null;
           vm.editModal.hide();
@@ -165,6 +179,7 @@
               vm.activeExpense.name = tempExpense.name;
               vm.activeExpense.amount = tempExpense.amount;
               vm.activeExpense.comments = tempExpense.comments;
+              vm.activeExpense.dateExpense = tempExpense.dateExpense;
               vm.activeExpense = null;
           }
 
