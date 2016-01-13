@@ -1,28 +1,35 @@
 <ion-modal-view>
 	<ion-header-bar>
-		<h1 class="title">{{products.activeItem ? 'Edit' : 'New'}} Product</h1>
+		<h1 class="title">{{products.editOpen ? 'Edit' : 'New'}} Inventory Item</h1>
+		<div class="buttons">
+			<button class="button button-clear button-positive" ng-click="products.deleteItem(products.activeItem)" ng-show="products.editOpen">
+				<i class="icon ion-trash-b"></i>
+			</button>
+		</div>
 	</ion-header-bar>
 	<ion-content>
 		<div class="list">
-			<label class="item item-input item-floating-label">
-				<span class="input-label">Name</span>
-				<input type="text" placeholder="Name" ng-model="products.activeItem.name">
-			</label>
-			<label class="item item-input item-floating-label">
-				<span class="input-label">Sales Price</span>
-				<input type="number" placeholder="Sales Price" ng-model="products.activeItem.salesPrice">
-			</label>
-			<ion-checkbox ng-model="products.activeItem.linkInventory">Add Inventory</ion-checkbox>
-			<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
-				<span class="input-label">Quantity</span>
-				<input type="number" placeholder="Quantity" ng-model="products.activeItem.quantity">
-			</label>
-			<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
-				<span class="input-label">Cost Per Unit</span>
-				<input type="number" placeholder="Cost Per Unit" ng-model="products.activeItem.unitCost">
-			</label>
+			<form name="productsForm">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Name</span>
+					<input type="text" placeholder="Name*" ng-model="products.activeItem.name" required="required">
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Sales Price</span>
+					<input type="number" placeholder="Sales Price*" ng-model="products.activeItem.salesPrice" required="required">
+				</label>
+				<ion-checkbox ng-model="products.activeItem.linkInventory">Add Inventory</ion-checkbox>
+				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
+					<span class="input-label">Quantity</span>
+					<input type="number" placeholder="Quantity*" ng-model="products.activeItem.quantity" ng-required="products.activeItem.linkInventory">
+				</label>
+				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
+					<span class="input-label">Cost Per Unit</span>
+					<input type="number" placeholder="Cost Per Unit*" ng-model="products.activeItem.unitCost" ng-required="products.activeItem.linkInventory">
+				</label>
+			</form>
 		</div>
-		<button class="button button-block button-balanced" ng-click="products.save(item)">Save</button>
+		<button class="button button-block button-balanced" ng-click="products.save(item)" ng-disabled="productsForm.$invalid">Save</button>
 		<button class="button button-block button-assertive" ng-click="products.cancel(item)">Cancel</button>
 	</ion-content>
 </ion-modal-view>

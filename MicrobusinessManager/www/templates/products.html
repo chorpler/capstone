@@ -3,21 +3,33 @@
 		<button class="button button-clear button-positive" ng-click="products.addNewItem()">Add New Product</button>
 	</ion-nav-buttons>
 	<ion-content class="products">
-		<div class="row header">
-			<div class="col">Product</div>
-			<div class="col">Sales Price</div>
-			<div class="col col-10"></div>
-			<div class="col col-10"></div>
-		</div>
-		<div class="row" ng-repeat="item in products.items">
-			<div class="col"><p>{{item.name}}</p></div>
-			<div class="col"><p>{{item.salesPrice}}</p></div>
-			<div class="col col-10" ng-click="products.editItem(item)">
-				<a class="icon ion-edit"></a>
+		<div class="list card">
+			<div class="item item-divider">
+				<div class="row">
+					<div class="col">
+						<span class="name-container">Name</span>
+					</div>
+					<div class="col">
+						<span class="amount-container">Sales Price</span>
+					</div>
+					<div class="col col-10"></div>
+				</div>
 			</div>
-			<div class="col col-10" ng-click="products.deleteItem(item)">
-				<a class="icon ion-trash-a"></a>
-			</div>
+			<ion-item ng-click="products.editItem(item)" ng-repeat="item in products.items">
+				<div class="card-container">
+					<a class="item item-icon-right">
+						<i class="icon ion-chevron-right"></i>
+						<div class="row">
+							<div class="col">
+								<span class="name-container">{{item.name}}</span>
+							</div>
+							<div class="col">
+								<span class="amount-container">{{item.salesPrice | currency}}</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</ion-item>
 		</div>
 	</ion-content>
 </ion-view>
