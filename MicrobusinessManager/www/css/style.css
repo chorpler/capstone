@@ -17,10 +17,6 @@
 	font-weight: 700;
 }
 
-/*.expenses .row:nth-child(even) {
-	background-color: rgba(0,0,0,0.4);
-}*/
-
 .expenses .card-container {
 	margin-top: -20px;
 	margin-bottom: -20px;
@@ -60,7 +56,3 @@
 .slide-in-right.ng-leave, .slide-in-right > .ng-leave {
   -webkit-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms; }
-
-.blabla .dateColor {
-	color: red;
-}

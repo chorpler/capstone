@@ -18,7 +18,7 @@
 	    		<textarea placeholder="Comments" ng-model="expenses.activeExpense.comments"></textarea>
 	  		</label>
 				<label class="item item-input">
-					<span class="input-label" class="dateColor">Date</span>
+					<span class="input-label">Date</span>
 	    		<input placeholder="Date" type="date" ng-model="expenses.activeExpense.dateExpense" required="required">
 	  		</label>
 				<button class="button button-block button-balanced" ng-click="expenses.save(expense)" ng-disabled="expenseForm.$invalid">Save</button>

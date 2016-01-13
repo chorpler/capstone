@@ -176,10 +176,10 @@
 
       function cancel () {
           if (vm.activeExpense) {
-              vm.activeExpense.name = tempExpense.name;
-              vm.activeExpense.amount = tempExpense.amount;
-              vm.activeExpense.comments = tempExpense.comments;
-              vm.activeExpense.dateExpense = tempExpense.dateExpense;
+              // vm.activeExpense.name = tempExpense.name;
+              // vm.activeExpense.amount = tempExpense.amount;
+              // vm.activeExpense.comments = tempExpense.comments;
+              // vm.activeExpense.dateExpense = tempExpense.dateExpense;
               vm.activeExpense = null;
           }
 
