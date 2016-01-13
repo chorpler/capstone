@@ -7,15 +7,15 @@
 			<form name="inventoryForm">
 				<label class="item item-input item-floating-label">
 					<span class="input-label">Name</span>
-					<input type="text" placeholder="Name" ng-model="inventory.activeItem.name" required="required">
+					<input type="text" placeholder="Name*" ng-model="inventory.activeItem.name" required="required">
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">Quantity</span>
-					<input type="number" placeholder="Quantity" ng-model="inventory.activeItem.quantity" required="required">
+					<input type="number" placeholder="Quantity*" ng-model="inventory.activeItem.quantity" required="required">
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">Cost Per Unit</span>
-					<input type="number" placeholder="Cost Per Unit" ng-model="inventory.activeItem.unitCost" step="0.01" required="required">
+					<input type="number" placeholder="Cost Per Unit*" ng-model="inventory.activeItem.unitCost" step="0.01" required="required">
 				</label>
 				<ion-checkbox ng-model="inventory.activeItem.linkInventory">Make Product</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="inventory.activeItem.linkInventory">

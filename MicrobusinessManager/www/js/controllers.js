@@ -121,13 +121,13 @@
               name: 'Rent',
               amount: 1500,
               comments: 'Jan Rent',
-              dateExpense: new Date("2016-01-11")
+              dateExpense: new Date(2016, 01, 13)
           }, {
               id: '2',
               name: 'Power',
               amount: 50,
               comments: 'I just paid half',
-              dateExpense: new Date("2016-01-11")
+              dateExpense: new Date(2016, 0, 12)
           }];
 
           vm.totalExpenses = vm.log.reduce(function (previousValue, currentExpense) {
@@ -157,8 +157,6 @@
       }
 
       function save (expense) {
-        console.log(vm.activeExpense);
-        console.log($filter('date')(vm.activeExpense.dateExpense, 'mediumDate'));
         var key = $filter('date')(vm.activeExpense.dateExpense, 'mediumDate');
           vm.totalExpenses += vm.activeExpense.amount;
 
