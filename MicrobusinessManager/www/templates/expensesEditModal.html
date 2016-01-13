@@ -1,19 +1,33 @@
 <ion-modal-view>
 	<ion-header-bar>
-		<h1 class="title">{{expenses.activeExpense ? 'Edit' : 'New'}} Expense Record</h1>
+		<h1 class="title">{{expenses.editviewOpen ? 'Edit' : 'New'}} Expense Record</h1>
+		<div class="buttons">
+			<button class="button button-clear button-positive" ng-click="expenses.deleteExpense(expenses.activeExpense)" ng-show="expenses.editviewOpen">
+				<i class="icon ion-trash-b"></i></button>
+  	</div>
 	</ion-header-bar>
-	<ion-content>
+	<ion-content class="expensesEdit">
 		<div class="list">
-			<label class="item item-input item-floating-label">
-				<span class="input-label">Name</span>
-				<input type="text" placeholder="Name" ng-model="expenses.activeExpense.name">
-			</label>
-			<label class="item item-input item-floating-label">
-				<span class="input-label">Amount</span>
-				<input type="number" placeholder="Amount" ng-model="expenses.activeExpense.amount">
-			</label>
+			<form name="expenseForm">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Name</span>
+					<input type="text" placeholder="Name*" ng-model="expenses.activeExpense.name" required="required">
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Amount</span>
+					<input type="number" placeholder="Amount*" ng-model="expenses.activeExpense.amount" required="required">
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Comments</span>
+	    		<textarea placeholder="Comments" ng-model="expenses.activeExpense.comments"></textarea>
+	  		</label>
+				<label class="item item-input">
+					<span class="input-label">Date<span ng-show="!expenses.editviewOpen">*</span></span>
+	    		<input placeholder="Date" type="date" ng-model="expenses.activeExpense.dateExpense" required="required">
+	  		</label>
+				<button class="button button-block button-balanced" ng-click="expenses.save(expense)" ng-disabled="expenseForm.$invalid">Save</button>
+				<button class="button button-block button-assertive" ng-click="expenses.cancel(expense)">Cancel</button>
+			</form>
 		</div>
-		<button class="button button-block button-balanced" ng-click="expenses.save(expense)">Save</button>
-		<button class="button button-block button-assertive" ng-click="expenses.cancel(expense)">Cancel</button>
 	</ion-content>
 </ion-modal-view>
