@@ -1,14 +1,18 @@
 /* Empty. Add your own CSS if you like */
 
-.inventory .header {
+.inventory .header,
+.products .header {
 	font-weight: 700;
 }
 
-.inventory .row:nth-child(even) {
+.inventory .row:nth-child(even),
+.products .row:nth-child(even) {
 	background-color: rgba(0,0,0,0.4);
 }
 
-.inventory .icon.ion-edit {
+.inventory .icon.ion-edit,
+.products .icon.ion-edit,
+.products .icon.ion-trash-a {
 	color: black;
 	font-size: 20px;
 }
