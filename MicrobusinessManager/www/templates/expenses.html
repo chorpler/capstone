@@ -12,11 +12,11 @@
       </div>
     </div>
     <div class="list card">
-      <div ng-repeat="(date, records) in expenses.reformattedList">
-  			<div class="item item-divider">
-  				{{date | date:'mediumDate'}}
-  			</div>
-  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in records">
+      <div ng-repeat="date in expenses.getKeys(expenses.reformattedList) | customDateFilter:true">
+        <div class="item item-divider">
+          {{date | date:'mediumDate'}}
+        </div>
+  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in expenses.reformattedList[date]">
           <div class="card-container">
     				<a class="item item-icon-right">
     				  <i class="icon ion-chevron-right"></i>

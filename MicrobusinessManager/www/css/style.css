@@ -45,7 +45,10 @@
 .expenses .icon.ion-edit {
 	font-size: 14px;
 }
-
+.ion-trash-b {
+	color: red;
+	margin-right: 8px;
+}
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }

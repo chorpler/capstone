@@ -27,6 +27,7 @@
         vm.activeItem = null;
         vm.totalAssets = 0;
         vm.editModal = null;
+        vm.editOpen = false;
 
         vm.editItem = editItem;
         vm.save = save;
@@ -61,6 +62,7 @@
         }
 
         function editItem (item) {
+            vm.editOpen = true;
             vm.activeItem = item;
             tempItem = angular.copy(item);
             vm.editModal.show();
@@ -93,6 +95,8 @@
         }
 
         function addNewItem () {
+            vm.editOpen = false;
+            tempItem = {};
             vm.editModal.show();
         }
 
@@ -104,6 +108,7 @@
 
       vm.log = [];
       vm.activeExpense = null;
+      vm.editviewOpen = false;
       vm.totalExpenses = 0;
       vm.editModal = null;
       vm.date = Date.now();
@@ -112,6 +117,8 @@
       vm.save = save;
       vm.cancel = cancel;
       vm.addNewExpense = addNewExpense;
+      vm.deleteExpense = deleteExpense;
+      vm.getKeys = getKeys;
 
       var tempExpense = null;
 
@@ -130,9 +137,6 @@
               dateExpense: new Date(2016, 0, 12)
           }];
 
-          vm.totalExpenses = vm.log.reduce(function (previousValue, currentExpense) {
-              return previousValue + currentExpense.amount;
-          }, 0);
 
           $ionicModal.fromTemplateUrl('templates/expensesEditModal.html', {
               scope: $scope,
@@ -148,20 +152,19 @@
             vm.reformattedList[key] = vm.reformattedList[key] || [];
             vm.reformattedList[key].push(record);
           });
+
+          updateTotal();
       }
 
       function editExpense (expense) {
           vm.activeExpense = expense;
           tempExpense = angular.copy(expense);
+          vm.editviewOpen = true;
           vm.editModal.show();
       }
 
       function save (expense) {
         var key = $filter('date')(vm.activeExpense.dateExpense, 'mediumDate');
-          vm.totalExpenses += vm.activeExpense.amount;
-
-          if (tempExpense)
-              vm.totalExpenses -= tempExpense.amount;
 
           if (!vm.activeExpense.id) {
               vm.activeExpense.id = Math.random() * 100;
@@ -169,25 +172,53 @@
               vm.reformattedList[key].push(vm.activeExpense);
           }
           vm.activeExpense = null;
+          vm.editviewOpen = false;
+          updateTotal();
           vm.editModal.hide();
       }
 
       function cancel () {
           if (vm.activeExpense) {
-              // vm.activeExpense.name = tempExpense.name;
-              // vm.activeExpense.amount = tempExpense.amount;
-              // vm.activeExpense.comments = tempExpense.comments;
-              // vm.activeExpense.dateExpense = tempExpense.dateExpense;
+              vm.activeExpense.name = tempExpense.name;
+              vm.activeExpense.amount = tempExpense.amount;
+              vm.activeExpense.comments = tempExpense.comments;
+              vm.activeExpense.dateExpense = tempExpense.dateExpense;
               vm.activeExpense = null;
+              vm.editviewOpen = false;
           }
 
           vm.editModal.hide();
       }
 
       function addNewExpense () {
+          tempExpense = {};
           vm.editModal.show();
+
       }
 
+      function deleteExpense (expense) {
+        var key = $filter('date')(expense.dateExpense, 'mediumDate');
+        vm.reformattedList[key].splice(vm.reformattedList[key].indexOf(expense), 1);
+        if (vm.reformattedList[key].length === 0) {
+          delete vm.reformattedList[key];
+        }
+        vm.activeExpense = null;
+        updateTotal();
+        vm.editModal.hide();
+      }
+
+      function updateTotal () {
+        vm.totalExpenses = 0;
+        angular.forEach(vm.reformattedList, function (reports) {
+          vm.totalExpenses += reports.reduce(function (previousValue, currentExpense) {
+              return previousValue + currentExpense.amount;
+          }, 0);
+        });
+      }
+
+      function getKeys (obj) {
+        return Object.keys(obj);
+      }
       init();
     }
 
