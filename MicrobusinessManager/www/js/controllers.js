@@ -263,9 +263,6 @@
             vm.reformattedList[key].push(vm.activeExpense);
         }
 
-
-        console.log(oldKey);
-
         if (key !== oldKey) {
             vm.reformattedList[key].push(vm.activeExpense);
             vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(vm.activeExpense), 1);
