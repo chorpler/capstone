@@ -3,26 +3,53 @@
 		<button class="button button-clear button-positive" ng-click="inventory.addNewItem()">Add New Item</button>
 	</ion-nav-buttons>
 	<ion-content class="inventory">
-		<div class="row header">
-			<div class="col">Item</div>
-			<div class="col">Stock</div>
-			<div class="col">Cost Per Unit</div>
-			<div class="col">Total Cost</div>
-			<div class="col col-10"></div>
-		</div>
-		<div class="row" ng-repeat="item in inventory.items">
-			<div class="col"><p>{{item.name}}</p></div>
-			<div class="col"><p>{{item.quantity}}</p></div>
-			<div class="col"><p>{{item.unitCost | currency}}</p></div>
-			<div class="col"><p>{{item.quantity * item.unitCost | currency}}</p></div>
-			<div class="col col-10" ng-click="inventory.editItem(item)">
-				<a class="icon ion-edit"></a>
+		<div class="card">
+			<div class="item item-divider">
+				<span>Total Assets</span>
+			</div>
+			<div class="item item-text-wrap">
+				<div class="totalexpenses-container">{{inventory.totalAssets | currency}}</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col col-33"></div>
-			<div class="col">Total Assets:</div>
-			<div class="col">{{inventory.totalAssets | currency}}</div>
+		<div class="list card">
+			<div class="item item-divider">
+				<div class="row">
+					<div class="col">
+						<span class="name-container">Name</span>
+					</div>
+					<div class="col">
+						<span class="amount-container">Quantity</span>
+					</div>
+					<div class="col">
+						<span class="amount-container">Cost Per Unit</span>
+					</div>
+					<div class="col">
+						<span class="amount-container">Total Cost</span>
+					</div>
+					<div class="col col-10"></div>
+				</div>
+			</div>
+			<ion-item ng-click="inventory.editItem(item)" ng-repeat="item in inventory.items">
+				<div class="card-container">
+					<a class="item item-icon-right">
+						<i class="icon ion-chevron-right"></i>
+						<div class="row">
+							<div class="col col-33">
+								<span class="name-container">{{item.name}}</span>
+							</div>
+							<div class="col">
+								<span class="amount-container">{{item.quantity}}</span>
+							</div>
+							<div class="col">
+								<span class="amount-container">{{item.unitCost | currency}}</span>
+							</div>
+							<div class="col">
+								<span class="amount-container">{{item.quantity * item.unitCost | currency}}</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</ion-item>
 		</div>
 	</ion-content>
 </ion-view>

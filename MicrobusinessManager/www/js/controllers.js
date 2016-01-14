@@ -22,6 +22,7 @@
         vm.items = [];
         vm.activeItem = null;
         vm.editModal = null;
+        vm.editOpen = false;
 
         vm.editItem = editItem;
         vm.save = save;
@@ -52,6 +53,7 @@
 
         function editItem (item) {
             vm.activeItem = item;
+            vm.editOpen = true;
             tempItem = angular.copy(item);
             vm.editModal.show();
         }
@@ -79,11 +81,16 @@
         }
 
         function addNewItem () {
+            vm.editOpen = false;
+            vm.activeItem = {};
+            tempItem = {};
             vm.editModal.show();
         }
 
         function deleteItem (item) {
             vm.items.splice(vm.items.indexOf(item), 1);
+            vm.activeItem = null;
+            vm.editModal.hide();
         }
 
         init();
@@ -102,6 +109,7 @@
         vm.save = save;
         vm.cancel = cancel;
         vm.addNewItem = addNewItem;
+        vm.deleteItem = deleteItem;
 
         var tempItem = null;
 
@@ -118,16 +126,14 @@
                 unitCost: 1.00
             }];
 
-            vm.totalAssets = vm.items.reduce(function (previousValue, currentItem) {
-                return previousValue + (currentItem.quantity * currentItem.unitCost);
-            }, 0);
-
             $ionicModal.fromTemplateUrl('templates/inventoryEditModal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
                 vm.editModal = modal;
             });
+
+            updateTotal();
         }
 
         function editItem (item) {
@@ -138,15 +144,12 @@
         }
 
         function save (item) {
-            vm.totalAssets += (vm.activeItem.quantity * vm.activeItem.unitCost);
-
-            if (tempItem)
-                vm.totalAssets -= (tempItem.quantity * tempItem.unitCost);
-
             if (!vm.activeItem.id) {
                 vm.activeItem.id = Math.random() * 100;
                 vm.items.push(vm.activeItem);
             }
+
+            updateTotal();
             vm.activeItem = null;
             vm.editModal.hide();
         }
@@ -165,8 +168,22 @@
 
         function addNewItem () {
             vm.editOpen = false;
+            vm.activeItem = {};
             tempItem = {};
             vm.editModal.show();
+        }
+
+        function deleteItem () {
+            vm.items.splice(vm.items.indexOf(vm.activeItem), 1);
+            vm.activeItem = null;
+            updateTotal();
+            vm.editModal.hide();
+        }
+
+        function updateTotal () {
+            vm.totalAssets = vm.items.reduce(function (previousValue, currentItem) {
+                return previousValue + (currentItem.quantity * currentItem.unitCost);
+            }, 0);
         }
 
         init();
@@ -234,16 +251,26 @@
 
       function save (expense) {
         var key = $filter('date')(vm.activeExpense.dateExpense, 'mediumDate');
+        var oldKey = $filter('date')(tempExpense.dateExpense, 'mediumDate');
 
-          if (!vm.activeExpense.id) {
-              vm.activeExpense.id = Math.random() * 100;
-              vm.reformattedList[key] = vm.reformattedList[key] || [];
-              vm.reformattedList[key].push(vm.activeExpense);
-          }
-          vm.activeExpense = null;
-          vm.editviewOpen = false;
-          updateTotal();
-          vm.editModal.hide();
+        vm.reformattedList[key] = vm.reformattedList[key] || [];
+        if (!vm.activeExpense.id) {
+            vm.activeExpense.id = Math.random() * 100;
+            vm.reformattedList[key].push(vm.activeExpense);
+        }
+
+        if (key !== oldKey) {
+            vm.reformattedList[key].push(vm.activeExpense);
+            vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(vm.activeExpense), 1);
+        }
+
+        if (vm.reformattedList[oldKey].length === 0) {
+          delete vm.reformattedList[oldKey];
+        }
+
+        vm.activeExpense = null;
+        updateTotal();
+        vm.editModal.hide();
       }
 
       function cancel () {
@@ -253,7 +280,6 @@
               vm.activeExpense.comments = tempExpense.comments;
               vm.activeExpense.dateExpense = tempExpense.dateExpense;
               vm.activeExpense = null;
-              vm.editviewOpen = false;
           }
 
           vm.editModal.hide();
@@ -261,8 +287,8 @@
 
       function addNewExpense () {
           tempExpense = {};
+          vm.editviewOpen = true;
           vm.editModal.show();
-
       }
 
       function deleteExpense (expense) {

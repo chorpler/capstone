@@ -5,7 +5,7 @@
 	font-weight: 700;
 }
 
-.inventory .row:nth-child(even),
+/*.inventory .row:nth-child(even),
 .products .row:nth-child(even) {
 	background-color: rgba(0,0,0,0.4);
 }
@@ -15,40 +15,62 @@
 .products .icon.ion-trash-a {
 	color: black;
 	font-size: 20px;
-}
+}*/
 
 .expenses .header {
 	font-weight: 700;
 }
 
-.expenses .card-container {
+.expenses .card-container,
+.inventory .card-container,
+.products .card-container {
 	margin-top: -20px;
 	margin-bottom: -20px;
 	width: 110%;
 	margin-left: -16px;
 }
 
-.expenses .icon.ion-chevron-right {
+.expenses .icon.ion-chevron-right,
+.inventory .icon.ion-chevron-right,
+.products .icon.ion-chevron-right {
 	font-size: 14px;
 }
 
-.expenses .name-container {
+.expenses .name-container,
+.inventory .name-container,
+.products .name-container {
 	font-size: 17px;
 }
 
-.expenses .amount-container {
+.expenses .amount-container
+.inventory .amount-container,
+.products .amount-container {
 	font-weight: bold;
 	font-size: 16px;
 }
 
-.expenses .totalexpenses-container {
+.expenses .total-container
+.inventory .total-container,
+.products .total-container {
 	font-weight: bold;
 	font-size: 22px;
 }
 
-.expenses .icon.ion-edit {
+.expenses .icon.ion-edit,
+.inventory .icon.ion-edit.
+.products .icon.ion-edit {
 	font-size: 14px;
 }
+
+.col {
+	white-space: normal;
+}
+
+.inventory .item-divider .row,
+.products .item-divider .row {
+	padding: 0;
+}
+
 .ion-trash-b {
 	color: red;
 	margin-right: 8px;
