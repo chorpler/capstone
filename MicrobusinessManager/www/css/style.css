@@ -42,14 +42,14 @@
 	font-size: 17px;
 }
 
-.expenses .amount-container
+.expenses .amount-container,
 .inventory .amount-container,
 .products .amount-container {
 	font-weight: bold;
 	font-size: 16px;
 }
 
-.expenses .total-container
+.expenses .total-container,
 .inventory .total-container,
 .products .total-container {
 	font-weight: bold;
@@ -57,7 +57,7 @@
 }
 
 .expenses .icon.ion-edit,
-.inventory .icon.ion-edit.
+.inventory .icon.ion-edit,
 .products .icon.ion-edit {
 	font-size: 14px;
 }
