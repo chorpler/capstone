@@ -287,7 +287,7 @@
 
       function addNewExpense () {
           tempExpense = {};
-          vm.editviewOpen = true;
+          vm.editviewOpen = false;
           vm.editModal.show();
       }
 
