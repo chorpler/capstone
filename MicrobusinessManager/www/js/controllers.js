@@ -253,11 +253,18 @@
         var key = $filter('date')(vm.activeExpense.dateExpense, 'mediumDate');
         var oldKey = $filter('date')(tempExpense.dateExpense, 'mediumDate');
 
+        if(oldKey === undefined) {
+          oldKey = key;
+        }
+
         vm.reformattedList[key] = vm.reformattedList[key] || [];
         if (!vm.activeExpense.id) {
             vm.activeExpense.id = Math.random() * 100;
             vm.reformattedList[key].push(vm.activeExpense);
         }
+
+
+        console.log(oldKey);
 
         if (key !== oldKey) {
             vm.reformattedList[key].push(vm.activeExpense);
