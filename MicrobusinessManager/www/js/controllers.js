@@ -251,16 +251,26 @@
 
       function save (expense) {
         var key = $filter('date')(vm.activeExpense.dateExpense, 'mediumDate');
+        var oldKey = $filter('date')(tempExpense.dateExpense, 'mediumDate');
 
-          if (!vm.activeExpense.id) {
-              vm.activeExpense.id = Math.random() * 100;
-              vm.reformattedList[key] = vm.reformattedList[key] || [];
-              vm.reformattedList[key].push(vm.activeExpense);
-          }
-          vm.activeExpense = null;
-          vm.editviewOpen = false;
-          updateTotal();
-          vm.editModal.hide();
+        vm.reformattedList[key] = vm.reformattedList[key] || [];
+        if (!vm.activeExpense.id) {
+            vm.activeExpense.id = Math.random() * 100;
+            vm.reformattedList[key].push(vm.activeExpense);
+        }
+
+        if (key !== oldKey) {
+            vm.reformattedList[key].push(vm.activeExpense);
+            vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(vm.activeExpense), 1);
+        }
+
+        if (vm.reformattedList[oldKey].length === 0) {
+          delete vm.reformattedList[oldKey];
+        }
+
+        vm.activeExpense = null;
+        updateTotal();
+        vm.editModal.hide();
       }
 
       function cancel () {
@@ -270,7 +280,6 @@
               vm.activeExpense.comments = tempExpense.comments;
               vm.activeExpense.dateExpense = tempExpense.dateExpense;
               vm.activeExpense = null;
-              vm.editviewOpen = false;
           }
 
           vm.editModal.hide();
@@ -278,8 +287,8 @@
 
       function addNewExpense () {
           tempExpense = {};
+          vm.editviewOpen = true;
           vm.editModal.show();
-
       }
 
       function deleteExpense (expense) {
