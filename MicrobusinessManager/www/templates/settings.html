@@ -1,0 +1,13 @@
+<ion-view view-title="Settings">
+  <ion-content class="settings">
+    <button class="button button-block button-light" ng-hide="settings.userAccount.token" ng-click="settings.login()">
+      Login
+    </button>
+
+    <div class="card" ng-show="settings.userAccount.token">
+      <div class="item item-text-wrap">
+        You Are Logged In!
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

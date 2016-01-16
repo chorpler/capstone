@@ -325,7 +325,51 @@
 
     }
 
-    function SettingsController () {
+    function SettingsController ($scope, $ionicModal, $http) {
+      var vm = this;
 
+      vm.userAccount = {};
+
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope
+      }).then(function(modal) {
+        vm.loginModal = modal;
+      });
+
+      vm.closeLogin = function() {
+        vm.loginModal.hide();
+      };
+
+      vm.login = function() {
+        vm.loginModal.show();
+      };
+
+      vm.submitLoginRequest = function() {
+        $http.post('http://localhost:8000/api/login', {
+          username: vm.userAccount.username,
+          password: vm.userAccount.password
+        })
+        .then(
+          function success(response) {
+            console.log('REQUEST SUCCESS! ', response);
+            if(response.data.error) {
+              vm.userAccount.error = response.data.error.message;
+            }
+            else {
+              vm.userAccount.token = response.token;
+              vm.userAccount.error = null;
+              vm.closeLogin();
+            }
+          },
+          function error(response) {
+            console.log('LOGIN ERROR ', response);
+            vm.userAccount.error = response.data.message;
+          }
+        );
+      }
+
+      vm.logout = function() {
+        vm.userAccount.token = null;
+      }
     }
 })();
