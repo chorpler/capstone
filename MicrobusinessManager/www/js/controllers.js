@@ -352,11 +352,12 @@
         .then(
           function success(response) {
             console.log('REQUEST SUCCESS! ', response);
-            if(response.data.error) {
+            if(!response.data.token) {
               vm.userAccount.error = response.data.error.message;
             }
             else {
-              vm.userAccount.token = response.token;
+              console.log('SETTING TOKEN ', response.data.token);
+              vm.userAccount.token = response.data.token;
               vm.userAccount.error = null;
               vm.closeLogin();
             }
@@ -370,6 +371,29 @@
 
       vm.logout = function() {
         vm.userAccount.token = null;
+      }
+
+      vm.userRegistration = {};
+
+      $ionicModal.fromTemplateUrl('templates/register.html', {
+        scope: $scope
+      }).then(function(modal) {
+        vm.registerModal = modal;
+      });
+
+      function submitRegistrationRequest() {
+        $http.post('http://localhost:8000/api/register', {
+          username: vm.userRegistration.username,
+          password: vm.userRegistration.password
+        })
+        .then(
+          function(response) {
+            console.log('ERROR');
+          },
+          function(response) {
+            console.log('ERROR');
+          }
+        );
       }
     }
 })();
