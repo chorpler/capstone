@@ -336,16 +336,22 @@
         vm.loginModal = modal;
       });
 
-      vm.closeLogin = function() {
+      vm.closeLogin = function closeLogin() {
         vm.loginModal.hide();
       };
 
-      vm.login = function() {
+      vm.login = function login() {
         vm.loginModal.show();
       };
 
-      vm.submitLoginRequest = function() {
-        $http.post('http://localhost:8000/api/login', {
+      vm.submitLoginRequest = function submitLoginRequest() {
+
+        if(!vm.userAccount.username || !vm.userAccount.password) {
+          vm.userAccount.error = 'Username and Password Required';
+          return;
+        }
+
+        $http.post('http://40.122.44.131/api/login', {
           username: vm.userAccount.username,
           password: vm.userAccount.password
         })
@@ -356,7 +362,8 @@
               vm.userAccount.error = response.data.error.message;
             }
             else {
-              vm.userAccount.token = response.token;
+              vm.userAccount.token = response.data.token;
+              vm.userAccount.user = response.data.user;
               vm.userAccount.error = null;
               vm.closeLogin();
             }
@@ -368,8 +375,64 @@
         );
       }
 
-      vm.logout = function() {
+      vm.logout = function logout() {
         vm.userAccount.token = null;
       }
+
+      vm.userRegistration = {};
+
+       $ionicModal.fromTemplateUrl('templates/register.html', {
+        scope: $scope
+      }).then(function(modal) {
+        vm.registerModal = modal;
+      });
+
+      vm.register = function register() {
+        vm.registerModal.show();
+      };
+
+      vm.closeRegistration = function closeRegistration() {
+        vm.registerModal.hide();
+      }
+
+      vm.submitRegistrationRequest = function submitRegistrationRequest() {
+        console.log('SUBMIT REGISTRATION QUEST');
+
+        if(!vm.userRegistration.username || !vm.userRegistration.password) {
+          vm.userRegistration.error = 'Username and Password Required.';
+          return;
+        }
+
+        if(vm.userRegistration.password !== vm.userRegistration.confirmPassword) {
+          vm.userRegistration.error = 'Passwords Do Not Match.'
+          return;
+        }
+
+        $http.post('http://40.122.44.131/api/register', {
+          username: vm.userRegistration.username,
+          password: vm.userRegistration.password,
+          email: vm.userRegistration.email,
+          phone: vm.userRegistration.phone
+        })
+        .then(
+          function(response) {
+            console.log('REGISTRATION SUCCESS!! ', response);
+            if(response.data.error) {
+              vm.userRegistration.error = response.data.error;
+            }
+            else {
+              vm.userRegistration.error = null;
+              vm.userAccount.token = response.data.token;
+              vm.userAccount.user = response.data.user;
+              vm.closeRegistration();
+            }
+          },
+          function(response) {
+            console.log('REGISTRATION ERROR!! ', response);
+            vm.userRegistration.error = response.data.error;
+          }
+        );
+      }
+
     }
 })();
