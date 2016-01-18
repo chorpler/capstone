@@ -1,9 +1,15 @@
 <ion-view view-title="Expenses Log">
 	<ion-nav-buttons side="right">
-		<button class="button button-clear button-positive" ng-click="expenses.addNewExpense()">Add Expense</button>
+		<button class="button button-icon ion-ios-plus-empty" ng-click="expenses.addNewExpense()"></button>
 	</ion-nav-buttons>
+  <ion-header-bar class="bar-light bar-subheader" ng-show"expenses.showBar">
+    <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="text" placeholder="Search" ng-model="search">
+    </label>
+  </ion-header-bar>
 	<ion-content class="expenses">
-    <div class="card">
+    <div class="card" ng-hide="search">
       <div class="item item-divider">
         <span>Total Expenses</span>
       </div>
@@ -11,12 +17,12 @@
   			<div class="total-container">{{expenses.totalExpenses | currency}}</div>
       </div>
     </div>
-    <div class="list card">
+    <div class="list card" ng-show="expenses.getKeys(expenses.reformattedList).length >= 1">
       <div ng-repeat="date in expenses.getKeys(expenses.reformattedList) | customDateFilter:true">
-        <div class="item item-divider">
+        <div class="item item-divider" ng-hide="results.length < 1">
           {{date | date:'mediumDate'}}
         </div>
-  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in expenses.reformattedList[date]">
+  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in expenses.reformattedList[date] | filter:search as results">
           <div class="card-container">
     				<a class="item item-icon-right">
     				  <i class="icon ion-chevron-right"></i>

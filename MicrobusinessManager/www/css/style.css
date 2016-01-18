@@ -75,6 +75,11 @@
 	color: red;
 	margin-right: 8px;
 }
+
+.ion-ios-plus-empty {
+	color: #3f80e9 !important;
+}
+
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }
