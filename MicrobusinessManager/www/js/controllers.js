@@ -9,6 +9,7 @@
     .controller('SettingsController', SettingsController);
 
     function AppController () {
+      var vm = this;
 
     }
 
