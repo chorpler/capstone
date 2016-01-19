@@ -16,7 +16,7 @@
 
     }
 
-    function ProductsController ($ionicModal, $scope) {
+    function ProductsController ($ionicModal, $scope, $q, Database) {
         var vm = this;
 
         vm.items = [];
@@ -31,17 +31,20 @@
         vm.deleteItem = deleteItem;
 
         var tempItem = null;
+        var productTable = 'product';
+        var inventoryTable = 'inventory';
 
         function init () {
-             vm.items = [{
-                id: '1',
-                name: 'Soda',
-                salesPrice: 3.00
-            }, {
-                id: '2',
-                name: 'Chocolate',
-                salesPrice: 2.50
-            }];
+            vm.items = [];
+
+            Database.select(productTable).then(function (response) {
+                for (var i = response.rows.length - 1; i >= 0; i--) {
+                    var item = response.rows.item(i);
+                    item.price = Number(item.price);
+                    vm.items.push(response.rows.item(i));
+                };
+                console.log(vm.items);
+            });
 
             $ionicModal.fromTemplateUrl('templates/productEditModal.html', {
                 scope: $scope,
@@ -59,10 +62,36 @@
         }
 
         function save (item) {
-            if (!vm.activeItem.id) {
-                vm.activeItem.id = Math.random() * 100;
-                vm.items.push(vm.activeItem);
+            var deferred = $q.defer();
+            if (item.linkInventory) {
+                deferred.promise = Database.select(inventoryTable, null, item.name).then(function (inventory) {
+                    if (inventory.rows.length > 0) {
+                        item.inventoryid = inventory.rows.item(0).id;
+                        deferred.resolve();
+                    } else {
+                        Database.insert(inventoryTable, [item.name, item.quantity, item.cost]).then(function (response) {
+                            item.inventoryid = response.insertId;
+                            deferred.resolve();
+                        });
+                    }
+                });
+            } else {
+                deferred.resolve();
             }
+
+            if (!item.id) {
+                deferred.promise.then(function () {
+                    Database.insert(productTable, [item.name, item.price, item.inventoryid]).then(function (response) {
+                        item.id = response.insertId;
+                        vm.items.push(item);
+                    });
+                });
+            } else {
+                deferred.promise.then(function () {
+                    Database.update(productTable, item.id, [item.name, item.price, item.inventoryid]);
+                });
+            }
+
             vm.activeItem = null;
             vm.editModal.hide();
         }
@@ -73,7 +102,7 @@
                 vm.activeItem.quantity = tempItem.quantity;
                 vm.activeItem.unitCost = tempItem.unitCost;
                 vm.activeItem.linkInventory = tempItem.linkInventory;
-                vm.activeItem.salesPrice = tempItem.salesPrice;
+                vm.activeItem.price = tempItem.price;
                 vm.activeItem = null;
             }
 
@@ -89,6 +118,7 @@
 
         function deleteItem (item) {
             vm.items.splice(vm.items.indexOf(item), 1);
+            Database.remove(productTable, item.id);
             vm.activeItem = null;
             vm.editModal.hide();
         }
@@ -329,12 +359,17 @@
       var vm = this;
 
       vm.userAccount = {};
+      vm.selfPayment = {};
 
       $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope
       }).then(function(modal) {
         vm.loginModal = modal;
       });
+
+      function init () {
+        vm.selfPayment.method = 'salary';
+      }
 
       vm.closeLogin = function() {
         vm.loginModal.hide();
@@ -371,5 +406,7 @@
       vm.logout = function() {
         vm.userAccount.token = null;
       }
+
+      init();
     }
 })();

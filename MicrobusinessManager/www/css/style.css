@@ -71,6 +71,10 @@
 	padding: 0;
 }
 
+input.self-payment {
+	text-align: right;
+}
+
 .ion-trash-b {
 	color: red;
 	margin-right: 8px;
