@@ -95,6 +95,48 @@ input.self-payment {
 	height: 58px;
 }
 
+.custom {
+  background-color: #3f4041 !important;
+ }
+
+ .custom .item {
+  background-color: transparent;
+  border:none;
+  border-top: 1px solid;
+  border-bottom:2px solid;
+  border-color: #666; 
+  color: white;
+}
+
+.custom .item:hover a {
+  background-color: slategray;
+}
+
+.custom .item:last-child {
+  border-bottom: 1px solid #666;
+}
+
+.custom .item-complex .item-content, .dark .item-radio .item-content {
+  background-color: transparent;
+}
+
+.custom h2,
+.custom h3,
+.custom p,
+.custom a {
+  color: white;
+	font-weight: 600;
+}
+
+.darkside-menu {
+	background-color: #3f4041 !important;
+}
+
+.darkside-menu h1 {
+	color: white;
+	font-weight: 600 !important;
+}
+
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }
