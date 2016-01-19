@@ -80,6 +80,13 @@
 	color: #3f80e9 !important;
 }
 
+.bar-header {
+    border: 0px !important;
+    border-bottom-color: transparent !important;
+    background-image: none !important;
+    border-bottom: none !important;
+}
+
 .bar-light .button.button-positive {
 	/*color: #3f80e9;
 	font-size: 14px;*/
