@@ -12,8 +12,62 @@
 
     }
 
-    function SalesController () {
+    function SalesController ($scope, $ionicModal) {
+      var vm = this;
 
+      vm.saleDate     = new Date();
+      vm.saleTotal    = 0;
+      vm.products     = [];  // TODO: pull from sqlite all available products
+      vm.saleProducts = [];
+
+      vm.addProduct        = addProduct;
+      vm.removeProduct     = removeProduct;
+      vm.checkout          = checkout;
+      vm.overrideSaleTotal = overrideSaleTotal;
+      vm.saveSale          = saveSale;
+
+      $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+      }).then(function(modal) {
+          vm.checkoutModal = modal;
+      });
+
+      function addProduct(product) {
+        // TODO: Check if product in saleProducts array
+        // if in array, increment qty by one
+        // else add to array with qty of 1
+      }
+
+      function removeProduct(product) {
+        // TODO: Check if product in saleProducts array
+        // if in array decrement qty by 1
+        //   if qty <= 0, remove from saleProducts array
+      }
+
+      function checkout() {
+        vm.checkoutModal.show();
+      }
+
+      function cancelCheckout() {
+        vm.checkoutModal.hide();
+      }
+
+      function overrideSaleTotal(price) {
+        vm.saleTotal = price;
+      }
+
+      function saveSale() {
+        // TODO: Save into sqlite
+        vm.checkoutModal.hide();
+        resetSale();
+      }
+
+      function resetSale() {
+        vm.saleDate     = new Date();
+        vm.saleTotal    = 0;
+        vm.saleProducts = [];
+      }
     }
 
     function ProductsController ($ionicModal, $scope) {
@@ -353,6 +407,15 @@
       var vm = this;
 
       vm.userAccount = {};
+      vm.userRegistration = {};
+
+      vm.login = login;
+      vm.closeLogin = closeLogin;
+      vm.submitLoginRequest = submitLoginRequest;
+      vm.logout = logout;
+      vm.register = register;
+      vm.closeRegistration = closeRegistration;
+      vm.submitRegistrationRequest = submitRegistrationRequest;
 
       $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope
@@ -360,16 +423,21 @@
         vm.loginModal = modal;
       });
 
-      vm.closeLogin = function closeLogin() {
-        vm.loginModal.hide();
-      };
+      $ionicModal.fromTemplateUrl('templates/register.html', {
+        scope: $scope
+      }).then(function(modal) {
+        vm.registerModal = modal;
+      });
 
-      vm.login = function login() {
+      function login() {
         vm.loginModal.show();
       };
 
-      vm.submitLoginRequest = function submitLoginRequest() {
+      function closeLogin() {
+        vm.loginModal.hide();
+      };
 
+      function submitLoginRequest() {
         if(!vm.userAccount.username || !vm.userAccount.password) {
           vm.userAccount.error = 'Username and Password Required';
           return;
@@ -380,7 +448,7 @@
           password: vm.userAccount.password
         })
         .then(
-          function success(response) {
+          function loginSuccess(response) {
             console.log('REQUEST SUCCESS! ', response);
             if(response.data.error) {
               vm.userAccount.error = response.data.error.message;
@@ -392,37 +460,27 @@
               vm.closeLogin();
             }
           },
-          function error(response) {
+          function loginError(response) {
             console.log('LOGIN ERROR ', response);
             vm.userAccount.error = response.data.message;
           }
         );
       }
 
-      vm.logout = function logout() {
+      function logout() {
         vm.userAccount = {};
         vm.userRegistration = {};
       }
 
-      vm.userRegistration = {};
-
-       $ionicModal.fromTemplateUrl('templates/register.html', {
-        scope: $scope
-      }).then(function(modal) {
-        vm.registerModal = modal;
-      });
-
-      vm.register = function register() {
+      function register() {
         vm.registerModal.show();
       };
 
-      vm.closeRegistration = function closeRegistration() {
+      function closeRegistration() {
         vm.registerModal.hide();
       }
 
-      vm.submitRegistrationRequest = function submitRegistrationRequest() {
-        console.log('SUBMIT REGISTRATION QUEST');
-
+      function submitRegistrationRequest() {
         if(!vm.userRegistration.username || !vm.userRegistration.password) {
           vm.userRegistration.error = 'Username and Password Required.';
           return;
@@ -440,8 +498,7 @@
           phone: vm.userRegistration.phone
         })
         .then(
-          function(response) {
-            console.log('REGISTRATION SUCCESS!! ', response);
+          function registrationSuccess(response) {
             if(response.data.error) {
               vm.userRegistration.error = response.data.error;
             }
@@ -452,8 +509,7 @@
               vm.closeRegistration();
             }
           },
-          function(response) {
-            console.log('REGISTRATION ERROR!! ', response);
+          function registrationFailure(response) {
             vm.userRegistration.error = response.data.error;
           }
         );
