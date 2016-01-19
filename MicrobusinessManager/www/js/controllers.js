@@ -376,7 +376,8 @@
       }
 
       vm.logout = function logout() {
-        vm.userAccount.token = null;
+        vm.userAccount = {};
+        vm.userRegistration = {};
       }
 
       vm.userRegistration = {};

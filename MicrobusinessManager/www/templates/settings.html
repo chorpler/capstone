@@ -9,9 +9,25 @@
     </button>
 
     <div class="card" ng-show="settings.userAccount.token">
-      <div class="item item-text-wrap">
-        You Are Logged In!
-      </div>
+      <ion-list>
+        <ion-item>
+          You are logged in!
+        </ion-item>
+        <ion-item>
+          Username: {{settings.userAccount.user.username}}
+        </ion-item>
+        <ion-item>
+          Email: {{settings.userAccount.user.email}}
+        </ion-item>
+        <ion-item>
+          Phone: {{settings.userAccount.user.phone}}
+        </ion-item>
+        <ion-item>
+          <button class="button button-block button-assertive" ng-click="settings.logout()">
+            Logout
+          </button>
+        </ion-item>
+      </ion-list>
     </div>
   </ion-content>
 </ion-view>
