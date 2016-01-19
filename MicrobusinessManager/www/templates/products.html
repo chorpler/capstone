@@ -15,7 +15,7 @@
 					<div class="col col-10"></div>
 				</div>
 			</div>
-			<ion-item ng-click="products.editItem(item)" ng-repeat="item in products.items">
+			<ion-item ng-click="products.editItem(item)" ng-repeat="item in products.items track by item.id">
 				<div class="card-container">
 					<a class="item item-icon-right">
 						<i class="icon ion-chevron-right"></i>
@@ -24,7 +24,7 @@
 								<span class="name-container">{{item.name}}</span>
 							</div>
 							<div class="col">
-								<span class="amount-container">{{item.salesPrice | currency}}</span>
+								<span class="amount-container">{{item.price | currency}}</span>
 							</div>
 						</div>
 					</a>

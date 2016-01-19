@@ -1,5 +1,5 @@
 (function () {
-    angular.module('app', ['ionic'])
+    angular.module('app', ['ionic', 'ngCordova'])
     .run(run)
     .config(config);
 

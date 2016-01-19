@@ -16,7 +16,7 @@
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">Sales Price</span>
-					<input type="number" placeholder="Sales Price*" ng-model="products.activeItem.salesPrice" required="required">
+					<input type="number" placeholder="Sales Price*" ng-model="products.activeItem.price" required="required">
 				</label>
 				<ion-checkbox ng-model="products.activeItem.linkInventory">Add Inventory</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
@@ -25,11 +25,11 @@
 				</label>
 				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
 					<span class="input-label">Cost Per Unit</span>
-					<input type="number" placeholder="Cost Per Unit*" ng-model="products.activeItem.unitCost" ng-required="products.activeItem.linkInventory">
+					<input type="number" placeholder="Cost Per Unit*" ng-model="products.activeItem.cost" ng-required="products.activeItem.linkInventory">
 				</label>
 			</form>
 		</div>
-		<button class="button button-block button-balanced" ng-click="products.save(item)" ng-disabled="productsForm.$invalid">Save</button>
-		<button class="button button-block button-assertive" ng-click="products.cancel(item)">Cancel</button>
+		<button class="button button-block button-balanced" ng-click="products.save(products.activeItem)" ng-disabled="productsForm.$invalid">Save</button>
+		<button class="button button-block button-assertive" ng-click="products.cancel(products.activeItem)">Cancel</button>
 	</ion-content>
 </ion-modal-view>
