@@ -1,6 +1,5 @@
 <ion-view view-title="Settings">
   <ion-content class="settings">
-    
     <div class="list">
       <label class="item item-input item-select">
         <div class="input-label">
@@ -18,12 +17,28 @@
       <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
         Login
       </button>
+      <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.register()">
+        Register
+      </button>
     </div>
 
     <div class="card" ng-show="settings.userAccount.token">
-      <div class="item item-text-wrap">
-        You Are Logged In!
-      </div>
+      <ion-list>
+        <ion-item>
+          Username: {{settings.userAccount.user.username}}
+        </ion-item>
+        <ion-item>
+          Email: {{settings.userAccount.user.email}}
+        </ion-item>
+        <ion-item>
+          Phone: {{settings.userAccount.user.phone}}
+        </ion-item>
+        <ion-item>
+          <button class="button button-block button-assertive" ng-click="settings.logout()">
+            Logout
+          </button>
+        </ion-item>
+      </ion-list>
     </div>
   </ion-content>
 </ion-view>

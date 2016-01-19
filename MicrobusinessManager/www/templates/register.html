@@ -2,13 +2,13 @@
   <ion-header-bar>
     <h1 class="title">Register</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="settings.closeLogin()">Close</button>
+      <button class="button button-clear" ng-click="settings.closeRegistration()">Close</button>
     </div>
   </ion-header-bar>
   <ion-content>
-    <div class="card" ng-show="settings.userAccount.error">
+    <div class="card" ng-show="settings.userRegistration.error">
       <div class="item item-text-wrap assertive">
-        Error: {{settings.userAccount.error}}
+        Error: {{settings.userRegistration.error}}
       </div>
     </div>
     <form ng-submit="settings.submitRegistrationRequest()">
@@ -24,6 +24,14 @@
         <label class="item item-input">
           <span class="input-label">Confirm Password</span>
           <input type="password" ng-model="settings.userRegistration.confirmPassword">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Email</span>
+          <input type="password" ng-model="settings.userRegistration.email">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Phone</span>
+          <input type="password" ng-model="settings.userRegistration.phone">
         </label>
         <label class="item">
           <button class="button button-block button-positive" type="submit">Register</button>

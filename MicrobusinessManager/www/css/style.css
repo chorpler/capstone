@@ -79,6 +79,22 @@ input.self-payment {
 	color: red;
 	margin-right: 8px;
 }
+
+.ion-ios-plus-empty {
+	color: #3f80e9 !important;
+}
+
+.bar-header {
+    border: 0px !important;
+    border-bottom-color: transparent !important;
+    background-image: none !important;
+    border-bottom: none !important;
+}
+
+.bar-subheader {
+	height: 58px;
+}
+
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }
