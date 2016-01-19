@@ -189,7 +189,7 @@
         init();
     }
 
-    function ExpensesController ($scope, $ionicModal, $filter) {
+    function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup) {
       var vm = this;
 
       vm.log = [];
@@ -197,6 +197,7 @@
       vm.editviewOpen = false;
       vm.totalExpenses = 0;
       vm.editModal = null;
+      vm.expenses = '';
       vm.date = Date.now();
 
       vm.editExpense = editExpense;
@@ -205,6 +206,8 @@
       vm.addNewExpense = addNewExpense;
       vm.deleteExpense = deleteExpense;
       vm.getKeys = getKeys;
+      vm.clearSearch = clearSearch;
+      vm.showConfirm = showConfirm;
 
       var tempExpense = null;
 
@@ -318,6 +321,27 @@
       function getKeys (obj) {
         return Object.keys(obj);
       }
+
+      function clearSearch () {
+        console.log('i am here');
+        vm.search = '';
+      }
+
+      function showConfirm () {
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Delete Expense',
+          template: 'Are you sure?'
+        });
+
+        confirmPopup.then(function(res) {
+          if(res) {
+            vm.deleteExpense(vm.activeExpense);
+          } else {
+            console.log('You are not sure');
+          }
+        });
+      }
+
       init();
     }
 
