@@ -87,10 +87,6 @@
     border-bottom: none !important;
 }
 
-.bar-light .button.button-positive {
-	/*color: #3f80e9;
-	font-size: 14px;*/
-}
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }
