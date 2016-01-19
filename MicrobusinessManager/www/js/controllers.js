@@ -12,12 +12,12 @@
 
     }
 
-    function SalesController ($scope, $ionicModal) {
+    function SalesController ($scope, $ionicModal, $q, Database) {
       var vm = this;
 
       vm.saleDate     = new Date();
       vm.saleTotal    = 0;
-      vm.products     = [];  // TODO: pull from sqlite all available products
+      vm.products     = [];
       vm.saleProducts = [];
 
       vm.addProduct        = addProduct;
@@ -26,12 +26,23 @@
       vm.overrideSaleTotal = overrideSaleTotal;
       vm.saveSale          = saveSale;
 
-      $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
-          scope: $scope,
-          animation: 'slide-in-up'
-      }).then(function(modal) {
-          vm.checkoutModal = modal;
-      });
+      function init() {
+        $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            vm.checkoutModal = modal;
+        });
+
+        Database.select(productTable)
+          .then(function(response) {
+          for (var i = response.rows.length - 1; i >= 0; i--) {
+              var item = response.rows.item(i);
+              item.price = Number(item.price);
+              vm.products.push(response.rows.item(i));
+          };
+        });
+      }
 
       function addProduct(product) {
         // TODO: Check if product in saleProducts array
@@ -68,6 +79,8 @@
         vm.saleTotal    = 0;
         vm.saleProducts = [];
       }
+
+      init();
     }
 
     function ProductsController ($ionicModal, $scope, $q, Database) {

@@ -1,0 +1,29 @@
+<ion-view view-title="Sales">
+  <ion-content class="products">
+    <div class="list card">
+      <div class="item item-divider">
+        <div class="row">
+          <div class="col">
+            <span class="name-container">Name</span>
+          </div>
+          <div class="col">
+            <span class="amount-container">Sales Price</span>
+          </div>
+          <div class="col col-10"></div>
+        </div>
+      </div>
+      <ion-item ng-click="products.addProduct(item)" ng-repeat="product in sales.products track by product.id">
+        <div class="card-container">
+          <div class="row">
+            <div class="col">
+              <span class="name-container">{{product.name}}</span>
+            </div>
+            <div class="col">
+              <span class="amount-container">{{product.price | currency}}</span>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </div>
+  </ion-content>
+</ion-view>
