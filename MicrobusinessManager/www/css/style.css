@@ -87,6 +87,10 @@
     border-bottom: none !important;
 }
 
+.bar-subheader {
+	height: 58px;
+}
+
 .slide-in-right {
   -webkit-transform: translateX(100%);
     transform: translateX(100%); }
