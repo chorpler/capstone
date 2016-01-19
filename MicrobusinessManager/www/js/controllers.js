@@ -197,6 +197,7 @@
       vm.editviewOpen = false;
       vm.totalExpenses = 0;
       vm.editModal = null;
+      vm.expenses = '';
       vm.date = Date.now();
 
       vm.editExpense = editExpense;
@@ -205,6 +206,7 @@
       vm.addNewExpense = addNewExpense;
       vm.deleteExpense = deleteExpense;
       vm.getKeys = getKeys;
+      vm.clearSearch = clearSearch;
 
       var tempExpense = null;
 
@@ -317,6 +319,11 @@
 
       function getKeys (obj) {
         return Object.keys(obj);
+      }
+
+      function clearSearch () {
+        console.log('i am here');
+        vm.search = '';
       }
       init();
     }

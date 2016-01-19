@@ -3,13 +3,25 @@
 		<button class="button button-icon ion-ios-plus-empty" ng-click="expenses.addNewExpense()"></button>
 	</ion-nav-buttons>
   <ion-header-bar class="bar-light bar-subheader">
-    <label class="item item-input">
+    <!-- <label class="item item-input">
       <i class="icon ion-search placeholder-icon"></i>
-      <input type="text" placeholder="Search" ng-model="search">
-    </label>
+      <input type="text" placeholder="Search" ng-model="expenses.search">
+      <button class="button button-clear" ng-show="expenses.search" ng-click="expenses.clearSearch()">
+        Cancel
+      </button>
+    </label> -->
+    <div class="item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="Search" ng-model="expenses.search">
+      </label>
+      <button class="button button-positive" ng-click="expenses.clearSearch()" ng-show="expenses.search">
+        Cancel
+      </button>
+    </div>
   </ion-header-bar>
 	<ion-content class="expenses">
-    <div class="card" ng-hide="search">
+    <div class="card" ng-hide="expenses.search">
       <div class="item item-divider">
         <span>Total Expenses</span>
       </div>
@@ -22,7 +34,7 @@
         <div class="item item-divider" ng-hide="results.length < 1">
           {{date | date:'mediumDate'}}
         </div>
-  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in expenses.reformattedList[date] | filter:search as results">
+  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in expenses.reformattedList[date] | filter:expenses.search as results">
           <div class="card-container">
     				<a class="item item-icon-right">
     				  <i class="icon ion-chevron-right"></i>
