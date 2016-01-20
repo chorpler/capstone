@@ -6,6 +6,7 @@
 		var db;
 		var deferred = $q.defer();
 		$ionicPlatform.ready(function() {
+			// $cordovaSQLite.deleteDB('my.db');
 			db = $cordovaSQLite.openDB('my.db');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
 									   'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
@@ -28,7 +29,7 @@
 		var REMOVE_PRODUCT = 'DELETE FROM product';
 
 		var INSERT_INVENTORY = 'INSERT INTO inventory (name, quantity, cost, productid) VALUES (?,?,?,?)';
-		var SELECT_INVENTORY = 'SELECT id, name, cost, productid FROM inventory';
+		var SELECT_INVENTORY = 'SELECT id, name, quantity, cost, productid FROM inventory';
 		var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, cost = ?, productid = ?';
 		var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
@@ -57,6 +58,7 @@
 					query = INSERT_PRODUCT;
 					break;
 			}
+
 
 			return deferred.promise.then(function () {
 				return $cordovaSQLite.execute(db, query, params).then(function (response) {
@@ -92,6 +94,7 @@
 				query += id ? AND + WHERE_NAME : WHERE + WHERE_NAME;
 				params.push(name);
 			}
+
 
 			return deferred.promise.then(function () {
 				return $cordovaSQLite.execute(db, query, params).then(function (response) {
