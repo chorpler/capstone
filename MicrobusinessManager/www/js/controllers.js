@@ -103,7 +103,7 @@
       init();
     }
 
-    function ProductsController ($ionicModal, $scope, $q, Database, productItems) {
+    function ProductsController ($ionicModal, $scope, $q, Database, productItems, $ionicPopup) {
         var vm = this;
 
         vm.items = productItems;
@@ -116,6 +116,9 @@
         vm.cancel = cancel;
         vm.addNewItem = addNewItem;
         vm.deleteItem = deleteItem;
+        vm.clearSearch = clearSearch;
+        vm.showConfirm = showConfirm;
+
 
         var tempItem = null;
         var productTable = 'product';
@@ -202,10 +205,30 @@
             vm.editModal.hide();
         }
 
+        function clearSearch () {
+          console.log('i am here');
+          vm.search = '';
+        }
+
+        function showConfirm () {
+          var confirmPopup = $ionicPopup.confirm({
+            title: 'Delete Product Item',
+            template: 'Are you sure?'
+          });
+
+          confirmPopup.then(function(res) {
+            if(res) {
+              vm.deleteItem(vm.activeItem);
+            } else {
+              console.log('You are not sure');
+            }
+          });
+        }
+
         init();
     }
 
-    function InventoryController ($scope, $ionicModal, $q, Database, inventoryItems) {
+    function InventoryController ($scope, $ionicModal, $q, Database, inventoryItems, $ionicPopup) {
         var vm = this;
 
         vm.items = inventoryItems;
@@ -219,6 +242,8 @@
         vm.cancel = cancel;
         vm.addNewItem = addNewItem;
         vm.deleteItem = deleteItem;
+        vm.clearSearch = clearSearch;
+        vm.showConfirm = showConfirm;
 
         var tempItem = null;
         var productTable = 'product';
@@ -317,6 +342,26 @@
             }, 0);
         }
 
+        function clearSearch () {
+          console.log('i am here');
+          vm.search = '';
+        }
+
+        function showConfirm () {
+          var confirmPopup = $ionicPopup.confirm({
+            title: 'Delete Inventory Item',
+            template: 'Are you sure?'
+          });
+
+          confirmPopup.then(function(res) {
+            if(res) {
+              vm.deleteItem(vm.activeItem);
+            } else {
+              console.log('You are not sure');
+            }
+          });
+        }
+
         init();
     }
 
@@ -326,7 +371,7 @@
       vm.log = [];
       vm.activeExpense = null;
       vm.editviewOpen = false;
-      vm.totalExpenses = 0;
+      vm.totalExpenses = 0
       vm.editModal = null;
       vm.expenses = '';
       vm.date = Date.now();

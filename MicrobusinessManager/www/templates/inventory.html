@@ -1,9 +1,20 @@
 <ion-view view-title="Inventory">
 	<ion-nav-buttons side="right">
-		<button class="button button-clear button-positive" ng-click="inventory.addNewItem()">Add New Item</button>
+		<button class="button button-icon ion-ios-plus-empty" ng-click="inventory.addNewItem()"></button>
 	</ion-nav-buttons>
+	<ion-header-bar class="bar-light bar-subheader">
+    <div class="item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="Search" ng-model="inventory.search">
+      </label>
+      <button class="button button-positive" ng-click="inventory.clearSearch()" ng-show="inventory.search">
+        Cancel
+      </button>
+    </div>
+  </ion-header-bar>
 	<ion-content class="inventory">
-		<div class="card">
+		<div class="card" ng-hide="inventory.search">
 			<div class="item item-divider">
 				<span>Total Assets</span>
 			</div>
@@ -28,7 +39,7 @@
 					</div>
 				</div>
 			</div>
-			<ion-item ng-click="inventory.editItem(item)" ng-repeat="item in inventory.items">
+			<ion-item ng-click="inventory.editItem(item)" ng-repeat="item in inventory.items | filter: inventory.search as results">
 				<div class="card-container">
 					<a class="item item-icon-right">
 						<i class="icon ion-chevron-right"></i>
