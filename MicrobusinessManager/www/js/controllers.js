@@ -433,7 +433,7 @@
             vm.userAccount.error = response.data.message;
           }
         );
-      }
+      };
 
       vm.logout = function logout() {
         vm.userAccount = {};

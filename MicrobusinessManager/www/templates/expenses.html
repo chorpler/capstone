@@ -34,6 +34,9 @@
         <div class="item item-divider" ng-hide="results.length < 1">
           {{date | date:'mediumDate'}}
         </div>
+        <div ng-show="results.length === 0">
+          No results
+        </div>
   			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in expenses.reformattedList[date] | filter:expenses.search as results">
           <div class="card-container">
     				<a class="item item-icon-right">
