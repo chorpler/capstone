@@ -20,16 +20,16 @@
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">Cost Per Unit</span>
-					<input type="number" placeholder="Cost Per Unit*" ng-model="inventory.activeItem.unitCost" step="0.01" required="required">
+					<input type="number" placeholder="Cost Per Unit*" ng-model="inventory.activeItem.cost" step="0.01" required="required">
 				</label>
-				<ion-checkbox ng-model="inventory.activeItem.linkInventory">Make Product</ion-checkbox>
-				<label class="item item-input item-floating-label" ng-show="inventory.activeItem.linkInventory">
+				<ion-checkbox ng-model="inventory.activeItem.linkProduct">Make Product</ion-checkbox>
+				<label class="item item-input item-floating-label" ng-show="inventory.activeItem.linkProduct">
 					<span class="input-label">Sales Price</span>
-					<input type="number" placeholder="Sales Price" ng-model="inventory.activeItem.price" ng-required="inventory.activeItem.linkInventory">
+					<input type="number" placeholder="Sales Price" ng-model="inventory.activeItem.price" ng-required="inventory.activeItem.linkProduct">
 				</label>
 			</form>
 		</div>
-		<button class="button button-block button-balanced" ng-click="inventory.save(item)" ng-disabled="inventoryForm.$invalid">Save</button>
-		<button class="button button-block button-assertive" ng-click="inventory.cancel(item)">Cancel</button>
+		<button class="button button-block button-balanced" ng-click="inventory.save(inventory.activeItem)" ng-disabled="inventoryForm.$invalid">Save</button>
+		<button class="button button-block button-assertive" ng-click="inventory.cancel(inventory.activeItem)">Cancel</button>
 	</ion-content>
 </ion-modal-view>

@@ -17,10 +17,10 @@
 
     }
 
-    function ProductsController ($ionicModal, $scope, $q, Database) {
+    function ProductsController ($ionicModal, $scope, $q, Database, productItems) {
         var vm = this;
 
-        vm.items = [];
+        vm.items = productItems;
         vm.activeItem = null;
         vm.editModal = null;
         vm.editOpen = false;
@@ -36,20 +36,9 @@
         var inventoryTable = 'inventory';
 
         function init () {
-            vm.items = [];
-
-            Database.select(productTable).then(function (response) {
-                for (var i = response.rows.length - 1; i >= 0; i--) {
-                    var item = response.rows.item(i);
-                    item.price = Number(item.price);
-                    vm.items.push(response.rows.item(i));
-                };
-                console.log(vm.items);
-            });
-
             $ionicModal.fromTemplateUrl('templates/productEditModal.html', {
                 scope: $scope,
-                animation: 'slide-in-up'
+                animation: 'slide-in-right'
             }).then(function (modal) {
                 vm.editModal = modal;
             });
@@ -67,10 +56,11 @@
             if (item.linkInventory) {
                 deferred.promise = Database.select(inventoryTable, null, item.name).then(function (inventory) {
                     if (inventory.rows.length > 0) {
-                        item.inventoryid = inventory.rows.item(0).id;
+                        var inventoryItem = inventory.rows.item(0);
+                        item.inventoryid = inventoryItem.id;
                         deferred.resolve();
                     } else {
-                        Database.insert(inventoryTable, [item.name, item.quantity, item.cost]).then(function (response) {
+                        return Database.insert(inventoryTable, [item.name, item.quantity, item.cost, item.id]).then(function (response) {
                             item.inventoryid = response.insertId;
                             deferred.resolve();
                         });
@@ -85,11 +75,13 @@
                     Database.insert(productTable, [item.name, item.price, item.inventoryid]).then(function (response) {
                         item.id = response.insertId;
                         vm.items.push(item);
+                        Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
                     });
                 });
             } else {
                 deferred.promise.then(function () {
                     Database.update(productTable, item.id, [item.name, item.price, item.inventoryid]);
+                    Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
                 });
             }
 
@@ -101,7 +93,7 @@
             if (vm.activeItem) {
                 vm.activeItem.name = tempItem.name;
                 vm.activeItem.quantity = tempItem.quantity;
-                vm.activeItem.unitCost = tempItem.unitCost;
+                vm.activeItem.cost = tempItem.cost;
                 vm.activeItem.linkInventory = tempItem.linkInventory;
                 vm.activeItem.price = tempItem.price;
                 vm.activeItem = null;
@@ -127,10 +119,10 @@
         init();
     }
 
-    function InventoryController ($scope, $ionicModal) {
+    function InventoryController ($scope, $ionicModal, $q, Database, inventoryItems) {
         var vm = this;
 
-        vm.items = [];
+        vm.items = inventoryItems;
         vm.activeItem = null;
         vm.totalAssets = 0;
         vm.editModal = null;
@@ -143,28 +135,19 @@
         vm.deleteItem = deleteItem;
 
         var tempItem = null;
+        var productTable = 'product';
+        var inventoryTable = 'inventory';
 
         function init () {
-            vm.items = [{
-                id: '1',
-                name: 'Soda',
-                quantity: 100,
-                unitCost: 1.20
-            }, {
-                id: '2',
-                name: 'Chocolate',
-                quantity: 150,
-                unitCost: 1.00
-            }];
+            updateTotal();
 
             $ionicModal.fromTemplateUrl('templates/inventoryEditModal.html', {
                 scope: $scope,
-                animation: 'slide-in-up'
+                animation: 'slide-in-right'
             }).then(function (modal) {
                 vm.editModal = modal;
             });
 
-            updateTotal();
         }
 
         function editItem (item) {
@@ -175,12 +158,41 @@
         }
 
         function save (item) {
-            if (!vm.activeItem.id) {
-                vm.activeItem.id = Math.random() * 100;
-                vm.items.push(vm.activeItem);
+            var deferred = $q.defer();
+            if (item.linkProduct) {
+                deferred.promise = Database.select(productTable, null, item.name).then(function (product) {
+                    if (product.rows.length > 0) {
+                        var productItem = product.rows.item(0);
+                        item.productid = productItem.id;
+                        deferred.resolve();
+                    } else {
+                        return Database.insert(productTable, [item.name, item.price, item.id]).then(function (response) {
+                            item.productid = response.insertId;
+                            deferred.resolve();
+                        });
+                    }
+                });
+            } else {
+                deferred.resolve();
             }
 
-            updateTotal();
+            if (!item.id) {
+                deferred.promise.then(function () {
+                    Database.insert(inventoryTable, [item.name, item.quantity, item.cost, item.productid]).then(function (response) {
+                        item.id = response.insertId;
+                        vm.items.push(item);
+                        Database.update(productTable, item.productid, [item.name, item.price, item.id]);
+                        updateTotal();
+                    });
+                });
+            } else {
+                deferred.promise.then(function () {
+                    Database.update(inventoryTable, item.id, [item.name, item.quantity, item.cost, item.productid]);
+                    Database.update(productTable, item.productid, [item.name, item.price, item.id]);
+                    updateTotal();
+                });
+            }
+
             vm.activeItem = null;
             vm.editModal.hide();
         }
@@ -189,7 +201,8 @@
             if (vm.activeItem) {
                 vm.activeItem.name = tempItem.name;
                 vm.activeItem.quantity = tempItem.quantity;
-                vm.activeItem.unitCost = tempItem.unitCost;
+                vm.activeItem.cost = tempItem.cost;
+                vm.activeItem.price = tempItem.price;
                 vm.activeItem.linkInventory = tempItem.linkInventory;
                 vm.activeItem = null;
             }
@@ -204,16 +217,17 @@
             vm.editModal.show();
         }
 
-        function deleteItem () {
-            vm.items.splice(vm.items.indexOf(vm.activeItem), 1);
+        function deleteItem (item) {
+            vm.items.splice(vm.items.indexOf(item), 1);
             vm.activeItem = null;
+            Database.remove(inventoryTable, item.id);
             updateTotal();
             vm.editModal.hide();
         }
 
         function updateTotal () {
             vm.totalAssets = vm.items.reduce(function (previousValue, currentItem) {
-                return previousValue + (currentItem.quantity * currentItem.unitCost);
+                return previousValue + (currentItem.quantity * currentItem.cost);
             }, 0);
         }
 
