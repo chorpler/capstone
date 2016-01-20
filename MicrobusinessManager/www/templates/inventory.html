@@ -21,12 +21,11 @@
 						<span class="amount-container">Quantity</span>
 					</div>
 					<div class="col">
-						<span class="amount-container">Cost Per Unit</span>
+						<span class="amount-container">Unit Cost</span>
 					</div>
 					<div class="col">
-						<span class="amount-container">Total Cost</span>
+						<span class="amount-container">Total</span>
 					</div>
-					<div class="col col-10"></div>
 				</div>
 			</div>
 			<ion-item ng-click="inventory.editItem(item)" ng-repeat="item in inventory.items">
@@ -41,10 +40,10 @@
 								<span class="amount-container">{{item.quantity}}</span>
 							</div>
 							<div class="col">
-								<span class="amount-container">{{item.unitCost | currency}}</span>
+								<span class="amount-container">{{item.cost | currency}}</span>
 							</div>
 							<div class="col">
-								<span class="amount-container">{{item.quantity * item.unitCost | currency}}</span>
+								<span class="amount-container">{{item.quantity * item.cost | currency}}</span>
 							</div>
 						</div>
 					</a>

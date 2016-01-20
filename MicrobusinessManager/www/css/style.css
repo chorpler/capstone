@@ -71,6 +71,17 @@
 	padding: 0;
 }
 
+.inventory .item,
+.products .item {
+	padding: 12px 5px;
+}
+
+.inventory .card,
+.products .card {
+	box-shadow: none;
+	border: 1px solid rgba(0,0,0,0.3);
+}
+
 input.self-payment {
 	text-align: right;
 }
