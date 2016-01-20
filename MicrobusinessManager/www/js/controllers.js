@@ -15,18 +15,24 @@
     function SalesController ($scope, $ionicModal, $q, Database) {
       var vm = this;
 
-      vm.saleDate     = new Date();
-      vm.saleTotal    = 0;
-      vm.products     = [];
-      vm.saleProducts = [];
-
       vm.addProduct        = addProduct;
       vm.removeProduct     = removeProduct;
       vm.checkout          = checkout;
+      vm.cancelCheckout    = cancelCheckout;
       vm.overrideSaleTotal = overrideSaleTotal;
       vm.saveSale          = saveSale;
+      vm.resetSale         = resetSale;
+
+      var productTable = 'product';
 
       function init() {
+        console.log('INIT!!!');
+        vm.saleDate     = new Date();
+        vm.saleTotal    = 0;
+        vm.productCount = 0;
+        vm.products     = [];
+        vm.saleProducts = [];
+
         $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -39,24 +45,33 @@
           for (var i = response.rows.length - 1; i >= 0; i--) {
               var item = response.rows.item(i);
               item.price = Number(item.price);
-              vm.products.push(response.rows.item(i));
+              item.count = 0;
+              vm.products.push(item);
           };
         });
       }
 
       function addProduct(product) {
-        // TODO: Check if product in saleProducts array
-        // if in array, increment qty by one
-        // else add to array with qty of 1
+        product.count += 1;
+        vm.productCount += 1;
+        vm.saleTotal += product.price;
       }
 
       function removeProduct(product) {
-        // TODO: Check if product in saleProducts array
-        // if in array decrement qty by 1
-        //   if qty <= 0, remove from saleProducts array
+        if (product.count > 0) {
+          product.count -= 1;
+          vm.productCount -= 1;
+          vm.saleTotal -= product.price;
+        }
       }
 
       function checkout() {
+        function hasCount(product) {
+          return product.count > 0;
+        }
+
+        vm.saleProducts = vm.products.filter(hasCount);
+
         vm.checkoutModal.show();
       }
 
@@ -77,7 +92,11 @@
       function resetSale() {
         vm.saleDate     = new Date();
         vm.saleTotal    = 0;
+        vm.productCount = 0;
         vm.saleProducts = [];
+        vm.products.forEach(function(product) {
+          product.count = 0;
+        });
       }
 
       init();

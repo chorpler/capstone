@@ -4,17 +4,52 @@
       <div class="item item-divider">
         <div class="row">
           <div class="col">
+            <span class="name-container">
+              Total: {{sales.saleTotal | currency}}
+            </span>
+          </div>
+          <div class="col">
+            <span class="name-container">
+              Products: {{sales.productCount}}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="button button-block button-positive" ng-click="sales.checkout()">
+              Checkout
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="button button-block button-assertive" ng-click="sales.resetSale()">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list card">
+      <div class="item item-divider">
+        <div class="row">
+          <div class="col">
+            <span class="name-container">Count</span>
+          </div>
+          <div class="col">
             <span class="name-container">Name</span>
           </div>
           <div class="col">
-            <span class="amount-container">Sales Price</span>
+            <span class="amount-container">Price</span>
           </div>
-          <div class="col col-10"></div>
         </div>
       </div>
-      <ion-item ng-click="products.addProduct(item)" ng-repeat="product in sales.products track by product.id">
+      <ion-item ng-click="sales.addProduct(product)" ng-repeat="product in sales.products track by product.id">
         <div class="card-container">
           <div class="row">
+            <div class="col">
+              <span class="name-container">{{product.count}}</span>
+            </div>
             <div class="col">
               <span class="name-container">{{product.name}}</span>
             </div>
