@@ -115,12 +115,12 @@ input.self-payment {
   border:none;
   border-top: 1px solid;
   border-bottom:2px solid;
-  border-color: #666; 
+  border-color: #666;
   color: white;
 }
 
-.custom .item:hover a {
-  background-color: slategray;
+.custom .item:active a {
+  background-color: #808080;
 }
 
 .custom .item:last-child {

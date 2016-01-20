@@ -10,7 +10,7 @@
 			db = $cordovaSQLite.openDB('my.db');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
 									   'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' + 
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
 									   'cost text, productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text)');
 			deferred.resolve();
@@ -33,9 +33,9 @@
 		var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, cost = ?, productid = ?';
 		var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
-		var INSERT_EXPENSE = 'INSERT INTO expense (name, amount) VALUES (?,?)';
-		var SELECT_EXPENSE = 'SELECT id, name, amount FROM expense';
-		var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?';
+		var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date) VALUES (?,?)';
+		var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date FROM expense';
+		var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?';
 		var REMOVE_EXPENSE = 'DELETE FROM expense';
 
 		var WHERE = ' WHERE ';
@@ -166,6 +166,6 @@
 					console.log(err);
 				});
 			});
-		} 
+		}
 	}
 })();
