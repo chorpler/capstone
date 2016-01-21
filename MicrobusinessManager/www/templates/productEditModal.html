@@ -2,7 +2,7 @@
 	<ion-header-bar>
 		<h1 class="title">{{products.editOpen ? 'Edit' : 'New'}} Inventory Item</h1>
 		<div class="buttons">
-			<button class="button button-clear button-positive" ng-click="products.deleteItem(products.activeItem)" ng-show="products.editOpen">
+			<button class="button button-clear button-positive"  ng-click="products.showConfirm()" ng-show="products.editOpen">
 				<i class="icon ion-trash-b"></i>
 			</button>
 		</div>

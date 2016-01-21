@@ -31,7 +31,6 @@
 			<ion-item ng-click="inventory.editItem(item)" ng-repeat="item in inventory.items">
 				<div class="card-container">
 					<a class="item item-icon-right">
-						<i class="icon ion-chevron-right"></i>
 						<div class="row">
 							<div class="col col-33">
 								<span class="name-container">{{item.name}}</span>
@@ -44,6 +43,9 @@
 							</div>
 							<div class="col">
 								<span class="amount-container">{{item.quantity * item.cost | currency}}</span>
+							</div>
+							<div class="col col-10">
+								<i class="icon ion-chevron-right"></i>
 							</div>
 						</div>
 					</a>

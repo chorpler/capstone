@@ -155,7 +155,7 @@
 					break;
 			}
 
-			query += id ? WHERE_ID : '';
+			query += id ? WHERE + WHERE_ID : '';
 
 			var params = id ? [id] : [];
 

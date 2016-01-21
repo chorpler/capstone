@@ -90,6 +90,7 @@
 			resolve: {
 				inventoryItems: function (Database, $q) {
 					var deferred = $q.defer();
+					var promises = [];
 					return Database.select('inventory').then(function (response) {
 						var items = {};
 
@@ -102,16 +103,16 @@
 					        item.cost = Number(item.cost);
 					        item.linkProduct = item.productid !== null && item.productid !== undefined;
 					        if (item.linkProduct) {
-					        	Database.select('product', item.productid).then(function (product) {
+					        	promises.push(Database.select('product', item.productid).then(function (product) {
 					        		items[product.rows.item(0).inventoryid].price = Number(product.rows.item(0).price);
 					        		deferred.resolve();
-					        	});
+					        	}));
 					        } else {
 					        	deferred.resolve();
 					        }
 					        items[item.id] = item;
 					    };
-					    return deferred.promise.then(function () {
+					    return $q.all(promises).then(function () {
 					    	return Object.keys(items).map(function (key) {
 					    		return items[key];
 					    	});
