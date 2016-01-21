@@ -13,7 +13,7 @@
 
     }
 
-    function SalesController ($scope, $ionicModal, products) {
+    function SalesController ($scope, $ionicModal, products, Database) {
       var vm = this;
 
       vm.products          = products;
@@ -24,6 +24,9 @@
       vm.overrideSaleTotal = overrideSaleTotal;
       vm.saveSale          = saveSale;
       vm.resetSale         = resetSale;
+
+      var saleTable = 'sale';
+      var saleProductTable = 'saleproduct';
 
       function init() {
         vm.saleDate     = new Date();
@@ -72,7 +75,15 @@
       }
 
       function saveSale() {
-        // TODO: Save into sqlite
+        Database.insert(saleTable, [vm.saleTotal, vm.saleDate.toString()])
+          .then(function (response) {
+            return response.insertId;
+          })
+          .then(function (saleId) {
+            vm.saleProducts.forEach(function(p) {
+              Database.insert(saleProductTable, [saleId, p.id, p.count]);
+            });
+          });
         vm.checkoutModal.hide();
         resetSale();
       }

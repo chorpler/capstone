@@ -27,6 +27,7 @@
     })
     .state('app.sales', {
       url: '/sales',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/sales.html',
