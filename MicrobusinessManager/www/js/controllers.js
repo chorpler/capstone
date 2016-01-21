@@ -13,9 +13,10 @@
 
     }
 
-    function SalesController ($scope, $ionicModal, $q, Database) {
+    function SalesController ($scope, $ionicModal, products) {
       var vm = this;
 
+      vm.products          = products;
       vm.addProduct        = addProduct;
       vm.removeProduct     = removeProduct;
       vm.checkout          = checkout;
@@ -24,14 +25,10 @@
       vm.saveSale          = saveSale;
       vm.resetSale         = resetSale;
 
-      var productTable = 'product';
-
       function init() {
-        console.log('INIT!!!');
         vm.saleDate     = new Date();
         vm.saleTotal    = 0;
         vm.productCount = 0;
-        vm.products     = [];
         vm.saleProducts = [];
 
         $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
@@ -39,16 +36,6 @@
             animation: 'slide-in-up'
         }).then(function(modal) {
             vm.checkoutModal = modal;
-        });
-
-        Database.select(productTable)
-          .then(function(response) {
-          for (var i = response.rows.length - 1; i >= 0; i--) {
-              var item = response.rows.item(i);
-              item.price = Number(item.price);
-              item.count = 0;
-              vm.products.push(item);
-          };
         });
       }
 
