@@ -536,10 +536,17 @@
 
     function init () {
       $ionicModal.fromTemplateUrl('templates/incomeStatement.html', {
-        $scope: $scope,
+        scope: $scope,
         animation: 'slide-in-right'
       }).then(function (modal) {
         vm.incomeStatementModal = modal;
+      });
+
+      $ionicModal.fromTemplateUrl('templates/salesReport.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+      }).then(function (modal) {
+        vm.salesReportModal = modal;
       });
     }
 

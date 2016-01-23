@@ -1,9 +1,15 @@
-<ion-view view-title="reports">
+<ion-view view-title="Reports">
   <ion-content class="reports">
     <div class="card">
       <ion-list>
-        <ion-item>
+        <ion-item class="item item-icon-right" ng-click="reports.incomeStatementModal.show()">
+          <i class="icon ion-chevron-right"></i>
           Income Statement
+        </ion-item>
+
+        <ion-item class="item item-icon-right" ng-click="reports.salesReportModal.show()">
+          <i class="icon ion-chevron-right"></i>
+          Sales Report
         </ion-item>
       </ion-list>
     </div>
