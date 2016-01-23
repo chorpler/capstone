@@ -10,7 +10,8 @@
 
   <ion-content>
     <ion-list>
-      <ion-item>
+      <ion-item ng-repeat="sale in reports.sales track by sale.id | orderBy: sale.date">
+        Date: {{sale.date | date:'short'}}  Total: {{sale.total | currency}}
       </ion-item>
     </ion-list>
   </ion-content>
