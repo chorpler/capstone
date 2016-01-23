@@ -68,7 +68,7 @@
           query = INSERT_INVENTORY;
           break;
         case 'expense':
-          query = INSERT_PRODUCT;
+          query = INSERT_EXPENSE;
           break;
         case 'sale':
           query = INSERT_SALE;
@@ -97,7 +97,7 @@
           query = SELECT_INVENTORY;
           break;
         case 'expense':
-          query = SELECT_PRODUCT;
+          query = SELECT_EXPENSE;
           break;
         case 'sale':
           query = SELECT_SALE;
@@ -143,7 +143,7 @@
           query = UPDATE_INVENTORY;
           break;
         case 'expense':
-          query = UPDATE_PRODUCT;
+          query = UPDATE_EXPENSE;
           break;
         case 'sale':
           query = UPDATE_SALE;
@@ -181,7 +181,7 @@
           query = REMOVE_INVENTORY;
           break;
         case 'expense':
-          query = REMOVE_PRODUCT;
+          query = REMOVE_EXPENSE;
           break;
         case 'sale':
           query = REMOVE_SALE;
