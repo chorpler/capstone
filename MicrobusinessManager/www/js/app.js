@@ -1,22 +1,22 @@
 (function () {
-    angular.module('app', ['ionic', 'ngCordova'])
+  angular.module('app', ['ionic', 'ngCordova'])
     .run(run)
     .config(config);
 
-    function run ($ionicPlatform) {
-        $ionicPlatform.ready(function () {
-            if (window.cordova && window.cordova.plugins.Keyboard) {
-                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-                cordova.plugins.Keyboard.disableScroll(true);
-            }
+  function run ($ionicPlatform) {
+    $ionicPlatform.ready(function () {
+      if (window.cordova && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
+      }
 
-            if (window.StatusBar) {
-                StatusBar.styleDefault();
-            }
-        });
-    }
+      if (window.StatusBar) {
+        StatusBar.styleDefault();
+      }
+    });
+  }
 
-    function config ($stateProvider, $urlRouterProvider) {
+  function config ($stateProvider, $urlRouterProvider) {
     $stateProvider
     .state('app', {
       url: '/app',
@@ -37,17 +37,17 @@
       },
       resolve: {
         products: function products (Database) {
-          var items = []
+          var items = [];
           return Database.select('product')
             .then(function (response) {
               for (var i = response.rows.length - 1; i >= 0; i--) {
-                var item = response.rows.item(i)
-                item.price = Number(item.price)
-                item.count = 0
-                items.push(item)
+                var item = response.rows.item(i);
+                item.price = Number(item.price);
+                item.count = 0;
+                items.push(item);
               }
-              return items
-            })
+              return items;
+            });
         }
       }
     })
@@ -72,24 +72,23 @@
               deferred.resolve();
             }
 
-<<<<<<< HEAD
-              for (var i = response.rows.length - 1; i >= 0; i--) {
-                  var item = response.rows.item(i);
-                  item.price = Number(item.price);
-                  item.linkInventory = item.inventoryid !== null && item.inventoryid !== undefined;
-                  items[item.id] = item;
-                  if (item.linkInventory) {
-                    promises.push(Database.select('inventory', item.inventoryid).then(function (inventory) {
-                      items[inventory.rows.item(0).productid].cost = Number(inventory.rows.item(0).cost);
-                      items[inventory.rows.item(0).productid].quantity = inventory.rows.item(0).quantity;
-                    }));
-                  }
-              };
-              return $q.all(promises).then(function () {
-                return Object.keys(items).map(function (key) {
-                  return items[key];
-                });
+            for (var i = response.rows.length - 1; i >= 0; i--) {
+              var item = response.rows.item(i);
+              item.price = Number(item.price);
+              item.linkInventory = item.inventoryid !== null && item.inventoryid !== undefined;
+              items[item.id] = item;
+              if (item.linkInventory) {
+                promises.push(Database.select('inventory', item.inventoryid).then(function (inventory) {
+                  items[inventory.rows.item(0).productid].cost = Number(inventory.rows.item(0).cost);
+                  items[inventory.rows.item(0).productid].quantity = inventory.rows.item(0).quantity;
+                }));
+              }
+            };
+            return $q.all(promises).then(function () {
+              return Object.keys(items).map(function (key) {
+                return items[key];
               });
+            });
           });
         }
       }
@@ -114,26 +113,25 @@
               deferred.resolve();
             }
 
-<<<<<<< HEAD
-              for (var i = response.rows.length - 1; i >= 0; i--) {
-                  var item = response.rows.item(i);
-                  item.cost = Number(item.cost);
-                  item.linkProduct = item.productid !== null && item.productid !== undefined;
-                  if (item.linkProduct) {
-                    Database.select('product', item.productid).then(function (product) {
-                      items[product.rows.item(0).inventoryid].price = Number(product.rows.item(0).price);
-                      deferred.resolve();
-                    });
-                  } else {
-                    deferred.resolve();
-                  }
-                  items[item.id] = item;
-              };
-              return deferred.promise.then(function () {
-                return Object.keys(items).map(function (key) {
-                  return items[key];
+            for (var i = response.rows.length - 1; i >= 0; i--) {
+              var item = response.rows.item(i);
+              item.cost = Number(item.cost);
+              item.linkProduct = item.productid !== null && item.productid !== undefined;
+              if (item.linkProduct) {
+                Database.select('product', item.productid).then(function (product) {
+                  items[product.rows.item(0).inventoryid].price = Number(product.rows.item(0).price);
+                  deferred.resolve();
                 });
+              } else {
+                deferred.resolve();
+              }
+              items[item.id] = item;
+            };
+            return deferred.promise.then(function () {
+              return Object.keys(items).map(function (key) {
+                return items[key];
               });
+            });
           });
         }
       }
@@ -156,10 +154,10 @@
               return items;
             }
             for (var i = response.rows.length - 1; i >= 0; i--) {
-                var item = response.rows.item(i);
-                item.amount = Number(item.amount);
-                item.date = new Date(item.date);
-                items.push(item);
+              var item = response.rows.item(i);
+              item.amount = Number(item.amount);
+              item.date = new Date(item.date);
+              items.push(item);
             }
             return items;
           });
