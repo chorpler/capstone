@@ -531,8 +531,19 @@
       init();
     }
 
-  function ReportsController () {
+  function ReportsController ($scope, $ionicModal) {
+    var vm = this;
 
+    function init () {
+      $ionicModal.fromTemplateUrl('templates/incomeStatement.html', {
+        $scope: $scope,
+        animation: 'slide-in-right'
+      }).then(function (modal) {
+        vm.incomeStatementModal = modal;
+      });
+    }
+
+    init();
   }
 
   function SettingsController ($scope, $ionicModal, $http) {
