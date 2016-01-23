@@ -5,7 +5,7 @@
   function Database ($ionicPlatform, $cordovaSQLite, $q) {
     var db;
     var deferred = $q.defer();
-    $ionicPlatform.ready(function() {
+    $ionicPlatform.ready(function () {
       // $cordovaSQLite.deleteDB('my.db');
       db = $cordovaSQLite.openDB('my.db');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
@@ -41,12 +41,12 @@
     var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
 
-    var INSERT_SALE = 'INSERT INTO sale (total, date) VALUES (?,?)'
+    var INSERT_SALE = 'INSERT INTO sale (total, date) VALUES (?,?)';
     var SELECT_SALE = 'SELECT id, total, date FROM sale';
     var UPDATE_SALE = 'UPDATE sale set total = ?, date = ?';
     var REMOVE_SALE = 'DELETE FROM sale';
 
-    var INSERT_SALE_PRODUCT = 'INSERT INTO saleproduct (saleid, productid, quantity) VALUES (?,?,?)'
+    var INSERT_SALE_PRODUCT = 'INSERT INTO saleproduct (saleid, productid, quantity) VALUES (?,?,?)';
     var SELECT_SALE_PRODUCT = 'SELECT id, saleid, productid, quantity FROM saleproduct';
     var UPDATE_SALE_PRODUCT = 'UPDATE saleproduct set saleid = ?, productid = ?, quantity = ?';
     var REMOVE_SALE_PRODUCT = 'DELETE FROM saleproduct';
@@ -77,7 +77,6 @@
           query = INSERT_SALE_PRODUCT;
           break;
       }
-
 
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {
@@ -184,11 +183,11 @@
         case 'expense':
           query = REMOVE_PRODUCT;
           break;
-				case 'sale':
-					query = REMOVE_SALE;
+        case 'sale':
+          query = REMOVE_SALE;
           break;
         case 'saleproduct':
-					query = REMOVE_SALE_PRODUCT;
+          query = REMOVE_SALE_PRODUCT;
           break;
       }
 
