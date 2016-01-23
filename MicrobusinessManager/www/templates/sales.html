@@ -14,6 +14,9 @@
             </span>
           </div>
         </div>
+      </div>
+
+      <ion-item>
         <div class="row">
           <div class="col">
             <button class="button button-block button-positive" ng-click="sales.checkout()">
@@ -28,8 +31,9 @@
             </button>
           </div>
         </div>
-      </div>
+      </ion-item>
     </div>
+
     <div class="list card">
       <div class="item item-divider">
         <div class="row">
@@ -42,20 +46,27 @@
           <div class="col">
             <span class="amount-container">Price</span>
           </div>
+          <div class="col">
+            <span class="amount-container">Add</span>
+          </div>
         </div>
       </div>
+
       <ion-item ng-click="sales.addProduct(product)" ng-repeat="product in sales.products track by product.id">
-        <div class="card-container">
-          <div class="row">
-            <div class="col">
-              <span class="name-container">{{product.count}}</span>
-            </div>
-            <div class="col">
-              <span class="name-container">{{product.name}}</span>
-            </div>
-            <div class="col">
-              <span class="amount-container">{{product.price | currency}}</span>
-            </div>
+        <div class="row">
+          <div class="col">
+            <span class="name-container">{{product.count}}</span>
+          </div>
+          <div class="col">
+            <span class="name-container">{{product.name}}</span>
+          </div>
+          <div class="col">
+            <span class="amount-container">{{product.price | currency}}</span>
+          </div>
+          <div class="col">
+            <button class="button button-icon button-small">
+              <i class="icon ion-plus-round"></i>
+            </button>
           </div>
         </div>
       </ion-item>
