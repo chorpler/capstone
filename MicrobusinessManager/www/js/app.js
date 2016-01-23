@@ -66,7 +66,7 @@
 					        		items[inventory.rows.item(0).productid].cost = Number(inventory.rows.item(0).cost);
 					        		items[inventory.rows.item(0).productid].quantity = inventory.rows.item(0).quantity;
 					        	}));
-					        } 
+					        }
 					    };
 					    return $q.all(promises).then(function () {
 					    	return Object.keys(items).map(function (key) {
@@ -127,6 +127,24 @@
 					templateUrl: 'templates/expenses.html',
 					controller: 'ExpensesController',
 					controllerAs: 'expenses'
+				}
+			},
+      resolve: {
+				expenseItems: function (Database) {
+					return Database.select('expense').then(function (response) {
+            console.log(response);
+						var items = [];
+            if (response.rows.length === 0) {
+							return items;
+						}
+				    for (var i = response.rows.length - 1; i >= 0; i--) {
+				        var item = response.rows.item(i);
+                item.amount = Number(item.amount);
+                item.date = new Date(item.date);
+				        items.push(item);
+				    }
+				    return items;
+					});
 				}
 			}
 		})

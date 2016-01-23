@@ -12,7 +12,7 @@
 									   'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
 									   'cost text, productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date text)');
 			deferred.resolve();
 		});
 
@@ -33,7 +33,7 @@
 		var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, cost = ?, productid = ?';
 		var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
-		var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date) VALUES (?,?)';
+		var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date) VALUES (?,?, ?, ?)';
 		var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date FROM expense';
 		var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?';
 		var REMOVE_EXPENSE = 'DELETE FROM expense';
@@ -55,11 +55,11 @@
 					query = INSERT_INVENTORY;
 					break;
 				case 'expense':
-					query = INSERT_PRODUCT;
+					query = INSERT_EXPENSE;
 					break;
 			}
 
-
+			console.log(params, query);
 			return deferred.promise.then(function () {
 				return $cordovaSQLite.execute(db, query, params).then(function (response) {
 					return response;
@@ -79,7 +79,7 @@
 					query = SELECT_INVENTORY;
 					break;
 				case 'expense':
-					query = SELECT_PRODUCT;
+					query = SELECT_EXPENSE;
 					break;
 			}
 
@@ -119,7 +119,7 @@
 					query = UPDATE_INVENTORY;
 					break;
 				case 'expense':
-					query = UPDATE_PRODUCT;
+					query = UPDATE_EXPENSE;
 					break;
 			}
 
@@ -151,14 +151,14 @@
 					query = REMOVE_INVENTORY;
 					break;
 				case 'expense':
-					query = REMOVE_PRODUCT;
+					query = REMOVE_EXPENSE;
 					break;
 			}
 
-			query += id ? WHERE_ID : '';
+			query += id ? WHERE + WHERE_ID : '';
 
 			var params = id ? [id] : [];
-
+			console.log(query, params);
 			return deferred.promise.then(function () {
 				return $cordovaSQLite.execute(db, query, params).then(function (response) {
 					return response;

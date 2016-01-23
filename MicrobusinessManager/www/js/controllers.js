@@ -365,13 +365,13 @@
         init();
     }
 
-    function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup) {
+    function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, expenseItems) {
       var vm = this;
 
-      vm.log = [];
+      vm.log = expenseItems;
       vm.activeExpense = null;
       vm.editviewOpen = false;
-      vm.totalExpenses = 0
+      vm.totalExpenses = 0;
       vm.editModal = null;
       vm.expenses = '';
       vm.date = Date.now();
@@ -386,22 +386,9 @@
       vm.showConfirm = showConfirm;
 
       var tempExpense = null;
+      var expenseTable = 'expense';
 
       function init () {
-          vm.log = [{
-              id: '1',
-              name: 'Rent',
-              amount: 1500,
-              comments: 'Jan Rent',
-              dateExpense: new Date(2016, 01, 13)
-          }, {
-              id: '2',
-              name: 'Power',
-              amount: 50,
-              comments: 'I just paid half',
-              dateExpense: new Date(2016, 0, 12)
-          }];
-
 
           $ionicModal.fromTemplateUrl('templates/expensesEditModal.html', {
               scope: $scope,
@@ -413,7 +400,7 @@
           vm.reformattedList = {};
 
           vm.log.forEach(function (record) {
-            var key = $filter('date')(record.dateExpense, 'mediumDate');
+            var key = $filter('date')(record.date, 'mediumDate');
             vm.reformattedList[key] = vm.reformattedList[key] || [];
             vm.reformattedList[key].push(record);
           });
@@ -428,23 +415,29 @@
           vm.editModal.show();
       }
 
-      function save (expense) {
-        var key = $filter('date')(vm.activeExpense.dateExpense, 'mediumDate');
-        var oldKey = $filter('date')(tempExpense.dateExpense, 'mediumDate');
+      function save (item) {
+        var key = $filter('date')(vm.activeExpense.date, 'mediumDate');
+        var oldKey = $filter('date')(tempExpense.date, 'mediumDate');
 
         if(oldKey === undefined) {
           oldKey = key;
         }
 
         vm.reformattedList[key] = vm.reformattedList[key] || [];
-        if (!vm.activeExpense.id) {
-            vm.activeExpense.id = Math.random() * 100;
-            vm.reformattedList[key].push(vm.activeExpense);
+
+        if (!item.id) {
+          console.log(item);
+          Database.insert(expenseTable, [item.name, item.amount, item.comments, item.date]).then(function (response) {
+              item.id = response.insertId;
+          });
+        } else {
+          Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, item.date]);
         }
 
+        vm.reformattedList[key].push(item);
+
         if (key !== oldKey) {
-            vm.reformattedList[key].push(vm.activeExpense);
-            vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(vm.activeExpense), 1);
+            vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(item), 1);
         }
 
         if (vm.reformattedList[oldKey].length === 0) {
@@ -461,7 +454,7 @@
               vm.activeExpense.name = tempExpense.name;
               vm.activeExpense.amount = tempExpense.amount;
               vm.activeExpense.comments = tempExpense.comments;
-              vm.activeExpense.dateExpense = tempExpense.dateExpense;
+              vm.activeExpense.date = tempExpense.date;
               vm.activeExpense = null;
           }
 
@@ -474,12 +467,13 @@
           vm.editModal.show();
       }
 
-      function deleteExpense (expense) {
-        var key = $filter('date')(expense.dateExpense, 'mediumDate');
-        vm.reformattedList[key].splice(vm.reformattedList[key].indexOf(expense), 1);
+      function deleteExpense (item) {
+        var key = $filter('date')(item.date, 'mediumDate');
+        vm.reformattedList[key].splice(vm.reformattedList[key].indexOf(item), 1);
         if (vm.reformattedList[key].length === 0) {
           delete vm.reformattedList[key];
         }
+        Database.remove(expenseTable, item.id);
         vm.activeExpense = null;
         updateTotal();
         vm.editModal.hide();
