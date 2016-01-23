@@ -8,98 +8,116 @@
     .controller('ReportsController', ReportsController)
     .controller('SettingsController', SettingsController);
 
-    function AppController () {
-      var vm = this;
+  function AppController () {
+    var vm = this;
+  }
 
+  function SalesController ($scope, $ionicModal, products, Database) {
+    var vm = this;
+
+    vm.products            = products;
+    vm.addProduct          = addProduct;
+    vm.removeProduct       = removeProduct;
+    vm.checkout            = checkout;
+    vm.cancelCheckout      = cancelCheckout;
+    vm.overrideSaleTotal   = overrideSaleTotal;
+    vm.saveSale            = saveSale;
+    vm.resetSale           = resetSale;
+    vm.editSaleProduct     = editSaleProduct;
+    vm.doneEditSaleProduct = doneEditSaleProduct;
+
+    var saleTable = 'sale';
+    var saleProductTable = 'saleproduct';
+
+    function init () {
+      vm.saleDate           = new Date();
+      vm.saleTotal          = 0;
+      vm.productCount       = 0;
+      vm.saleProducts       = [];
+      vm.currentEditProduct = null;
+
+      $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function (modal) {
+        vm.checkoutModal = modal;
+      });
+
+      $ionicModal.fromTemplateUrl('templates/saleProductEditModal.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+      }).then(function (modal) {
+        vm.saleProductEditModal = modal;
+      });
     }
 
-    function SalesController ($scope, $ionicModal, products, Database) {
-      var vm = this;
+    function addProduct (product) {
+      product.count += 1;
+      vm.productCount += 1;
+      vm.saleTotal += product.price;
+    }
 
-      vm.products          = products;
-      vm.addProduct        = addProduct;
-      vm.removeProduct     = removeProduct;
-      vm.checkout          = checkout;
-      vm.cancelCheckout    = cancelCheckout;
-      vm.overrideSaleTotal = overrideSaleTotal;
-      vm.saveSale          = saveSale;
-      vm.resetSale         = resetSale;
+    function removeProduct (product) {
+      if (product.count > 0) {
+        product.count -= 1;
+        vm.productCount -= 1;
+        vm.saleTotal -= product.price;
+      }
+    }
 
-      var saleTable = 'sale';
-      var saleProductTable = 'saleproduct';
-
-      function init() {
-        vm.saleDate     = new Date();
-        vm.saleTotal    = 0;
-        vm.productCount = 0;
-        vm.saleProducts = [];
-
-        $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            vm.checkoutModal = modal;
-        });
+    function checkout () {
+      function hasCount (product) {
+        return product.count > 0;
       }
 
-      function addProduct(product) {
-        product.count += 1;
-        vm.productCount += 1;
-        vm.saleTotal += product.price;
-      }
+      vm.saleProducts = vm.products.filter(hasCount);
 
-      function removeProduct(product) {
-        if (product.count > 0) {
-          product.count -= 1;
-          vm.productCount -= 1;
-          vm.saleTotal -= product.price;
-        }
-      }
+      vm.checkoutModal.show();
+    }
 
-      function checkout() {
-        function hasCount(product) {
-          return product.count > 0;
-        }
+    function cancelCheckout () {
+      vm.checkoutModal.hide();
+    }
 
-        vm.saleProducts = vm.products.filter(hasCount);
+    function overrideSaleTotal (price) {
+      vm.saleTotal = price;
+    }
 
-        vm.checkoutModal.show();
-      }
+    function editSaleProduct (product) {
+      vm.currentEditProduct = product;
+      vm.saleProductEditModal.show();
+    }
 
-      function cancelCheckout() {
-        vm.checkoutModal.hide();
-      }
+    function doneEditSaleProduct () {
+      vm.saleProductEditModal.hide();
+    }
 
-      function overrideSaleTotal(price) {
-        vm.saleTotal = price;
-      }
-
-      function saveSale() {
-        Database.insert(saleTable, [vm.saleTotal, vm.saleDate.toString()])
-          .then(function (response) {
-            return response.insertId;
-          })
-          .then(function (saleId) {
-            vm.saleProducts.forEach(function(p) {
-              Database.insert(saleProductTable, [saleId, p.id, p.count]);
-            });
+    function saveSale () {
+      Database.insert(saleTable, [vm.saleTotal, vm.saleDate.toString()])
+        .then(function (response) {
+          return response.insertId;
+        })
+        .then(function (saleId) {
+          vm.saleProducts.forEach(function (p) {
+            Database.insert(saleProductTable, [saleId, p.id, p.count]);
           });
-        vm.checkoutModal.hide();
-        resetSale();
-      }
-
-      function resetSale() {
-        vm.saleDate     = new Date();
-        vm.saleTotal    = 0;
-        vm.productCount = 0;
-        vm.saleProducts = [];
-        vm.products.forEach(function(product) {
-          product.count = 0;
         });
-      }
-
-      init();
+      vm.checkoutModal.hide();
+      resetSale();
     }
+
+    function resetSale () {
+      vm.saleDate     = new Date();
+      vm.saleTotal    = 0;
+      vm.productCount = 0;
+      vm.saleProducts = [];
+      vm.products.forEach(function (product) {
+        product.count = 0;
+      });
+    }
+
+    init();
+  }
 
     function ProductsController ($ionicModal, $scope, $q, Database, productItems, $ionicPopup) {
         var vm = this;
@@ -513,127 +531,127 @@
       init();
     }
 
-    function ReportsController () {
+  function ReportsController () {
 
+  }
+
+  function SettingsController ($scope, $ionicModal, $http) {
+    var vm = this;
+
+    vm.userAccount = {};
+    vm.userRegistration = {};
+
+    vm.login = login;
+    vm.closeLogin = closeLogin;
+    vm.submitLoginRequest = submitLoginRequest;
+    vm.logout = logout;
+    vm.register = register;
+    vm.closeRegistration = closeRegistration;
+    vm.submitRegistrationRequest = submitRegistrationRequest;
+    vm.selfPayment = {};
+
+    function init () {
+      vm.selfPayment.method = 'salary';
+
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope
+      }).then(function (modal) {
+        vm.loginModal = modal;
+      });
+
+      $ionicModal.fromTemplateUrl('templates/register.html', {
+        scope: $scope
+      }).then(function (modal) {
+        vm.registerModal = modal;
+      });
     }
 
-    function SettingsController ($scope, $ionicModal, $http) {
-      var vm = this;
+    function login () {
+      vm.loginModal.show();
+    };
 
+    function closeLogin () {
+      vm.loginModal.hide();
+    };
+
+    function submitLoginRequest () {
+      if (!vm.userAccount.username || !vm.userAccount.password) {
+        vm.userAccount.error = 'Username and Password Required';
+        return;
+      }
+
+      $http.post('http://40.122.44.131/api/login', {
+        username: vm.userAccount.username,
+        password: vm.userAccount.password
+      })
+      .then(
+        function loginSuccess (response) {
+          console.log('REQUEST SUCCESS! ', response);
+          if (response.data.error) {
+            vm.userAccount.error = response.data.error.message;
+          }
+          else {
+            vm.userAccount.token = response.data.token;
+            vm.userAccount.user = response.data.user;
+            vm.userAccount.error = null;
+            vm.closeLogin();
+          }
+        },
+        function loginError (response) {
+          console.log('LOGIN ERROR ', response);
+          vm.userAccount.error = response.data.message;
+        }
+      );
+    };
+
+    function logout () {
       vm.userAccount = {};
       vm.userRegistration = {};
+    }
 
-      vm.login = login;
-      vm.closeLogin = closeLogin;
-      vm.submitLoginRequest = submitLoginRequest;
-      vm.logout = logout;
-      vm.register = register;
-      vm.closeRegistration = closeRegistration;
-      vm.submitRegistrationRequest = submitRegistrationRequest;
-      vm.selfPayment = {};
+    function register () {
+      vm.registerModal.show();
+    };
 
-      function init () {
-        vm.selfPayment.method = 'salary';
+    function closeRegistration () {
+      vm.registerModal.hide();
+    }
 
-        $ionicModal.fromTemplateUrl('templates/login.html', {
-          scope: $scope
-        }).then(function(modal) {
-          vm.loginModal = modal;
-        });
-
-        $ionicModal.fromTemplateUrl('templates/register.html', {
-          scope: $scope
-        }).then(function(modal) {
-          vm.registerModal = modal;
-        });
+    function submitRegistrationRequest () {
+      if (!vm.userRegistration.username || !vm.userRegistration.password) {
+        vm.userRegistration.error = 'Username and Password Required.';
+        return;
       }
 
-      function login() {
-        vm.loginModal.show();
-      };
-
-      function closeLogin() {
-        vm.loginModal.hide();
-      };
-
-      function submitLoginRequest() {
-        if(!vm.userAccount.username || !vm.userAccount.password) {
-          vm.userAccount.error = 'Username and Password Required';
-          return;
-        }
-
-        $http.post('http://40.122.44.131/api/login', {
-          username: vm.userAccount.username,
-          password: vm.userAccount.password
-        })
-        .then(
-          function loginSuccess(response) {
-            console.log('REQUEST SUCCESS! ', response);
-            if(response.data.error) {
-              vm.userAccount.error = response.data.error.message;
-            }
-            else {
-              vm.userAccount.token = response.data.token;
-              vm.userAccount.user = response.data.user;
-              vm.userAccount.error = null;
-              vm.closeLogin();
-            }
-          },
-          function loginError(response) {
-            console.log('LOGIN ERROR ', response);
-            vm.userAccount.error = response.data.message;
-          }
-        );
-      };
-
-      function logout() {
-        vm.userAccount = {};
-        vm.userRegistration = {};
+      if (vm.userRegistration.password !== vm.userRegistration.confirmPassword) {
+        vm.userRegistration.error = 'Passwords Do Not Match.';
+        return;
       }
 
-      function register() {
-        vm.registerModal.show();
-      };
-
-      function closeRegistration() {
-        vm.registerModal.hide();
-      }
-
-      function submitRegistrationRequest() {
-        if(!vm.userRegistration.username || !vm.userRegistration.password) {
-          vm.userRegistration.error = 'Username and Password Required.';
-          return;
-        }
-
-        if(vm.userRegistration.password !== vm.userRegistration.confirmPassword) {
-          vm.userRegistration.error = 'Passwords Do Not Match.'
-          return;
-        }
-
-        $http.post('http://40.122.44.131/api/register', {
-          username: vm.userRegistration.username,
-          password: vm.userRegistration.password,
-          email: vm.userRegistration.email,
-          phone: vm.userRegistration.phone
-        })
-        .then(
-          function registrationSuccess(response) {
-            if(response.data.error) {
-              vm.userRegistration.error = response.data.error;
-            }
-            else {
-              vm.userRegistration.error = null;
-              vm.userAccount.token = response.data.token;
-              vm.userAccount.user = response.data.user;
-              vm.closeRegistration();
-            }
-          },
-          function registrationFailure(response) {
+      $http.post('http://40.122.44.131/api/register', {
+        username: vm.userRegistration.username,
+        password: vm.userRegistration.password,
+        email: vm.userRegistration.email,
+        phone: vm.userRegistration.phone
+      })
+      .then(
+        function registrationSuccess (response) {
+          if (response.data.error) {
             vm.userRegistration.error = response.data.error;
           }
-        );
-      }
-
-      init();
+          else {
+            vm.userRegistration.error = null;
+            vm.userAccount.token = response.data.token;
+            vm.userAccount.user = response.data.user;
+            vm.closeRegistration();
+          }
+        },
+        function registrationFailure (response) {
+          vm.userRegistration.error = response.data.error;
+        }
+      );
     }
+
+    init();
+  }
 })();

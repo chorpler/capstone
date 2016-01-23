@@ -1,0 +1,46 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Edit Quantity</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="sales.doneEditSaleProduct()">
+        Done
+      </button>
+    </div>
+  </ion-header-bar>
+
+  <ion-content class="products">
+    <div class="list card center">
+      <div class="item-item-divider">
+        <div class="row">
+          <div class="col">
+            <span class="name-container">
+              {{sales.currentEditProduct.name}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <ion-item>
+        <div class="row">
+          <div class="col">
+            <button class="button button-icon" ng-click="sales.removeProduct(sales.currentEditProduct)">
+              <i class="icon ion-minus-round"></i>
+            </button>
+          </div>
+
+          <div class="col">
+            <div class="button button-icon">
+              {{sales.currentEditProduct.count}}
+            </div>
+          </div>
+
+          <div class="col">
+            <button class="button button-icon" ng-click="sales.addProduct(sales.currentEditProduct)">
+              <i class="icon ion-plus-round"></i>
+            </button>
+          </div>
+        </div>
+      </ion-item>
+    </div>
+  </ion-content>
+</ion-modal-view>

@@ -9,22 +9,31 @@
   </ion-header-bar>
 
   <ion-content class="products">
-    <div class="list">
-      <span class="input-label">Total Sales Price</span>
-      <div class="list list-inset">
+    <div class="list card">
+      <div class="item item-divider center">
+        <span>Total Sales Price</span>
+      </div>
+
+      <ion-item>
         <label class="item item-input">
           <i class="icon ion-social-usd placeholder-icon"></i>
           <input type="text" ng-model="sales.saleTotal">
         </label>
-      </div>
+      </ion-item>
 
-      <button class="button button-block button-balanced" ng-click="sales.saveSale()">
-        Save
-      </button>
+      <ion-item>
+        <button class="button button-block button-balanced" ng-click="sales.saveSale()">
+          Save
+        </button>
+      </ion-item>
     </div>
 
+
     <div class="list card">
-      <ion-item ng-repeat="product in sales.saleProducts track by product.id">
+      <div class="item item-divider center">
+        <span>Sale Products</span>
+      </div>
+      <ion-item ng-click="sales.editSaleProduct(product)" ng-repeat="product in sales.saleProducts track by product.id">
         <div class="card-container">
           <a class="item item-icon-right">
             <i class="icon ion-chevron-right"></i>
