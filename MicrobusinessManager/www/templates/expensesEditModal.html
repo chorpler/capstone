@@ -23,10 +23,10 @@
 	  		</label>
 				<label class="item item-input">
 					<span class="input-label">Date<span ng-show="!expenses.editviewOpen">*</span></span>
-	    		<input placeholder="Date" type="date" ng-model="expenses.activeExpense.dateExpense" required="required">
+	    		<input placeholder="Date" type="date" ng-model="expenses.activeExpense.date" required="required">
 	  		</label>
-				<button class="button button-block button-balanced" ng-click="expenses.save(expense)" ng-disabled="expenseForm.$invalid">Save</button>
-				<button class="button button-block button-assertive" ng-click="expenses.cancel(expense)">Cancel</button>
+				<button class="button button-block button-balanced" ng-click="expenses.save(expenses.activeExpense)" ng-disabled="expenseForm.$invalid">Save</button>
+				<button class="button button-block button-assertive" ng-click="expenses.cancel(expenses.activeExpense)">Cancel</button>
 			</form>
 		</div>
 	</ion-content>

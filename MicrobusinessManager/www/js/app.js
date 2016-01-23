@@ -72,6 +72,7 @@
               deferred.resolve();
             }
 
+<<<<<<< HEAD
               for (var i = response.rows.length - 1; i >= 0; i--) {
                   var item = response.rows.item(i);
                   item.price = Number(item.price);
@@ -113,6 +114,7 @@
               deferred.resolve();
             }
 
+<<<<<<< HEAD
               for (var i = response.rows.length - 1; i >= 0; i--) {
                   var item = response.rows.item(i);
                   item.cost = Number(item.cost);
@@ -143,6 +145,24 @@
           templateUrl: 'templates/expenses.html',
           controller: 'ExpensesController',
           controllerAs: 'expenses'
+        }
+      },
+      resolve: {
+        expenseItems: function (Database) {
+          return Database.select('expense').then(function (response) {
+            console.log(response);
+            var items = [];
+            if (response.rows.length === 0) {
+              return items;
+            }
+            for (var i = response.rows.length - 1; i >= 0; i--) {
+                var item = response.rows.item(i);
+                item.amount = Number(item.amount);
+                item.date = new Date(item.date);
+                items.push(item);
+            }
+            return items;
+          });
         }
       }
     })
