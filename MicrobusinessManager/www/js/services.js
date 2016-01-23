@@ -12,7 +12,7 @@
                      'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
                      'cost text, productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, total real, date text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
                      'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
@@ -36,7 +36,7 @@
     var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, cost = ?, productid = ?';
     var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
-    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date) VALUES (?,?)';
+    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date) VALUES (?, ?, ?, ?)';
     var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date FROM expense';
     var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
