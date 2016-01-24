@@ -107,7 +107,7 @@ input.self-payment {
 }
 
 .custom {
-  background-color: #3f4041 !important;
+  background-color: #343434 !important;
  }
 
  .custom .item {
@@ -120,7 +120,7 @@ input.self-payment {
 }
 
 .custom .item:active a {
-  background-color: #808080;
+	background-color: #3f4041;
 }
 
 .custom .item:first-child {
@@ -137,15 +137,17 @@ input.self-payment {
 .custom a {
   color: white;
 	font-weight: 600;
+	font-size: 18px;
 }
 
 .darkside-menu {
-	background-color: #3f4041 !important;
+	background-color: #343434 !important;
 }
 
 .darkside-menu h1 {
 	color: white;
 	font-weight: 600 !important;
+	font-size: 18px !important;
 }
 
 .slide-in-right {
