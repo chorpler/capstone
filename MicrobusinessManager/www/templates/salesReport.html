@@ -9,9 +9,20 @@
   </ion-header-bar>
 
   <ion-content>
-    <ion-list>
-      <ion-item ng-repeat="sale in reports.sales track by sale.id | orderBy: sale.date">
-        Date: {{sale.date | date:'short'}}  Total: {{sale.total | currency}}
+    <ion-list ng-repeat="sale in reports.sales track by sale.id | orderBy: sale.date">
+      <div class="item item-divider">
+        <div class="row">
+          <div class="col">
+            <span class="name-container">Date: {{sale.date | date:'short'}}</span>
+          </div>
+          <div class="col">
+            <span class="amount-container">Total: {{sale.total | currency}}</span>
+          </div>
+          <div class="col col-10"></div>
+        </div>
+      </div>
+      <ion-item ng-repeat="product in sale.products track by product.id">
+          Name: {{product.name}} Price: {{product.price | currency}} Qty: {{product.quantity}}
       </ion-item>
     </ion-list>
   </ion-content>

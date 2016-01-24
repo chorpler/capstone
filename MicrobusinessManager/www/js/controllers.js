@@ -12,7 +12,7 @@
     var vm = this;
   }
 
-  function SalesController ($scope, $ionicModal, products, Database) {
+  function SalesController ($scope, $ionicModal, $q, products, Database) {
     var vm = this;
 
     vm.products            = products;
@@ -98,12 +98,17 @@
           return response.insertId;
         })
         .then(function (saleId) {
+          var promises = [];
+
           vm.saleProducts.forEach(function (p) {
-            Database.insert(saleProductTable, [saleId, p.id, p.count]);
+            promises.push(Database.insert(saleProductTable, [saleId, p.id, p.count]));
+          });
+
+          $q.all(promises).then(function () {
+            vm.checkoutModal.hide();
+            resetSale();
           });
         });
-      vm.checkoutModal.hide();
-      resetSale();
     }
 
     function resetSale () {
@@ -541,7 +546,6 @@
 
     vm.sales        = [];
     vm.expenses     = [];
-    vm.saleProducts = [];
 
     function init () {
       $ionicModal.fromTemplateUrl('templates/incomeStatement.html', {
@@ -581,11 +585,22 @@
     }
 
     function loadSalesProducts () {
-      Database.select('saleproduct')
+      return Database.select('sale')
         .then(function (response) {
           for (var i = response.rows.length - 1; i >= 0; i--) {
-            var saleproduct = response.rows.item(i);
-            vm.salesProducts.push(saleproduct);
+            var sale = response.rows.item(i);
+            sale.date = new Date(sale.date);
+            vm.sales.push(sale);
+
+            sale.products = [];
+            Database.selectProductsForSale(sale.id)
+              .then(function (response) {
+                for (var i = response.rows.length - 1; i >= 0; i--) {
+                  var product = response.rows.item(i);
+                  console.log('PRODUCT?? ', product);
+                  sale.products.push(product);
+                }
+              });
           }
         });
     }
@@ -603,14 +618,14 @@
     }
 
     function loadSalesReport () {
-      loadSales();
-      loadSalesProducts();
-      vm.salesReportModal.show();
+      loadSalesProducts()
+        .then(function () {
+          vm.salesReportModal.show();
+        });
     }
 
     function closeSalesReport () {
       vm.sales = [];
-      vm.salesProducts = [];
       vm.salesReportModal.hide();
     }
 

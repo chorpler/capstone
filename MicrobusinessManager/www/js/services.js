@@ -23,7 +23,8 @@
       insert: insert,
       select: select,
       update: update,
-      remove: remove
+      remove: remove,
+      selectProductsForSale: selectProductsForSale
     };
 
     var INSERT_PRODUCT = 'INSERT INTO product (name, price, inventoryid) VALUES (?,?,?)';
@@ -197,6 +198,17 @@
 
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {
+          return response;
+        }, function (err) {
+          console.log(err);
+        });
+      });
+    }
+
+    function selectProductsForSale (saleId) {
+      var query  = 'SELECT DISTINCT product.id, name, price, quantity FROM product INNER JOIN saleproduct ON product.id = saleproduct.productid WHERE saleproduct.saleid = ?';
+      return deferred.promise.then(function () {
+        return $cordovaSQLite.execute(db, query, [saleId]).then(function (response) {
           return response;
         }, function (err) {
           console.log(err);
