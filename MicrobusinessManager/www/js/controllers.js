@@ -590,17 +590,20 @@
           for (var i = response.rows.length - 1; i >= 0; i--) {
             var sale = response.rows.item(i);
             sale.date = new Date(sale.date);
-            vm.sales.push(sale);
-
             sale.products = [];
-            Database.selectProductsForSale(sale.id)
-              .then(function (response) {
-                for (var i = response.rows.length - 1; i >= 0; i--) {
-                  var product = response.rows.item(i);
-                  console.log('PRODUCT?? ', product);
-                  sale.products.push(product);
-                }
-              });
+
+            vm.sales.push(sale);
+            addProductsToSale(sale);
+          }
+        });
+    }
+
+    function addProductsToSale (sale) {
+      Database.selectProductsForSale(sale.id)
+        .then(function (response) {
+          for (var i = response.rows.length - 1; i >= 0; i--) {
+            var product = response.rows.item(i);
+            sale.products.push(product);
           }
         });
     }
