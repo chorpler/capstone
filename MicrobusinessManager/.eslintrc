@@ -1,0 +1,9 @@
+{
+  "extends": "standard",
+  "plugins": ["standard"],
+  "rules": {
+    "semi": [2, "always"],
+    "no-multi-spaces": [0, { "exceptions": { "VariableDeclarator": true } }],
+    "brace-style": [2, "stroustrup"]
+  }
+}
