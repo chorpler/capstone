@@ -88,6 +88,7 @@
       vm.saleProductEditModal.show();
     }
 
+<<<<<<< HEAD
     function doneEditSaleProduct () {
       vm.saleProductEditModal.hide();
     }
@@ -124,7 +125,7 @@
     init();
   }
 
-    function ProductsController ($ionicModal, $scope, $q, Database, productItems, $ionicPopup) {
+    function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems) {
         var vm = this;
 
         vm.items = productItems;
@@ -139,7 +140,6 @@
         vm.deleteItem = deleteItem;
         vm.clearSearch = clearSearch;
         vm.showConfirm = showConfirm;
-
 
         var tempItem = null;
         var productTable = 'product';
@@ -163,10 +163,11 @@
 
         function save (item) {
             var deferred = $q.defer();
+            var inventoryItem;
             if (item.linkInventory) {
                 deferred.promise = Database.select(inventoryTable, null, item.name).then(function (inventory) {
                     if (inventory.rows.length > 0) {
-                        var inventoryItem = inventory.rows.item(0);
+                        inventoryItem = inventory.rows.item(0);
                         item.inventoryid = inventoryItem.id;
                         deferred.resolve();
                     } else {
@@ -176,8 +177,17 @@
                         });
                     }
                 });
+            } else if (tempItem.linkInventory !== item.linkInventory && item.inventoryid) {
+                deferred.promise = Database.select(inventoryTable, item.inventoryid).then(function (inventory) {
+                  if (inventory.rows.length > 0) {
+                    inventoryItem = inventory.rows.item(0);
+                    Database.update(inventoryTable, inventoryItem.id, [inventoryItem.name, inventoryItem.quantity, inventoryItem.cost, null]);
+                    item.inventoryid = null;
+                    deferred.resolve();
+                  }
+                })
             } else {
-                deferred.resolve();
+              deferred.resolve();
             }
 
             if (!item.id) {
@@ -185,13 +195,15 @@
                     Database.insert(productTable, [item.name, item.price, item.inventoryid]).then(function (response) {
                         item.id = response.insertId;
                         vm.items.push(item);
-                        Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
+                        if (item.linkInventory)
+                          Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
                     });
                 });
             } else {
                 deferred.promise.then(function () {
                     Database.update(productTable, item.id, [item.name, item.price, item.inventoryid]);
-                    Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
+                    if (item.linkInventory)
+                      Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
                 });
             }
 
@@ -221,6 +233,14 @@
 
         function deleteItem (item) {
             vm.items.splice(vm.items.indexOf(item), 1);
+            if (item.inventoryid) {
+              Database.select(inventoryTable, item.inventoryid).then(function (response) {
+                if (response.rows.length > 0) {
+                  var inventoryItem = response.rows.item(0);
+                  Database.update(inventoryTable, inventoryItem.id, [inventoryItem.name, inventoryItem.quantity, inventoryItem.cost, null]);
+                }
+              })
+            }
             Database.remove(productTable, item.id);
             vm.activeItem = null;
             vm.editModal.hide();
@@ -249,7 +269,7 @@
         init();
     }
 
-    function InventoryController ($scope, $ionicModal, $q, Database, inventoryItems, $ionicPopup) {
+    function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems) {
         var vm = this;
 
         vm.items = inventoryItems;
@@ -291,10 +311,11 @@
 
         function save (item) {
             var deferred = $q.defer();
+            var inventoryItem;
             if (item.linkProduct) {
                 deferred.promise = Database.select(productTable, null, item.name).then(function (product) {
                     if (product.rows.length > 0) {
-                        var productItem = product.rows.item(0);
+                        productItem = product.rows.item(0);
                         item.productid = productItem.id;
                         deferred.resolve();
                     } else {
@@ -304,25 +325,36 @@
                         });
                     }
                 });
+            } else if (tempItem.linkProduct !== item.linkProduct && item.productid) {
+                deferred.promise = Database.select(productTable, item.productid).then(function (product) {
+                  if (product.rows.length > 0) {
+                    productItem = product.rows.item(0);
+                    Database.update(productTable, productItem.id, [productItem.name, productItem.price, null]);
+                    item.productid = null;
+                    deferred.resolve();
+                  }
+                })
             } else {
-                deferred.resolve();
+              deferred.resolve();
             }
 
             if (!item.id) {
                 deferred.promise.then(function () {
+                    vm.items.push(item);
                     Database.insert(inventoryTable, [item.name, item.quantity, item.cost, item.productid]).then(function (response) {
                         item.id = response.insertId;
-                        vm.items.push(item);
-                        Database.update(productTable, item.productid, [item.name, item.price, item.id]);
-                        updateTotal();
+                        if (item.linkProduct)
+                          Database.update(productTable, item.productid, [item.name, item.price, item.id]);
                     });
+                    updateTotal();
                 });
             } else {
                 deferred.promise.then(function () {
                     Database.update(inventoryTable, item.id, [item.name, item.quantity, item.cost, item.productid]);
-                    Database.update(productTable, item.productid, [item.name, item.price, item.id]);
-                    updateTotal();
+                    if (item.linkProduct)
+                      Database.update(productTable, item.productid, [item.name, item.price, item.id]);
                 });
+                updateTotal();
             }
 
             vm.activeItem = null;
@@ -352,6 +384,14 @@
         function deleteItem (item) {
             vm.items.splice(vm.items.indexOf(item), 1);
             vm.activeItem = null;
+            if (item.productid) {
+              Database.select(productTable, item.productid).then(function (response) {
+                if (response.rows.length > 0) {
+                  var productItem = response.rows.item(0);
+                  Database.update(productTable, productItem.id, [productItem.name, productItem.price, null]);
+                }
+              })
+            }
             Database.remove(inventoryTable, item.id);
             updateTotal();
             vm.editModal.hide();
