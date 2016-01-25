@@ -88,7 +88,6 @@
       vm.saleProductEditModal.show();
     }
 
-<<<<<<< HEAD
     function doneEditSaleProduct () {
       vm.saleProductEditModal.hide();
     }
