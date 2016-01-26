@@ -1,5 +1,5 @@
 (function () {
-	angular.module('app.product')
+	angular.module('app.products')
 	.controller('ProductsController', ProductsController);
 
 		function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems) {
@@ -23,7 +23,7 @@
 		var inventoryTable = 'inventory';
 
 		function init () {
-			$ionicModal.fromTemplateUrl('templates/productEditModal.html', {
+			$ionicModal.fromTemplateUrl('Product/templates/productEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {

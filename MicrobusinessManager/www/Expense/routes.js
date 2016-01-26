@@ -8,7 +8,7 @@
 			url: '/expenses',
 			views: {
 				'menuContent': {
-					templateUrl: 'templates/expenses.html',
+					templateUrl: 'Expense/templates/expenses.html',
 					controller: 'ExpensesController',
 					controllerAs: 'expenses'
 				}

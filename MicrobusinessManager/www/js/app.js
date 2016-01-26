@@ -1,5 +1,15 @@
 (function () {
-	angular.module('app', ['ionic', 'ngCordova'])
+	angular.module('app', [
+		'ionic', 
+		'ngCordova',
+		'app.expenses',
+		'app.inventory',
+		'app.products',
+		'app.reports',
+		'app.sales',
+		'app.settings'
+
+	])
 	.run(run)
 	.config(config);
 

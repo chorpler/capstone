@@ -8,7 +8,7 @@
 			url: '/reports',
 			views: {
 				'menuContent': {
-					templateUrl: 'templates/reports.html',
+					templateUrl: 'Reports/templates/reports.html',
 					controller: 'ReportsController',
 					controllerAs: 'reports'
 				}

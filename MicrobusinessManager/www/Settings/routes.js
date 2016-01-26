@@ -8,7 +8,7 @@
 			url: '/settings',
 			views: {
 				'menuContent': {
-					templateUrl: 'templates/settings.html',
+					templateUrl: 'Settings/templates/settings.html',
 					controller: 'SettingsController',
 					controllerAs: 'settings'
 				}

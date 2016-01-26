@@ -27,7 +27,7 @@ angular.module('app.expenses')
 
 		function init () {
 
-			$ionicModal.fromTemplateUrl('templates/expensesEditModal.html', {
+			$ionicModal.fromTemplateUrl('Expense/templates/expensesEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {

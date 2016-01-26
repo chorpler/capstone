@@ -14,14 +14,14 @@
 		vm.expenses     = [];
 
 		function init () {
-			$ionicModal.fromTemplateUrl('templates/incomeStatement.html', {
+			$ionicModal.fromTemplateUrl('Reports/templates/incomeStatement.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
 				vm.incomeStatementModal = modal;
 			});
 
-			$ionicModal.fromTemplateUrl('templates/salesReport.html', {
+			$ionicModal.fromTemplateUrl('Reports/templates/salesReport.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {

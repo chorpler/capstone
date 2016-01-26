@@ -9,7 +9,7 @@
 			url: '/products',
 			views: {
 				'menuContent': {
-					templateUrl: 'templates/products.html',
+					templateUrl: 'Product/templates/products.html',
 					controller: 'ProductsController',
 					controllerAs: 'products'
 				}

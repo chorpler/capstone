@@ -9,13 +9,14 @@
 			url: '/inventory',
 			views: {
 				'menuContent': {
-					templateUrl: 'templates/inventory.html',
+					templateUrl: 'Inventory/templates/inventory.html',
 					controller: 'InventoryController',
 					controllerAs: 'inventory'
 				}
 			},
 			resolve: {
 				inventoryItems: function (Database, $q) {
+					console.log('here');
 					var deferred = $q.defer();
 					return Database.select('inventory').then(function (response) {
 						var items = {};

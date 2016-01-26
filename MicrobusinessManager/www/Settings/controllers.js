@@ -20,13 +20,13 @@
 		function init () {
 			vm.selfPayment.method = 'salary';
 
-			$ionicModal.fromTemplateUrl('templates/login.html', {
+			$ionicModal.fromTemplateUrl('Settings/templates/login.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.loginModal = modal;
 			});
 
-			$ionicModal.fromTemplateUrl('templates/register.html', {
+			$ionicModal.fromTemplateUrl('Settings/templates/register.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.registerModal = modal;

@@ -9,7 +9,7 @@
 			cache: false,
 			views: {
 				'menuContent': {
-					templateUrl: 'templates/sales.html',
+					templateUrl: 'Sales/templates/sales.html',
 					controller: 'SalesController',
 					controllerAs: 'sales'
 				}

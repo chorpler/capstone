@@ -26,14 +26,14 @@
 			vm.saleProducts       = [];
 			vm.currentEditProduct = null;
 
-			$ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
+			$ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function (modal) {
 				vm.checkoutModal = modal;
 			});
 
-			$ionicModal.fromTemplateUrl('templates/saleProductEditModal.html', {
+			$ionicModal.fromTemplateUrl('Sales/templates/saleProductEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {

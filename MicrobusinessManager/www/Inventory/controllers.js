@@ -4,6 +4,7 @@
 
 	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems) {
 		var vm = this;
+		console.log('here');
 
 		vm.items = inventoryItems;
 		vm.activeItem = null;
@@ -26,7 +27,7 @@
 		function init () {
 			updateTotal();
 
-			$ionicModal.fromTemplateUrl('templates/inventoryEditModal.html', {
+			$ionicModal.fromTemplateUrl('Inventory/templates/inventoryEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
