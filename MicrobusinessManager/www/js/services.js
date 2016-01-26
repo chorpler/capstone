@@ -120,7 +120,6 @@
         params.push(name);
       }
 
-
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {
           return response;
@@ -192,7 +191,7 @@
           break;
       }
 
-      query += id ? WHERE_ID : '';
+      query += id ? WHERE + WHERE_ID : '';
 
       var params = id ? [id] : [];
 
