@@ -166,6 +166,7 @@
     })
     .state('app.reports', {
       url: '/reports',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/reports.html',
