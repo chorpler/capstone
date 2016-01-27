@@ -1,116 +1,143 @@
 (function () {
-	angular.module('app.sales')
-	.controller('SalesController', SalesController);
+  angular.module('app.sales')
+  .controller('SalesController', SalesController);
 
-	function SalesController ($scope, $ionicModal, $q, products, Database) {
-		var vm = this;
+  function SalesController ($scope, $ionicModal, $q, products, Database) {
+    var vm = this;
 
-		vm.products            = products;
-		vm.addProduct          = addProduct;
-		vm.removeProduct       = removeProduct;
-		vm.checkout            = checkout;
-		vm.cancelCheckout      = cancelCheckout;
-		vm.overrideSaleTotal   = overrideSaleTotal;
-		vm.saveSale            = saveSale;
-		vm.resetSale           = resetSale;
-		vm.editSaleProduct     = editSaleProduct;
-		vm.doneEditSaleProduct = doneEditSaleProduct;
+    vm.products            = products;
+    vm.addProduct          = addProduct;
+    vm.removeProduct       = removeProduct;
+    vm.checkout            = checkout;
+    vm.cancelCheckout      = cancelCheckout;
+    vm.overrideSaleTotal   = overrideSaleTotal;
+    vm.saveSale            = saveSale;
+    vm.resetSale           = resetSale;
+    vm.editSaleProduct     = editSaleProduct;
+    vm.doneEditSaleProduct = doneEditSaleProduct;
 
-		var saleTable = 'sale';
-		var saleProductTable = 'saleproduct';
+    var saleTable = 'sale';
+    var saleProductTable = 'saleproduct';
 
-		function init () {
-			vm.saleDate           = new Date();
-			vm.saleTotal          = 0;
-			vm.productCount       = 0;
-			vm.saleProducts       = [];
-			vm.currentEditProduct = null;
+    function init () {
+      vm.saleDate           = new Date();
+      vm.saleTotal          = 0;
+      vm.productCount       = 0;
+      vm.saleProducts       = [];
+      vm.error              = null;
+      vm.currentEditProduct = null;
 
-			$ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
-				scope: $scope,
-				animation: 'slide-in-up'
-			}).then(function (modal) {
-				vm.checkoutModal = modal;
-			});
+      $ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function (modal) {
+        vm.checkoutModal = modal;
+      });
 
-			$ionicModal.fromTemplateUrl('Sales/templates/saleProductEditModal.html', {
-				scope: $scope,
-				animation: 'slide-in-right'
-			}).then(function (modal) {
-				vm.saleProductEditModal = modal;
-			});
-		}
+      $ionicModal.fromTemplateUrl('Sales/templates/saleProductEditModal.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+      }).then(function (modal) {
+        vm.saleProductEditModal = modal;
+      });
+    }
 
-		function addProduct (product) {
-			product.count += 1;
-			vm.productCount += 1;
-			vm.saleTotal += product.price;
-		}
+    function addProduct (product) {
+      // Check inventory limit if applicable
+      if (product.inventoryid) {
+        if (product.count + 1 > product.limit) {
+          vm.error = '' + product.name + ' has only ' + product.limit + ' in inventory.  You cannot sell more than ' + product.limit;
+          return;
+        }
+      }
+      product.count += 1;
+      vm.productCount += 1;
+      vm.saleTotal += product.price;
+    }
 
-		function removeProduct (product) {
-			if (product.count > 0) {
-				product.count -= 1;
-				vm.productCount -= 1;
-				vm.saleTotal -= product.price;
-			}
-		}
+    function removeProduct (product) {
+      if (product.count > 0) {
+        product.count -= 1;
+        vm.productCount -= 1;
+        vm.saleTotal -= product.price;
+      }
+    }
 
-		function checkout () {
-			function hasCount (product) {
-				return product.count > 0;
-			}
+    function checkout () {
+      function hasCount (product) {
+        return product.count > 0;
+      }
 
-			vm.saleProducts = vm.products.filter(hasCount);
+      vm.saleProducts = vm.products.filter(hasCount);
 
-			vm.checkoutModal.show();
-		}
+      vm.checkoutModal.show();
+    }
 
-		function cancelCheckout () {
-			vm.checkoutModal.hide();
-		}
+    function cancelCheckout () {
+      vm.checkoutModal.hide();
+    }
 
-		function overrideSaleTotal (price) {
-			vm.saleTotal = price;
-		}
+    function overrideSaleTotal (price) {
+      vm.saleTotal = price;
+    }
 
-		function editSaleProduct (product) {
-			vm.currentEditProduct = product;
-			vm.saleProductEditModal.show();
-		}
+    function editSaleProduct (product) {
+      vm.currentEditProduct = product;
+      vm.saleProductEditModal.show();
+    }
 
-		function doneEditSaleProduct () {
-			vm.saleProductEditModal.hide();
-		}
+    function doneEditSaleProduct () {
+      vm.saleProductEditModal.hide();
+    }
 
-		function saveSale () {
-			Database.insert(saleTable, [vm.saleTotal, vm.saleDate.toString()])
-			.then(function (response) {
-				return response.insertId;
-			})
-			.then(function (saleId) {
-				var promises = [];
+    function saveSale () {
+      Database.insert(saleTable, [vm.saleTotal, vm.saleDate.toString()])
+      .then(function (response) {
+        return response.insertId;
+      })
+      .then(function (saleId) {
+        var promises = [];
 
-				vm.saleProducts.forEach(function (p) {
-					promises.push(Database.insert(saleProductTable, [saleId, p.id, p.count]));
-				});
+        vm.saleProducts.forEach(function (p) {
+          promises.push(Database.insert(saleProductTable, [saleId, p.id, p.count]));
 
-				$q.all(promises).then(function () {
-					vm.checkoutModal.hide();
-					resetSale();
-				});
-			});
-		}
+          // Decrement inventory if applicable
+          if (p.inventoryid) {
+            promises.push(Database.select('inventory', p.inventoryid)
+              .then(function (response) {
+                var inv = response.rows.item(0);
 
-		function resetSale () {
-			vm.saleDate     = new Date();
-			vm.saleTotal    = 0;
-			vm.productCount = 0;
-			vm.saleProducts = [];
-			vm.products.forEach(function (product) {
-				product.count = 0;
-			});
-		}
+                var quantity = inv.quantity - p.count;
+                p.limit = quantity;
 
-		init();
-	}
+                return Database.update('inventory', p.inventoryid, [
+                  inv.name,
+                  quantity,
+                  inv.cost,
+                  p.id
+                ]);
+              })
+            );
+          }
+        });
+
+        $q.all(promises).then(function () {
+          vm.checkoutModal.hide();
+          resetSale();
+        });
+      });
+    }
+
+    function resetSale () {
+      vm.saleDate     = new Date();
+      vm.saleTotal    = 0;
+      vm.productCount = 0;
+      vm.saleProducts = [];
+      vm.products.forEach(function (product) {
+        product.count = 0;
+      });
+    }
+
+    init();
+  }
 })();

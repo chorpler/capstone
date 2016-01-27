@@ -31,6 +31,9 @@
             </button>
           </div>
         </div>
+        <div class="row" ng-show="sales.error">
+          {{sales.error}}
+        </div>
       </ion-item>
     </div>
 
@@ -48,6 +51,11 @@
           </div>
           <div class="col">
             <span class="amount-container">Add</span>
+          </div>
+          <div class="col">
+            <span class="amount-container">
+              Limit
+            </span>
           </div>
         </div>
       </div>
@@ -67,6 +75,9 @@
             <button class="button button-icon button-small">
               <i class="icon ion-plus-round"></i>
             </button>
+          </div>
+          <div class="col">
+            <span class="name-container">{{product.limit}}</span>
           </div>
         </div>
       </ion-item>

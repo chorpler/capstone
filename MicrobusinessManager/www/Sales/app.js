@@ -1,5 +1,5 @@
 (function () {
-	angular.module('app.sales', [
-		'app'
-	]);
+  angular.module('app.sales', [
+    'app'
+  ]);
 })();
