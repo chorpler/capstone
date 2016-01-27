@@ -1,0 +1,18 @@
+<section class="report-header">
+	<label class="item item-input item-select" for="timeFrame">
+		<div class="input-label">
+			Time Frame
+		</div>
+		<select name="timeFrame"
+				id="timeFrame"
+				ng-model="model.timeFrame" 
+				ng-change="changeTimeFrame(model.timeFrame)" 
+				ng-options="option for option in model.timeFrames">
+		</select>
+	</label>
+	<div class="date-range">
+		<a class="button icon-left ion-chevron-left" ng-click="changeDateRange(-1, model.timeFrame)"></a>
+		<h4>{{startDate.format('MMM D, YYYY')}} - {{endDate.format('MMM D, YYYY')}}</h4>
+		<a class="button icon-right ion-chevron-right" ng-click="changeDateRange(1, model.timeFrame)"></a>
+	</div>
+</section>
