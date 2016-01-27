@@ -100,8 +100,24 @@
 
         vm.saleProducts.forEach(function (p) {
           promises.push(Database.insert(saleProductTable, [saleId, p.id, p.count]));
+
+          // Decrement inventory if applicable
           if (p.inventoryid) {
-            // update inventoryItem
+            promises.push(Database.select('inventory', p.inventoryid)
+              .then(function (response) {
+                var inv = response.rows.item(0);
+
+                var quantity = inv.quantity - p.count;
+                p.limit = quantity;
+
+                return Database.update('inventory', p.inventoryid, [
+                  inv.name,
+                  quantity,
+                  inv.cost,
+                  p.id
+                ]);
+              })
+            );
           }
         });
 
