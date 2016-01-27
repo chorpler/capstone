@@ -1,18 +1,19 @@
 <ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Income Statement</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="reports.incomeStatementModal.hide()">
-        Done
-      </button>
-    </div>
-  </ion-header-bar>
+	<ion-header-bar>
+		<h1 class="title">Income Statement</h1>
+		<div class="buttons">
+			<button class="button button-clear" ng-click="reports.incomeStatementModal.hide()">
+				Done
+			</button>
+		</div>
+	</ion-header-bar>
 
-  <ion-content>
-    <ion-list>
-      <ion-item>
+	<ion-content>
+		<report-header start-date="reports.startDate" time-frame="reports.timeFrame" change="reports.change"></report-header>
+		<ion-list>
+			<ion-item>
 
-      </ion-item>
-    </ion-list>
-  </ion-content>
+			</ion-item>
+		</ion-list>
+	</ion-content>
 </ion-modal-view>

@@ -2,16 +2,19 @@
 	angular.module('app.reports')
 	.controller('ReportsController', ReportsController);
 
-	function ReportsController ($scope, $ionicModal, Database) {
+	function ReportsController ($scope, $ionicModal, Database, $window) {
 		var vm = this;
 
 		vm.loadIncomeStatement  = loadIncomeStatement;
 		vm.closeIncomeStatement = closeIncomeStatement;
 		vm.loadSalesReport      = loadSalesReport;
 		vm.closeSalesReport     = closeSalesReport;
+		vm.change 				= change;
 
 		vm.sales        = [];
 		vm.expenses     = [];
+		vm.startDate    = moment($window.localStorage['MM_Reports_Start_Date']) || moment().startOf('month');
+		vm.timeFrame	= $window.localStorage['MM_Reports_Timeframe'] || 'Day';
 
 		function init () {
 			$ionicModal.fromTemplateUrl('Reports/templates/incomeStatement.html', {
@@ -96,6 +99,10 @@
 		function closeSalesReport () {
 			vm.sales = [];
 			vm.salesReportModal.hide();
+		}
+
+		function change () {
+
 		}
 
 		init();
