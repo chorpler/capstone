@@ -44,7 +44,7 @@
 
     function addProduct (product) {
       // Check inventory limit if applicable
-      if (product.inventoryid && product.limit) {
+      if (product.inventoryid) {
         if (product.count + 1 > product.limit) {
           vm.error = '' + product.name + ' has only ' + product.limit + ' in inventory.  You cannot sell more than ' + product.limit;
           return;
