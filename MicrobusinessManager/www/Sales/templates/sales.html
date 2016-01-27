@@ -31,6 +31,9 @@
             </button>
           </div>
         </div>
+        <div class="row" ng-show="sales.error">
+          {{sales.error}}
+        </div>
       </ion-item>
     </div>
 
@@ -50,8 +53,8 @@
             <span class="amount-container">Add</span>
           </div>
           <div class="col">
-            <span class="name-container">
-              LIMIT
+            <span class="amount-container">
+              Limit
             </span>
           </div>
         </div>

@@ -9,7 +9,7 @@
       cache: false,
       views: {
         'menuContent': {
-          templateUrl: 'templates/sales.html',
+          templateUrl: 'Sales/templates/sales.html',
           controller: 'SalesController',
           controllerAs: 'sales'
         }
@@ -17,24 +17,30 @@
       resolve: {
         products: function products (Database) {
           var items = [];
+
+          function pushProduct (product) {
+            product.price = Number(product.price);
+            product.count = 0;
+            product.limit = "N/A";
+
+            if (product.inventoryid) {
+              Database.select('inventory', product.inventoryid)
+                .then(function (response) {
+                  var inventoryItem = response.rows.item(0);
+                  product.limit = inventoryItem.quantity;
+                  items.push(product);
+                });
+            }
+            else {
+              items.push(product);
+            }
+          }
+
           return Database.select('product')
           .then(function (response) {
             for (var i = response.rows.length - 1; i >= 0; i--) {
               var item = response.rows.item(i);
-              item.price = Number(item.price);
-              if (item.inventoryid) {
-                Database.select('inventory', item.inventoryid)
-                  .then(function (response) {
-                    var inventoryItem = response.rows.item(0);
-                    item.limit = inventoryItem.quantity;
-                    item.count = 0;
-                    items.push(item);
-                  });
-              }
-              else {
-                item.count = 0;
-                items.push(item);
-              }
+              pushProduct(item);
             }
             return items;
           });

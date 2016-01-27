@@ -24,16 +24,17 @@
       vm.saleTotal          = 0;
       vm.productCount       = 0;
       vm.saleProducts       = [];
+      vm.error              = null;
       vm.currentEditProduct = null;
 
-      $ionicModal.fromTemplateUrl('templates/checkoutModal.html', {
+      $ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
         scope: $scope,
         animation: 'slide-in-up'
       }).then(function (modal) {
         vm.checkoutModal = modal;
       });
 
-      $ionicModal.fromTemplateUrl('templates/saleProductEditModal.html', {
+      $ionicModal.fromTemplateUrl('Sales/templates/saleProductEditModal.html', {
         scope: $scope,
         animation: 'slide-in-right'
       }).then(function (modal) {
@@ -43,6 +44,12 @@
 
     function addProduct (product) {
       // Check inventory limit if applicable
+      if (product.inventoryid && product.limit) {
+        if (product.count + 1 > product.limit) {
+          vm.error = '' + product.name + ' has only ' + product.limit + ' in inventory.  You cannot sell more than ' + product.limit;
+          return;
+        }
+      }
       product.count += 1;
       vm.productCount += 1;
       vm.saleTotal += product.price;
@@ -93,6 +100,9 @@
 
         vm.saleProducts.forEach(function (p) {
           promises.push(Database.insert(saleProductTable, [saleId, p.id, p.count]));
+          if (p.inventoryid) {
+            // update inventoryItem
+          }
         });
 
         $q.all(promises).then(function () {
