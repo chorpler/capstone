@@ -6,6 +6,7 @@
 		$stateProvider
 		.state('app.expenses', {
 			url: '/expenses',
+			cache: false,
 			views: {
 				'menuContent': {
 					templateUrl: 'Expense/templates/expenses.html',
@@ -23,9 +24,11 @@
 						for (var i = response.rows.length - 1; i >= 0; i--) {
 							var item = response.rows.item(i);
 							item.amount = Number(item.amount);
-							item.date = new Date(item.date);
+							item.date = moment(item.date).toDate();
 							items.push(item);
 						}
+
+						console.log(items);
 						return items;
 					});
 				}

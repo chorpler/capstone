@@ -39,8 +39,8 @@
     var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
     var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date, type) VALUES (?, ?, ?, ?, ?)';
-    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date, type FROM expense';
-    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?, type = ?';
+    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date , type FROM expense';
+    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?, type = ? ';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
 
     var INSERT_SALE = 'INSERT INTO sale (total, date) VALUES (?,?)';
@@ -98,7 +98,7 @@
       });
     }
 
-    function select (table, id, name) {
+    function select (table, id, name, type) {
       var query;
       switch (table) {
         case 'product':
