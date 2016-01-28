@@ -79,16 +79,13 @@
 }
 
 .salary .record-button {
-  margin-left: 60px;
-  margin-right: 15px;
   font-size: 15px;
-  margin-top: -6px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 
 .salary .adjust-button {
-  font-size: 15px;
-  margin-top: -6px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 

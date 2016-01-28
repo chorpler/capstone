@@ -12,7 +12,7 @@
                      'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
                      'cost text, productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date text, type text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, total real, date text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
                      'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
@@ -38,9 +38,9 @@
     var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, cost = ?, productid = ?';
     var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
-    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date) VALUES (?, ?, ?, ?)';
-    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date FROM expense';
-    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?';
+    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date, type) VALUES (?, ?, ?, ?, ?)';
+    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date, type FROM expense';
+    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?, type = ?';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
 
     var INSERT_SALE = 'INSERT INTO sale (total, date) VALUES (?,?)';
@@ -62,6 +62,7 @@
     var AND = ' AND ';
     var WHERE_ID = 'id = ? ';
     var WHERE_NAME = 'name = ? ';
+    var WHERE_TYPE = 'type = ? ';
 
     return service;
 
@@ -130,6 +131,11 @@
       if (name) {
         query += id ? AND + WHERE_NAME : WHERE + WHERE_NAME;
         params.push(name);
+      }
+
+      if (type) {
+        query += id ? AND + WHERE_TYPE : WHERE + WHERE_TYPE;
+        params.push(type);
       }
 
       return deferred.promise.then(function () {
