@@ -24,6 +24,7 @@
 }
 
 .expenses .card-container,
+.salary .card-container,
 .inventory .card-container,
 .products .card-container {
 	margin-top: -20px;
@@ -33,18 +34,21 @@
 }
 
 .expenses .icon.ion-chevron-right,
+.salary .icon.ion-chevron-right,
 .inventory .icon.ion-chevron-right,
 .products .icon.ion-chevron-right {
 	font-size: 14px;
 }
 
 .expenses .name-container,
+.salary .name-container,
 .inventory .name-container,
 .products .name-container {
 	font-size: 17px;
 }
 
 .expenses .amount-container,
+.salary .amount-container,
 .inventory .amount-container,
 .products .amount-container {
 	font-weight: bold;
@@ -52,6 +56,7 @@
 }
 
 .expenses .total-container,
+.salary .total-container,
 .inventory .total-container,
 .products .total-container {
 	font-weight: bold;
@@ -62,6 +67,24 @@
 .inventory .icon.ion-edit,
 .products .icon.ion-edit {
 	font-size: 14px;
+}
+
+.salary .salary-container {
+  margin-bottom: -20px;
+}
+
+.salary .record-button {
+  margin-left: 60px;
+  margin-right: 15px;
+  font-size: 15px;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
+
+.salary .adjust-button {
+  font-size: 15px;
+  margin-top: -8px;
+  margin-bottom: 20px;
 }
 
 .col {
