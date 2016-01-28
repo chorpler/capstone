@@ -73,18 +73,27 @@
   margin-bottom: -20px;
 }
 
+.salary .salary-adjuster {
+  margin-left: 20%;
+  margin-top: -10px;
+}
+
 .salary .record-button {
   margin-left: 60px;
   margin-right: 15px;
   font-size: 15px;
-  margin-top: -8px;
+  margin-top: -6px;
   margin-bottom: 20px;
 }
 
 .salary .adjust-button {
   font-size: 15px;
-  margin-top: -8px;
+  margin-top: -6px;
   margin-bottom: 20px;
+}
+
+.salary .notAllowed {
+  color: red;
 }
 
 .col {
