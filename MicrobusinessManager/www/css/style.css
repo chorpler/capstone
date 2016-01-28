@@ -96,6 +96,12 @@
   color: red;
 }
 
+.salary .info {
+  margin-top: -20px;
+  font-size: 22px;
+  color: #FFD700;
+}
+
 .col {
 	white-space: normal;
 }
