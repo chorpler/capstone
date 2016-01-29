@@ -16,7 +16,6 @@
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, total real, date text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
                      'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, name text, amount text, comments text, date text)');
       deferred.resolve();
     });
 
@@ -53,11 +52,6 @@
     var UPDATE_SALE_PRODUCT = 'UPDATE saleproduct set saleid = ?, productid = ?, quantity = ?';
     var REMOVE_SALE_PRODUCT = 'DELETE FROM saleproduct';
 
-    var INSERT_SALARY = 'INSERT INTO salary (name, amount, comments, date) VALUES (?, ?, ?, ?)';
-    var SELECT_SALARY = 'SELECT id, name, amount, comments, date FROM salary';
-    var UPDATE_SALARY = 'UPDATE salary set name = ?, amount = ?, comments = ?, date = ?';
-    var REMOVE_SALARY = 'DELETE FROM salary';
-
     var WHERE = ' WHERE ';
     var AND = ' AND ';
     var WHERE_ID = 'id = ? ';
@@ -83,9 +77,6 @@
           break;
         case 'saleproduct':
           query = INSERT_SALE_PRODUCT;
-          break;
-        case 'salary':
-          query = INSERT_SALARY;
           break;
       }
 
@@ -115,9 +106,6 @@
           break;
         case 'saleproduct':
           query = SELECT_SALE_PRODUCT;
-          break;
-        case 'salary':
-          query = SELECT_SALARY;
           break;
       }
 
@@ -169,9 +157,6 @@
         case 'saleproduct':
           query = UPDATE_SALE_PRODUCT;
           break;
-        case 'salary':
-          query = UPDATE_SALARY;
-          break;
       }
 
       query += id ? WHERE + WHERE_ID : '';
@@ -209,9 +194,6 @@
           break;
         case 'saleproduct':
           query = REMOVE_SALE_PRODUCT;
-          break;
-        case 'salary':
-          query = REMOVE_SALARY;
           break;
       }
 

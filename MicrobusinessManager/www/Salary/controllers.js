@@ -78,10 +78,8 @@ angular.module('app.salary')
 			vm.reformattedList[key] = vm.reformattedList[key] || [];
 
 			if (!item.id) {
-				console.log(vm.reformattedList[key]);
 				Database.insert(expenseTable, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]).then(function (response) {
 					item.id = response.insertId;
-					console.log(vm.reformattedList[key]);
 				});
 				vm.reformattedList[key].push(item);
 
@@ -172,7 +170,7 @@ angular.module('app.salary')
 			});
 
 			alertPopup.then(function(res) {
-				console.log('Thank you for not eating my delicious ice cream cone');
+				console.log('none');
 			});
 		}
 

@@ -25,7 +25,7 @@
 						<a class="button button-icon ion-ios-information info" ng-if="salary.expectedSalary > salary.cashAvailable &amp;&amp; !salary.showAdjust" ng-click="salary.showAlert()"></a>
 						<form name="adjustSalary">
 							<div class="item item-input-inset salary-adjuster" ng-if="salary.showAdjust">
-	    					<label class="item-input-wrapper">
+	    					<label class="item-input-wrapper salary-input">
 	      					<input type="number" ng-model="salary.expectedSalary" placeholder="Salary" required="required">
 	    					</label>
 						    <a class="button button-outline button-balanced button-small icon ion-android-done" ng-disabled="adjustSalary.$invalid" ng-click="salary.showAdjust = false">

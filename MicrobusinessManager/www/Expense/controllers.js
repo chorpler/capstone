@@ -66,11 +66,14 @@ angular.module('app.expenses')
 				Database.insert(expenseTable, [item.name, item.amount, item.comments, item.date]).then(function (response) {
 					item.id = response.insertId;
 				});
+				vm.reformattedList[key].push(item);
+
 			} else {
 				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, item.date]);
+				if (key !== oldKey) {
+					vm.reformattedList[key].push(item);
+				}
 			}
-
-			vm.reformattedList[key].push(item);
 
 			if (key !== oldKey) {
 				vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(item), 1);
