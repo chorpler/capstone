@@ -108,6 +108,10 @@ input.self-payment {
 	height: 58px;
 }
 
+.icon.ion-refresh.icon-reset {
+  font-size: 16px;
+}
+
 .custom {
   background-color: #343434 !important;
  }
@@ -171,4 +175,8 @@ input.self-payment {
 .report-header .date-range {
 	display: flex;
 	justify-content: space-between;
+}
+
+.product-qty {
+  margin-top: 8px;
 }

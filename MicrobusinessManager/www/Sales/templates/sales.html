@@ -1,86 +1,69 @@
 <ion-view view-title="Sales">
-  <ion-content class="products">
+  <ion-content class="sales">
     <div class="list card">
-      <div class="item item-divider">
-        <div class="row">
-          <div class="col">
-            <span class="name-container">
-              Total: {{sales.saleTotal | currency}}
-            </span>
-          </div>
-          <div class="col">
-            <span class="name-container">
-              Products: {{sales.productCount}}
-            </span>
+        <div class="item item-divider">
+          <div class="row center">
+            <div class="col">
+              <span class="name-container">
+                Total: {{sales.saleTotal | currency}}
+              </span>
+            </div>
+            <div class="col">
+              <span class="name-container">
+                Products: {{sales.productCount}}
+              </span>
+            </div>
+            <div class="col">
+              <div class="assertive" ng-click="sales.resetSale()">
+                Reset
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <ion-item>
-        <div class="row">
-          <div class="col">
-            <button class="button button-block button-positive" ng-click="sales.checkout()">
-              Checkout
-            </button>
+        <ion-item>
+          <div class="button button-block button-balanced" ng-click="sales.checkout()">
+            Checkout
           </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <button class="button button-block button-assertive" ng-click="sales.resetSale()">
-              Reset
-            </button>
-          </div>
-        </div>
-        <div class="row" ng-show="sales.error">
+        </ion-item>
+
+        <div class="row assertive" ng-show="sales.error">
           {{sales.error}}
         </div>
-      </ion-item>
     </div>
 
-    <div class="list card">
+    <div class="list card" ng-repeat="product in sales.products track by product.id">
       <div class="item item-divider">
-        <div class="row">
+        <div class="row center">
           <div class="col">
-            <span class="name-container">Count</span>
+            <span class="name-container">Name: {{product.name}}</span>
           </div>
           <div class="col">
-            <span class="name-container">Name</span>
+            <span class="amount-container">Price: {{product.price | currency}}</span>
           </div>
-          <div class="col">
-            <span class="amount-container">Price</span>
-          </div>
-          <div class="col">
-            <span class="amount-container">Add</span>
-          </div>
-          <div class="col">
-            <span class="amount-container">
-              Limit
-            </span>
+          <div class="col" ng-show="product.inventoryid">
+            <span class="amount-container">Limit: {{product.limit}}</span>
           </div>
         </div>
       </div>
 
-      <ion-item ng-click="sales.addProduct(product)" ng-repeat="product in sales.products track by product.id">
-        <div class="row">
-          <div class="col">
-            <span class="name-container">{{product.count}}</span>
-          </div>
-          <div class="col">
-            <span class="name-container">{{product.name}}</span>
-          </div>
-          <div class="col">
-            <span class="amount-container">{{product.price | currency}}</span>
-          </div>
-          <div class="col">
-            <button class="button button-icon button-small">
-              <i class="icon ion-plus-round"></i>
-            </button>
-          </div>
-          <div class="col">
-            <span class="name-container">{{product.limit}}</span>
+      <div class="row center">
+        <div class="col">
+          <button class="button-icon" ng-click="sales.removeProduct(product)">
+            <i class="icon ion-minus-round"></i>
+          </button>
+        </div>
+        <div class="col">
+          <div class="button-icon product-qty">
+            {{product.count}}
           </div>
         </div>
-      </ion-item>
+        <div class="col">
+          <button class="button-icon" ng-click="sales.addProduct(product)">
+            <i class="icon ion-plus-round"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </ion-content>
 </ion-view>
