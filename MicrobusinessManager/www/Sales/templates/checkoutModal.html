@@ -1,11 +1,10 @@
 <ion-modal-view>
   <ion-header-bar>
+    <button class="button button-clear" ng-click="sales.cancelCheckout()">
+      <i class="icon ion-chevron-left"></i>
+      Back
+    </button>
     <h1 class="title">Checkout</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="sales.cancelCheckout()">
-        Cancel
-      </button>
-    </div>
   </ion-header-bar>
 
   <ion-content class="products">
@@ -45,7 +44,12 @@
               </div>
               <div class="col">
                 <span class="name-container">
-                  {{product.count}}
+                  {{product.price | currency}}
+                </span>
+              </div>
+              <div class="col">
+                <span class="name-container">
+                  x {{product.count}}
                 </span>
               </div>
             </div>
