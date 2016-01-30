@@ -63,11 +63,11 @@ angular.module('app.expenses')
 			vm.reformattedList[key] = vm.reformattedList[key] || [];
 
 			if (!item.id) {
-				Database.insert(expenseTable, [item.name, item.amount, item.comments, item.date]).then(function (response) {
+				Database.insert(expenseTable, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
 					item.id = response.insertId;
 				});
 			} else {
-				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, item.date]);
+				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
 			}
 
 			vm.reformattedList[key].push(item);
