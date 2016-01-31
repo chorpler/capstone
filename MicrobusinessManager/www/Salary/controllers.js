@@ -1,16 +1,18 @@
 (function () {
-angular.module('app.expenses')
-.controller('ExpensesController', ExpensesController);
+angular.module('app.salary')
+.controller('salaryController', salaryController);
 
-	function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, expenseItems) {
+	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems) {
 		var vm = this;
 
-		vm.log = expenseItems;
+		vm.log = salaryItems;
 		vm.activeExpense = null;
 		vm.editviewOpen = false;
 		vm.totalExpenses = 0;
 		vm.editModal = null;
 		vm.expenses = '';
+		vm.cashAvailable = 550;
+		vm.expectedSalary = 250;
 		vm.date = Date.now();
 
 		vm.editExpense = editExpense;
@@ -21,13 +23,15 @@ angular.module('app.expenses')
 		vm.getKeys = getKeys;
 		vm.clearSearch = clearSearch;
 		vm.showConfirm = showConfirm;
+		vm.showAlert = showAlert;
 
 		var tempExpense = null;
 		var expenseTable = 'expense';
+		var salaryTable = 'salary';
 
 		function init () {
 
-			$ionicModal.fromTemplateUrl('Expense/templates/expensesEditModal.html', {
+			$ionicModal.fromTemplateUrl('Salary/templates/salaryEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
@@ -53,6 +57,17 @@ angular.module('app.expenses')
 		}
 
 		function save (item) {
+			if (item === null) {
+				item = {};
+				item.name = 'My Salary';
+				item.amount = vm.expectedSalary;
+				item.date = new Date();
+				item.comments = 'my salary';
+				item.type = 'salary';
+				vm.activeExpense = item;
+				tempExpense = item;
+			}
+
 			var key = $filter('date')(vm.activeExpense.date, 'mediumDate');
 			var oldKey = $filter('date')(tempExpense.date, 'mediumDate');
 
@@ -63,13 +78,13 @@ angular.module('app.expenses')
 			vm.reformattedList[key] = vm.reformattedList[key] || [];
 
 			if (!item.id) {
-				Database.insert(expenseTable, [item.name, item.amount, item.comments, item.date]).then(function (response) {
+				Database.insert(expenseTable, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]).then(function (response) {
 					item.id = response.insertId;
 				});
 				vm.reformattedList[key].push(item);
 
 			} else {
-				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, item.date]);
+				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]);
 				if (key !== oldKey) {
 					vm.reformattedList[key].push(item);
 				}
@@ -137,7 +152,7 @@ angular.module('app.expenses')
 
 		function showConfirm () {
 			var confirmPopup = $ionicPopup.confirm({
-				title: 'Delete Expense',
+				title: 'Delete Salary Record',
 				template: 'Are you sure?'
 			});
 
@@ -145,6 +160,17 @@ angular.module('app.expenses')
 				if(res) {
 					vm.deleteExpense(vm.activeExpense);
 				}
+			});
+		}
+
+		function showAlert () {
+			var alertPopup = $ionicPopup.alert({
+				title: 'Insufficient Funds!',
+				template: 'You only have on hand $' + vm.cashAvailable + '. Please adjust your salary.'
+			});
+
+			alertPopup.then(function(res) {
+				console.log('none');
 			});
 		}
 

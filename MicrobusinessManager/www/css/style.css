@@ -7,23 +7,12 @@
 	font-weight: 700;
 }
 
-/*.inventory .row:nth-child(even),
-.products .row:nth-child(even) {
-	background-color: rgba(0,0,0,0.4);
-}
-
-.inventory .icon.ion-edit,
-.products .icon.ion-edit,
-.products .icon.ion-trash-a {
-	color: black;
-	font-size: 20px;
-}*/
-
 .expenses .header {
 	font-weight: 700;
 }
 
 .expenses .card-container,
+.salary .card-container,
 .inventory .card-container,
 .products .card-container {
 	margin-top: -20px;
@@ -33,18 +22,21 @@
 }
 
 .expenses .icon.ion-chevron-right,
+.salary .icon.ion-chevron-right,
 .inventory .icon.ion-chevron-right,
 .products .icon.ion-chevron-right {
 	font-size: 14px;
 }
 
 .expenses .name-container,
+.salary .name-container,
 .inventory .name-container,
 .products .name-container {
 	font-size: 17px;
 }
 
 .expenses .amount-container,
+.salary .amount-container,
 .inventory .amount-container,
 .products .amount-container {
 	font-weight: bold;
@@ -52,6 +44,7 @@
 }
 
 .expenses .total-container,
+.salary .total-container,
 .inventory .total-container,
 .products .total-container {
 	font-weight: bold;
@@ -62,6 +55,40 @@
 .inventory .icon.ion-edit,
 .products .icon.ion-edit {
 	font-size: 14px;
+}
+
+.salary .salary-container {
+  margin-bottom: -20px;
+}
+
+.salary .salary-adjuster {
+  margin-top: -10px;
+}
+
+.salary .salary-input {
+  height: 35px;
+  margin-left: 30px;
+}
+
+.salary .record-button {
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.salary .adjust-button {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.salary .notAllowed {
+  color: red;
+}
+
+.salary .info {
+  margin-top: -20px;
+  font-size: 22px;
+  color: #FFD700;
 }
 
 .col {

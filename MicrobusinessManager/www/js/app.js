@@ -1,13 +1,14 @@
 (function () {
 	angular.module('app', [
-		'ionic', 
+		'ionic',
 		'ngCordova',
 		'app.expenses',
 		'app.inventory',
 		'app.products',
 		'app.reports',
 		'app.sales',
-		'app.settings'
+		'app.settings',
+		'app.salary'
 
 	])
 	.run(run)
