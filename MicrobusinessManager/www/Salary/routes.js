@@ -6,6 +6,7 @@
 		$stateProvider
 		.state('app.salary', {
 			url: '/salary',
+			cache: false,
 			views: {
 				'menuContent': {
 					templateUrl: 'Salary/templates/salary.html',
