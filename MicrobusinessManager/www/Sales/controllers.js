@@ -91,7 +91,7 @@
     }
 
     function saveSale () {
-      Database.insert(saleTable, [vm.saleTotal, vm.saleDate.toString()])
+      Database.insert(saleTable, [vm.saleTotal, moment(vm.saleDate).format('YYYY-MM-DD HH:mm:ss')])
       .then(function (response) {
         return response.insertId;
       })

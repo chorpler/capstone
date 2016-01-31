@@ -24,7 +24,8 @@
       select: select,
       update: update,
       remove: remove,
-      selectProductsForSale: selectProductsForSale
+      selectProductsForSale: selectProductsForSale,
+      calculateCashOnHand: calculateCashOnHand
     };
 
     var INSERT_PRODUCT = 'INSERT INTO product (name, price, inventoryid) VALUES (?,?,?)';
@@ -56,6 +57,8 @@
     var AND = ' AND ';
     var WHERE_ID = 'id = ? ';
     var WHERE_NAME = 'name = ? ';
+    var WHERE_START_DATE = 'date >= ? ';
+    var WHERE_END_DATE = 'date <= ? ';
     var WHERE_TYPE = 'type = ? ';
 
     return service;
@@ -89,7 +92,7 @@
       });
     }
 
-    function select (table, id, name, type) {
+    function select (table, id, name, type, startDate, endDate) {
       var query;
       switch (table) {
         case 'product':
@@ -110,19 +113,34 @@
       }
 
       var params = [];
+      var whereClause = false;
 
       if (id) {
         query += WHERE + WHERE_ID;
         params.push(id);
+        whereClause = true;
       }
 
       if (name) {
-        query += id ? AND + WHERE_NAME : WHERE + WHERE_NAME;
+        query += whereClause ? AND + WHERE_NAME : WHERE + WHERE_NAME;
         params.push(name);
+        whereClause = true;
+      }
+
+      if (startDate) {
+        query += whereClause ? AND + WHERE_START_DATE : WHERE + WHERE_START_DATE;
+        params.push(moment(startDate).format('YYYY-MM-DD HH:mm:ss'));
+        whereClause = true;
+      }
+
+      if (endDate) {
+        query += whereClause ? AND + WHERE_END_DATE : WHERE + WHERE_END_DATE;
+        params.push(moment(endDate).format('YYYY-MM-DD HH:mm:ss'));
+        whereClause = true;
       }
 
       if (type) {
-        query += id ? AND + WHERE_TYPE : WHERE + WHERE_TYPE;
+        query += whereClause ? AND + WHERE_TYPE : WHERE + WHERE_TYPE;
         params.push(type);
       }
 
@@ -219,6 +237,51 @@
           console.log(err);
         });
       });
+    }
+
+    function calculateCashOnHand (startDate, endDate) {
+      var queryStart = 'SELECT total(amount) as total FROM ';
+      var queryExpense = '(SELECT total(amount) * -1 as amount FROM expense ';
+      var queryUnion = 'UNION ';
+      var querySales = 'SELECT total(total) as amount FROM sale ';
+      var queryEnd = ')';
+      
+      var queryExpense = queryExpense + ((startDate || endDate) ? 
+                            WHERE + 
+                            (startDate != null ? 'date > ? ' + 
+                              (endDate != null ? AND + 'date < ? ' : '') :
+                              (endDate != null ? 'date < ?' : '')
+                            ) : '');
+
+      var querySales = querySales + ((startDate || endDate) ? 
+                            WHERE + 
+                            (startDate != null ? 'date > ? ' + 
+                              (endDate != null ? AND + 'date < ? ' : '') :
+                              (endDate != null ? 'date < ?' : '')
+                            ) : '');
+
+
+      var query = queryStart + queryExpense + queryUnion + querySales + queryEnd;
+
+      var params = [];
+
+      if (startDate) {
+        params.push(moment(startDate).format('YYYY-MM-DD HH:mm:ss'));
+      }
+
+      if (endDate) {
+        params.push(moment(endDate).format('YYYY-MM-DD HH:mm:ss'));
+      }
+
+      params = params.concat(params);
+
+      return deferred.promise.then(function () {
+        return $cordovaSQLite.execute(db, query, params).then(function (response) {
+          return response;
+        }, function (err) {
+          console.log(err);
+        })
+      })
     }
   }
 })();

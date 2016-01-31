@@ -2,7 +2,7 @@
 	angular.module('app.reports')
 	.controller('ReportsController', ReportsController);
 
-	function ReportsController ($scope, $ionicModal, Database, $window) {
+	function ReportsController ($scope, $ionicModal, $window, $q, Database, startDate, endDate, timeFrame, startingCash, expenses, sales) {
 		var vm = this;
 
 		vm.loadIncomeStatement  = loadIncomeStatement;
@@ -13,8 +13,13 @@
 
 		vm.sales        = [];
 		vm.expenses     = [];
-		vm.startDate    = moment($window.localStorage['MM_Reports_Start_Date']) || moment().startOf('month');
-		vm.timeFrame	= $window.localStorage['MM_Reports_Timeframe'] || 'Day';
+		vm.startDate    = startDate;
+		vm.timeFrame	= timeFrame;
+		vm.endDate		= endDate;
+		vm.startingCash = startingCash;
+		vm.endingCash	= 0;
+		vm.expenses 	= expenses;
+		vm.sales 		= sales;
 
 		function init () {
 			$ionicModal.fromTemplateUrl('Reports/templates/incomeStatement.html', {
@@ -30,22 +35,26 @@
 			}).then(function (modal) {
 				vm.salesReportModal = modal;
 			});
+
+			vm.endingCash = calculateEndCash();
 		}
 
 		function loadSales () {
-			Database.select('sale')
+			return Database.select('sale', null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
+				vm.sales.length = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var sale = response.rows.item(i);
-					sale.date = new Date(sale.date);
+					sale.date = moment(sale.date);
 					vm.sales.push(sale);
 				}
 			});
 		}
 
 		function loadExpenses () {
-			Database.select('expense')
+			return Database.select('expense', null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
+				vm.expenses.length = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var expense = response.rows.item(i);
 					vm.expenses.push(expense);
@@ -54,8 +63,9 @@
 		}
 
 		function loadSalesProducts () {
-			return Database.select('sale')
+			return Database.select('sale', null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
+				vm.sales.length = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var sale = response.rows.item(i);
 					sale.date = new Date(sale.date);
@@ -101,8 +111,34 @@
 			vm.salesReportModal.hide();
 		}
 
-		function change () {
+		function change (startDate, timeFrame) {
+			var promises = [];
+			vm.startDate = startDate;
+			vm.timeFrame = timeFrame;
+			vm.endDate = moment(vm.startDate).endOf(vm.timeFrame);
+			promises.push(Database.calculateCashOnHand(null, vm.startDate).then(function (response) {
+				vm.startingCash = response.rows.item(0) ? response.rows.item(0).total : 0;
+			}));
 
+			promises.push(loadExpenses());
+
+			promises.push(loadSales());
+
+			$q.all(promises).then(calculateEndCash);
+		}
+
+		function calculateEndCash () {
+			vm.endingCash = vm.startingCash;
+
+			vm.endingCash = vm.expenses.reduce(function (prev, curr) {
+				return prev - curr.amount;
+			}, vm.endingCash);
+
+			vm.endingCash = vm.sales.reduce(function (prev, curr) {
+				return prev + curr.total;
+			}, vm.endingCash);
+
+			return vm.endingCash;
 		}
 
 		init();

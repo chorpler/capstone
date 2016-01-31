@@ -40,18 +40,17 @@
 				$window.localStorage['MM_Reports_Start_Date'] = scope.startDate.toJSON();
 				$window.localStorage['MM_Reports_Timeframe'] = timeFrame;
 
-				scope.change();
+				scope.change()(scope.startDate, timeFrame);
 			}
 
 			function changeDateRange (direction, timeFrame) {
 				scope.startDate = direction > 0 ? moment(scope.startDate).add(1, timeFrame) : 
 												  moment(scope.startDate).subtract(1, timeFrame);
-				scope.endDate = direction > 0 ? moment(scope.endDate).add(1, timeFrame) : 
-												moment(scope.endDate).subtract(1, timeFrame);
+				scope.endDate = moment(scope.startDate).endOf(timeFrame);
 
-				$window.localStorage['MM_Reports_Start_Date'] = scope.startDate;
+				$window.localStorage['MM_Reports_Start_Date'] = scope.startDate.toJSON();
 
-				scope.change();
+				scope.change()(scope.startDate, timeFrame);
 			}
 
 			init();
