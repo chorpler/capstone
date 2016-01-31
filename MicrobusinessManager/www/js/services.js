@@ -12,8 +12,8 @@
                      'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
                      'cost text, productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date integer)');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, total real, date integer)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date text, type text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, total real, date text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
                      'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
       deferred.resolve();
@@ -38,9 +38,9 @@
     var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, cost = ?, productid = ?';
     var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
-    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date) VALUES (?, ?, ?, ?)';
-    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date FROM expense';
-    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?';
+    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date, type) VALUES (?, ?, ?, ?, ?)';
+    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date , type FROM expense';
+    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?, type = ? ';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
 
     var INSERT_SALE = 'INSERT INTO sale (total, date) VALUES (?,?)';
@@ -59,6 +59,7 @@
     var WHERE_NAME = 'name = ? ';
     var WHERE_START_DATE = 'date >= ? ';
     var WHERE_END_DATE = 'date <= ? ';
+    var WHERE_TYPE = 'type = ? ';
 
     return service;
 
@@ -91,7 +92,7 @@
       });
     }
 
-    function select (table, id, name, startDate, endDate) {
+    function select (table, id, name, type, startDate, endDate) {
       var query;
       switch (table) {
         case 'product':
@@ -138,7 +139,10 @@
         whereClause = true;
       }
 
-      console.log(query, params);
+      if (type) {
+        query += whereClause ? AND + WHERE_TYPE : WHERE + WHERE_TYPE;
+        params.push(type);
+      }
 
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {

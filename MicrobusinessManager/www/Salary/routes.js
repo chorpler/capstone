@@ -1,22 +1,21 @@
 (function () {
-	angular.module('app.expenses')
+	angular.module('app.salary')
 	.config(config);
 
 	function config ($stateProvider) {
 		$stateProvider
-		.state('app.expenses', {
-			url: '/expenses',
-			cache: false,
+		.state('app.salary', {
+			url: '/salary',
 			views: {
 				'menuContent': {
-					templateUrl: 'Expense/templates/expenses.html',
-					controller: 'ExpensesController',
-					controllerAs: 'expenses'
+					templateUrl: 'Salary/templates/salary.html',
+					controller: 'salaryController',
+					controllerAs: 'salary'
 				}
 			},
 			resolve: {
-				expenseItems: function (Database) {
-					return Database.select('expense').then(function (response) {
+				salaryItems: function (Database) {
+					return Database.select('expense', null, null, 'salary').then(function (response) {
 						var items = [];
 						if (response.rows.length === 0) {
 							return items;
@@ -27,8 +26,6 @@
 							item.date = moment(item.date).toDate();
 							items.push(item);
 						}
-
-						console.log(items);
 						return items;
 					});
 				}

@@ -29,7 +29,7 @@
 
       $ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
         scope: $scope,
-        animation: 'slide-in-up'
+        animation: 'slide-in-right'
       }).then(function (modal) {
         vm.checkoutModal = modal;
       });
