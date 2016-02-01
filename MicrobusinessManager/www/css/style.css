@@ -85,6 +85,13 @@
   color: red;
 }
 
+.salary .salary-container .no-comission {
+  font-weight: 600;
+  margin-bottom: 10px;
+  margin-top: -5px;
+  text-align: center;
+}
+
 .salary .info {
   margin-top: -20px;
   font-size: 22px;

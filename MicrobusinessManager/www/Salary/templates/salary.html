@@ -13,10 +13,10 @@
 	<ion-content class="salary">
     <div class="card" ng-hide="salary.search">
       <div class="item item-divider">
-        <span>Expected {{salary.paymentType === 'salary' ? 'Salary' : 'Commission'}}</span>
+        <span>Expected {{salary.paymentType === 'commission' ? 'Commission' : 'Salary'}}</span>
       </div>
       <div class="item item-text-wrap">
-				<div class="salary-container">
+				<div class="salary-container" ng-if="salary.salary.length > 0">
 					<div class="row">
 						<div class="total-container" ng-if="!salary.showAdjust && salary.paymentType === 'salary'" ng-class="{'notAllowed': salary.expectedSalary > salary.cashAvailable}">{{salary.expectedSalary | currency}}</div>
 						<div class="total-container" ng-if="!salary.showAdjust && salary.paymentType === 'commission'" ng-class="{'notAllowed': salary.expectedSalary > 100}">{{salary.expectedSalary}}%</div>
@@ -39,6 +39,11 @@
 						<div class="col">
 							<button class="button button-full button-positive adjust-button" ng-hide = "salary.showAdjust" ng-click="salary.showAdjust = true">Adjust</button>
 						</div>
+					</div>
+				</div>
+				<div class="salary-container" ng-show="salary.salary.length < 1">
+					<div class="row">
+						<span class="no-comission">Go to Settings and Set Salary/Commision to use this feature.</span>
 					</div>
 				</div>
 			</div>

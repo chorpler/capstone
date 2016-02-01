@@ -7,6 +7,7 @@ angular.module('app.salary')
 
 		vm.log = salaryItems;
 		vm.salary = salary;
+		console.log(vm.salary);
 		vm.activeExpense = null;
 		vm.editviewOpen = false;
 		vm.totalExpenses = 0;
