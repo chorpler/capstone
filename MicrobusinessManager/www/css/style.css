@@ -124,6 +124,28 @@ input.self-payment {
 	color: #3f80e9 !important;
 }
 
+.settings .edit-button {
+  margin-top: -18px !important;
+}
+
+.settings .icon.ion-edit,
+.settings .icon.ion-plus-round {
+  color: #708090 !important;
+}
+
+.settings .devider-container {
+  margin-bottom: -15px;
+}
+.settings .card-container {
+  margin-top: -15px;
+  margin-bottom: -15px;
+}
+
+.settings .salary-info {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
 .bar-header {
     border: 0px !important;
     border-bottom-color: transparent !important;

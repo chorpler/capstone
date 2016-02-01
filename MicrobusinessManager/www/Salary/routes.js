@@ -29,6 +29,21 @@
 						}
 						return items;
 					});
+				},
+				salary: function (Database) {
+					return Database.select('salary').then(function (response) {
+						var items = [];
+						if (response.rows.length === 0) {
+							return items;
+						}
+						for (var i = response.rows.length - 1; i >= 0; i--) {
+							var item = response.rows.item(i);
+							item.amount = Number(item.amount);
+							items.push(item);
+						}
+						console.log(items);
+						return items;
+					});
 				}
 			}
 		});

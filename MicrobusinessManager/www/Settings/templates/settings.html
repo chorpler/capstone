@@ -2,87 +2,62 @@
   <ion-content class="settings">
     <div class="list list-inset" ng-if="settings.salary.length < 1">
       <div class="item item-divider">
-        <div class="row">
-          <div class="col col-90">
-            <span class="name-container">Self Payment Settings</span>
+        <div class="devider-container">
+          <div class="row">
+            <div class="col col-90">
+              <span class="name-container">Self Payment Settings</span>
+            </div>
+            <div class="col col-10 edit-button" ng-show="!settings.edit">
+              <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
+                <i class="icon ion-plus-round"></i></button>
+            </div>
           </div>
-          <div class="col col-10" ng-show="!settings.edit">
-            <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
-              <i class="icon ion-ios-plus-empty"></i></button>
-          </div>
-          <!-- <div class="col col-10" ng-show="settings.edit">
-            <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
-              <i class="ion-checkmark-round"></i></button>
-          </div> -->
         </div>
       </div>
     </div>
     <div ng-repeat="item in settings.salary">
       <div class="list list-inset">
-        <div class="item item-divider">
-          <div class="row">
-            <div class="col col-90">
-              <span class="name-container">Self Payment Settings</span>
+          <div class="item item-divider">
+            <div class="devider-container">
+            <div class="row">
+              <div class="col col-90">
+                <span class="name-container">Self Payment Settings</span>
+              </div>
+              <div class="col col-10 edit-button" ng-show="!settings.edit">
+                <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
+          				<i class="icon ion-edit"></i></button>
+              </div>
             </div>
-            <div class="col col-10" ng-show="!settings.edit">
-              <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
-        				<i class="icon ion-edit"></i></button>
-            </div>
-            <!-- <div class="col col-10" ng-show="settings.edit">
-              <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
-        				<i class="ion-checkmark-round"></i></button>
-            </div> -->
           </div>
         </div>
         <div class="item">
-          <div class="row">
-            <div class="col col-50">
-              <span>Payment Method</span>
+          <div class="card-container">
+            <div class="row">
+              <div class="col col-50">
+                <span>Payment Method</span>
+              </div>
+              <div class="col col-50" ng-show="!settings.edit">
+                <span class="salary-info">{{item.type}}</span>
+              </div>
             </div>
-            <div class="col col-50" ng-show="!settings.edit">
-              <span>{{item.type}}</span>
-            </div>
-            <!-- <div class="col col-50" ng-show="settings.edit">
-              <select ng-model="settings.selfPayment.method">
-                <option value="commission">Commission</option>
-                <option value="salary">Salary</option>
-              </select>
-            </div> -->
           </div>
         </div>
         <div class="item">
-          <div class="row">
-            <div class="col col-50">
-              <span>Payment Amount</span>
+          <div class="card-container">
+            <div class="row">
+              <div class="col col-50">
+                <span>Payment Amount</span>
+              </div>
+              <div class="col col-50" ng-show="!settings.edit">
+                <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount}}%</span>
+                <span class="salary-info" ng-if="item.type === 'salary'">{{item.amount | currency}}</span>
+              </div>
             </div>
-            <div class="col col-50" ng-show="!settings.edit">
-              <span>{{item.amount | currency}}</span>
-            </div>
-            <!-- <div class="col col-50" ng-show="settings.edit">
-              <input type="number" placeholder="{{settings.selfPayment.method === 'salary' ? 'Salary ($)' : 'Commission (%)'}}"
-              ng-model="settings.selfPayment.amount" required="required" class="self-payment">
-            </div> -->
           </div>
         </div>
       </div>
     </div>
     <div class="list">
-      <!-- <form name="salaryForm">
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Self Payment Method
-          </div>
-          <select ng-model="settings.selfPayment.method">
-            <option value="commission">Commission</option>
-            <option value="salary">Salary</option>
-          </select>
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Payment Amount</span>
-          <input type="number" placeholder="{{settings.selfPayment.method === 'salary' ? 'Salary ($)' : 'Commission (%)'}}" ng-model="settings.selfPayment.amount" required="required" class="self-payment">
-        </label>
-        <button class="button button-block button-balanced" ng-click="settings.save(settings.selfPayment)" ng-disabled="salaryForm.$invalid">Save</button>
-      </form> -->
       <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
         Login
       </button>

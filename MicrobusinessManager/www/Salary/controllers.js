@@ -2,17 +2,17 @@
 angular.module('app.salary')
 .controller('salaryController', salaryController);
 
-	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems) {
+	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems, salary) {
 		var vm = this;
 
 		vm.log = salaryItems;
+		vm.salary = salary;
 		vm.activeExpense = null;
 		vm.editviewOpen = false;
 		vm.totalExpenses = 0;
 		vm.editModal = null;
 		vm.expenses = '';
-		vm.cashAvailable = 550;
-		vm.expectedSalary = 250;
+		vm.cashAvailable = 600;
 		vm.date = Date.now();
 
 		vm.editExpense = editExpense;
@@ -24,12 +24,18 @@ angular.module('app.salary')
 		vm.clearSearch = clearSearch;
 		vm.showConfirm = showConfirm;
 		vm.showAlert = showAlert;
+		vm.showAlertCommission = showAlertCommission;
 
 		var tempExpense = null;
 		var expenseTable = 'expense';
 		var salaryTable = 'salary';
 
 		function init () {
+
+			for (var i = 0; i < salary.length; i++) {
+				vm.expectedSalary = salary[i].amount;
+				vm.paymentType = salary[i].type;
+			}
 
 			$ionicModal.fromTemplateUrl('Salary/templates/salaryEditModal.html', {
 				scope: $scope,
@@ -60,7 +66,11 @@ angular.module('app.salary')
 			if (item === null) {
 				item = {};
 				item.name = 'My Salary';
-				item.amount = vm.expectedSalary;
+				if (vm.paymentType === 'commission') {
+					item.amount = vm.cashAvailable * (vm.expectedSalary/100);
+				} else {
+					item.amount = vm.expectedSalary;
+				}
 				item.date = new Date();
 				item.comments = 'my salary';
 				item.type = 'salary';
@@ -167,6 +177,17 @@ angular.module('app.salary')
 			var alertPopup = $ionicPopup.alert({
 				title: 'Insufficient Funds!',
 				template: 'You only have on hand $' + vm.cashAvailable + '. Please adjust your salary.'
+			});
+
+			alertPopup.then(function(res) {
+				console.log('none');
+			});
+		}
+
+		function showAlertCommission () {
+			var alertPopup = $ionicPopup.alert({
+				title: 'Cash on Hand!',
+				template: 'You have on hand $' + vm.cashAvailable + '.'
 			});
 
 			alertPopup.then(function(res) {

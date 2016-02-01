@@ -16,20 +16,19 @@
 		vm.closeRegistration = closeRegistration;
 		vm.submitRegistrationRequest = submitRegistrationRequest;
 		vm.save = save;
-		vm.selfPayment = {};
-		vm.edit = false;
 		vm.showEdit = showEdit;
 		vm.editSalary = editSalary;
 		vm.cancel = cancel;
+		vm.selfPayment = {};
+		vm.edit = false;
 
 		var salaryTable = 'salary';
 
 		function init () {
 			if (vm.salary.length < 1) {
-				vm.activeSalary = [];
+				vm.activeSalary = {};
 				vm.activeSalary.type = 'salary';
 			}
-			// vm.edit = false;
 
 			$ionicModal.fromTemplateUrl('Settings/templates/login.html', {
 				scope: $scope
@@ -65,7 +64,6 @@
 		}
 
 		function showEdit () {
-			// vm.edit = !vm.edit;
 			vm.editModal.show();
 		}
 
