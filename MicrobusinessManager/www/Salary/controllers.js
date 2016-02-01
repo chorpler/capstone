@@ -65,14 +65,16 @@ angular.module('app.salary')
 		function save (item) {
 			if (item === null) {
 				item = {};
-				item.name = 'My Salary';
 				if (vm.paymentType === 'commission') {
+					item.name = 'My Commission';
 					item.amount = vm.cashAvailable * (vm.expectedSalary/100);
+					item.comments = 'my commission of ' + vm.expectedSalary + '% of ' + vm.cashAvailable;
 				} else {
+					item.name = 'My Salary';
 					item.amount = vm.expectedSalary;
+					item.comments = 'my salary';
 				}
 				item.date = new Date();
-				item.comments = 'my salary';
 				item.type = 'salary';
 				vm.activeExpense = item;
 				tempExpense = item;
