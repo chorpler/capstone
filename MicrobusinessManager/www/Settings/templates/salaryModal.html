@@ -15,7 +15,8 @@
       </label>
       <label class="item item-input">
         <span class="input-label">Payment Amount</span>
-        <input type="number" placeholder="{{settings.activeSalary.type === 'salary' ? 'Salary ($)' : 'Commission (%)'}}" ng-model="settings.activeSalary.amount" required="required" class="self-payment">
+        <!-- <input type="number" placeholder="{{settings.activeSalary.type === 'salary' ? 'Salary ($)' : 'Commission (%)'}}" ng-model="settings.activeSalary.amount" required="required" class="self-payment"> -->
+				<input type="number" placeholder="Salary ($)" ng-model="settings.activeSalary.amount" required="required" class="self-payment">
       </label>
       <button class="button button-block button-balanced" ng-click="settings.save(settings.activeSalary)" ng-disabled="salaryForm.$invalid">Save</button>
       <button class="button button-block button-assertive" ng-click="settings.cancel()">Cancel</button>
