@@ -44,6 +44,11 @@
 						console.log(items);
 						return items;
 					});
+				},
+				cashOnHand: function (Database) {
+					return Database.calculateCashOnHand().then(function (response) {
+						return response.rows.item(0).total;
+					});
 				}
 			}
 		});

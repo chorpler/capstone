@@ -2,18 +2,17 @@
 angular.module('app.salary')
 .controller('salaryController', salaryController);
 
-	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems, salary) {
+	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems, salary, cashOnHand) {
 		var vm = this;
 
 		vm.log = salaryItems;
 		vm.salary = salary;
-		console.log(vm.salary);
 		vm.activeExpense = null;
 		vm.editviewOpen = false;
 		vm.totalExpenses = 0;
 		vm.editModal = null;
 		vm.expenses = '';
-		vm.cashAvailable = 600;
+		vm.cashAvailable = cashOnHand;
 		vm.date = Date.now();
 
 		vm.editExpense = editExpense;
@@ -111,6 +110,7 @@ angular.module('app.salary')
 				delete vm.reformattedList[oldKey];
 			}
 
+			updateCashonHand();
 			vm.activeExpense = null;
 			updateTotal();
 			vm.editModal.hide();
@@ -143,6 +143,7 @@ angular.module('app.salary')
 			Database.remove(expenseTable, item.id);
 			vm.activeExpense = null;
 			updateTotal();
+			updateCashonHand();
 			vm.editModal.hide();
 		}
 
@@ -195,6 +196,12 @@ angular.module('app.salary')
 
 			alertPopup.then(function(res) {
 				console.log('none');
+			});
+		}
+
+		function updateCashonHand () {
+			Database.calculateCashOnHand().then(function (response) {
+				vm.cashAvailable = response.rows.item(0).total;
 			});
 		}
 

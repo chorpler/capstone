@@ -263,17 +263,17 @@
       var queryUnion = 'UNION ';
       var querySales = 'SELECT total(total) as amount FROM sale ';
       var queryEnd = ')';
-      
-      var queryExpense = queryExpense + ((startDate || endDate) ? 
-                            WHERE + 
-                            (startDate != null ? 'date > ? ' + 
+
+      var queryExpense = queryExpense + ((startDate || endDate) ?
+                            WHERE +
+                            (startDate != null ? 'date > ? ' +
                               (endDate != null ? AND + 'date < ? ' : '') :
                               (endDate != null ? 'date < ?' : '')
                             ) : '');
 
-      var querySales = querySales + ((startDate || endDate) ? 
-                            WHERE + 
-                            (startDate != null ? 'date > ? ' + 
+      var querySales = querySales + ((startDate || endDate) ?
+                            WHERE +
+                            (startDate != null ? 'date > ? ' +
                               (endDate != null ? AND + 'date < ? ' : '') :
                               (endDate != null ? 'date < ?' : '')
                             ) : '');
