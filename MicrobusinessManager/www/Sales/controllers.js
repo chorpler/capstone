@@ -129,6 +129,7 @@
     }
 
     function resetSale () {
+      vm.error = null;
       vm.saleDate     = new Date();
       vm.saleTotal    = 0;
       vm.productCount = 0;
