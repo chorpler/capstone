@@ -12,6 +12,7 @@ angular.module('app.salary')
 		vm.totalExpenses = 0;
 		vm.editModal = null;
 		vm.expenses = '';
+		vm.showErrorAlert = false;
 		vm.cashAvailable = cashOnHand;
 		vm.date = Date.now();
 
@@ -96,9 +97,15 @@ angular.module('app.salary')
 				vm.reformattedList[key].push(item);
 
 			} else {
-				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]);
-				if (key !== oldKey) {
-					vm.reformattedList[key].push(item);
+				var calc = vm.activeExpense.amount - tempExpense.amount;
+				if (calc > 0 && calc > vm.cashAvailable) {
+						vm.showErrorAlert = true;
+						return;
+				} else {
+					Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]);
+					if (key !== oldKey) {
+						vm.reformattedList[key].push(item);
+					}
 				}
 			}
 
@@ -112,6 +119,7 @@ angular.module('app.salary')
 
 			updateCashonHand();
 			vm.activeExpense = null;
+			vm.showErrorAlert = false;
 			updateTotal();
 			vm.editModal.hide();
 		}
@@ -123,6 +131,7 @@ angular.module('app.salary')
 				vm.activeExpense.comments = tempExpense.comments;
 				vm.activeExpense.date = tempExpense.date;
 				vm.activeExpense = null;
+				vm.showErrorAlert = false;
 			}
 
 			vm.editModal.hide();

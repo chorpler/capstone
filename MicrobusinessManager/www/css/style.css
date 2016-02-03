@@ -24,7 +24,8 @@
 .expenses .icon.ion-chevron-right,
 .salary .icon.ion-chevron-right,
 .inventory .icon.ion-chevron-right,
-.products .icon.ion-chevron-right {
+.products .icon.ion-chevron-right,
+.reports .icon.ion-chevron-right {
 	font-size: 14px;
 }
 
@@ -96,6 +97,11 @@
   margin-top: -20px;
   font-size: 22px;
   color: #FFD700;
+}
+
+.expensesEdit .notAllowed{
+  color: red;
+  font-weight: 600;
 }
 
 .col {

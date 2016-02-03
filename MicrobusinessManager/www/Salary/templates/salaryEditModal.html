@@ -25,6 +25,11 @@
 					<span class="input-label">Date<span ng-show="!salary.editviewOpen">*</span></span>
 	    		<input placeholder="Date" type="date" ng-model="salary.activeExpense.date" required="required">
 	  		</label>
+				<div class="card" ng-show="salary.showErrorAlert">
+				  <div class="item item-text-wrap center">
+				    <span class="notAllowed">Sorry! You only have ${{salary.cashAvailable}} available. Adjust the amount so that the difference is less or equal to what you have on hand.</span>
+				  </div>
+				</div>
 				<button class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense)" ng-disabled="expenseForm.$invalid">Save</button>
 				<button class="button button-block button-assertive" ng-click="salary.cancel(salary.activeExpense)">Cancel</button>
 			</form>
