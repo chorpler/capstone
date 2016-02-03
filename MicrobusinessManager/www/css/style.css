@@ -278,5 +278,5 @@ input.self-payment {
 }
 
 ion-content.sales {
-  top: 241px;
+  top: 241px !important;
 }
