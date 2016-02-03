@@ -1,4 +1,4 @@
-<ion-modal-view>
+<ion-modal-view class="income-statement">
 	<ion-header-bar>
 		<h1 class="title">Income Statement</h1>
 		<div class="buttons">
@@ -8,11 +8,43 @@
 		</div>
 	</ion-header-bar>
 
+	<report-header start-date="reports.startDate" time-frame="reports.timeFrame" change="reports.change" class="has-header"></report-header>
 	<ion-content>
-		<report-header start-date="reports.startDate" time-frame="reports.timeFrame" change="reports.change"></report-header>
+		<div></div>
 		<ion-list>
 			<ion-item>
-
+				<div class="row">
+					<div class="col">
+						<b>Starting Cash:</b>
+					</div>
+					<div class="col" ng-class="{negative : reports.startingCash < 0}">
+						{{reports.startingCash | currency}}
+					</div>
+				</div>
+			</ion-item>
+			<ion-item ng-repeat="item in reports.incomeStatement">
+				<div class="row">
+					<div class="col">
+						<b class="report-name">{{item.isExpense ? item.name : 'Sale'}}</b>
+						<span>{{item.date.format('MMM D, YYYY')}}</span>
+					</div>
+					<div class="col">
+						<span ng-show="!item.isExpense">{{item.total | currency}}</span>
+					</div>
+					<div class="col negative">
+						<span ng-show="item.isExpense">{{item.amount | currency}}</span>
+					</div>
+				</div>
+			</ion-item>
+			<ion-item>
+				<div class="row">
+					<div class="col">
+						<b>Ending Cash:</b>
+					</div>
+					<div class="col" ng-class="{negative : reports.endingCash < 0}">
+						{{reports.endingCash | currency}}
+					</div>
+				</div>
 			</ion-item>
 		</ion-list>
 	</ion-content>

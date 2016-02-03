@@ -236,3 +236,36 @@ input.self-payment {
 .product-qty {
   margin-top: 8px;
 }
+
+.report-name {
+  display: block;
+}
+
+.income-statement .row .col:not(:first-child) {
+  text-align: center;
+}
+
+.negative {
+  color: red;
+}
+
+.income-statement report-header,
+.sales-report report-header {
+  display: block;
+  z-index: 1000;
+  position: absolute;
+  width: 100%;
+  background-color: white;
+}
+
+.income-statement ion-content,
+.sales-report ion-content {
+  top: 138px;
+}
+
+.sales-report .no-reports {
+  font-size: 2em;
+  line-height: 2em;
+  text-align: center;
+  padding-top: 50px;
+}

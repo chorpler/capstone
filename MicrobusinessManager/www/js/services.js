@@ -40,7 +40,7 @@
     var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
     var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date, type) VALUES (?, ?, ?, ?, ?)';
-    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date , type FROM expense';
+    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date, type FROM expense';
     var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?, type = ? ';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
 
@@ -154,6 +154,7 @@
       if (type) {
         query += whereClause ? AND + WHERE_TYPE : WHERE + WHERE_TYPE;
         params.push(type);
+        whereClause = true;
       }
 
       return deferred.promise.then(function () {
