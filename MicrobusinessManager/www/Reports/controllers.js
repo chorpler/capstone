@@ -183,6 +183,12 @@
 			});
 		}
 
+		//Cleanup the modal when we're done with it!
+		$scope.$on('$destroy', function() {
+			vm.incomeStatementModal.remove();
+			vm.salesReportModal.remove();
+		});
+
 		init();
 	}
 })();
