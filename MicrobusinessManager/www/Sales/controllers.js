@@ -113,7 +113,6 @@
                 return Database.update('inventory', p.inventoryid, [
                   inv.name,
                   quantity,
-                  inv.cost,
                   p.id
                 ]);
               })

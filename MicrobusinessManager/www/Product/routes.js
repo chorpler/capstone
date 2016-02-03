@@ -32,7 +32,6 @@
 							items[item.id] = item;
 							if (item.linkInventory) {
 								promises.push(Database.select('inventory', item.inventoryid).then(function (inventory) {
-									items[inventory.rows.item(0).productid].cost = Number(inventory.rows.item(0).cost);
 									items[inventory.rows.item(0).productid].quantity = inventory.rows.item(0).quantity;
 								}));
 							}
