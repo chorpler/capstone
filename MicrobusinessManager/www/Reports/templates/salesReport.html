@@ -1,28 +1,40 @@
-<ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Sales Report</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="reports.salesReportModal.hide()">
-        Done
-      </button>
-    </div>
-  </ion-header-bar>
+<ion-modal-view class="sales-report">
+	<ion-header-bar>
+		<h1 class="title">Sales Report</h1>
+		<div class="buttons">
+			<button class="button button-clear" ng-click="reports.salesReportModal.hide()">
+				Done
+			</button>
+		</div>
+	</ion-header-bar>
 
-  <ion-content>
-    <ion-list ng-repeat="sale in reports.sales track by sale.id | orderBy: sale.date">
-      <div class="item item-divider">
-        <div class="row">
-          <div class="col">
-            <span class="name-container">Date: {{sale.date | date:'short'}}</span>
-          </div>
-          <div class="col">
-            <span class="amount-container">Total: {{sale.total | currency}}</span>
-          </div>
-        </div>
-      </div>
-      <ion-item ng-repeat="product in sale.products track by product.id">
-          Name: {{product.name}} Price: {{product.price | currency}} Qty: {{product.quantity}}
-      </ion-item>
-    </ion-list>
-  </ion-content>
+	<report-header start-date="reports.startDate" time-frame="reports.timeFrame" change="reports.change" class="has-header"></report-header>
+	<ion-content>
+		<ion-list ng-repeat="sale in reports.sales track by sale.id | orderBy: sale.date">
+			<div class="item item-divider">
+				<div class="row">
+					<div class="col">
+						<span class="name-container">Date: {{sale.date.format('MMM D, YYYY')}}</span>
+					</div>
+					<div class="col">
+						<span class="amount-container">Total: {{sale.total | currency}}</span>
+					</div>
+				</div>
+			</div>
+			<ion-item ng-repeat="product in sale.products track by product.id">
+				<div class="row">
+					<div class="col col-33">
+						<span>{{product.name}}</span>
+					</div>
+					<div class="col col-50">
+						<span>Price: {{product.price | currency}}</span>
+					</div>
+					<div class="col">
+						<span>Qty: {{product.quantity}}</span>
+					</div>
+				</div>
+			</ion-item>
+		</ion-list>
+		<div ng-if="reports.sales.length === 0" class="no-reports">There were no sales in this time period.</div>
+	</ion-content>
 </ion-modal-view>

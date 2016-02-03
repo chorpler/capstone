@@ -30,7 +30,7 @@
 					});
 				},
 				expenses: function (startDate, endDate, Database) {
-					return Database.select('expense', null, null, startDate, endDate).then(function (response) {
+					return Database.select('expense', null, null, null, startDate, endDate).then(function (response) {
 						var items = [];
 						if (response.rows.length === 0) {
 							return items;
@@ -47,7 +47,7 @@
 					});
 				},
 				sales: function (startDate, endDate, Database) {
-					return Database.select('sale', null, null, startDate, endDate).then(function (response) {
+					return Database.select('sale', null, null, null, startDate, endDate).then(function (response) {
 						var items = [];
 						if (response.rows.length === 0) {
 							return items;

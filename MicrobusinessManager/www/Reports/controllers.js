@@ -20,6 +20,13 @@
 		vm.endingCash	= 0;
 		vm.expenses 	= expenses;
 		vm.sales 		= sales;
+		vm.incomeStatement	= [];
+		vm.incomeStatementModal = {};
+		vm.salesReportModal = {};
+
+		var currentReport = '';
+		var INCOME_STATEMENT = 'income';
+		var SALES_REPORT = 'sales';
 
 		function init () {
 			$ionicModal.fromTemplateUrl('Reports/templates/incomeStatement.html', {
@@ -37,10 +44,11 @@
 			});
 
 			vm.endingCash = calculateEndCash();
+			prepareIncomeStatement();
 		}
 
 		function loadSales () {
-			return Database.select('sale', null, null, vm.startDate, vm.endDate)
+			return Database.select('sale', null, null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
 				vm.sales.length = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
@@ -52,23 +60,25 @@
 		}
 
 		function loadExpenses () {
-			return Database.select('expense', null, null, vm.startDate, vm.endDate)
+			return Database.select('expense', null, null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
 				vm.expenses.length = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var expense = response.rows.item(i);
+					expense.amount = Number(expense.amount);
+					expense.date = moment(expense.date);
 					vm.expenses.push(expense);
 				}
 			});
 		}
 
 		function loadSalesProducts () {
-			return Database.select('sale', null, null, vm.startDate, vm.endDate)
+			return Database.select('sale', null, null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
 				vm.sales.length = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var sale = response.rows.item(i);
-					sale.date = new Date(sale.date);
+					sale.date = moment(sale.date);
 					sale.products = [];
 
 					vm.sales.push(sale);
@@ -90,11 +100,13 @@
 		function loadIncomeStatement () {
 			loadSales();
 			loadExpenses();
+			currentReport = INCOME_STATEMENT;
 			vm.incomeStatementModal.show();
 		}
 
 		function closeIncomeStatement () {
 			vm.incomeStatementModal.hide();
+			currentReport = '';
 			vm.sales = [];
 			vm.expenses = [];
 		}
@@ -102,6 +114,7 @@
 		function loadSalesReport () {
 			loadSalesProducts()
 			.then(function () {
+				currentReport = SALES_REPORT;
 				vm.salesReportModal.show();
 			});
 		}
@@ -122,9 +135,16 @@
 
 			promises.push(loadExpenses());
 
-			promises.push(loadSales());
+			switch (currentReport) {
+				case INCOME_STATEMENT:
+					promises.push(loadSales());
+					break;
+				case SALES_REPORT:
+					promises.push(loadSalesProducts());
+					break;
+			}
 
-			$q.all(promises).then(calculateEndCash);
+			$q.all(promises).then(calculateEndCash).then(prepareIncomeStatement);
 		}
 
 		function calculateEndCash () {
@@ -139,6 +159,28 @@
 			}, vm.endingCash);
 
 			return vm.endingCash;
+		}
+
+		function prepareIncomeStatement () {
+			vm.sales.forEach(function (sale) {
+				sale.isExpense = false;
+			});
+			vm.expenses.forEach(function (expense) {
+				expense.isExpense = true;
+			});
+
+			vm.incomeStatement = vm.sales.concat(vm.expenses);
+			vm.incomeStatement.sort(function (a, b) {
+				if (a.date < b.date) {
+					return -1;
+				}
+
+				if (a.date > b.date) {
+					return 1;
+				}
+
+				return 0;
+			});
 		}
 
 		init();
