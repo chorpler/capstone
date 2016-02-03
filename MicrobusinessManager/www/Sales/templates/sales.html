@@ -1,37 +1,36 @@
 <ion-view view-title="Sales">
+  <div class="list card has-header">
+      <div class="item item-divider">
+        <div class="row center">
+          <div class="col">
+            <span class="name-container">
+              Total: {{sales.saleTotal | currency}}
+            </span>
+          </div>
+          <div class="col">
+            <span class="name-container">
+              Products: {{sales.productCount}}
+            </span>
+          </div>
+          <div class="col">
+            <div class="assertive" ng-click="sales.resetSale()">
+              Reset
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ion-item>
+        <div class="button button-block button-balanced" ng-click="sales.checkout()">
+          Checkout
+        </div>
+      </ion-item>
+
+      <div class="row assertive center" ng-show="sales.error">
+        {{sales.error}}
+      </div>
+  </div>
   <ion-content class="sales">
-    <div class="list card">
-        <div class="item item-divider">
-          <div class="row center">
-            <div class="col">
-              <span class="name-container">
-                Total: {{sales.saleTotal | currency}}
-              </span>
-            </div>
-            <div class="col">
-              <span class="name-container">
-                Products: {{sales.productCount}}
-              </span>
-            </div>
-            <div class="col">
-              <div class="assertive" ng-click="sales.resetSale()">
-                Reset
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <ion-item>
-          <div class="button button-block button-balanced" ng-click="sales.checkout()">
-            Checkout
-          </div>
-        </ion-item>
-
-        <div class="row assertive center" ng-show="sales.error">
-          {{sales.error}}
-        </div>
-    </div>
-
     <div class="list card" ng-repeat="product in sales.products track by product.id">
       <div class="item item-divider">
         <div class="row center">
@@ -64,6 +63,9 @@
           </button>
         </div>
       </div>
+    </div>
+    <div ng-if="sales.products.length === 0" class="no-products">
+      You have not added any products. Go to the Products page and add some.
     </div>
   </ion-content>
 </ion-view>

@@ -269,3 +269,14 @@ input.self-payment {
   text-align: center;
   padding-top: 50px;
 }
+
+.sales .no-products {
+  font-size: 1.6em;
+  line-height: 1.6em;
+  text-align: center;
+  padding-top: 30px;
+}
+
+ion-content.sales {
+  top: 241px;
+}
