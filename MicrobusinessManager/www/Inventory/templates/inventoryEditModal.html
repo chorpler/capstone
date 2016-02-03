@@ -18,10 +18,18 @@
 					<span class="input-label">Quantity</span>
 					<input type="number" placeholder="Quantity*" ng-model="inventory.activeItem.quantity" required="required">
 				</label>
-				<label class="item item-input item-floating-label">
-					<span class="input-label">Cost Per Unit</span>
-					<input type="number" placeholder="Cost Per Unit*" ng-model="inventory.activeItem.cost" step="0.01" required="required">
+				<label class="item item-input item-floating-label" ng-if="!inventory.editOpen">
+					<span class="input-label">Total Cost</span>
+					<input type="number" placeholder="Total Cost*" ng-model="inventory.activeItem.cost" step="0.01" required="required">
 				</label>
+				<label class="item item-input item-floating-label" ng-if="!inventory.editOpen">
+					<span class="input-label">Comments</span>
+					<textarea placeholder="Comments" ng-model="inventory.activeItem.comments"></textarea>
+				</label>
+				<label class="item item-input" ng-if="!inventory.editOpen">
+					<span class="input-label">Date*</span>
+	    			<input placeholder="Date" type="date" ng-model="inventory.activeItem.date" required="required">
+	    		</label>
 				<ion-checkbox ng-model="inventory.activeItem.linkProduct">Make Product</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="inventory.activeItem.linkProduct">
 					<span class="input-label">Sales Price</span>

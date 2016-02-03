@@ -21,6 +21,7 @@
 		var tempItem = null;
 		var productTable = 'product';
 		var inventoryTable = 'inventory';
+		var expenseTable = 'expense';
 
 		function init () {
 			$ionicModal.fromTemplateUrl('Product/templates/productEditModal.html', {
@@ -48,8 +49,9 @@
 						item.inventoryid = inventoryItem.id;
 						deferred.resolve();
 					} else {
-						return Database.insert(inventoryTable, [item.name, item.quantity, item.cost, item.id]).then(function (response) {
+						return Database.insert(inventoryTable, [item.name, item.quantity, item.id]).then(function (response) {
 						    item.inventoryid = response.insertId;
+						    Database.insert(expenseTable, [item.name, item.cost, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
 						    deferred.resolve();
 						});
 					}
@@ -58,7 +60,7 @@
 				deferred.promise = Database.select(inventoryTable, item.inventoryid).then(function (inventory) {
 					if (inventory.rows.length > 0) {
 						inventoryItem = inventory.rows.item(0);
-						Database.update(inventoryTable, inventoryItem.id, [inventoryItem.name, inventoryItem.quantity, inventoryItem.cost, null]);
+						Database.update(inventoryTable, inventoryItem.id, [inventoryItem.name, inventoryItem.quantity, null]);
 						item.inventoryid = null;
 						deferred.resolve();
 					}
@@ -73,14 +75,14 @@
 						item.id = response.insertId;
 						vm.items.push(item);
 						if (item.linkInventory)
-							Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
+							Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.id]);
 					});
 				});
 			} else {
 				deferred.promise.then(function () {
 					Database.update(productTable, item.id, [item.name, item.price, item.inventoryid]);
 					if (item.linkInventory)
-						Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.cost, item.id]);
+						Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.id]);
 				});
 			}
 
@@ -93,6 +95,8 @@
 				vm.activeItem.name = tempItem.name;
 				vm.activeItem.quantity = tempItem.quantity;
 				vm.activeItem.cost = tempItem.cost;
+				vm.activeItem.comments = tempItem.comments;
+				vm.activeItem.date = tempItem.date;
 				vm.activeItem.linkInventory = tempItem.linkInventory;
 				vm.activeItem.price = tempItem.price;
 				vm.activeItem = null;
@@ -124,7 +128,6 @@
 		}
 
 		function clearSearch () {
-			console.log('i am here');
 			vm.search = '';
 		}
 
@@ -137,8 +140,6 @@
 			confirmPopup.then(function(res) {
 				if(res) {
 					vm.deleteItem(vm.activeItem);
-				} else {
-					console.log('You are not sure');
 				}
 			});
 		}

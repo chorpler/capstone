@@ -28,7 +28,6 @@
 							items.push(item);
 						}
 
-						console.log(items);
 						return items;
 					});
 				}

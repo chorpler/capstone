@@ -23,10 +23,18 @@
 					<span class="input-label">Quantity</span>
 					<input type="number" placeholder="Quantity*" ng-model="products.activeItem.quantity" ng-required="products.activeItem.linkInventory">
 				</label>
-				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
-					<span class="input-label">Cost Per Unit</span>
-					<input type="number" placeholder="Cost Per Unit*" ng-model="products.activeItem.cost" ng-required="products.activeItem.linkInventory">
+				<label class="item item-input item-floating-label" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
+					<span class="input-label">Total Cost</span>
+					<input type="number" placeholder="Total Cost*" ng-model="products.activeItem.cost" ng-required="products.activeItem.linkInventory">
 				</label>
+				<label class="item item-input item-floating-label" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
+					<span class="input-label">Comments</span>
+					<textarea placeholder="Comments" ng-model="products.activeItem.comments"></textarea>
+				</label>
+				<label class="item item-input" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
+					<span class="input-label">Date*</span>
+	    			<input placeholder="Date" type="date" ng-model="products.activeItem.date" required="required">
+	    		</label>
 			</form>
 		</div>
 		<button class="button button-block button-balanced" ng-click="products.save(products.activeItem)" ng-disabled="productsForm.$invalid">Save</button>
