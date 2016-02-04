@@ -25,12 +25,13 @@
           Checkout
         </div>
       </ion-item>
-
-      <div class="row assertive center" ng-show="sales.error">
-        {{sales.error}}
-      </div>
   </div>
   <ion-content class="sales">
+    <div class="card" ng-show="sales.error">
+      <div class="item item-text-wrap assertive center">
+        {{sales.error}}
+      </div>
+    </div>
     <div class="list card" ng-repeat="product in sales.products track by product.id">
       <div class="item item-divider">
         <div class="row center">
@@ -64,8 +65,13 @@
         </div>
       </div>
     </div>
-    <div ng-if="sales.products.length === 0" class="no-products">
+    <!-- <div ng-if="sales.products.length === 0" class="no-products">
       You have not added any products. Go to the Products page and add some.
+    </div> -->
+    <div class="card" ng-if="sales.products.length === 0">
+      <div class="item item-text-wrap center">
+        <span class="no-products">You have not added any products. Go to the Products page and add some.</span>
+      </div>
     </div>
   </ion-content>
 </ion-view>
