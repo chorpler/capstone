@@ -35,6 +35,10 @@
 				</div>
 			</ion-item>
 		</ion-list>
-		<div ng-if="reports.sales.length === 0" class="no-reports">There were no sales in this time period.</div>
+		<div class="card" ng-if="reports.sales.length === 0">
+      <div class="item item-text-wrap center">
+        <span class="no-reports">There are no sales in this time period.</span>
+      </div>
+    </div>
 	</ion-content>
 </ion-modal-view>

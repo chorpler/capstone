@@ -266,21 +266,12 @@ input.self-payment {
 
 .income-statement ion-content,
 .sales-report ion-content {
-  top: 138px;
+  top: 158px !important;
 }
 
+.sales .no-products,
 .sales-report .no-reports {
-  font-size: 2em;
-  line-height: 2em;
-  text-align: center;
-  padding-top: 50px;
-}
-
-.sales .no-products {
-  font-size: 1.6em;
-  line-height: 1.6em;
-  text-align: center;
-  padding-top: 30px;
+  font-weight: 600 !important;
 }
 
 ion-content.sales {

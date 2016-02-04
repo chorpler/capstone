@@ -163,7 +163,7 @@
 		function showConfirm () {
 			var confirmPopup = $ionicPopup.confirm({
 				title: 'Delete Inventory Item',
-				template: 'Are you sure?'
+				template: 'Are you sure? If you delete it, you will need to go to expenses and update the corresponding entry.'
 			});
 
 			confirmPopup.then(function(res) {
