@@ -23,6 +23,7 @@
 		vm.incomeStatement	= [];
 		vm.incomeStatementModal = {};
 		vm.salesReportModal = {};
+		vm.salesTotal = 0;
 
 		var currentReport = '';
 		var INCOME_STATEMENT = 'income';
@@ -51,9 +52,11 @@
 			return Database.select('sale', null, null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
 				vm.sales.length = 0;
+				vm.salesTotal = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var sale = response.rows.item(i);
 					sale.date = moment(sale.date);
+					vm.salesTotal += sale.total;
 					vm.sales.push(sale);
 				}
 			});
@@ -76,10 +79,12 @@
 			return Database.select('sale', null, null, null, vm.startDate, vm.endDate)
 			.then(function (response) {
 				vm.sales.length = 0;
+				vm.salesTotal = 0;
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var sale = response.rows.item(i);
 					sale.date = moment(sale.date);
 					sale.products = [];
+					vm.salesTotal += sale.total;
 
 					vm.sales.push(sale);
 					addProductsToSale(sale);
