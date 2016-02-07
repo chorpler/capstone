@@ -2,7 +2,7 @@
 angular.module('app.expenses')
 .controller('ExpensesController', ExpensesController);
 
-	function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, expenseItems) {
+	function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, expenseItems, languages) {
 		var vm = this;
 
 		vm.log = expenseItems;
@@ -23,10 +23,16 @@ angular.module('app.expenses')
 		vm.showConfirm = showConfirm;
 
 		var tempExpense = null;
+		var language = {};
 		var expenseTable = 'expense';
+		var title_delete, message_body;
 
 		function init () {
-
+			if (languages.length) {
+				for (var i = 0; i < languages.length; i++) {
+					language.type = languages[0].type;
+				}
+			}
 			$ionicModal.fromTemplateUrl('Expense/templates/expensesEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
@@ -136,9 +142,16 @@ angular.module('app.expenses')
 		}
 
 		function showConfirm () {
+			if (language.type === 'es') {
+				title_delete = "Borrar Gasto";
+				message_body = "Esta seguro?";
+			} else {
+				title_delete = "Delete Expense";
+				message_body = "Are you sure?";
+			}
 			var confirmPopup = $ionicPopup.confirm({
-				title: 'Delete Expense',
-				template: 'Are you sure?'
+				title: title_delete,
+				template: message_body
 			});
 
 			confirmPopup.then(function(res) {

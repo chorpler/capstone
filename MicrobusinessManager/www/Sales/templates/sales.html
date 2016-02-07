@@ -1,4 +1,4 @@
-<ion-view view-title="Sales">
+<ion-view view-title="{{'menu_sales' | translate}}">
   <div class="list card has-header">
       <div class="item item-divider">
         <div class="row center">
@@ -9,12 +9,12 @@
           </div>
           <div class="col">
             <span class="name-container">
-              Products: {{sales.productCount}}
+              {{"menu_products" | translate}}: {{sales.productCount}}
             </span>
           </div>
           <div class="col">
             <div class="assertive" ng-click="sales.resetSale()">
-              Reset
+              {{"sales_reset" | translate}}
             </div>
           </div>
         </div>
@@ -22,27 +22,28 @@
 
       <ion-item>
         <div class="button button-block button-balanced" ng-click="sales.checkout()">
-          Checkout
+          {{"sales_checkout" | translate}}
         </div>
       </ion-item>
   </div>
   <ion-content class="sales">
     <div class="card" ng-show="sales.error">
       <div class="item item-text-wrap assertive center">
-        {{sales.error}}
+        <!-- {{sales.error}} -->
+        {{sales.productError.name}} {{"sales_error_part1" | translate}} {{sales.productError.limit}}  {{"sales_error_part2" | translate}} {{sales.productError.limit}}.
       </div>
     </div>
     <div class="list card" ng-repeat="product in sales.products track by product.id">
       <div class="item item-divider">
         <div class="row center">
           <div class="col">
-            <span class="name-container">Name: {{product.name}}</span>
+            <span class="name-container">{{"sales_name" | translate}}: {{product.name}}</span>
           </div>
           <div class="col">
-            <span class="amount-container">Price: {{product.price | currency}}</span>
+            <span class="amount-container">{{"sales_price" | translate}}: {{product.price | currency}}</span>
           </div>
           <div class="col" ng-show="product.inventoryid">
-            <span class="amount-container">Limit: {{product.limit}}</span>
+            <span class="amount-container">{{"sales_limit" | translate}}: {{product.limit}}</span>
           </div>
         </div>
       </div>
@@ -67,7 +68,7 @@
     </div>
     <div class="card" ng-if="sales.products.length === 0">
       <div class="item item-text-wrap center">
-        <span class="no-products">You have not added any products. Go to the Products page and add some.</span>
+        <span class="no-products">{{"sales_no_product" | translate}}</span>
       </div>
     </div>
   </ion-content>

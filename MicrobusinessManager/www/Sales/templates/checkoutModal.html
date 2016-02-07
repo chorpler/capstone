@@ -2,15 +2,15 @@
   <ion-header-bar>
     <button class="button button-clear" ng-click="sales.cancelCheckout()">
       <i class="icon ion-chevron-left"></i>
-      Back
+      {{"sales_edit_product_back" | translate}}
     </button>
-    <h1 class="title">Checkout</h1>
+    <h1 class="title">{{"sales_checkout" | translate}}</h1>
   </ion-header-bar>
 
   <ion-content class="products">
     <div class="list card">
       <div class="item item-divider center">
-        <span>Total Sales Price</span>
+        <span>{{"sales_total_sale" | translate}}</span>
       </div>
 
       <ion-item>
@@ -22,7 +22,7 @@
 
       <ion-item>
         <button class="button button-block button-balanced" ng-click="sales.saveSale()">
-          Save
+          {{"sales_record" | translate}}
         </button>
       </ion-item>
     </div>
@@ -30,7 +30,7 @@
 
     <div class="list card">
       <div class="item item-divider center">
-        <span>Sale Products</span>
+        <span>{{"sale_products_total" | translate}}</span>
       </div>
       <ion-item ng-click="sales.editSaleProduct(product)" ng-repeat="product in sales.saleProducts track by product.id">
         <div class="card-container">

@@ -17,6 +17,7 @@
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
                      'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount text, type text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
       deferred.resolve();
     });
 
@@ -59,6 +60,11 @@
     var UPDATE_SALARY = 'UPDATE salary set amount = ?, type = ? ';
     var REMOVE_SALARY = 'DELETE FROM salary';
 
+    var INSERT_LANGUAGES = 'INSERT INTO languages (type) VALUES (?)';
+    var SELECT_LANGUAGES = 'SELECT id, type FROM languages';
+    var UPDATE_LANGUAGES = 'UPDATE languages set type = ? ';
+    var REMOVE_LANGUAGES = 'DELETE FROM languages';
+
     var WHERE = ' WHERE ';
     var AND = ' AND ';
     var WHERE_ID = 'id = ? ';
@@ -89,6 +95,9 @@
           break;
         case 'salary':
           query = INSERT_SALARY;
+          break;
+        case 'languages':
+          query = INSERT_LANGUAGES;
           break;
       }
 
@@ -121,6 +130,9 @@
           break;
         case 'salary':
           query = SELECT_SALARY;
+          break;
+        case 'languages':
+          query = SELECT_LANGUAGES;
           break;
       }
 
@@ -191,6 +203,9 @@
         case 'salary':
           query = UPDATE_SALARY;
           break;
+        case 'languages':
+          query = UPDATE_LANGUAGES;
+          break;
       }
 
       query += id ? WHERE + WHERE_ID : '';
@@ -231,6 +246,9 @@
           break;
         case 'salary':
           query = REMOVE_SALARY;
+          break;
+        case 'languages':
+          query = REMOVE_LANGUAGES;
           break;
       }
 

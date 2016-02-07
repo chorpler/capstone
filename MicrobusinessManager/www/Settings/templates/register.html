@@ -1,8 +1,8 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Register</h1>
+    <h1 class="title">{{"register_button" | translate}}</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="settings.closeRegistration()">Close</button>
+      <button class="button button-clear" ng-click="settings.closeRegistration()">{{'close_button' | translate}}</button>
     </div>
   </ion-header-bar>
   <ion-content>
@@ -14,27 +14,27 @@
     <form ng-submit="settings.submitRegistrationRequest()">
       <div class="list">
         <label class="item item-input">
-          <span class="input-label">Username</span>
+          <span class="input-label">{{"settings_username" | translate}}</span>
           <input type="text" ng-model="settings.userRegistration.username">
         </label>
         <label class="item item-input">
-          <span class="input-label">Password</span>
+          <span class="input-label">{{"settings_password" | translate}}</span>
           <input type="password" ng-model="settings.userRegistration.password">
         </label>
         <label class="item item-input">
-          <span class="input-label">Confirm Password</span>
+          <span class="input-label">{{"settings_confirm_password" | translate}}</span>
           <input type="password" ng-model="settings.userRegistration.confirmPassword">
         </label>
         <label class="item item-input">
-          <span class="input-label">Email</span>
+          <span class="input-label">{{"settings_email" | translate}}</span>
           <input type="password" ng-model="settings.userRegistration.email">
         </label>
         <label class="item item-input">
-          <span class="input-label">Phone</span>
+          <span class="input-label">{{"settings_phone" | translate}}</span>
           <input type="password" ng-model="settings.userRegistration.phone">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Register</button>
+          <button class="button button-block button-positive" type="submit">{{"register_button" | translate}}</button>
         </label>
       </div>
     </form>

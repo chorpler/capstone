@@ -1,4 +1,4 @@
-<ion-view view-title="Inventory">
+<ion-view view-title="{{'menu_inventory' | translate}}">
 	<ion-nav-buttons side="right">
 		<button class="button button-icon ion-ios-plus-empty" ng-click="inventory.addNewItem()"></button>
 	</ion-nav-buttons>
@@ -6,10 +6,10 @@
     <div class="item-input-inset">
       <label class="item-input-wrapper">
         <i class="icon ion-ios-search placeholder-icon"></i>
-        <input type="search" placeholder="Search" ng-model="inventory.search">
+        <input type="search" placeholder="{{'placehoder_search' | translate}}" ng-model="inventory.search">
       </label>
       <button class="button button-positive" ng-click="inventory.clearSearch()" ng-show="inventory.search">
-        Cancel
+        {{"cancel_button" | translate}}
       </button>
     </div>
   </ion-header-bar>
@@ -18,10 +18,10 @@
 			<div class="item item-divider">
 				<div class="row">
 					<div class="col">
-						<span class="name-container">Name</span>
+						<span class="name-container">{{"inventory_name" | translate}}</span>
 					</div>
 					<div class="col">
-						<span class="amount-container">Quantity</span>
+						<span class="amount-container">{{"inventory_quantity" | translate}}</span>
 					</div>
 					<div class="col col-10"></div>
 				</div>

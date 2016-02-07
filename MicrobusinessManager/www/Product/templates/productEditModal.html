@@ -11,33 +11,33 @@
 		<div class="list">
 			<form name="productsForm">
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Name</span>
-					<input type="text" placeholder="Name*" ng-model="products.activeItem.name" required="required">
+					<span class="input-label">{{"product_name" | translate}}</span>
+					<input type="text" placeholder="{{'product_name' | translate}}*" ng-model="products.activeItem.name" required="required">
 				</label>
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Sales Price</span>
-					<input type="number" placeholder="Sales Price*" ng-model="products.activeItem.price" required="required">
+					<span class="input-label">{{"product_sales_price" | translate}}</span>
+					<input type="number" placeholder="{{'product_sales_price' | translate}}*" ng-model="products.activeItem.price" required="required">
 				</label>
-				<ion-checkbox ng-model="products.activeItem.linkInventory">Add Inventory</ion-checkbox>
+				<ion-checkbox ng-model="products.activeItem.linkInventory">{{"product_add_inventory" | translate}}</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
-					<span class="input-label">Quantity</span>
-					<input type="number" placeholder="Quantity*" ng-model="products.activeItem.quantity" ng-required="products.activeItem.linkInventory">
+					<span class="input-label">{{"inventory_quantity" | translate}}</span>
+					<input type="number" placeholder="{{'inventory_quantity' | translate}}*" ng-model="products.activeItem.quantity" ng-required="products.activeItem.linkInventory">
 				</label>
 				<label class="item item-input item-floating-label" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
-					<span class="input-label">Total Cost</span>
-					<input type="number" placeholder="Total Cost*" ng-model="products.activeItem.cost" ng-required="products.activeItem.linkInventory">
+					<span class="input-label">{{"inventory_total_cost" | translate}}</span>
+					<input type="number" placeholder="{{'inventory_total_cost' | translate}}*" ng-model="products.activeItem.cost" ng-required="products.activeItem.linkInventory">
 				</label>
 				<label class="item item-input item-floating-label" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
-					<span class="input-label">Comments</span>
-					<textarea placeholder="Comments" ng-model="products.activeItem.comments"></textarea>
+					<span class="input-label">{{"inventory_total_comments" | translate}}</span>
+					<textarea placeholder="{{'inventory_total_comments' | translate}}" ng-model="products.activeItem.comments"></textarea>
 				</label>
 				<label class="item item-input" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
-					<span class="input-label">Date*</span>
-	    			<input placeholder="Date" type="date" ng-model="products.activeItem.date" required="required">
+					<span class="input-label">{{"inv_exp_sal_date" | translate}}*</span>
+	    			<input placeholder="{{'inv_exp_sal_date' | translate}}" type="date" ng-model="products.activeItem.date" required="required">
 	    		</label>
 			</form>
 		</div>
-		<button class="button button-block button-balanced" ng-click="products.save(products.activeItem)" ng-disabled="productsForm.$invalid">Save</button>
-		<button class="button button-block button-assertive" ng-click="products.cancel(products.activeItem)">Cancel</button>
+		<button class="button button-block button-balanced" ng-click="products.save(products.activeItem)" ng-disabled="productsForm.$invalid">{{"save_button" | translate}}</button>
+		<button class="button button-block button-assertive" ng-click="products.cancel(products.activeItem)">{{"cancel_button" | translate}}</button>
 	</ion-content>
 </ion-modal-view>
