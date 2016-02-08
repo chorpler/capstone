@@ -37,6 +37,7 @@ angular.module('app.salary')
 			if (languages.length) {
 				for (var k = 0; k < languages.length; k++) {
 					language.type = languages[0].type;
+
 				}
 			}
 			for (var i = 0; i < salary.length; i++) {
@@ -192,7 +193,7 @@ angular.module('app.salary')
 		function showConfirm () {
 			if (language.type === 'es') {
 				title_delete = "Borrar Registro de Sueldo";
-				message_body = "Estas seguro?";
+				message_body = "¿Estás seguro?";
 				cancel_button = "Cancelar";
 			} else {
 				title_delete = "Delete Salary Record";
@@ -219,8 +220,8 @@ angular.module('app.salary')
 
 		function showAlert () {
 			if (language.type === 'es') {
-				title_funds = "Insuficientes Fondos!";
-				message_body = "Solamnete tienes disponible $";
+				title_funds = "Fondos Insuficientes!";
+				message_body = "Solamente tienes disponible $";
 				message_body_2 = ". Porfavor ajusta tu sueldo.";
 			} else {
 				title_funds = "Insufficient Funds!";

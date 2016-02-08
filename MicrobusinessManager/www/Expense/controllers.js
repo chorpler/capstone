@@ -144,7 +144,7 @@ angular.module('app.expenses')
 		function showConfirm () {
 			if (language.type === 'es') {
 				title_delete = "Borrar Gasto";
-				message_body = "Estas seguro?";
+				message_body = "¿Estás seguro?";
 				cancel_button = "Cancelar";
 			} else {
 				title_delete = "Delete Expense";

@@ -169,7 +169,7 @@
 		function showConfirm () {
 			if (language.type === 'es') {
 				title_delete = "Borrar Articulo de Inventario";
-				message_body = "Estas seguro? Si le borras, tendras que ir a Gastos y actualizar el correspondiente registro";
+				message_body = "¿Estás seguro? Si le borras, tendrás que ir a Gastos y actualizar el correspondiente registro";
 				cancel_button = "Cancelar";
 			} else {
 				title_delete = "Delete Inventory Item";

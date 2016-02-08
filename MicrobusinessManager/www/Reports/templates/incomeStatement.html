@@ -1,9 +1,9 @@
 <ion-modal-view class="income-statement">
 	<ion-header-bar>
-		<h1 class="title">Income Statement</h1>
+		<h1 class="title">{{"reports_income_statement2" | translate}}</h1>
 		<div class="buttons">
 			<button class="button button-clear" ng-click="reports.incomeStatementModal.hide()">
-				Done
+				{{"close_button" | translate}}
 			</button>
 		</div>
 	</ion-header-bar>
@@ -15,7 +15,7 @@
 			<ion-item>
 				<div class="row">
 					<div class="col">
-						<b>Starting Cash:</b>
+						<b>{{"reports_starting_cash" | translate}}</b>
 					</div>
 					<div class="col" ng-class="{negative : reports.startingCash < 0}">
 						{{reports.startingCash | currency}}
@@ -39,7 +39,7 @@
 			<ion-item>
 				<div class="row">
 					<div class="col">
-						<b>Ending Cash:</b>
+						<b>{{"reports_ending_cash" | translate}}</b>
 					</div>
 					<div class="col" ng-class="{negative : reports.endingCash < 0}">
 						{{reports.endingCash | currency}}

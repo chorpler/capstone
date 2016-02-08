@@ -123,11 +123,11 @@
 
 		function login () {
 			vm.loginModal.show();
-		};
+		}
 
 		function closeLogin () {
 			vm.loginModal.hide();
-		};
+		}
 
 		function submitLoginRequest () {
 			if (!vm.userAccount.username || !vm.userAccount.password) {
@@ -157,7 +157,7 @@
 					vm.userAccount.error = response.data.message;
 				}
 			);
-		};
+		}
 
 		function logout () {
 			vm.userAccount = {};
@@ -166,7 +166,7 @@
 
 		function register () {
 			vm.registerModal.show();
-		};
+		}
 
 		function closeRegistration () {
 			vm.registerModal.hide();

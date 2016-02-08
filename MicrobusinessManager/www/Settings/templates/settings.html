@@ -51,7 +51,8 @@
                 <span>{{"payment_method" | translate}}</span>
               </div>
               <div class="col col-50" ng-show="!settings.edit">
-                <span class="salary-info">{{item.type}}</span>
+                <span class="salary-info" ng-if="item.type === 'salary' && settings.language.type === 'es'">Salario</span>
+                <span class="salary-info" ng-if="item.type === 'salary' && settings.language.type === 'en'">{{item.type}}</span>
               </div>
             </div>
           </div>

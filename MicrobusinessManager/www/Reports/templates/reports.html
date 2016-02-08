@@ -1,15 +1,15 @@
-<ion-view view-title="Reports">
+<ion-view view-title="{{'menu_reports' | translate}}">
   <ion-content class="reports">
     <div class="card">
       <ion-list>
         <ion-item class="item item-icon-right" ng-click="reports.loadIncomeStatement()">
           <i class="icon ion-chevron-right"></i>
-          Income Statement
+          {{"reports_income_statement" | translate}}
         </ion-item>
 
         <ion-item class="item item-icon-right" ng-click="reports.loadSalesReport()">
           <i class="icon ion-chevron-right"></i>
-          Sales Report
+          {{"reports_sales_reports" | translate}}
         </ion-item>
       </ion-list>
     </div>
