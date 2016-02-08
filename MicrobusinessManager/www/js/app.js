@@ -15,7 +15,7 @@
 	.run(run)
 	.config(config);
 
-	var language;
+	var languageTable = 'languages';
 	function run ($ionicPlatform, Database) {
 		$ionicPlatform.ready(function () {
 			if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -30,18 +30,12 @@
 		Database.select('languages').then(function (response) {
 			var items = [];
 			if (response.rows.length === 0) {
-				return items;
+				var language = {};
+				language.type = 'es';
+				Database.insert(languageTable, [language.type]).then(function (response) {
+					language.id = response.insertId;
+				});
 			}
-			for (var i = response.rows.length - 1; i >= 0; i--) {
-				var item = response.rows.item(i);
-				items.push(item);
-			}
-			console.log(items);
-			for (var j = 0; j < items.length; j++) {
-				language = items[0].type;
-			}
-			console.log(language);
-			return items;
 		});
 	}
 
@@ -102,9 +96,16 @@
 			expense_name: "Expense Nanme",
 			expense_amount: "Amount",
 			salary_expected: "Expected Salary",
+			commission_expected: "Expected Commission",
 			salary_register: "Register",
 			salary_adjust: "Adjust",
 			salary_no_comission: "Go to Settings and Set Self Payment to use this feature.",
+			salary_name: "Name",
+			salary_amount: "Amount",
+			salary_comments: "Comments",
+			salary_Date: "Date",
+			salary_message_1: "Sorry! You only have $",
+			salary_message_2: " available. Adjust the amount so that the difference is less than or equal to what you have on hand.",
 			self_payment_settings: "Self Payment Settings",
 			payment_method: "Self Payment Method",
 			payment_amount: "Payment Amount",
@@ -126,7 +127,7 @@
 			menu_products: "Productos",
 			menu_inventory: "Inventario",
 			menu_expenses: "Gastos",
-			menu_salary: "Salario",
+			menu_salary: "Sueldo",
 			menu_reports: "Reportes",
 			menu_settings: "Configuraciones",
 			cancel_button: "Cancelar",
@@ -167,9 +168,16 @@
 			expense_name: "Nombre del Gasto",
 			expense_amount: "Cantidad",
 			salary_expected: "Sueldo Esperado",
+			commission_expected: "Comision Esperada",
 			salary_register: "Registrar",
 			salary_adjust: "Ajustar",
 			salary_no_comission: "Ve a Configuraciones y establece el metodo de sueldo para usar esta funcion.",
+			salary_name: "Nombre",
+			salary_amount: "Cantidad",
+			salary_comments: "Comentarios",
+			salary_Date: "Fecha",
+			salary_message_1: "Lo sientimos! Solamente tienes $",
+			salary_message_2: " disponible. Ajusta la cantidad para que la diferencia sea menor o igual a lo que tienes disponible.",
 			self_payment_settings: "Configuracion de Mi Salario",
 			payment_method: "Metodo de Pago",
 			payment_amount: "Cantidad",

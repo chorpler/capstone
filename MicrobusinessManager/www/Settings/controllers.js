@@ -25,8 +25,8 @@
 		vm.selfPayment = {};
 		vm.language = {};
 		vm.edit = false;
-		var tempSalary = null;
 
+		var tempSalary = null;
 		var salaryTable = 'salary';
 		var languageTable = 'languages';
 
@@ -94,7 +94,6 @@
 		}
 
 		function changeLanguage (language) {
-			// language.id = 1;
 			$translate.use(language.type).then(function(data) {
         console.log("SUCCESS -> " + data);
 				if (!language.id) {

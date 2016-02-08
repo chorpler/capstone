@@ -144,20 +144,28 @@ angular.module('app.expenses')
 		function showConfirm () {
 			if (language.type === 'es') {
 				title_delete = "Borrar Gasto";
-				message_body = "Esta seguro?";
+				message_body = "Estas seguro?";
+				cancel_button = "Cancelar";
 			} else {
 				title_delete = "Delete Expense";
 				message_body = "Are you sure?";
+				cancel_button = "Cancel";
 			}
 			var confirmPopup = $ionicPopup.confirm({
 				title: title_delete,
-				template: message_body
-			});
-
-			confirmPopup.then(function(res) {
-				if(res) {
-					vm.deleteExpense(vm.activeExpense);
-				}
+				template: message_body,
+				buttons: [
+					{
+						text: cancel_button,
+						type: 'button-stable'},
+					{
+						text: '<b>Ok</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							vm.deleteExpense(vm.activeExpense);
+						}
+					}
+			]
 			});
 		}
 

@@ -2,7 +2,7 @@
 	angular.module('app.inventory')
 	.controller('InventoryController', InventoryController);
 
-	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems) {
+	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems, languages) {
 		var vm = this;
 
 		vm.items = inventoryItems;
@@ -20,13 +20,19 @@
 		vm.showConfirm = showConfirm;
 
 		var tempItem = null;
+		var language = {};
+		var title_delete, message_body;
 		var productTable = 'product';
 		var inventoryTable = 'inventory';
 		var expenseTable = 'expense';
 
 		function init () {
 			// updateTotal();
-
+			if (languages.length) {
+				for (var i = 0; i < languages.length; i++) {
+					language.type = languages[0].type;
+				}
+			}
 			$ionicModal.fromTemplateUrl('Inventory/templates/inventoryEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
@@ -161,15 +167,30 @@
 		}
 
 		function showConfirm () {
+			if (language.type === 'es') {
+				title_delete = "Borrar Articulo de Inventario";
+				message_body = "Estas seguro? Si le borras, tendras que ir a Gastos y actualizar el correspondiente registro";
+				cancel_button = "Cancelar";
+			} else {
+				title_delete = "Delete Inventory Item";
+				message_body = "Are you sure? If you delete it, you will need to go to expenses and update the corresponding entry.";
+				cancel_button = "Cancel";
+			}
 			var confirmPopup = $ionicPopup.confirm({
-				title: 'Delete Inventory Item',
-				template: 'Are you sure? If you delete it, you will need to go to expenses and update the corresponding entry.'
-			});
-
-			confirmPopup.then(function(res) {
-				if(res) {
-					vm.deleteItem(vm.activeItem);
-				}
+				title: title_delete,
+				template: message_body,
+				buttons: [
+					{
+						text: cancel_button,
+						type: 'button-stable'},
+					{
+						text: 'Ok',
+						type: 'button-positive',
+						onTap: function(e) {
+							vm.deleteItem(vm.activeItem);
+						}
+					}
+			]
 			});
 		}
 
