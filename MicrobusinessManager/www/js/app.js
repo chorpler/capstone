@@ -218,17 +218,17 @@
 			settings_language_options: "Idiomas",
 			english_language: "Inglés",
 			spanish_language: "Español",
-			reports_income_statement: "Estado de Ganancias y Perdidas",
-			reports_income_statement2: "Ganancias y Perdidas",
+			reports_income_statement: "Estado de Ganancias y Pérdidas",
+			reports_income_statement2: "Ganancias y Pérdidas",
 			reports_sales_reports: "Reporte de Ventas",
-			reports_starting_cash: "Utilidad del Periódo Previo",
-			reports_ending_cash: "Utilidad del Periódo",
+			reports_starting_cash: "Utilidad del Período Previo",
+			reports_ending_cash: "Utilidad del Período",
 			reports_date: "Fecha",
 			reports_price: "Precio",
 			reports_qty: "Cant",
 			reports_grand_total: "Gran Total",
 			reports_no_sales: "No hay ventas en este periodo.",
-			reports_time_frame: "Periodo de Tiempo"
+			reports_time_frame: "Período de Tiempo"
 
 
 		});
