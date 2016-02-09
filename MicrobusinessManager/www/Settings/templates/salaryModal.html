@@ -1,25 +1,25 @@
 <ion-modal-view>
 	<ion-header-bar>
-		<h1 class="title">Self Payment Method Configuration</h1>
+		<h1 class="title">{{"self_payment_settings" | translate}}</h1>
 	</ion-header-bar>
 	<ion-content class="expensesEdit">
     <form name="salaryForm">
       <label class="item item-input item-select">
         <div class="input-label">
-          Self Payment Method
+          {{"payment_method" | translate}}
         </div>
         <select ng-model="settings.activeSalary.type">
-          <!-- <option value="commission">Commission</option> -->
-          <option value="salary">Salary</option>
+          <!-- <option value="commission">{{"commission_option" | translate}}</option> -->
+          <option value="salary">{{"salary_option" | translate}}</option>
         </select>
       </label>
       <label class="item item-input">
-        <span class="input-label">Payment Amount</span>
+        <span class="input-label">{{"payment_amount" | translate}}</span>
         <!-- <input type="number" placeholder="{{settings.activeSalary.type === 'salary' ? 'Salary ($)' : 'Commission (%)'}}" ng-model="settings.activeSalary.amount" required="required" class="self-payment"> -->
-				<input type="number" placeholder="Salary ($)" ng-model="settings.activeSalary.amount" required="required" class="self-payment">
+				<input type="number" placeholder="{{'salary_placeholder' | translate}}" ng-model="settings.activeSalary.amount" required="required" class="self-payment">
       </label>
-      <button class="button button-block button-balanced" ng-click="settings.save(settings.activeSalary)" ng-disabled="salaryForm.$invalid">Save</button>
-      <button class="button button-block button-assertive" ng-click="settings.cancel()">Cancel</button>
+      <button class="button button-block button-balanced" ng-click="settings.save(settings.activeSalary)" ng-disabled="salaryForm.$invalid">{{"save_button" | translate}}</button>
+      <button class="button button-block button-assertive" ng-click="settings.cancel(settings.activeSalary)">{{"cancel_button" | translate}}</button>
     </form>
 	</ion-content>
 </ion-modal-view>

@@ -10,26 +10,26 @@
 		<div class="list">
 			<form name="expenseForm">
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Name</span>
-					<input type="text" placeholder="Name*" ng-model="expenses.activeExpense.name" required="required">
+					<span class="input-label">{{"expense_name" | translate}}</span>
+					<input type="text" placeholder="{{'expense_name' | translate}}*" ng-model="expenses.activeExpense.name" required="required">
 				</label>
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Amount</span>
-					<input type="number" placeholder="Amount*" ng-model="expenses.activeExpense.amount" required="required">
+					<span class="input-label">{{"expense_amount" | translate}}</span>
+					<input type="number" placeholder="{{'expense_amount' | translate}}*" ng-model="expenses.activeExpense.amount" required="required">
 				</label>
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Comments</span>
-					<textarea placeholder="Comments" ng-model="expenses.activeExpense.comments"></textarea>
+					<span class="input-label">{{"inventory_total_comments" | translate}}</span>
+					<textarea placeholder="{{'inventory_total_comments' | translate}}" ng-model="expenses.activeExpense.comments"></textarea>
 				</label>
 				<label class="item item-input">
-					<span class="input-label">Date<span ng-show="!expenses.editviewOpen">*</span></span>
-		    		<input placeholder="Date" type="date" ng-model="expenses.activeExpense.date" required="required">
+					<span class="input-label">{{"inv_exp_sal_date" | translate}}<span ng-show="!expenses.editviewOpen">*</span></span>
+		    		<input placeholder="{{'inv_exp_sal_date' | translate}}" type="date" ng-model="expenses.activeExpense.date" required="required">
 		  		</label>
-				
+
 			</form>
 		</div>
-		<button class="button button-block button-balanced" ng-click="expenses.save(expenses.activeExpense)" ng-disabled="expenseForm.$invalid">	Save
+		<button class="button button-block button-balanced" ng-click="expenses.save(expenses.activeExpense)" ng-disabled="expenseForm.$invalid">{{"save_button" | translate}}
 		</button>
-		<button class="button button-block button-assertive" ng-click="expenses.cancel(expenses.activeExpense)">Cancel</button>
+		<button class="button button-block button-assertive" ng-click="expenses.cancel(expenses.activeExpense)">{{"cancel_button" | translate}}</button>
 	</ion-content>
 </ion-modal-view>

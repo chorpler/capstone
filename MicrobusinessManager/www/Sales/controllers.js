@@ -46,7 +46,9 @@
       // Check inventory limit if applicable
       if (product.inventoryid) {
         if (product.count + 1 > product.limit) {
-          vm.error = '' + product.name + ' has only ' + product.limit + ' in inventory.  You cannot sell more than ' + product.limit;
+          // vm.error = '' + product.name + ' has only ' + product.limit + ' in inventory.  You cannot sell more than ' + product.limit;
+          vm.productError = product;
+          vm.error = true;
           return;
         }
       }

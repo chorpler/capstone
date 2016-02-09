@@ -2,7 +2,7 @@
 angular.module('app.salary')
 .controller('salaryController', salaryController);
 
-	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems, salary, cashOnHand) {
+	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems, salary, cashOnHand, languages) {
 		var vm = this;
 
 		vm.log = salaryItems;
@@ -28,11 +28,18 @@ angular.module('app.salary')
 		vm.showAlertCommission = showAlertCommission;
 
 		var tempExpense = null;
+		var language = {};
+		var title_delete, message_body, message_body_2, title_funds;
 		var expenseTable = 'expense';
 		var salaryTable = 'salary';
 
 		function init () {
+			if (languages.length) {
+				for (var k = 0; k < languages.length; k++) {
+					language.type = languages[0].type;
 
+				}
+			}
 			for (var i = 0; i < salary.length; i++) {
 				vm.expectedSalary = salary[i].amount;
 				vm.paymentType = salary[i].type;
@@ -67,13 +74,23 @@ angular.module('app.salary')
 			if (item === null) {
 				item = {};
 				if (vm.paymentType === 'commission') {
-					item.name = 'My Commission';
+					if (language.type === 'es') {
+						item.name = 'Mi Comisión';
+						item.comments = 'Mi comisión de' + vm.expectedSalary + '% de ' + vm.cashAvailable;
+					} else {
+						item.name = 'My Commission';
+						item.comments = 'my commission of ' + vm.expectedSalary + '% of ' + vm.cashAvailable;
+					}
 					item.amount = vm.cashAvailable * (vm.expectedSalary/100);
-					item.comments = 'my commission of ' + vm.expectedSalary + '% of ' + vm.cashAvailable;
 				} else {
-					item.name = 'My Salary';
+					if (language.type === 'es') {
+						item.name = 'Mi Salario';
+						item.comments = 'mi salario';
+					} else {
+						item.name = 'My Salary';
+						item.comments = 'my salary';
+					}
 					item.amount = vm.expectedSalary;
-					item.comments = 'my salary';
 				}
 				item.date = new Date();
 				item.type = 'salary';
@@ -174,22 +191,46 @@ angular.module('app.salary')
 		}
 
 		function showConfirm () {
+			if (language.type === 'es') {
+				title_delete = "Borrar Registro de Sueldo";
+				message_body = "¿Estás seguro?";
+				cancel_button = "Cancelar";
+			} else {
+				title_delete = "Delete Salary Record";
+				message_body = "Are you sure?";
+				cancel_button = "Cancel";
+			}
 			var confirmPopup = $ionicPopup.confirm({
-				title: 'Delete Salary Record',
-				template: 'Are you sure?'
-			});
-
-			confirmPopup.then(function(res) {
-				if(res) {
-					vm.deleteExpense(vm.activeExpense);
-				}
+				title: title_delete,
+				template: message_body,
+				buttons: [
+					{
+						text: cancel_button,
+						type: 'button-stable'},
+					{
+						text: '<b>Ok</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							vm.deleteExpense(vm.activeExpense);
+						}
+					}
+			]
 			});
 		}
 
 		function showAlert () {
+			if (language.type === 'es') {
+				title_funds = "Fondos Insuficientes!";
+				message_body = "Solamente tienes disponible $";
+				message_body_2 = ". Porfavor ajusta tu sueldo.";
+			} else {
+				title_funds = "Insufficient Funds!";
+				message_body = "You only have on hand $";
+				message_body_2 = ". Please adjust your salary.";
+			}
 			var alertPopup = $ionicPopup.alert({
-				title: 'Insufficient Funds!',
-				template: 'You only have on hand $' + vm.cashAvailable + '. Please adjust your salary.'
+				title: title_funds,
+				template: message_body + vm.cashAvailable + message_body_2
 			});
 
 			alertPopup.then(function(res) {
@@ -198,9 +239,16 @@ angular.module('app.salary')
 		}
 
 		function showAlertCommission () {
+			if (language.type === 'es') {
+				title_funds = "Fondos Disponibles";
+				message_body = "Tienes disponible $";
+			} else {
+				title_delete = "Cash on Hand!";
+				message_body = "You have on hand $";
+			}
 			var alertPopup = $ionicPopup.alert({
-				title: 'Cash on Hand!',
-				template: 'You have on hand $' + vm.cashAvailable + '.'
+				title: title_funds,
+				template: message_body + vm.cashAvailable + '.'
 			});
 
 			alertPopup.then(function(res) {

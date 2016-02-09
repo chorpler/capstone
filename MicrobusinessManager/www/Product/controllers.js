@@ -2,7 +2,7 @@
 	angular.module('app.products')
 	.controller('ProductsController', ProductsController);
 
-		function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems) {
+		function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems, languages) {
 		var vm = this;
 
 		vm.items = productItems;
@@ -19,11 +19,18 @@
 		vm.showConfirm = showConfirm;
 
 		var tempItem = null;
+		var language = {};
+		var title_delete, message_body;
 		var productTable = 'product';
 		var inventoryTable = 'inventory';
 		var expenseTable = 'expense';
 
 		function init () {
+			if (languages.length) {
+				for (var i = 0; i < languages.length; i++) {
+					language.type = languages[0].type;
+				}
+			}
 			$ionicModal.fromTemplateUrl('Product/templates/productEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
@@ -132,15 +139,30 @@
 		}
 
 		function showConfirm () {
+			if (language.type === 'es') {
+				title_delete = "Borrar Producto";
+				message_body = "¿Estás seguro?";
+				cancel_button = "Cancelar";
+			} else {
+				title_delete = "Delete Product Item";
+				message_body = "Are you sure?";
+				cancel_button = "Cancel";
+			}
 			var confirmPopup = $ionicPopup.confirm({
-				title: 'Delete Product Item',
-				template: 'Are you sure?'
-			});
-
-			confirmPopup.then(function(res) {
-				if(res) {
-					vm.deleteItem(vm.activeItem);
-				}
+				title: title_delete,
+				template: message_body,
+				buttons: [
+					{
+						text: cancel_button,
+						type: 'button-stable'},
+					{
+						text: '<b>Ok</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							vm.deleteItem(vm.activeItem);
+						}
+					}
+			]
 			});
 		}
 

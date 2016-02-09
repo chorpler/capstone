@@ -1,8 +1,8 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Login</h1>
+    <h1 class="title">{{'login_button' | translate}}</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="settings.closeLogin()">Close</button>
+      <button class="button button-clear" ng-click="settings.closeLogin()">{{'close_button' | translate}}</button>
     </div>
   </ion-header-bar>
   <ion-content>
@@ -14,15 +14,15 @@
     <form ng-submit="settings.submitLoginRequest()">
       <div class="list">
         <label class="item item-input">
-          <span class="input-label">Username</span>
+          <span class="input-label">{{"settings_username" | translate}}</span>
           <input type="text" ng-model="settings.userAccount.username">
         </label>
         <label class="item item-input">
-          <span class="input-label">Password</span>
+          <span class="input-label">{{"settings_password" | translate}}</span>
           <input type="password" ng-model="settings.userAccount.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
+          <button class="button button-block button-positive" type="submit">{{"login_button" | translate}}</button>
         </label>
       </div>
     </form>

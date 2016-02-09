@@ -1,9 +1,9 @@
 <ion-modal-view class="sales-report">
 	<ion-header-bar>
-		<h1 class="title">Sales Report</h1>
+		<h1 class="title">{{"reports_sales_reports" | translate}}</h1>
 		<div class="buttons">
 			<button class="button button-clear" ng-click="reports.salesReportModal.hide()">
-				Done
+				{{"close_button" | translate}}
 			</button>
 		</div>
 	</ion-header-bar>
@@ -14,7 +14,7 @@
 			<div class="item item-divider">
 				<div class="row">
 					<div class="col">
-						<span class="name-container">Date: {{sale.date.format('MMM D, YYYY')}}</span>
+						<span class="name-container">{{"reports_date" | translate}}: {{sale.date.format('MMM D, YYYY')}}</span>
 					</div>
 					<div class="col">
 						<span class="amount-container">Total: {{sale.total | currency}}</span>
@@ -26,11 +26,11 @@
 					<div class="col col-33">
 						<span>{{product.name}}</span>
 					</div>
-					<div class="col col-50">
-						<span>Price: {{product.price | currency}}</span>
+					<div class="col col-48">
+						<span>{{"reports_price" | translate}}: {{product.price | currency}}</span>
 					</div>
 					<div class="col">
-						<span>Qty: {{product.quantity}}</span>
+						<span>{{"reports_qty" | translate}}: {{product.quantity}}</span>
 					</div>
 				</div>
 			</ion-item>
@@ -38,7 +38,7 @@
 		<div class="item item-divider">
 			<div class="row">
 				<div class="col">
-					<b>Grand Total: </b>
+					<b>{{"reports_grand_total" | translate}}: </b>
 				</div>
 				<div class="col">
 					<b>{{reports.salesTotal | currency}}</b>
@@ -47,7 +47,7 @@
 		</div>
 		<div class="card" ng-if="reports.sales.length === 0">
 			<div class="item item-text-wrap center">
-				<span class="no-reports">There are no sales in this time period.</span>
+				<span class="no-reports">{{"reports_no_sales" | translate}}</span>
 			</div>
 		</div>
 	</ion-content>

@@ -1,11 +1,25 @@
-<ion-view view-title="Settings">
+<ion-view view-title="{{'menu_settings' | translate}}">
   <ion-content class="settings">
+    <div class="card">
+      <div class="item item-divider">
+        <span class="name-container">{{"settings_language_preference" | translate}}</span>
+      </div>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          {{"settings_language_options" | translate}}
+        </div>
+        <select ng-model="settings.language.type" ng-change="settings.changeLanguage(settings.language)">
+          <option value="en">{{"english_language" | translate}}</option>
+          <option value="es">{{"spanish_language" | translate}}</option>
+        </select>
+      </label>
+    </div>
     <div class="list list-inset" ng-if="settings.salary.length < 1">
       <div class="item item-divider">
         <div class="devider-container">
           <div class="row">
             <div class="col col-90">
-              <span class="name-container">Self Payment Settings</span>
+              <span class="name-container">{{"self_payment_settings" | translate}}</span>
             </div>
             <div class="col col-10 edit-button" ng-show="!settings.edit">
               <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
@@ -21,7 +35,7 @@
             <div class="devider-container">
             <div class="row">
               <div class="col col-90">
-                <span class="name-container">Self Payment Settings</span>
+                <span class="name-container">{{"self_payment_settings" | translate}}</span>
               </div>
               <div class="col col-10 edit-button" ng-show="!settings.edit">
                 <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
@@ -34,10 +48,11 @@
           <div class="card-container">
             <div class="row">
               <div class="col col-50">
-                <span>Payment Method</span>
+                <span>{{"payment_method" | translate}}</span>
               </div>
               <div class="col col-50" ng-show="!settings.edit">
-                <span class="salary-info">{{item.type}}</span>
+                <span class="salary-info" ng-if="item.type === 'salary' && settings.language.type === 'es'">Salario</span>
+                <span class="salary-info" ng-if="item.type === 'salary' && settings.language.type === 'en'">{{item.type}}</span>
               </div>
             </div>
           </div>
@@ -46,7 +61,7 @@
           <div class="card-container">
             <div class="row">
               <div class="col col-50">
-                <span>Payment Amount</span>
+                <span>{{"payment_amount" | translate}}</span>
               </div>
               <div class="col col-50" ng-show="!settings.edit">
                 <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount}}%</span>
@@ -59,27 +74,27 @@
     </div>
     <div class="list">
       <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
-        Login
+        {{"login_button" | translate}}
       </button>
       <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.register()">
-        Register
+        {{"register_button" | translate}}
       </button>
     </div>
 
     <div class="card" ng-show="settings.userAccount.token">
       <ion-list>
         <ion-item>
-          Username: {{settings.userAccount.user.username}}
+          {{"settings_username" | translate}}: {{settings.userAccount.user.username}}
         </ion-item>
         <ion-item>
-          Email: {{settings.userAccount.user.email}}
+          {{"settings_email" | translate}}: {{settings.userAccount.user.email}}
         </ion-item>
         <ion-item>
-          Phone: {{settings.userAccount.user.phone}}
+          {{"settings_phone" | translate}}: {{settings.userAccount.user.phone}}
         </ion-item>
         <ion-item>
           <button class="button button-block button-assertive" ng-click="settings.logout()">
-            Logout
+            {{"logout_button" | translate}}
           </button>
         </ion-item>
       </ion-list>

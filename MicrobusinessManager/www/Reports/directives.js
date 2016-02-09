@@ -44,7 +44,7 @@
 			}
 
 			function changeDateRange (direction, timeFrame) {
-				scope.startDate = direction > 0 ? moment(scope.startDate).add(1, timeFrame) : 
+				scope.startDate = direction > 0 ? moment(scope.startDate).add(1, timeFrame) :
 												  moment(scope.startDate).subtract(1, timeFrame);
 				scope.endDate = moment(scope.startDate).endOf(timeFrame);
 

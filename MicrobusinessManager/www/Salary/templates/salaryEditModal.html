@@ -10,28 +10,28 @@
 		<div class="list">
 			<form name="expenseForm">
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Name</span>
-					<input type="text" placeholder="Name*" ng-model="salary.activeExpense.name" required="required">
+					<span class="input-label">{{"salary_name" | translate}}*</span>
+					<input type="text" placeholder="{{'salary_name' | translate}}*" ng-model="salary.activeExpense.name" required="required">
 				</label>
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Amount</span>
-					<input type="number" placeholder="Amount*" ng-model="salary.activeExpense.amount" required="required">
+					<span class="input-label">{{"salary_amount" | translate}}*</span>
+					<input type="number" placeholder="{{'salary_amount' | translate}}*" ng-model="salary.activeExpense.amount" required="required">
 				</label>
 				<label class="item item-input item-floating-label">
-					<span class="input-label">Comments</span>
-	    		<textarea placeholder="Comments" ng-model="salary.activeExpense.comments"></textarea>
+					<span class="input-label">{{"salary_comments" | translate}}</span>
+	    		<textarea placeholder="{{'salary_comments' | translate}}" ng-model="salary.activeExpense.comments"></textarea>
 	  		</label>
 				<label class="item item-input">
-					<span class="input-label">Date<span ng-show="!salary.editviewOpen">*</span></span>
-	    		<input placeholder="Date" type="date" ng-model="salary.activeExpense.date" required="required">
+					<span class="input-label">{{"salary_Date" | translate}}*<span ng-show="!salary.editviewOpen">*</span></span>
+	    		<input placeholder="{{'salary_Date' | translate}}*" type="date" ng-model="salary.activeExpense.date" required="required">
 	  		</label>
 				<div class="card" ng-show="salary.showErrorAlert">
 				  <div class="item item-text-wrap center">
-				    <span class="notAllowed">Sorry! You only have ${{salary.cashAvailable}} available. Adjust the amount so that the difference is less or equal to what you have on hand.</span>
+				    <span class="notAllowed">{{"salary_message_1" | translate}}{{salary.cashAvailable}} {{"salary_message_2" | translate}}</span>
 				  </div>
 				</div>
-				<button class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense)" ng-disabled="expenseForm.$invalid">Save</button>
-				<button class="button button-block button-assertive" ng-click="salary.cancel(salary.activeExpense)">Cancel</button>
+				<button class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense)" ng-disabled="expenseForm.$invalid">{{"save_button" | translate}}</button>
+				<button class="button button-block button-assertive" ng-click="salary.cancel(salary.activeExpense)">{{"cancel_button" | translate}}</button>
 			</form>
 		</div>
 	</ion-content>

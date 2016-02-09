@@ -2,12 +2,14 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $ionicModal, $http, Database, salary) {
+	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages) {
 		var vm = this;
 
 		vm.userAccount = {};
 		vm.userRegistration = {};
+		vm.activeSalary = null;
 		vm.salary = salary;
+		vm.languages = languages;
 		vm.login = login;
 		vm.closeLogin = closeLogin;
 		vm.submitLoginRequest = submitLoginRequest;
@@ -18,16 +20,33 @@
 		vm.save = save;
 		vm.showEdit = showEdit;
 		vm.editSalary = editSalary;
+		vm.changeLanguage = changeLanguage;
 		vm.cancel = cancel;
 		vm.selfPayment = {};
+		vm.language = {};
 		vm.edit = false;
 
+		var tempSalary = null;
 		var salaryTable = 'salary';
+		var languageTable = 'languages';
 
 		function init () {
 			if (vm.salary.length < 1) {
 				vm.activeSalary = {};
 				vm.activeSalary.type = 'salary';
+			}
+			if (languages.length) {
+				for (var i = 0; i < languages.length; i++) {
+					vm.language.type = languages[0].type;
+				}
+			} else {
+				var language = {};
+				vm.language.type = 'es';
+				language.type = vm.language.type;
+				Database.insert(languageTable, [language.type]).then(function (response) {
+					language.id = response.insertId;
+				});
+				vm.languages.push(language);
 			}
 
 			$ionicModal.fromTemplateUrl('Settings/templates/login.html', {
@@ -74,6 +93,23 @@
 			vm.editModal.show();
 		}
 
+		function changeLanguage (language) {
+			$translate.use(language.type).then(function(data) {
+        console.log("SUCCESS -> " + data);
+				if (!language.id) {
+					Database.insert(languageTable, [language.type]).then(function (response) {
+						language.id = response.insertId;
+					});
+					vm.languages.push(language);
+				} else {
+					Database.update(languageTable, language.id, [language.type]);
+				}
+
+      }, function(error) {
+          console.log("ERROR -> " + error);
+      });
+		}
+
 		function cancel () {
 			if (vm.activeSalary) {
 				vm.activeSalary.type = tempSalary.type;
@@ -87,11 +123,11 @@
 
 		function login () {
 			vm.loginModal.show();
-		};
+		}
 
 		function closeLogin () {
 			vm.loginModal.hide();
-		};
+		}
 
 		function submitLoginRequest () {
 			if (!vm.userAccount.username || !vm.userAccount.password) {
@@ -121,7 +157,7 @@
 					vm.userAccount.error = response.data.message;
 				}
 			);
-		};
+		}
 
 		function logout () {
 			vm.userAccount = {};
@@ -130,7 +166,7 @@
 
 		function register () {
 			vm.registerModal.show();
-		};
+		}
 
 		function closeRegistration () {
 			vm.registerModal.hide();
