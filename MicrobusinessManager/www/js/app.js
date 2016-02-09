@@ -142,7 +142,11 @@
 			reports_qty: "Qty",
 			reports_grand_total: "Grand Total",
 			reports_no_sales: "There are no sales in this time period.",
-			reports_time_frame: "Time Frame"
+			reports_time_frame: "Time Frame",
+			reports_sale: "Sale",
+			edit_title: "Edit",
+			new_title: "New",
+			inventory_item: "Inventory Item"
 
 		});
 
@@ -228,7 +232,11 @@
 			reports_qty: "Cant",
 			reports_grand_total: "Gran Total",
 			reports_no_sales: "No hay ventas en este periodo.",
-			reports_time_frame: "Período de Tiempo"
+			reports_time_frame: "Período de Tiempo",
+			reports_sale: "Venta",
+			edit_title: "Editar",
+			new_title: "Nuevo",
+			inventory_item: "Articulo de Inventario"
 
 
 		});
