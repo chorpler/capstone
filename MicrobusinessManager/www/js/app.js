@@ -236,7 +236,7 @@
 			reports_sale: "Venta",
 			edit_title: "Editar",
 			new_title: "Nuevo",
-			inventory_item: "Articulo de Inventario"
+			inventory_item: "Artículo de Inventario"
 
 
 		});
