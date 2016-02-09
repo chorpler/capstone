@@ -1,6 +1,6 @@
 <ion-modal-view>
 	<ion-header-bar>
-		<h1 class="title">{{products.editOpen ? 'Edit' : 'New'}} Product Item</h1>
+		<h1 class="title">{{products.editOpen ? "edit_title" : "new_title" | translate}} {{"product_title" | translate}}</h1>
 		<div class="buttons">
 			<button class="button button-clear button-positive" ng-click="products.showConfirm()" ng-show="products.editOpen">
 				<i class="icon ion-trash-b"></i>

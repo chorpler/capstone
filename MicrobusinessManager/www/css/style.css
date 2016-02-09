@@ -11,6 +11,10 @@
 	font-weight: 700;
 }
 
+.back-color {
+  color: #1C86EE;
+}
+
 .expenses .card-container,
 .salary .card-container,
 .inventory .card-container,
