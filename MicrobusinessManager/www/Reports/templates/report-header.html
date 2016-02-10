@@ -5,9 +5,9 @@
 		</div>
 		<select name="timeFrame"
 				id="timeFrame"
-				ng-model="model.timeFrame"
-				ng-change="changeTimeFrame(model.timeFrame)"
-				ng-options="option for option in model.timeFrames">
+				ng-model="timeFrame"
+				ng-change="changeTimeFrame(timeFrame)"
+				ng-options="option as (option.id | translate) for option in model.timeFrames track by option.id">
 		</select>
 	</label>
 	<div class="date-range">

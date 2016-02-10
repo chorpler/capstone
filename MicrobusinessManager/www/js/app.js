@@ -143,6 +143,9 @@
 			reports_grand_total: "Grand Total",
 			reports_no_sales: "There are no sales in this time period.",
 			reports_time_frame: "Time Frame",
+			reports_header_day: 'Day',
+			reports_header_week: 'Week',
+			reports_header_month: 'Month'
 			reports_sale: "Sale",
 			edit_title: "Edit",
 			new_title: "New",
@@ -233,11 +236,13 @@
 			reports_grand_total: "Gran Total",
 			reports_no_sales: "No hay ventas en este periodo.",
 			reports_time_frame: "Período de Tiempo",
+			reports_header_day: 'Dia',
+			reports_header_week: 'Semana',
+			reports_header_month: 'Mes'
 			reports_sale: "Venta",
 			edit_title: "Editar",
 			new_title: "Nuevo",
 			inventory_item: "Artículo de Inventario"
-
 
 		});
 

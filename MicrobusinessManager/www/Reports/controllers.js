@@ -2,7 +2,7 @@
 	angular.module('app.reports')
 	.controller('ReportsController', ReportsController);
 
-	function ReportsController ($scope, $ionicModal, $window, $q, Database, startDate, endDate, timeFrame, startingCash, expenses, sales) {
+	function ReportsController ($scope, $ionicModal, $window, $q, Database, startDate, endDate, timeFrame, startingCash, expenses, sales, languages) {
 		var vm = this;
 
 		vm.loadIncomeStatement  = loadIncomeStatement;
@@ -21,28 +21,21 @@
 		vm.expenses 	= expenses;
 		vm.sales 		= sales;
 		vm.incomeStatement	= [];
-		vm.incomeStatementModal = {};
-		vm.salesReportModal = {};
+		vm.incomeStatementModal = null;
+		vm.salesReportModal = null;
 		vm.salesTotal = 0;
+		vm.language = {};
 
 		var currentReport = '';
 		var INCOME_STATEMENT = 'income';
 		var SALES_REPORT = 'sales';
 
 		function init () {
-			$ionicModal.fromTemplateUrl('Reports/templates/incomeStatement.html', {
-				scope: $scope,
-				animation: 'slide-in-right'
-			}).then(function (modal) {
-				vm.incomeStatementModal = modal;
-			});
-
-			$ionicModal.fromTemplateUrl('Reports/templates/salesReport.html', {
-				scope: $scope,
-				animation: 'slide-in-right'
-			}).then(function (modal) {
-				vm.salesReportModal = modal;
-			});
+			if (languages.length) {
+				for (var i = 0; i < languages.length; i++) {
+					vm.language.type = languages[0].type;
+				}
+			}
 
 			vm.endingCash = calculateEndCash();
 			prepareIncomeStatement();
@@ -106,11 +99,20 @@
 			loadSales();
 			loadExpenses();
 			currentReport = INCOME_STATEMENT;
-			vm.incomeStatementModal.show();
+			$ionicModal.fromTemplateUrl('Reports/templates/incomeStatement.html', {
+				scope: $scope,
+				animation: 'slide-in-right'
+			}).then(function (modal) {
+				vm.incomeStatementModal = modal;
+				vm.incomeStatementModal.show();
+			});
 		}
 
 		function closeIncomeStatement () {
-			vm.incomeStatementModal.hide();
+			// vm.incomeStatementModal.hide();
+			vm.incomeStatementModal.remove().then(function () {
+				vm.incomeStatementModal = null;
+			});
 			currentReport = '';
 			vm.sales = [];
 			vm.expenses = [];
@@ -120,20 +122,28 @@
 			loadSalesProducts()
 			.then(function () {
 				currentReport = SALES_REPORT;
-				vm.salesReportModal.show();
+				$ionicModal.fromTemplateUrl('Reports/templates/salesReport.html', {
+					scope: $scope,
+					animation: 'slide-in-right'
+				}).then(function (modal) {
+					vm.salesReportModal = modal;
+					vm.salesReportModal.show();
+				});
 			});
 		}
 
 		function closeSalesReport () {
 			vm.sales = [];
-			vm.salesReportModal.hide();
+			vm.salesReportModal.remove().then(function () {
+				vm.salesReportModal = null;
+			});;
 		}
 
 		function change (startDate, timeFrame) {
 			var promises = [];
 			vm.startDate = startDate;
 			vm.timeFrame = timeFrame;
-			vm.endDate = moment(vm.startDate).endOf(vm.timeFrame);
+			vm.endDate = moment(vm.startDate).endOf(vm.timeFrame.value);
 			promises.push(Database.calculateCashOnHand(null, vm.startDate).then(function (response) {
 				vm.startingCash = response.rows.item(0) ? response.rows.item(0).total : 0;
 			}));
@@ -190,8 +200,10 @@
 
 		//Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function() {
-			vm.incomeStatementModal.remove();
-			vm.salesReportModal.remove();
+			if (vm.incomeStatementModal)
+				vm.incomeStatementModal.remove();
+			if (vm.salesReportModal)
+				vm.salesReportModal.remove();
 		});
 
 		init();
