@@ -51,8 +51,10 @@
 
 		function save (item) {
 			var deferred = $q.defer();
-			var inventoryItem;
-			if (item.linkProduct) {
+			var productItem;
+			if (item.linkProduct && item.productid) {
+				deferred.resolve();
+			} else if (item.linkProduct) {
 				deferred.promise = Database.select(productTable, null, item.name).then(function (product) {
 					if (product.rows.length > 0) {
 						productItem = product.rows.item(0);
