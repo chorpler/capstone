@@ -273,6 +273,11 @@ input.self-payment {
   top: 138px !important;
 }
 
+.platform-ios .income-statement ion-content,
+.platform-ios .sales-report ion-content {
+  top: 160px !important;
+}
+
 .sales .no-products,
 .sales-report .no-reports {
   font-weight: 600 !important;
