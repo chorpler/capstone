@@ -142,7 +142,10 @@
 			reports_qty: "Qty",
 			reports_grand_total: "Grand Total",
 			reports_no_sales: "There are no sales in this time period.",
-			reports_time_frame: "Time Frame"
+			reports_time_frame: "Time Frame",
+			reports_header_day: 'Day',
+			reports_header_week: 'Week',
+			reports_header_month: 'Month'
 
 		});
 
@@ -228,7 +231,10 @@
 			reports_qty: "Cant",
 			reports_grand_total: "Gran Total",
 			reports_no_sales: "No hay ventas en este periodo.",
-			reports_time_frame: "Período de Tiempo"
+			reports_time_frame: "Período de Tiempo",
+			reports_header_day: 'Dia',
+			reports_header_week: 'Semana',
+			reports_header_month: 'Mes'
 
 
 		});

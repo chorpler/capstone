@@ -15,14 +15,14 @@
 				}
 			},
 			resolve: {
-				startDate: function ($window) {
-					return moment($window.localStorage['MM_Reports_Start_Date']) || moment().startOf('month');
-				},
 				timeFrame: function ($window) {
-					return $window.localStorage['MM_Reports_Timeframe'] || 'Day';
+					return JSON.parse($window.localStorage['MM_Reports_Timeframe'] || null) || { id: 'reports_header_day', value: 'day'};
+				},
+				startDate: function ($window, timeFrame) {
+					return moment($window.localStorage['MM_Reports_Start_Date']).startOf(timeFrame.value) || moment().startOf('day');
 				},
 				endDate: function (startDate, timeFrame) {
-					return moment(startDate).endOf(timeFrame);
+					return moment(startDate).endOf(timeFrame.value);
 				},
 				startingCash: function (startDate, timeFrame, Database) {
 					return Database.calculateCashOnHand(null, startDate).then(function (response) {
@@ -59,6 +59,19 @@
 							items.push(item);
 						};
 
+						return items;
+					});
+				},
+				languages: function (Database) {
+					return Database.select('languages').then(function (response) {
+						var items = [];
+						if (response.rows.length === 0) {
+							return items;
+						}
+						for (var i = response.rows.length - 1; i >= 0; i--) {
+							var item = response.rows.item(i);
+							items.push(item);
+						}
 						return items;
 					});
 				}

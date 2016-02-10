@@ -2,13 +2,13 @@
 	<ion-header-bar>
 		<h1 class="title">{{"reports_income_statement2" | translate}}</h1>
 		<div class="buttons">
-			<button class="button button-clear" ng-click="reports.incomeStatementModal.hide()">
+			<button class="button button-clear" ng-click="reports.closeIncomeStatement()">
 				{{"close_button" | translate}}
 			</button>
 		</div>
 	</ion-header-bar>
 
-	<report-header start-date="reports.startDate" time-frame="reports.timeFrame" change="reports.change" class="has-header"></report-header>
+	<report-header start-date="reports.startDate" end-date="reports.endDate" time-frame="reports.timeFrame" change="reports.change" language="reports.language" class="has-header"></report-header>
 	<ion-content>
 		<div></div>
 		<ion-list>

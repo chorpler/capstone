@@ -2,13 +2,13 @@
 	<ion-header-bar>
 		<h1 class="title">{{"reports_sales_reports" | translate}}</h1>
 		<div class="buttons">
-			<button class="button button-clear" ng-click="reports.salesReportModal.hide()">
+			<button class="button button-clear" ng-click="reports.closeSalesReport()">
 				{{"close_button" | translate}}
 			</button>
 		</div>
 	</ion-header-bar>
 
-	<report-header start-date="reports.startDate" time-frame="reports.timeFrame" change="reports.change" class="has-header"></report-header>
+	<report-header start-date="reports.startDate" end-date="reports.endDate" time-frame="reports.timeFrame" change="reports.change" language="reports.language" class="has-header"></report-header>
 	<ion-content>
 		<ion-list ng-repeat="sale in reports.sales track by sale.id | orderBy: sale.date">
 			<div class="item item-divider">

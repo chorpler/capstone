@@ -2,20 +2,21 @@
 	angular.module('app.reports')
 	.directive('reportHeader', reportHeader);
 
-	function reportHeader ($window) {
+	function reportHeader ($window, $filter) {
 		var directive = {
 			restrict: 'E',
 			scope: {
 				startDate: '=',
+				endDate: '=',
 				timeFrame: '=',
-				change: '&'
+				change: '&',
+				language: '='
 			},
 			templateUrl: 'Reports/templates/report-header.html',
 			link: link
 		};
 
-
-		var timeFrames = ['Day', 'Week', 'Month'];
+		var timeFrames = [];
 
 		return directive;
 
@@ -27,26 +28,35 @@
 			scope.changeDateRange = changeDateRange;
 
 			function init () {
+				timeFrames = [{
+					id: 'reports_header_day',
+					value: 'day'
+				}, {
+					id: 'reports_header_week',
+					value: 'week'
+				}, {
+					id: 'reports_header_month',
+					value: 'month'
+				}];
+
 				scope.model.timeFrames = timeFrames;
 				scope.model.timeFrame = scope.timeFrame;
-
-				scope.endDate = moment(scope.startDate).endOf(scope.model.timeFrame);
 			}
 
 			function changeTimeFrame (timeFrame) {
-				scope.startDate = moment(scope.startDate).startOf(timeFrame);
-				scope.endDate = moment(scope.startDate).endOf(timeFrame);
+				scope.startDate = moment(scope.startDate).startOf(timeFrame.value);
+				scope.endDate = moment(scope.startDate).endOf(timeFrame.value);
 
 				$window.localStorage['MM_Reports_Start_Date'] = scope.startDate.toJSON();
-				$window.localStorage['MM_Reports_Timeframe'] = timeFrame;
+				$window.localStorage['MM_Reports_Timeframe'] = JSON.stringify(timeFrame);
 
 				scope.change()(scope.startDate, timeFrame);
 			}
 
 			function changeDateRange (direction, timeFrame) {
-				scope.startDate = direction > 0 ? moment(scope.startDate).add(1, timeFrame) :
-												  moment(scope.startDate).subtract(1, timeFrame);
-				scope.endDate = moment(scope.startDate).endOf(timeFrame);
+				scope.startDate = direction > 0 ? moment(scope.startDate).add(1, timeFrame.value) :
+												  moment(scope.startDate).subtract(1, timeFrame.value);
+				scope.endDate = moment(scope.startDate).endOf(timeFrame.value);
 
 				$window.localStorage['MM_Reports_Start_Date'] = scope.startDate.toJSON();
 
