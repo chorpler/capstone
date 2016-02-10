@@ -51,7 +51,7 @@
 
 		function save (item) {
 			var deferred = $q.defer();
-			var inventoryItem;
+			var productItem;
 			if (item.linkProduct && item.productid) {
 				deferred.resolve();
 			} else if (item.linkProduct) {
