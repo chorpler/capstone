@@ -2,7 +2,8 @@
   <ion-header-bar>
     <h1 class="title">{{"register_button" | translate}}</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="settings.closeRegistration()">{{'close_button' | translate}}</button>
+      <button class="button button-clear" ng-click="settings.closeRegistration()">
+        <span class="back-color">{{'close_button' | translate}}</span></button>
     </div>
   </ion-header-bar>
   <ion-content>
@@ -11,30 +12,30 @@
         Error: {{settings.userRegistration.error}}
       </div>
     </div>
-    <form ng-submit="settings.submitRegistrationRequest()">
+    <form name = "registerform" ng-submit="settings.submitRegistrationRequest()">
       <div class="list">
         <label class="item item-input">
-          <span class="input-label">{{"settings_username" | translate}}</span>
-          <input type="text" ng-model="settings.userRegistration.username">
+          <span class="input-label">{{"settings_username" | translate}}*</span>
+          <input type="text" ng-model="settings.userRegistration.username" required="required">
         </label>
         <label class="item item-input">
-          <span class="input-label">{{"settings_password" | translate}}</span>
-          <input type="password" ng-model="settings.userRegistration.password">
+          <span class="input-label">{{"settings_password" | translate}}*</span>
+          <input type="password" ng-model="settings.userRegistration.password" required="required">
         </label>
         <label class="item item-input">
-          <span class="input-label">{{"settings_confirm_password" | translate}}</span>
-          <input type="password" ng-model="settings.userRegistration.confirmPassword">
+          <span class="input-label">{{"settings_confirm_password" | translate}}*</span>
+          <input type="password" ng-model="settings.userRegistration.confirmPassword" required="required">
         </label>
         <label class="item item-input">
           <span class="input-label">{{"settings_email" | translate}}</span>
-          <input type="password" ng-model="settings.userRegistration.email">
+          <input type="email" ng-model="settings.userRegistration.email">
         </label>
         <label class="item item-input">
           <span class="input-label">{{"settings_phone" | translate}}</span>
-          <input type="password" ng-model="settings.userRegistration.phone">
+          <input type="text" ng-model="settings.userRegistration.phone">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">{{"register_button" | translate}}</button>
+          <button class="button button-block button-positive" type="submit" ng-disabled="registerform.$invalid">{{"register_button" | translate}}</button>
         </label>
       </div>
     </form>
