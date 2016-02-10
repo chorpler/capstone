@@ -146,6 +146,10 @@
 			reports_header_day: 'Day',
 			reports_header_week: 'Week',
 			reports_header_month: 'Month'
+			reports_sale: "Sale",
+			edit_title: "Edit",
+			new_title: "New",
+			inventory_item: "Inventory Item"
 
 		});
 
@@ -235,7 +239,10 @@
 			reports_header_day: 'Dia',
 			reports_header_week: 'Semana',
 			reports_header_month: 'Mes'
-
+			reports_sale: "Venta",
+			edit_title: "Editar",
+			new_title: "Nuevo",
+			inventory_item: "Artículo de Inventario"
 
 		});
 
