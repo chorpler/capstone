@@ -62,6 +62,23 @@
 						return items;
 					});
 				},
+				cashInfusions: function (startDate, endDate, Database) {
+					return Database.select('cashInfusion', null, null, null, startDate, endDate)
+					.then(function (response) {
+						var items = [];
+						if (response.rows.length === 0) {
+							return items;
+						}
+
+						for (var i = response.rows.length - 1; i >= 0; i--) {
+							var cashInfusion = response.rows.item(i);
+							cashInfusion.date = moment(cashInfusion.date);
+							items.push(cashInfusion);
+						}
+
+						return items;
+					});
+				},
 				languages: function (Database) {
 					return Database.select('languages').then(function (response) {
 						var items = [];
