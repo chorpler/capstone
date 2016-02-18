@@ -2,7 +2,7 @@
 	angular.module('app.reports')
 	.controller('ReportsController', ReportsController);
 
-	function ReportsController ($scope, $ionicModal, $window, $q, Database, startDate, endDate, timeFrame, startingCash, expenses, sales, languages) {
+	function ReportsController ($scope, $ionicModal, $q, Database, startDate, endDate, timeFrame, startingCash, expenses, sales, languages) {
 		var vm = this;
 
 		vm.loadIncomeStatement  = loadIncomeStatement;
