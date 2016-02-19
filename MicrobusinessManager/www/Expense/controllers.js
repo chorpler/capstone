@@ -38,7 +38,7 @@ angular.module('app.expenses')
 			}
 			$ionicModal.fromTemplateUrl('Expense/templates/expensesEditModal.html', {
 				scope: $scope,
-				animation: 'slide-in-right'
+				animation: 'slide-in-up'
 			}).then(function (modal) {
 				vm.editModal = modal;
 			});
@@ -135,7 +135,7 @@ angular.module('app.expenses')
 			if (language.type === 'es') {
 				important_title = "Importante!";
 				message_body = "Este es un nuevo gasto. No estas editando un registro pasado." +
-				" Hemos pre-llenado esta forma con la información de tu mas receinte gasto con este nombre.";
+				" Hemos llenado este formulario con los datos de tu más receinte gasto que coincide con este nombre.";
 				cancel_button = "Cancelar";
 				continue_button = "Continuar";
 			} else {
