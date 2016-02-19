@@ -2,6 +2,13 @@
   text-align: center;
 }
 
+.bold {
+  font-weight: bold;
+}
+.button.button-stable {
+  background-color: #d3d3d3;
+}
+
 .inventory .header,
 .products .header {
 	font-weight: 700;
@@ -62,6 +69,18 @@
 	font-size: 14px;
 }
 
+.expensesEdit .expense_type {
+  margin-left: 16px;
+  margin-top: 10px;
+}
+
+.expensesEdit .types {
+  margin-bottom: 10px;
+}
+
+.item-radio .radio-icon {
+  color: #39e600;
+}
 .salary .salary-container {
   margin-bottom: -20px;
 }
