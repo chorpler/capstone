@@ -134,14 +134,14 @@ angular.module('app.expenses')
 		function showConfirm (expense) {
 			if (language.type === 'es') {
 				important_title = "Importante!";
-				message_body = "Este es un nuevo gasto. No estas editando un registro pasado." +
+				message_body = "Este es un nuevo gasto. No estas editando un registro de un gasto pasado." +
 				" Hemos llenado este formulario con los datos de tu más receinte gasto que coincide con este nombre.";
 				cancel_button = "Cancelar";
 				continue_button = "Continuar";
 			} else {
 				important_title = "Important!";
 				message_body = "This is a new expense. You are not editing a past expense." +
-				" We have pre-filled this form with the information of the most recent expense that matches this expense name.";
+				" We have pre-filled this form with the information of the most recent expense that matches this expense's name.";
 				continue_button = "Continue";
 				cancel_button = "Cancel";
 			}
