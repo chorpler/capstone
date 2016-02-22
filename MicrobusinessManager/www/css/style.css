@@ -103,6 +103,11 @@
 .salary .adjust-button {
   margin-top: 10px;
   margin-bottom: 20px;
+  background-color: #b0b0b0;
+}
+
+.salary .adjust-button:active {
+  background-color: #d3d3d3;
 }
 
 .salary .notAllowed {
