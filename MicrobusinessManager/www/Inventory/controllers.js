@@ -2,7 +2,7 @@
 	angular.module('app.inventory')
 	.controller('InventoryController', InventoryController);
 
-	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems, languages) {
+	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems, languages, CashBalance) {
 		var vm = this;
 
 		vm.items = inventoryItems;
@@ -105,7 +105,8 @@
 						}
 					});
 
-					Database.insert(expenseTable, [item.name, item.cost, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
+					Database.insert(expenseTable, [item.name, item.cost, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')])
+					.then(CashBalance.updateCashBalance);
 					// updateTotal();
 				});
 			} else {

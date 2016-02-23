@@ -150,7 +150,8 @@
 			reports_cash: 'Cash',
 			edit_title: "Edit",
 			new_title: "New",
-			inventory_item: "Inventory Item"
+			inventory_item: "Inventory Item",
+			cash_balance: 'Cash Balance'
 
 		});
 
@@ -244,7 +245,8 @@
 			reports_cash: 'Efectivo',
 			edit_title: "Editar",
 			new_title: "Nuevo",
-			inventory_item: "Artículo de Inventario"
+			inventory_item: "Artículo de Inventario",
+			cash_balance: 'Saldo'
 
 		});
 
