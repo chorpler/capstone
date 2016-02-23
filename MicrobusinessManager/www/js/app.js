@@ -148,6 +148,7 @@
 			reports_header_week: 'Week',
 			reports_header_month: 'Month',
 			reports_sale: "Sale",
+			reports_cash: 'Cash',
 			edit_title: "Edit",
 			new_title: "New",
 			inventory_item: "Inventory Item"
@@ -242,6 +243,7 @@
 			reports_header_month: 'Mes',
 			reports_sale: "Venta",
 			reports_expense_log: "Registro de Gastos",
+			reports_cash: 'Efectivo',
 			edit_title: "Editar",
 			new_title: "Nuevo",
 			inventory_item: "Artículo de Inventario"
