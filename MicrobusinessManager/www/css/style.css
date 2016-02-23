@@ -267,6 +267,11 @@ input.self-payment {
 	justify-content: space-between;
 }
 
+.report-header .date-range div {
+  font-size: 1.4em;
+  line-height: 47px;
+}
+
 .product-qty {
   margin-top: 8px;
 }

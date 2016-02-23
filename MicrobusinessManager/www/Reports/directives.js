@@ -2,7 +2,7 @@
 	angular.module('app.reports')
 	.directive('reportHeader', reportHeader);
 
-	function reportHeader ($window, $filter) {
+	function reportHeader ($filter) {
 		var directive = {
 			restrict: 'E',
 			scope: {
@@ -47,9 +47,6 @@
 				scope.startDate = moment(scope.startDate).startOf(timeFrame.value);
 				scope.endDate = moment(scope.startDate).endOf(timeFrame.value);
 
-				$window.localStorage['MM_Reports_Start_Date'] = scope.startDate.toJSON();
-				$window.localStorage['MM_Reports_Timeframe'] = JSON.stringify(timeFrame);
-
 				scope.change()(scope.startDate, timeFrame);
 			}
 
@@ -57,8 +54,6 @@
 				scope.startDate = direction > 0 ? moment(scope.startDate).add(1, timeFrame.value) :
 												  moment(scope.startDate).subtract(1, timeFrame.value);
 				scope.endDate = moment(scope.startDate).endOf(timeFrame.value);
-
-				$window.localStorage['MM_Reports_Start_Date'] = scope.startDate.toJSON();
 
 				scope.change()(scope.startDate, timeFrame);
 			}
