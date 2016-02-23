@@ -1,6 +1,7 @@
 (function () {
   angular.module('app')
-  .factory('Database', Database);
+  .factory('Database', Database)
+  .factory('CashBalance', CashBalance);
 
   function Database ($ionicPlatform, $cordovaSQLite, $q) {
     var db;
@@ -187,6 +188,7 @@
 
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {
+
           return response;
         }, function (err) {
           console.log(err);
@@ -350,5 +352,33 @@
         })
       })
     }
+  }
+
+  function CashBalance (Database) {
+    var currentCashBalance;
+     
+    var service = {
+      get CashBalance () {
+        return currentCashBalance;
+      },
+      set CashBalance (val) {
+        return currentCashBalance = val;
+      },
+      updateCashBalance: function () {
+        return Database.calculateCashOnHand().then(function (response) {
+          return currentCashBalance = response.rows.item(0).total;
+        });
+      }
+    };
+
+    init();
+
+    function init () {
+      Database.calculateCashOnHand().then(function (response) {
+        currentCashBalance = response.rows.item(0).total;
+      });
+    }
+
+    return service;
   }
 })();

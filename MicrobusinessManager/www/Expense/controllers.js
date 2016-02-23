@@ -2,7 +2,7 @@
 angular.module('app.expenses')
 .controller('ExpensesController', ExpensesController);
 
-	function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, expenseItems, languages) {
+	function ExpensesController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, expenseItems, languages, CashBalance) {
 		var vm = this;
 
 		vm.log = expenseItems;
@@ -57,6 +57,7 @@ angular.module('app.expenses')
 		function save (item) {
 
 			Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
+				CashBalance.updateCashBalance();
 				item.id = response.insertId;
 			});
 
@@ -105,7 +106,7 @@ angular.module('app.expenses')
 			if (vm.reformattedList[key].length === 0) {
 				delete vm.reformattedList[key];
 			}
-			Database.remove(expenseTable, item.id);
+			Database.remove(expenseTable, item.id).then(CashBalance.updateCashBalance);
 			vm.activeExpense = null;
 			updateTotal();
 			vm.editModal.hide();
