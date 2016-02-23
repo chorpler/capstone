@@ -33,7 +33,7 @@
         {{sales.productError.name}} {{"sales_error_part1" | translate}} {{sales.productError.limit}}  {{"sales_error_part2" | translate}} {{sales.productError.limit}}.
       </div>
     </div>
-    <div class="card">
+    <div class="card" ng-if="sales.products.length">
       <div class="item item-divider">
         <div class="row" class="category-title">
           <div class="col col-75">

@@ -21,10 +21,10 @@
 				<label class="item-stacked-label">
 					<span class="input-label categories">{{"product_category" | translate}}*</span>
 						<div class="row category_options">
-							<div class="col">
+							<div class="col col-50">
 								<ion-radio ng-model="products.pick" ng-value="'add'" ng-click="products.show = true; products.choose = false; products.editCategory = false">{{"product_Category_add" | translate}}</ion-radio>
 							</div>
-							<div class="col">
+							<div class="col" ng-if="products.items.length">
 								<ion-radio ng-model="products.pick" ng-value="'choose'" ng-click="products.choose = true; products.show = false; products.editCategory = false">{{"product_Category_choose" | translate}}</ion-radio>
 							</div>
 						</div>
@@ -33,7 +33,7 @@
 					<div class="input-label">
 						{{products.editOpen ? "product_Category_existent_category" : "product_Category_choose_category" | translate}}
 					</div>
-					<select name="categories" id="categories" ng-model="products.activeItem.category">
+					<select  name="categories" id="categories" ng-model="products.activeItem.category">
 						<option ng-repeat="category in products.categories" value="{{category.category}}">
 							{{category.category}}
 						</option>
