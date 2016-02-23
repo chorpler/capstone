@@ -25,11 +25,11 @@
 			<ion-item ng-repeat="item in reports.incomeStatement">
 				<div class="row">
 					<div class="col">
-						<b class="report-name">{{item.isExpense ? item.name : "reports_sale" | translate}}</b>
+						<b class="report-name">{{item.isExpense ? item.name : (item.isCash ? 'reports_cash' : 'reports_sale') | translate}}</b>
 						<span>{{item.date.format('MMM D, YYYY')}}</span>
 					</div>
 					<div class="col">
-						<span ng-show="!item.isExpense">{{item.total | currency}}</span>
+						<span ng-show="!item.isExpense">{{item.amount | currency}}</span>
 					</div>
 					<div class="col negative">
 						<span ng-show="item.isExpense">{{item.amount | currency}}</span>

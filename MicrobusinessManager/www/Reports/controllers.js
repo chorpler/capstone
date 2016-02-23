@@ -2,7 +2,8 @@
 	angular.module('app.reports')
 	.controller('ReportsController', ReportsController);
 
-	function ReportsController ($scope, $ionicModal, $q, Database, startDate, endDate, timeFrame, startingCash, expenses, sales, languages) {
+	function ReportsController ($scope, $ionicModal, $q, Database, startDate, endDate, timeFrame, startingCash, 
+								expenses, sales, cashInfusions, languages) {
 		var vm = this;
 
 		vm.loadIncomeStatement  = loadIncomeStatement;
@@ -11,15 +12,14 @@
 		vm.closeSalesReport     = closeSalesReport;
 		vm.change 				= change;
 
-		vm.sales        = [];
-		vm.expenses     = [];
-		vm.startDate    = startDate;
-		vm.timeFrame	= timeFrame;
-		vm.endDate		= endDate;
-		vm.startingCash = startingCash;
-		vm.endingCash	= 0;
-		vm.expenses 	= expenses;
-		vm.sales 		= sales;
+		vm.sales        	= sales;
+		vm.expenses     	= expenses;
+		vm.cashInfusions	= cashInfusions;
+		vm.startDate    	= startDate;
+		vm.timeFrame		= timeFrame;
+		vm.endDate			= endDate;
+		vm.startingCash 	= startingCash;
+		vm.endingCash		= 0;
 		vm.incomeStatement	= [];
 		vm.incomeStatementModal = null;
 		vm.salesReportModal = null;
@@ -49,7 +49,7 @@
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var sale = response.rows.item(i);
 					sale.date = moment(sale.date);
-					vm.salesTotal += sale.total;
+					vm.salesTotal += sale.amount;
 					vm.sales.push(sale);
 				}
 			});
@@ -77,10 +77,22 @@
 					var sale = response.rows.item(i);
 					sale.date = moment(sale.date);
 					sale.products = [];
-					vm.salesTotal += sale.total;
+					vm.salesTotal += sale.amount;
 
 					vm.sales.push(sale);
 					addProductsToSale(sale);
+				}
+			});
+		}
+
+		function loadCashInfusions () {
+			return Database.select('cashInfusion', null, null, null, vm.startDate, vm.endDate)
+			.then(function (response) {
+				vm.cashInfusions.length = 0;
+				for (var i = response.rows.length - 1; i >= 0; i--) {
+					var cashInfusion = response.rows.item(i);
+					cashInfusion.date = moment(cashInfusion.date);
+					vm.cashInfusions.push(cashInfusion);
 				}
 			});
 		}
@@ -149,6 +161,7 @@
 			}));
 
 			promises.push(loadExpenses());
+			promises.push(loadCashInfusions());
 
 			switch (currentReport) {
 				case INCOME_STATEMENT:
@@ -170,7 +183,11 @@
 			}, vm.endingCash);
 
 			vm.endingCash = vm.sales.reduce(function (prev, curr) {
-				return prev + curr.total;
+				return prev + curr.amount;
+			}, vm.endingCash);
+
+			vm.endingCash = vm.cashInfusions.reduce(function (prev, curr) {
+				return prev + curr.amount;
 			}, vm.endingCash);
 
 			return vm.endingCash;
@@ -183,8 +200,12 @@
 			vm.expenses.forEach(function (expense) {
 				expense.isExpense = true;
 			});
+			vm.cashInfusions.forEach(function (cash) {
+				cash.isExpense = false;
+				cash.isCash = true;
+			})
 
-			vm.incomeStatement = vm.sales.concat(vm.expenses);
+			vm.incomeStatement = vm.sales.concat(vm.expenses).concat(vm.cashInfusions);
 			vm.incomeStatement.sort(function (a, b) {
 				if (a.date < b.date) {
 					return -1;
