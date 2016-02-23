@@ -53,8 +53,7 @@
         <div class="row" ng-if="$even">
           <div class="col col-50"
             ng-repeat="category in [sales.categories[$index],sales.categories[$index + 1]]">
-            <!-- <ion-radio ng-model="checked" ng-click="sales.filter = category.category">{{category.category}}</ion-radio> -->
-            <button class="button button-block button-dark" ng-click="sales.filter = category.category; active = true" ng-class="{'activeCategory': active}">
+            <button ng-hide="!category.category" class="button button-block button-dark" ng-click="sales.filter = category.category" ng-class="{'activeCategory': sales.filter === category.category}">
               {{category.category}}
             </button>
           </div>

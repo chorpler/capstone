@@ -308,7 +308,7 @@ input.self-payment {
   font-weight: bold;
 }
 .sales .activeCategory {
-  background-color: red !important:
+  background: red !important;
 }
 
 .sales .category:last-of-type {
