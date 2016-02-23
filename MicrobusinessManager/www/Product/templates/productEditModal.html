@@ -7,7 +7,7 @@
 			</button>
 		</div>
 	</ion-header-bar>
-	<ion-content>
+	<ion-content class="product_edit">
 		<div class="list">
 			<form name="productsForm">
 				<label class="item item-input item-floating-label">
@@ -18,9 +18,30 @@
 					<span class="input-label">{{"product_sales_price" | translate}}</span>
 					<input type="number" placeholder="{{'product_sales_price' | translate}}*" ng-model="products.activeItem.price" required="required">
 				</label>
-				<label class="item item-input item-floating-label">
-					<span class="input-label">{{"product_category" | translate}}</span>
-					<input type="text" placeholder="{{'product_category' | translate}}*" ng-model="products.activeItem.category" required="required">
+				<label class="item-stacked-label">
+					<span class="input-label categories">{{"product_category" | translate}}*</span>
+						<div class="row category_options">
+							<div class="col">
+								<ion-radio ng-model="products.pick" ng-value="'add'" ng-click="products.show = true; products.choose = false; products.editCategory = false">{{"product_Category_add" | translate}}</ion-radio>
+							</div>
+							<div class="col">
+								<ion-radio ng-model="products.pick" ng-value="'choose'" ng-click="products.choose = true; products.show = false; products.editCategory = false">{{"product_Category_choose" | translate}}</ion-radio>
+							</div>
+						</div>
+				</label>
+				<label select-click class="item item-input item-select" ng-show="products.choose || products.editCategory">
+					<div class="input-label">
+						{{products.editOpen ? "product_Category_existent_category" : "product_Category_choose_category" | translate}}
+					</div>
+					<select name="categories" id="categories" ng-model="products.activeItem.category">
+						<option ng-repeat="category in products.categories" value="{{category.category}}">
+							{{category.category}}
+						</option>
+					</select>
+	      </label>
+				<label class="item item-input item-floating-label" ng-show="products.show">
+					<span class="input-label">{{"product_new_Category" | translate}}</span>
+						<input type="text" placeholder="{{'product_input_category' | translate}}*" ng-model="products.activeItem.category" required="required">
 				</label>
 				<ion-checkbox ng-model="products.activeItem.linkInventory">{{"product_add_inventory" | translate}}</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">

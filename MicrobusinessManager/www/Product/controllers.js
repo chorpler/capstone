@@ -2,13 +2,18 @@
 	angular.module('app.products')
 	.controller('ProductsController', ProductsController);
 
-		function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems, languages) {
+		function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems, languages, categories) {
 		var vm = this;
 
 		vm.items = productItems;
+		vm.categories = categories;
 		vm.activeItem = null;
 		vm.editModal = null;
 		vm.editOpen = false;
+		vm.editCategory = false;
+		vm.show = false;
+		vm.choose = false;
+		vm.pick = '';
 
 		vm.editItem = editItem;
 		vm.save = save;
@@ -42,6 +47,8 @@
 		function editItem (item) {
 			vm.activeItem = item;
 			vm.editOpen = true;
+			vm.editCategory = true;
+			vm.pick = 'choose';
 			tempItem = angular.copy(item);
 			vm.editModal.show();
 		}
@@ -109,6 +116,7 @@
 				vm.activeItem.date = tempItem.date;
 				vm.activeItem.linkInventory = tempItem.linkInventory;
 				vm.activeItem.price = tempItem.price;
+				vm.pick = '';
 				vm.activeItem = null;
 			}
 
@@ -117,6 +125,10 @@
 
 		function addNewItem () {
 			vm.editOpen = false;
+			vm.editCategory = false;
+			vm.show = false;
+			vm.choose = false;
+			vm.pick = '';
 			vm.activeItem = {};
 			tempItem = {};
 			vm.editModal.show();

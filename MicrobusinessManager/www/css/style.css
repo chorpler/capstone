@@ -62,6 +62,19 @@
 	font-size: 14px;
 }
 
+.item-radio .radio-icon {
+  color: #39e600;
+}
+
+.product_edit .categories {
+  margin-left: 16px;
+  margin-top: 10px;
+}
+
+.product_edit .category_options {
+  margin-bottom: 10px;
+}
+
 .salary .salary-container {
   margin-bottom: -20px;
 }
@@ -281,6 +294,25 @@ input.self-payment {
 .sales .no-products,
 .sales-report .no-reports {
   font-weight: 600 !important;
+}
+
+.sales .category {
+  margin-bottom: -25px;
+}
+
+.sales .category-title {
+  margin-bottom: -5px;
+}
+
+.sales .activeAll:active {
+  font-weight: bold;
+}
+.sales .activeCategory {
+  background-color: red !important:
+}
+
+.sales .category:last-of-type {
+  margin-bottom: 18px;
 }
 
 ion-content.sales {

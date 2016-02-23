@@ -34,11 +34,35 @@
       </div>
     </div>
     <div class="card">
-      <div ng-repeat="category in sales.categories">
-        <a ng-click="sales.filter = category.category">{{category.category}}</a>
-        <a ng-click="sales.filter = ''">clear filter</a>
+      <div class="item item-divider">
+        <div class="row" class="category-title">
+          <div class="col col-75">
+            <span class="category_title">{{"sales_category" | translate}}</span>
+          </div>
+          <div class="col col-25">
+            <!-- <button class="button button-small button-outline button-dark" ng-click="sales.filter=''">
+              All
+            </button> -->
+            <div class="assertive" ng-click="sales.filter=''; all = true" ng-class="{activeAll: all}">
+              {{"sales_all" | translate}}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>  
+      <div ng-repeat="category in sales.categories" class="category">
+        <div class="row" ng-if="$even">
+          <div class="col col-50"
+            ng-repeat="category in [sales.categories[$index],sales.categories[$index + 1]]">
+            <!-- <ion-radio ng-model="checked" ng-click="sales.filter = category.category">{{category.category}}</ion-radio> -->
+            <button class="button button-block button-dark" ng-click="sales.filter = category.category; active = true" ng-class="{'activeCategory': active}">
+              {{category.category}}
+            </button>
+          </div>
+        </div>
+      </div>
+      </label>
+      </div>
+    </div>
     <div class="list card" ng-repeat="product in sales.products | filter:sales.filter as results track by product.id">
       <div class="item item-divider">
         <div class="row center">

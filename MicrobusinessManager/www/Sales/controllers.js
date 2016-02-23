@@ -29,6 +29,7 @@
       vm.saleProducts       = [];
       vm.error              = null;
       vm.currentEditProduct = null;
+      vm.filter = '';
       $ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
         scope: $scope,
         animation: 'slide-in-right'
