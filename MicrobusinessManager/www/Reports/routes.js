@@ -15,11 +15,11 @@
 				}
 			},
 			resolve: {
-				timeFrame: function ($window) {
-					return JSON.parse($window.localStorage['MM_Reports_Timeframe'] || null) || { id: 'reports_header_day', value: 'day'};
+				timeFrame: function () {
+					return { id: 'reports_header_day', value: 'day'};
 				},
-				startDate: function ($window, timeFrame) {
-					return moment($window.localStorage['MM_Reports_Start_Date']).startOf(timeFrame.value) || moment().startOf('day');
+				startDate: function (timeFrame) {
+					return moment().startOf('day');
 				},
 				endDate: function (startDate, timeFrame) {
 					return moment(startDate).endOf(timeFrame.value);
