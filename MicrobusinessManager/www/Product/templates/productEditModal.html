@@ -18,6 +18,10 @@
 					<span class="input-label">{{"product_sales_price" | translate}}</span>
 					<input type="number" placeholder="{{'product_sales_price' | translate}}*" ng-model="products.activeItem.price" required="required">
 				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">{{"product_category" | translate}}</span>
+					<input type="text" placeholder="{{'product_category' | translate}}*" ng-model="products.activeItem.category" required="required">
+				</label>
 				<ion-checkbox ng-model="products.activeItem.linkInventory">{{"product_add_inventory" | translate}}</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
 					<span class="input-label">{{"inventory_quantity" | translate}}</span>

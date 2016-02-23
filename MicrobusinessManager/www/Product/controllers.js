@@ -80,7 +80,7 @@
 
 			if (!item.id) {
 				deferred.promise.then(function () {
-					Database.insert(productTable, [item.name, item.price, item.inventoryid]).then(function (response) {
+					Database.insert(productTable, [item.name, item.price, item.category, item.inventoryid]).then(function (response) {
 						item.id = response.insertId;
 						vm.items.push(item);
 						if (item.linkInventory)
@@ -89,7 +89,7 @@
 				});
 			} else {
 				deferred.promise.then(function () {
-					Database.update(productTable, item.id, [item.name, item.price, item.inventoryid]);
+					Database.update(productTable, item.id, [item.name, item.price, item.category, item.inventoryid]);
 					if (item.linkInventory)
 						Database.update(inventoryTable, item.inventoryid, [item.name, item.quantity, item.id]);
 				});
@@ -104,6 +104,7 @@
 				vm.activeItem.name = tempItem.name;
 				vm.activeItem.quantity = tempItem.quantity;
 				vm.activeItem.cost = tempItem.cost;
+				vm.activeItem.category = tempItem.category;
 				vm.activeItem.comments = tempItem.comments;
 				vm.activeItem.date = tempItem.date;
 				vm.activeItem.linkInventory = tempItem.linkInventory;

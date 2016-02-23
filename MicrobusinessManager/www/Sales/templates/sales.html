@@ -33,7 +33,13 @@
         {{sales.productError.name}} {{"sales_error_part1" | translate}} {{sales.productError.limit}}  {{"sales_error_part2" | translate}} {{sales.productError.limit}}.
       </div>
     </div>
-    <div class="list card" ng-repeat="product in sales.products track by product.id">
+    <div class="card">
+      <div ng-repeat="category in sales.categories">
+        <a ng-click="sales.filter = category.category">{{category.category}}</a>
+        <a ng-click="sales.filter = ''">clear filter</a>
+      </div>
+    </div>  
+    <div class="list card" ng-repeat="product in sales.products | filter:sales.filter as results track by product.id">
       <div class="item item-divider">
         <div class="row center">
           <div class="col">
@@ -47,7 +53,6 @@
           </div>
         </div>
       </div>
-
       <div class="row center">
         <div class="col">
           <button class="button-icon" ng-click="sales.removeProduct(product)">
