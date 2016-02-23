@@ -12,6 +12,7 @@ angular.module('app.expenses')
 		vm.editModal = null;
 		vm.expenses = '';
 		vm.date = Date.now();
+		vm.activeExpense = {};
 
 		vm.editExpense = editExpense;
 		vm.save = save;
@@ -21,11 +22,13 @@ angular.module('app.expenses')
 		vm.getKeys = getKeys;
 		vm.clearSearch = clearSearch;
 		vm.showConfirm = showConfirm;
+		vm.showAlert = showAlert;
+		vm.isCheckboxChecked = isCheckboxChecked;
 
 		var tempExpense = null;
 		var language = {};
 		var expenseTable = 'expense';
-		var title_delete, message_body;
+		var important_title, message_body;
 
 		function init () {
 			if (languages.length) {
@@ -35,19 +38,12 @@ angular.module('app.expenses')
 			}
 			$ionicModal.fromTemplateUrl('Expense/templates/expensesEditModal.html', {
 				scope: $scope,
-				animation: 'slide-in-right'
+				animation: 'slide-in-up'
 			}).then(function (modal) {
 				vm.editModal = modal;
 			});
 
-			vm.reformattedList = {};
-
-			vm.log.forEach(function (record) {
-				var key = $filter('date')(record.date, 'mediumDate');
-				vm.reformattedList[key] = vm.reformattedList[key] || [];
-				vm.reformattedList[key].push(record);
-			});
-
+			vm.ischecked = false;
 			updateTotal();
 		}
 
@@ -59,55 +55,46 @@ angular.module('app.expenses')
 		}
 
 		function save (item) {
-			var key = $filter('date')(vm.activeExpense.date, 'mediumDate');
-			var oldKey = $filter('date')(tempExpense.date, 'mediumDate');
 
-			if(oldKey === undefined) {
-				oldKey = key;
-			}
+			Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
+				item.id = response.insertId;
+			});
 
-			vm.reformattedList[key] = vm.reformattedList[key] || [];
+			vm.log = [];
 
-			if (!item.id) {
-				Database.insert(expenseTable, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
-					item.id = response.insertId;
-				});
-				vm.reformattedList[key].push(item);
-
-			} else {
-				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
-				if (key !== oldKey) {
-					vm.reformattedList[key].push(item);
+			Database.select('exp').then(function (response) {
+				var items = [];
+				if (response.rows.length === 0) {
+					return items;
 				}
-			}
-
-			if (key !== oldKey) {
-				vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(item), 1);
-			}
-
-			if (vm.reformattedList[oldKey].length === 0) {
-				delete vm.reformattedList[oldKey];
-			}
+				for (var i = response.rows.length - 1; i >= 0; i--) {
+					var item = response.rows.item(i);
+					item.amount = Number(item.amount);
+					vm.log.push(item);
+				}
+			});
 
 			vm.activeExpense = null;
-			updateTotal();
+			vm.ischecked = false;
 			vm.editModal.hide();
+			showAlert();
 		}
 
 		function cancel () {
-			if (vm.activeExpense) {
-				vm.activeExpense.name = tempExpense.name;
-				vm.activeExpense.amount = tempExpense.amount;
-				vm.activeExpense.comments = tempExpense.comments;
-				vm.activeExpense.date = tempExpense.date;
-				vm.activeExpense = null;
-			}
-
+			vm.activeExpense = null;
 			vm.editModal.hide();
 		}
 
-		function addNewExpense () {
+		function addNewExpense (expense) {
 			tempExpense = {};
+			vm.activeExpense = {};
+			if (expense != null) {
+				vm.activeExpense.name = expense.name;
+				vm.activeExpense.expType = expense.expType;
+				vm.ischecked = true;
+				vm.activeExpense.amount = expense.amount;
+			}
+			vm.activeExpense.date = new Date();
 			vm.editviewOpen = false;
 			vm.editModal.show();
 		}
@@ -140,32 +127,57 @@ angular.module('app.expenses')
 		function clearSearch () {
 			vm.search = '';
 		}
+		function isCheckboxChecked () {
+    	vm.ischecked = true;
+		}
 
-		function showConfirm () {
+		function showConfirm (expense) {
 			if (language.type === 'es') {
-				title_delete = "Borrar Gasto";
-				message_body = "¿Estás seguro?";
+				important_title = "Importante!";
+				message_body = "Este es un nuevo gasto. No estas editando un registro de un gasto pasado." +
+				" Hemos llenado este formulario con los datos de tu más receinte gasto que coincide con este nombre.";
 				cancel_button = "Cancelar";
+				continue_button = "Continuar";
 			} else {
-				title_delete = "Delete Expense";
-				message_body = "Are you sure?";
+				important_title = "Important!";
+				message_body = "This is a new expense. You are not editing a past expense." +
+				" We have pre-filled this form with the information of the most recent expense that matches this expense's name.";
+				continue_button = "Continue";
 				cancel_button = "Cancel";
 			}
 			var confirmPopup = $ionicPopup.confirm({
-				title: title_delete,
+				title: important_title,
 				template: message_body,
 				buttons: [
 					{
 						text: cancel_button,
 						type: 'button-stable'},
 					{
-						text: '<b>Ok</b>',
+						text: '<b>' +continue_button + '</b>',
 						type: 'button-positive',
 						onTap: function(e) {
-							vm.deleteExpense(vm.activeExpense);
+							vm.addNewExpense(expense);
 						}
 					}
 			]
+			});
+		}
+
+		function showAlert () {
+			if (language.type === 'es') {
+				title_funds = "Buenas Noticias!";
+				message_body = "Tu Gasto se ha guardado exitosamente. Si deseas ver o editarlo, ve al Registro de Gastos en Reportes.";
+			} else {
+				title_funds = "Success!";
+				message_body = "Your Expense has been recorded. If you want to see or edit it, go to the Expenses Log under Reports.";
+			}
+			var alertPopup = $ionicPopup.alert({
+				title: title_funds,
+				template: message_body
+			});
+
+			alertPopup.then(function(res) {
+				console.log('none');
 			});
 		}
 
