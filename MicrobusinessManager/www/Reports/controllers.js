@@ -10,6 +10,7 @@
 		vm.closeIncomeStatement = closeIncomeStatement;
 		vm.loadSalesReport      = loadSalesReport;
 		vm.closeSalesReport     = closeSalesReport;
+		vm.openSalesLog         = openSalesLog;
 		vm.openExpenseLog       = openExpenseLog;
 		vm.change 				      = change;
 
@@ -152,8 +153,11 @@
 			});
 		}
 
+		function openSalesLog () {
+			$state.go('app.saleslog');
+		}
+
 		function openExpenseLog () {
-			console.log('OPEN EXPENSE LOG>>');
 			$state.go('app.expenselog');
 		}
 
