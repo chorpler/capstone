@@ -9,7 +9,7 @@
 		vm.timeFrame = timeFrame;
 		vm.endDate = endDate;
 		vm.language = {};
-		vm.loadSalesProducts = loadSalesProducts;
+		vm.change = change;
 
 		function init () {
 			vm.sales = [];
@@ -43,6 +43,13 @@
 					sale.products.push(product);
 				}
 			});
+		}
+
+		function change (startDate, timeFrame) {
+			vm.startDate = startDate;
+			vm.timeFrame = timeFrame;
+			vm.endDate = moment(vm.startDate).endOf(vm.timeFrame.value);
+			loadSalesProducts();
 		}
 
 		// TODO: SHOW THE SALE EDIT MODAL

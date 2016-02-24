@@ -8,7 +8,7 @@
 		</div>
 	</ion-header-bar>
 
-	<report-header start-date="saleslog.startDate" end-date="saleslog.endDate" time-frame="saleslog.timeFrame" change="saleslog.loadSalesProducts" language="saleslog.language" class="has-header"></report-header>
+	<report-header start-date="saleslog.startDate" end-date="saleslog.endDate" time-frame="saleslog.timeFrame" change="saleslog.change" language="saleslog.language" class="has-header"></report-header>
 	<ion-content>
 		<ion-list ng-repeat="sale in saleslog.sales track by sale.id | orderBy: sale.date">
 			<div class="item item-divider">
