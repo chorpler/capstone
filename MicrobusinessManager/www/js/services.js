@@ -1,6 +1,7 @@
 (function () {
   angular.module('app')
-  .factory('Database', Database);
+  .factory('Database', Database)
+  .factory('CashBalance', CashBalance);
 
   function Database ($ionicPlatform, $cordovaSQLite, $q) {
     var db;
@@ -12,7 +13,7 @@
                      'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
                      'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date text, type text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, expType text, comments text, date text, type text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
                      'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
@@ -41,9 +42,10 @@
     var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, productid = ?';
     var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
-    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date, type) VALUES (?, ?, ?, ?, ?)';
-    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date, type FROM expense';
-    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?, type = ? ';
+    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, expType, comments, date, type) VALUES (?, ?, ?, ?, ?, ?)';
+    var SELECT_EXPENSE = 'SELECT id, name, amount, expType, comments, date, type FROM expense';
+    var SELECT_EXP = 'SELECT name, amount, expType FROM expense GROUP BY name';
+    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, expType = ?, comments = ?, date = ?, type = ? ';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
 
     var INSERT_SALE = 'INSERT INTO sale (amount, date) VALUES (?,?)';
@@ -131,6 +133,9 @@
         case 'expense':
           query = SELECT_EXPENSE;
           break;
+        case 'exp':
+          query = SELECT_EXP;
+          break;
         case 'sale':
           query = SELECT_SALE;
           break;
@@ -183,6 +188,7 @@
 
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {
+
           return response;
         }, function (err) {
           console.log(err);
@@ -346,5 +352,33 @@
         })
       })
     }
+  }
+
+  function CashBalance (Database) {
+    var currentCashBalance;
+     
+    var service = {
+      get CashBalance () {
+        return currentCashBalance;
+      },
+      set CashBalance (val) {
+        return currentCashBalance = val;
+      },
+      updateCashBalance: function () {
+        return Database.calculateCashOnHand().then(function (response) {
+          return currentCashBalance = response.rows.item(0).total;
+        });
+      }
+    };
+
+    init();
+
+    function init () {
+      Database.calculateCashOnHand().then(function (response) {
+        currentCashBalance = response.rows.item(0).total;
+      });
+    }
+
+    return service;
   }
 })();

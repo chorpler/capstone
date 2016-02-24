@@ -2,7 +2,7 @@
 angular.module('app.salary')
 .controller('salaryController', salaryController);
 
-	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems, salary, cashOnHand, languages) {
+	function salaryController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, salaryItems, salary, cashOnHand, languages, CashBalance) {
 		var vm = this;
 
 		vm.log = salaryItems;
@@ -91,6 +91,7 @@ angular.module('app.salary')
 						item.comments = 'my salary';
 					}
 					item.amount = vm.expectedSalary;
+					item.expType = 'Variable';
 				}
 				item.date = new Date();
 				item.type = 'salary';
@@ -108,7 +109,8 @@ angular.module('app.salary')
 			vm.reformattedList[key] = vm.reformattedList[key] || [];
 
 			if (!item.id) {
-				Database.insert(expenseTable, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]).then(function (response) {
+				Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]).then(function (response) {
+					CashBalance.updateCashBalance();
 					item.id = response.insertId;
 				});
 				vm.reformattedList[key].push(item);
@@ -119,7 +121,8 @@ angular.module('app.salary')
 						vm.showErrorAlert = true;
 						return;
 				} else {
-					Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type]);
+					Database.update(expenseTable, item.id, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), item.type])
+					.then(CashBalance.updateCashBalance);
 					if (key !== oldKey) {
 						vm.reformattedList[key].push(item);
 					}
@@ -166,7 +169,7 @@ angular.module('app.salary')
 			if (vm.reformattedList[key].length === 0) {
 				delete vm.reformattedList[key];
 			}
-			Database.remove(expenseTable, item.id);
+			Database.remove(expenseTable, item.id).then(CashBalance.updateCashBalance);
 			vm.activeExpense = null;
 			updateTotal();
 			updateCashonHand();
