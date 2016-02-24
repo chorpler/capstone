@@ -21,6 +21,7 @@
 		vm.getKeys = getKeys;
 		vm.clearSearch = clearSearch;
 		vm.showConfirm = showConfirm;
+		vm.isCheckboxChecked = isCheckboxChecked;
 
 		var tempExpense = null;
 		var language = {};
@@ -33,7 +34,8 @@
 					language.type = languages[0].type;
 				}
 			}
-			$ionicModal.fromTemplateUrl('Expense/templates/expensesEditModal.html', {
+
+			$ionicModal.fromTemplateUrl('ExpenseLog/templates/expenseEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
@@ -47,6 +49,8 @@
 				vm.reformattedList[key] = vm.reformattedList[key] || [];
 				vm.reformattedList[key].push(record);
 			});
+
+			vm.ischecked = false;
 
 			updateTotal();
 		}
@@ -69,13 +73,13 @@
 			vm.reformattedList[key] = vm.reformattedList[key] || [];
 
 			if (!item.id) {
-				Database.insert(expenseTable, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
+				Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
 					item.id = response.insertId;
 				});
 				vm.reformattedList[key].push(item);
 			}
 			else {
-				Database.update(expenseTable, item.id, [item.name, item.amount, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
+				Database.update(expenseTable, item.id, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
 				if (key !== oldKey) {
 					vm.reformattedList[key].push(item);
 				}
@@ -89,6 +93,7 @@
 				delete vm.reformattedList[oldKey];
 			}
 
+			vm.ischecked = false;
 			vm.activeExpense = null;
 			updateTotal();
 			vm.editModal.hide();
@@ -98,6 +103,7 @@
 			if (vm.activeExpense) {
 				vm.activeExpense.name = tempExpense.name;
 				vm.activeExpense.amount = tempExpense.amount;
+				vm.activeExpense.expType = tempExpense.expType;
 				vm.activeExpense.comments = tempExpense.comments;
 				vm.activeExpense.date = tempExpense.date;
 				vm.activeExpense = null;
@@ -141,6 +147,10 @@
 			vm.search = '';
 		}
 
+		function isCheckboxChecked () {
+			vm.ischecked = true;
+		}
+
 		function showConfirm () {
 			if (language.type === 'es') {
 				title_delete = 'Borrar Gasto';
@@ -152,6 +162,7 @@
 				message_body = 'Are you sure?';
 				cancel_button = 'Cancel';
 			}
+
 			var confirmPopup = $ionicPopup.confirm({
 				title: title_delete,
 				template: message_body,
