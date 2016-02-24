@@ -1,4 +1,4 @@
-<ion-view class="sales-report">
+<ion-view class="sales-report" view-title="{{'reports_sales_reports' | translate}}">
 	<ion-header-bar>
 		<h1 class="title">{{"reports_sales_reports" | translate}}</h1>
 		<div class="buttons">
@@ -10,10 +10,18 @@
 
 	<report-header start-date="saleslog.startDate" end-date="saleslog.endDate" time-frame="saleslog.timeFrame" change="saleslog.change" language="saleslog.language" class="has-header"></report-header>
 	<ion-content>
-		<ion-list ng-repeat="sale in saleslog.sales track by sale.id | orderBy: sale.date">
+		<div class="card">
+			<div class="item item-divider">
+				<span>{{"reports_grand_total" | translate}}: </span>
+			</div>
+			<div class="item item-text-wrap">
+				<span>{{saleslog.salesTotal | currency}}</span>
+			</div>
+		</div>
+		<div class="list card" ng-repeat="sale in saleslog.sales track by sale.id | orderBy: sale.date">
 			<div class="item item-divider">
 				<div class="row">
-					<div class="col">
+					<div class="col col-60">
 						<span class="name-container">{{"reports_date" | translate}}: {{sale.date.format('MMM D, YYYY')}}</span>
 					</div>
 					<div class="col">
@@ -21,7 +29,7 @@
 					</div>
 				</div>
 			</div>
-			<ion-item ng-repeat="product in sale.products track by product.id">
+			<div ng-repeat="product in sale.products track by product.id">
 				<div class="row">
 					<div class="col col-33">
 						<span>{{product.name}}</span>
@@ -32,16 +40,6 @@
 					<div class="col">
 						<span>{{"reports_qty" | translate}}: {{product.quantity}}</span>
 					</div>
-				</div>
-			</ion-item>
-		</ion-list>
-		<div class="item item-divider">
-			<div class="row">
-				<div class="col">
-					<b>{{"reports_grand_total" | translate}}: </b>
-				</div>
-				<div class="col">
-					<b>{{saleslog.salesTotal | currency}}</b>
 				</div>
 			</div>
 		</div>
