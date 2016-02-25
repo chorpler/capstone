@@ -7,7 +7,7 @@
 			</button>
 		</div>
 	</ion-header-bar>
-	<ion-content>
+	<ion-content class="inventory-edit">
 		<div class="list">
 			<form name="inventoryForm">
 				<label class="item item-input item-floating-label">
@@ -34,6 +34,25 @@
 				<label class="item item-input item-floating-label" ng-show="inventory.activeItem.linkProduct">
 					<span class="input-label">{{"product_sales_price" | translate}}</span>
 					<input type="number" placeholder="{{'product_sales_price' | translate}}*" ng-model="inventory.activeItem.price" ng-required="inventory.activeItem.linkProduct">
+				</label>
+				<label class="item-stacked-label" ng-show="inventory.activeItem.linkProduct && inventory.categories.length">
+					<span class="input-label categories">{{"product_category" | translate}}*</span>
+						<div class="row category_options">
+							<div class="col col-50">
+								<ion-radio ng-model="inventory.pick" ng-value="'add'" ng-click="inventory.show = true; inventory.choose = false; inventory.editCategory = false; inventory.activeItem.category = ''; inventory.enterCat = false">{{"product_Category_add" | translate}}</ion-radio>
+							</div>
+							<div class="col">
+								<ion-radio ng-model="inventory.pick" ng-value="'choose'" ng-click="inventory.chooseCategory($event)">{{"product_Category_choose" | translate}}</ion-radio>
+							</div>
+						</div>
+				</label>
+				<label class="item-stacked-label" ng-show="inventory.choose || inventory.editCategory || (inventory.choose &amp;&amp; inventory.activeItem.linkProduct)">
+					<span class="categoy-name">{{"product_category_name" | translate}}</span>
+					<p class="categories">{{inventory.activeItem.category}}</p>
+				</label>
+				<label class="item item-input item-floating-label" ng-show="inventory.show || (!inventory.categories.length &amp;&amp; inventory.activeItem.linkProduct)">
+					<span class="input-label">{{"product_new_Category" | translate}}</span>
+						<input type="text" placeholder="{{'product_input_category' | translate}}*" ng-model="inventory.activeItem.category" required="required">
 				</label>
 			</form>
 		</div>

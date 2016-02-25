@@ -2,10 +2,12 @@
   angular.module('app.sales')
   .controller('SalesController', SalesController);
 
-  function SalesController ($scope, $ionicModal, $q, products, Database, CashBalance) {
+  function SalesController ($scope, $ionicModal, $q, products, Database, categories, CashBalance) {
+
     var vm = this;
 
     vm.products            = products;
+    vm.categories          = categories;
     vm.addProduct          = addProduct;
     vm.removeProduct       = removeProduct;
     vm.checkout            = checkout;
@@ -18,6 +20,8 @@
 
     var saleTable = 'sale';
     var saleProductTable = 'saleproduct';
+    vm.filters = {};
+    console.log(vm.filters);
 
     function init () {
       vm.saleDate           = new Date();
@@ -26,7 +30,7 @@
       vm.saleProducts       = [];
       vm.error              = null;
       vm.currentEditProduct = null;
-
+      vm.filter = '';
       $ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
         scope: $scope,
         animation: 'slide-in-right'
@@ -132,6 +136,7 @@
 
     function resetSale () {
       vm.error = null;
+      vm.filter = '';
       vm.saleDate     = new Date();
       vm.saleTotal    = 0;
       vm.productCount = 0;

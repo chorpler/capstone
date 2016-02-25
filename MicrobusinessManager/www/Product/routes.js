@@ -43,6 +43,19 @@
 						});
 					});
 				},
+				categories: function (Database) {
+					return Database.select('category').then(function (response) {
+						var items = [];
+						if (response.rows.length === 0) {
+							return items;
+						}
+						for (var i = response.rows.length - 1; i >= 0; i--) {
+							var item = response.rows.item(i);
+							items.push(item);
+						}
+						return items;
+					});
+				},
 				languages: function (Database) {
 					return Database.select('languages').then(function (response) {
 						var items = [];
@@ -53,7 +66,6 @@
 							var item = response.rows.item(i);
 							items.push(item);
 						}
-						console.log(items);
 						return items;
 					});
 				}
