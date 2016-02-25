@@ -1,6 +1,7 @@
 (function () {
   angular.module('app')
-  .factory('Database', Database);
+  .factory('Database', Database)
+  .factory('CashBalance', CashBalance);
 
   function Database ($ionicPlatform, $cordovaSQLite, $q) {
     var db;
@@ -12,12 +13,13 @@
                      'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
                      'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, comments text, date text, type text)');
-      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, total real, date text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, expType text, comments text, date text, type text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
                      'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount text, type text)');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
+      $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
       deferred.resolve();
     });
 
@@ -41,14 +43,15 @@
     var UPDATE_INVENTORY = 'UPDATE inventory set name = ?, quantity = ?, productid = ?';
     var REMOVE_INVENTORY = 'DELETE FROM inventory';
 
-    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, comments, date, type) VALUES (?, ?, ?, ?, ?)';
-    var SELECT_EXPENSE = 'SELECT id, name, amount, comments, date, type FROM expense';
-    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, comments = ?, date = ?, type = ? ';
+    var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, expType, comments, date, type) VALUES (?, ?, ?, ?, ?, ?)';
+    var SELECT_EXPENSE = 'SELECT id, name, amount, expType, comments, date, type FROM expense';
+    var SELECT_EXP = 'SELECT name, amount, expType FROM expense GROUP BY name';
+    var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, expType = ?, comments = ?, date = ?, type = ? ';
     var REMOVE_EXPENSE = 'DELETE FROM expense';
 
-    var INSERT_SALE = 'INSERT INTO sale (total, date) VALUES (?,?)';
-    var SELECT_SALE = 'SELECT id, total, date FROM sale';
-    var UPDATE_SALE = 'UPDATE sale set total = ?, date = ?';
+    var INSERT_SALE = 'INSERT INTO sale (amount, date) VALUES (?,?)';
+    var SELECT_SALE = 'SELECT id, amount, date FROM sale';
+    var UPDATE_SALE = 'UPDATE sale set amount = ?, date = ?';
     var REMOVE_SALE = 'DELETE FROM sale';
 
     var INSERT_SALE_PRODUCT = 'INSERT INTO saleproduct (saleid, productid, quantity) VALUES (?,?,?)';
@@ -65,6 +68,11 @@
     var SELECT_LANGUAGES = 'SELECT id, type FROM languages';
     var UPDATE_LANGUAGES = 'UPDATE languages set type = ? ';
     var REMOVE_LANGUAGES = 'DELETE FROM languages';
+
+    var INSERT_CASH_INFUSION = 'INSERT INTO cashInfusion (amount, date) VALUES (?,?)';
+    var SELECT_CASH_INFUSION = 'SELECT id, amount, date FROM cashInfusion';
+    var UPDATE_CASH_INFUSION = 'UPDATE cashInfusion set amount = ?, date = ? ';
+    var REMOVE_CASH_INFUSION = 'DELETE FROM cashInfusion';
 
     var WHERE = ' WHERE ';
     var AND = ' AND ';
@@ -100,6 +108,9 @@
         case 'languages':
           query = INSERT_LANGUAGES;
           break;
+        case 'cashInfusion':
+          query = INSERT_CASH_INFUSION;
+          break;
       }
 
       return deferred.promise.then(function () {
@@ -126,6 +137,9 @@
         case 'expense':
           query = SELECT_EXPENSE;
           break;
+        case 'exp':
+          query = SELECT_EXP;
+          break;
         case 'sale':
           query = SELECT_SALE;
           break;
@@ -137,6 +151,9 @@
           break;
         case 'languages':
           query = SELECT_LANGUAGES;
+          break;
+        case 'cashInfusion':
+          query = SELECT_CASH_INFUSION;
           break;
       }
 
@@ -175,6 +192,7 @@
 
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {
+
           return response;
         }, function (err) {
           console.log(err);
@@ -209,6 +227,9 @@
           break;
         case 'languages':
           query = UPDATE_LANGUAGES;
+          break;
+        case 'cashInfusion':
+          query = UPDATE_CASH_INFUSION;
           break;
       }
 
@@ -254,6 +275,9 @@
         case 'languages':
           query = REMOVE_LANGUAGES;
           break;
+        case 'cashInfusion':
+          query = REMOVE_CASH_INFUSION;
+          break;
       }
 
       query += id ? WHERE + WHERE_ID : '';
@@ -283,8 +307,9 @@
     function calculateCashOnHand (startDate, endDate) {
       var queryStart = 'SELECT total(amount) as total FROM ';
       var queryExpense = '(SELECT total(amount) * -1 as amount FROM expense ';
-      var queryUnion = 'UNION ';
-      var querySales = 'SELECT total(total) as amount FROM sale ';
+      var queryUnion = ' UNION ';
+      var querySales = 'SELECT total(amount) as amount FROM sale ';
+      var queryCash = 'SELECT total(amount) as amount FROM cashInfusion ';
       var queryEnd = ')';
 
       var queryExpense = queryExpense + ((startDate || endDate) ?
@@ -301,8 +326,15 @@
                               (endDate != null ? 'date < ?' : '')
                             ) : '');
 
+      var queryCash = queryCash + ((startDate || endDate) ?
+                            WHERE +
+                            (startDate != null ? 'date > ? ' +
+                              (endDate != null ? AND + 'date < ? ' : '') :
+                              (endDate != null ? 'date < ?' : '')
+                            ) : '');
 
-      var query = queryStart + queryExpense + queryUnion + querySales + queryEnd;
+
+      var query = queryStart + queryExpense + queryUnion + querySales + queryUnion + queryCash + queryEnd;
 
       var params = [];
 
@@ -314,7 +346,7 @@
         params.push(moment(endDate).format('YYYY-MM-DD HH:mm:ss'));
       }
 
-      params = params.concat(params);
+      params = params.concat(params).concat(params);
 
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, params).then(function (response) {
@@ -324,5 +356,33 @@
         })
       })
     }
+  }
+
+  function CashBalance (Database) {
+    var currentCashBalance;
+
+    var service = {
+      get CashBalance () {
+        return currentCashBalance;
+      },
+      set CashBalance (val) {
+        return currentCashBalance = val;
+      },
+      updateCashBalance: function () {
+        return Database.calculateCashOnHand().then(function (response) {
+          return currentCashBalance = response.rows.item(0).total;
+        });
+      }
+    };
+
+    init();
+
+    function init () {
+      Database.calculateCashOnHand().then(function (response) {
+        currentCashBalance = response.rows.item(0).total;
+      });
+    }
+
+    return service;
   }
 })();

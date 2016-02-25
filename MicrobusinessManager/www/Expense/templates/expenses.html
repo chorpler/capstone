@@ -1,7 +1,4 @@
-<ion-view view-title="{{'expenses_expenses_log' | translate}}">
-	<ion-nav-buttons side="right">
-		<button class="button button-icon ion-ios-plus-empty" ng-click="expenses.addNewExpense()"></button>
-	</ion-nav-buttons>
+<ion-view view-title="{{'menu_expenses' | translate}}">
   <ion-header-bar class="bar-light bar-subheader">
     <div class="item-input-inset">
       <label class="item-input-wrapper">
@@ -14,35 +11,31 @@
     </div>
   </ion-header-bar>
 	<ion-content class="expenses">
-    <div class="card" ng-hide="expenses.search">
-      <div class="item item-divider">
-        <span>{{"expenses_total_expenses" | translate}}</span>
+		<div class="card">
+			<div class="row">
+				<div class="col col-80 col-offset-10">
+					<button class="button button-block button-positive" ng-click="expenses.addNewExpense()">
+		  			{{"add_expense" | translate}}
+					</button>
+				</div>
+			</div>
+		</div>
+    <div class="list card" ng-show="expenses.log.length >= 1">
+			<div class="item item-divider">
+        <span class="bold">{{"expense_history" | translate}}</span>
       </div>
-      <div class="item item-text-wrap">
-  			<div class="total-container">{{expenses.totalExpenses | currency}}</div>
-      </div>
-    </div>
-    <div class="list card" ng-show="expenses.getKeys(expenses.reformattedList).length >= 1">
-      <div ng-repeat="date in expenses.getKeys(expenses.reformattedList) | customDateFilter:true">
-        <div class="item item-divider" ng-hide="results.length < 1">
-          {{date | date:'mediumDate'}}
-        </div>
-  			<ion-item ng-click="expenses.editExpense(expense)" ng-repeat="expense in expenses.reformattedList[date] | filter:expenses.search as results">
-          <div class="card-container">
-    				<a class="item item-icon-right">
-    				  <i class="icon ion-chevron-right"></i>
-              <div class="row">
-                <div class="col">
-                  <span class="name-container">{{expense.name}}</span>
-                </div>
-                <div class="col">
-                  <span class="amount-container">{{expense.amount | currency}}</span>
-                </div>
+			<ion-item ng-click="expenses.showConfirm(expense)" ng-repeat="expense in expenses.log | orderBy:'name' | filter:expenses.search as results">
+        <div class="card-container">
+  				<a class="item item-icon-right">
+  				  <i class="icon ion-ios-plus-empty"></i>
+            <div class="row">
+              <div class="col">
+                <span class="name-container">{{expense.name}}</span>
               </div>
-    				</a>
-          </div>
-  			</ion-item>
-      </div>
+            </div>
+  				</a>
+        </div>
+			</ion-item>
 		</div>
     <!-- <div ng-show="!expenses.getKeys(expenses.reformattedList).length">No Results</div> -->
 	</ion-content>

@@ -1,5 +1,5 @@
 (function () {
 	angular.module('app.reports', [
-		'app'
+		'app', 'app.expenselog'
 	]);
 })();

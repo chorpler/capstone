@@ -2,7 +2,8 @@
 	angular.module('app.products')
 	.controller('ProductsController', ProductsController);
 
-		function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems, languages, categories, $ionicPopover) {
+	function ProductsController ($ionicModal, $scope, $q, $ionicPopup, Database, productItems, languages, categories, $ionicPopover, CashBalance) {
+
 		var vm = this;
 
 		vm.items = productItems;
@@ -81,7 +82,8 @@
 					} else {
 						return Database.insert(inventoryTable, [item.name, item.quantity, item.id]).then(function (response) {
 						    item.inventoryid = response.insertId;
-						    Database.insert(expenseTable, [item.name, item.cost, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
+						    Database.insert(expenseTable, [item.name, item.cost, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')])
+						    .then(CashBalance.updateCashBalance);
 						    deferred.resolve();
 						});
 					}

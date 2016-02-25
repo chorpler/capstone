@@ -114,9 +114,15 @@
 			inventory_total_comments: "Comments",
 			inv_exp_sal_date: "Date",
 			expenses_expenses_log: "Expenses Log",
+			expenses_new_expense: "Expense Record",
 			expenses_total_expenses: "Total Expenses",
-			expense_name: "Expense Nanme",
+			expense_name: "Expense Name",
 			expense_amount: "Amount",
+			expense_type: "Expense Type",
+			expense_variable: "Variable",
+			expense_fixed: "Fixed",
+			expense_history: "Recent Expenses",
+			add_expense: "Add Expense",
 			salary_expected: "Expected Salary",
 			commission_expected: "Expected Commission",
 			salary_register: "Register",
@@ -153,14 +159,17 @@
 			reports_qty: "Qty",
 			reports_grand_total: "Grand Total",
 			reports_no_sales: "There are no sales in this time period.",
+			reports_expense_log: "Expense Log",
 			reports_time_frame: "Time Frame",
 			reports_header_day: 'Day',
 			reports_header_week: 'Week',
 			reports_header_month: 'Month',
 			reports_sale: "Sale",
+			reports_cash: 'Cash',
 			edit_title: "Edit",
 			new_title: "New",
-			inventory_item: "Inventory Item"
+			inventory_item: "Inventory Item",
+			cash_balance: 'Cash Balance'
 
 		});
 
@@ -218,9 +227,15 @@
 			inventory_total_comments: "Comentarios",
 			inv_exp_sal_date: "Fecha",
 			expenses_expenses_log: "Registro de Gastos",
+			expenses_new_expense: "Registro de Gastos",
 			expenses_total_expenses: "Total de Gastos",
 			expense_name: "Nombre del Gasto",
 			expense_amount: "Cantidad Gastada",
+			expense_type: "Tipo de Gasto",
+			expense_variable: "Variable",
+			expense_fixed: "Fijo",
+			expense_history: "Gastos Recientes",
+			add_expense: "Agregar Gasto",
 			salary_expected: "Sueldo Esperado",
 			commission_expected: "Comisión Esperada",
 			salary_register: "Registrar",
@@ -262,9 +277,12 @@
 			reports_header_week: 'Semana',
 			reports_header_month: 'Mes',
 			reports_sale: "Venta",
+			reports_expense_log: "Registro de Gastos",
+			reports_cash: 'Efectivo',
 			edit_title: "Editar",
 			new_title: "Nuevo",
-			inventory_item: "Artículo de Inventario"
+			inventory_item: "Artículo de Inventario",
+			cash_balance: 'Saldo'
 
 		});
 

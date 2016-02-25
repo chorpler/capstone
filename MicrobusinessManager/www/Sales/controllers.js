@@ -2,7 +2,8 @@
   angular.module('app.sales')
   .controller('SalesController', SalesController);
 
-  function SalesController ($scope, $ionicModal, $q, products, Database, categories) {
+  function SalesController ($scope, $ionicModal, $q, products, Database, categories, CashBalance) {
+
     var vm = this;
 
     vm.products            = products;
@@ -98,6 +99,7 @@
     function saveSale () {
       Database.insert(saleTable, [vm.saleTotal, moment(vm.saleDate).format('YYYY-MM-DD HH:mm:ss')])
       .then(function (response) {
+        CashBalance.updateCashBalance();
         return response.insertId;
       })
       .then(function (saleId) {
