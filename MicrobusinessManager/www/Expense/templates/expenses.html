@@ -1,4 +1,7 @@
 <ion-view view-title="{{'menu_expenses' | translate}}">
+  <ion-nav-buttons side="right">
+		 <button class="button button-positive" ng-click="expenses.addNewExpense()">{{"add_button" | translate}}</button>
+	</ion-nav-buttons>
   <ion-header-bar class="bar-light bar-subheader">
     <div class="item-input-inset">
       <label class="item-input-wrapper">
@@ -11,15 +14,6 @@
     </div>
   </ion-header-bar>
 	<ion-content class="expenses">
-		<div class="card">
-			<div class="row">
-				<div class="col col-80 col-offset-10">
-					<button class="button button-block button-positive" ng-click="expenses.addNewExpense()">
-		  			{{"add_expense" | translate}}
-					</button>
-				</div>
-			</div>
-		</div>
     <div class="list card" ng-show="expenses.log.length >= 1">
 			<div class="item item-divider">
         <span class="bold">{{"expense_history" | translate}}</span>
