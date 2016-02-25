@@ -29,7 +29,8 @@
       update: update,
       remove: remove,
       selectProductsForSale: selectProductsForSale,
-      calculateCashOnHand: calculateCashOnHand
+      calculateCashOnHand: calculateCashOnHand,
+      generateIncomeStatement: generateIncomeStatement
     };
 
     var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
@@ -314,23 +315,23 @@
 
       var queryExpense = queryExpense + ((startDate || endDate) ?
                             WHERE +
-                            (startDate != null ? 'date > ? ' +
-                              (endDate != null ? AND + 'date < ? ' : '') :
-                              (endDate != null ? 'date < ?' : '')
+                            (startDate != null ? 'date >= ? ' +
+                              (endDate != null ? AND + 'date <= ? ' : '') :
+                              (endDate != null ? 'date <= ?' : '')
                             ) : '');
 
       var querySales = querySales + ((startDate || endDate) ?
                             WHERE +
-                            (startDate != null ? 'date > ? ' +
-                              (endDate != null ? AND + 'date < ? ' : '') :
-                              (endDate != null ? 'date < ?' : '')
+                            (startDate != null ? 'date >= ? ' +
+                              (endDate != null ? AND + 'date <= ? ' : '') :
+                              (endDate != null ? 'date <= ?' : '')
                             ) : '');
 
       var queryCash = queryCash + ((startDate || endDate) ?
                             WHERE +
-                            (startDate != null ? 'date > ? ' +
-                              (endDate != null ? AND + 'date < ? ' : '') :
-                              (endDate != null ? 'date < ?' : '')
+                            (startDate != null ? 'date >= ? ' +
+                              (endDate != null ? AND + 'date <= ? ' : '') :
+                              (endDate != null ? 'date <= ?' : '')
                             ) : '');
 
 
@@ -354,6 +355,84 @@
         }, function (err) {
           console.log(err);
         })
+      })
+    }
+
+    function generateIncomeStatement (startDate, endDate, groupBy) {
+      var incomeStatement = {
+        incomeItems: [],
+        expenseItems: []
+      }
+      var promises = [];
+
+      var querySales = 'SELECT p.name as name, SUM(p.price * sp.quantity) as amount FROM product p ' +
+                        'INNER JOIN saleproduct sp ON p.id = sp.productid ' + 
+                        'INNER JOIN sale s ON sp.saleid = s.id ';
+      var queryCash = 'SELECT \'Cash\' as name, SUM(amount) FROM cashInfusion';
+      var queryExpenses = 'SELECT SUM(amount) as amount, ' + groupBy + ' as name FROM expense';
+      var queryUnion = ' UNION ';
+      var queryGroupBy = ' GROUP BY ';
+      var groupByName = ' name ';
+
+      var querySales = querySales + ((startDate || endDate) ?
+                            WHERE +
+                            (startDate != null ? 'date >= ? ' +
+                              (endDate != null ? AND + 'date <= ? ' : '') :
+                              (endDate != null ? 'date <= ?' : '')
+                            ) : '');
+
+      var queryCash = queryCash + ((startDate || endDate) ?
+                            WHERE +
+                            (startDate != null ? 'date >= ? ' +
+                              (endDate != null ? AND + 'date <= ? ' : '') :
+                              (endDate != null ? 'date <= ?' : '')
+                            ) : '');
+
+      var queryExpenses = queryExpenses + ((startDate || endDate) ?
+                            WHERE +
+                            (startDate != null ? 'date >= ? ' +
+                              (endDate != null ? AND + 'date <= ? ' : '') :
+                              (endDate != null ? 'date <= ?' : '')
+                            ) : '');
+
+      var queryIncomeItems = querySales + queryGroupBy + groupByName + queryUnion + queryCash + queryGroupBy + groupByName;
+      var queryExpenseItems = queryExpenses + queryGroupBy + groupBy;
+
+      var paramsIncome = [];
+      var paramsExpense = [];
+
+      if (startDate) {
+        paramsIncome.push(moment(startDate).format('YYYY-MM-DD HH:mm:ss'));
+        paramsExpense.push(moment(startDate).format('YYYY-MM-DD HH:mm:ss'));
+      }
+
+      if (endDate) {
+        paramsIncome.push(moment(endDate).format('YYYY-MM-DD HH:mm:ss'));
+        paramsExpense.push(moment(endDate).format('YYYY-MM-DD HH:mm:ss'));
+      }
+
+      paramsIncome = paramsIncome.concat(paramsIncome);
+
+      return deferred.promise.then(function () {
+        promises.push($cordovaSQLite.execute(db, queryIncomeItems, paramsIncome).then(function (response) {
+          for (var i = response.rows.length - 1; i >= 0; i--) {
+            incomeStatement.incomeItems.push(response.rows.item(i));
+          }
+        }, function (err) {
+          console.log(err);
+        }));
+
+        promises.push($cordovaSQLite.execute(db, queryExpenseItems, paramsExpense).then(function (response) {
+          for (var i = response.rows.length - 1; i >= 0; i--) {
+            incomeStatement.expenseItems.push(response.rows.item(i));
+          }
+        }, function (err) {
+          console.log(err);
+        }));
+
+        return $q.all(promises).then(function () {
+          return incomeStatement;
+        });
       })
     }
   }

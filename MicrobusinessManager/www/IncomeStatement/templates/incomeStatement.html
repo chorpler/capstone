@@ -1,0 +1,80 @@
+<ion-view view-title="{{'reports_income_statement' | translate}}" class="income-statement">
+	<report-header start-date="income.startDate" end-date="income.endDate" time-frame="income.timeFrame" change="income.change" class="has-header"></report-header>
+	<ion-content class="has-footer">
+		<div class="card">
+			<div class="item item-divider">
+				<div class="row">
+					<div class="col">
+						{{'income_statement_profit' | translate}}
+					</div>
+					<div class="col">
+						{{income.totalProfit | currency}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="list card">
+			<div class="item item-divider">
+				<div class="row">
+					{{'income_statement_income_header' | translate}}
+				</div>
+			</div>
+			<div ng-repeat="item in income.incomeStatement.incomeItems" class="item">
+				<div class="row">
+					<div class="col">
+						{{item.name}}
+					</div>
+					<div class="col">
+						{{item.amount | currency}}
+					</div>
+				</div>
+			</div>
+			<div class="item item-divider">
+				<div class="row">
+					<div class="col">
+						{{'income_statement_total_income' | translate}}
+					</div>
+					<div class="col">
+						{{income.totalIncome | currency}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="list card">
+			<div class="item item-divider">
+				<div class="row">
+					{{'income_statement_expenses_header' | translate}}
+				</div>
+			</div>
+			<div ng-repeat="item in income.incomeStatement.expenseItems" class="item">
+				<div class="row">
+					<div class="col" ng-if="item.name === 'fixed' || item.name === 'variable'">
+						{{'income_statement_' + item.name | translate}}
+					</div>
+					<div class="col" ng-if="item.name !== 'fixed' && item.name !== 'variable'">
+						{{item.name}}
+					</div>
+					<div class="col">
+						{{item.amount | currency}}
+					</div>
+				</div>
+			</div>
+			<div class="item item-divider">
+				<div class="row">
+					<div class="col">
+						{{'income_statement_total_expenses' | translate}}
+					</div>
+					<div class="col">
+						{{income.totalExpenses | currency}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</ion-content>
+	<div class="bar bar-footer">
+		<div class="button-bar">
+			<button class="button button-light" ng-class="{'button-positive' : income.groupBy === 'expType'}" ng-click="income.changeGroupBy('expType')">{{'income_statement_type' | translate}}</button>
+			<button class="button button-light" ng-class="{'button-positive' : income.groupBy === 'name'}" ng-click="income.changeGroupBy('name')">{{'income_statement_name' | translate}}</button>
+		</div>
+	</div>
+</ion-view>
