@@ -31,6 +31,7 @@
 							if (item.linkProduct) {
 								Database.select('product', item.productid).then(function (product) {
 									items[product.rows.item(0).inventoryid].price = Number(product.rows.item(0).price);
+									items[product.rows.item(0).inventoryid].category = product.rows.item(0).category;
 									deferred.resolve();
 								});
 							} else {
@@ -43,6 +44,20 @@
 								return items[key];
 							});
 						});
+					});
+				},
+				categories: function (Database) {
+					return Database.select('category').then(function (response) {
+						var items = [];
+						if (response.rows.length === 0) {
+							return items;
+						}
+						for (var i = response.rows.length - 1; i >= 0; i--) {
+							var item = response.rows.item(i);
+							items.push(item);
+						}
+						console.log(items);
+						return items;
 					});
 				},
 				languages: function (Database) {

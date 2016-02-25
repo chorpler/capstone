@@ -12,6 +12,7 @@
 		vm.closeSalesReport     = closeSalesReport;
 		vm.change 				= change;
 		vm.stateGo				= stateGo;
+		vm.openExpenseLog       = openExpenseLog;
 
 		vm.sales        	= sales;
 		vm.expenses     	= expenses;
@@ -155,7 +156,12 @@
 			vm.sales = [];
 			vm.salesReportModal.remove().then(function () {
 				vm.salesReportModal = null;
-			});;
+			});
+		}
+
+		function openExpenseLog () {
+			console.log('OPEN EXPENSE LOG>>');
+			$state.go('app.expenselog');
 		}
 
 		function change (startDate, timeFrame) {

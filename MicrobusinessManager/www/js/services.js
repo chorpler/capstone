@@ -10,7 +10,7 @@
       // $cordovaSQLite.deleteDB('my.db');
       db = $cordovaSQLite.openDB('my.db');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
-                     'inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
+                     'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
                      'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
       $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, expType text, comments text, date text, type text)');
@@ -33,9 +33,10 @@
       generateIncomeStatement: generateIncomeStatement
     };
 
-    var INSERT_PRODUCT = 'INSERT INTO product (name, price, inventoryid) VALUES (?,?,?)';
-    var SELECT_PRODUCT = 'SELECT id, name, price, inventoryid FROM product';
-    var UPDATE_PRODUCT = 'UPDATE product set name = ?, price = ?, inventoryid = ?';
+    var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
+    var SELECT_PRODUCT = 'SELECT id, name, price, category, inventoryid FROM product';
+    var SELECT_CATEGORY = 'SELECT DISTINCT category FROM product';
+    var UPDATE_PRODUCT = 'UPDATE product set name = ?, price = ?, category = ?, inventoryid = ?';
     var REMOVE_PRODUCT = 'DELETE FROM product';
 
     var INSERT_INVENTORY = 'INSERT INTO inventory (name, quantity, productid) VALUES (?,?,?)';
@@ -127,6 +128,9 @@
       switch (table) {
         case 'product':
           query = SELECT_PRODUCT;
+          break;
+        case 'category':
+          query = SELECT_CATEGORY;
           break;
         case 'inventory':
           query = SELECT_INVENTORY;
@@ -435,7 +439,7 @@
 
   function CashBalance (Database) {
     var currentCashBalance;
-     
+
     var service = {
       get CashBalance () {
         return currentCashBalance;
