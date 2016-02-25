@@ -26,7 +26,7 @@
         </div>
       </ion-item>
   </div>
-  <ion-content class="sales">
+  <ion-content class="sales" ng-class="{salesMore: sales.saleTotal >= 20}">
     <div class="card" ng-show="sales.error">
       <div class="item item-text-wrap assertive center">
         <!-- {{sales.error}} -->
@@ -36,14 +36,14 @@
     <div class="card" ng-if="sales.products.length">
       <div class="item item-divider">
         <div class="row" class="category-title">
-          <div class="col col-75">
+          <div class="col col-70">
             <span class="category_title">{{"sales_category" | translate}}</span>
           </div>
-          <div class="col col-25">
+          <div class="col col-30">
             <!-- <button class="button button-small button-outline button-dark" ng-click="sales.filter=''">
               All
             </button> -->
-            <div class="assertive" ng-click="sales.filter=''; all = true" ng-class="{activeAll: all}">
+            <div class="activeAll" ng-click="sales.filter=''; all = true" ng-class="{activeAll: all, notActive: sales.filter !== ''}">
               {{"sales_all" | translate}}
             </div>
           </div>
@@ -53,7 +53,7 @@
         <div class="row" ng-if="$even">
           <div class="col col-50"
             ng-repeat="category in [sales.categories[$index],sales.categories[$index + 1]]">
-            <button ng-hide="!category.category" class="button button-block button-dark" ng-click="sales.filter = category.category" ng-class="{'activeCategory': sales.filter === category.category}">
+            <button ng-hide="!category.category" class="button button-block default" ng-click="sales.filter = category.category" ng-class="{'activeCategory': sales.filter === category.category}">
               {{category.category}}
             </button>
           </div>

@@ -53,7 +53,6 @@
 							var item = response.rows.item(i);
 							items.push(item);
 						}
-						console.log(items);
 						return items;
 					});
 				},
@@ -67,7 +66,6 @@
 							var item = response.rows.item(i);
 							items.push(item);
 						}
-						console.log(items);
 						return items;
 					});
 				}
