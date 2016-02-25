@@ -47,6 +47,8 @@
 				$translate.use(selectedLanguage.type);
 			}
 		});
+
+		// Database.insert('cashInfusion', [500,  moment().format('YYYY-MM-DD HH:mm:ss')]);
 	}
 
 	function config ($stateProvider, $urlRouterProvider, $translateProvider) {
@@ -157,7 +159,16 @@
 			edit_title: "Edit",
 			new_title: "New",
 			inventory_item: "Inventory Item",
-			cash_balance: 'Cash Balance'
+			cash_balance: 'Cash Balance',
+			'income_statement_profit': 'Profit (or Loss)',
+			'income_statement_income_header': 'Income',
+			'income_statement_total_income': 'Total Income',
+			'income_statement_expenses_header': 'Expenses',
+			'income_statement_fixed': 'Fixed',
+			'income_statement_variable': 'Variable',
+			'income_statement_total_expenses': 'Total Expenses',
+			'income_statement_type': 'Type',
+			'income_statement_name': 'Name'
 
 		});
 
@@ -258,7 +269,16 @@
 			edit_title: "Editar",
 			new_title: "Nuevo",
 			inventory_item: "Artículo de Inventario",
-			cash_balance: 'Saldo'
+			cash_balance: 'Saldo',
+			'income_statement_profit': 'Ganancia (o Pérdida)',
+			'income_statement_income_header': 'Ingresos',
+			'income_statement_total_income': 'Ingresos Totales',
+			'income_statement_expenses_header': 'Gastos',
+			'income_statement_fixed': 'Fijo',
+			'income_statement_variable': 'Variable',
+			'income_statement_total_expenses': 'Gastos Totales',
+			'income_statement_type': 'Tipo',
+			'income_statement_name': 'Nombre'
 
 		});
 

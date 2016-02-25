@@ -324,3 +324,19 @@ input.self-payment {
 ion-content.sales {
   top: 241px !important;
 }
+
+.income-statement .bar-footer button {
+  width: 50%;
+}
+
+.income-statement .col {
+  text-transform: capitalize;
+}
+
+.income-statement .card .item {
+  padding: 0;
+}
+
+.income-statement .item-divider {
+  font-weight: 700;
+}

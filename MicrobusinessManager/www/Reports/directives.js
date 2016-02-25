@@ -9,8 +9,7 @@
 				startDate: '=',
 				endDate: '=',
 				timeFrame: '=',
-				change: '&',
-				language: '='
+				change: '&'
 			},
 			templateUrl: 'Reports/templates/report-header.html',
 			link: link
