@@ -68,7 +68,6 @@
 		}
 
 		function save (item) {
-			console.log(item);
 			var deferred = $q.defer();
 			var inventoryItem;
 			if (item.linkInventory && item.inventoryid) {
@@ -82,7 +81,8 @@
 					} else {
 						return Database.insert(inventoryTable, [item.name, item.quantity, item.id]).then(function (response) {
 						    item.inventoryid = response.insertId;
-						    Database.insert(expenseTable, [item.name, item.cost, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')])
+								item.expType = 'variable';
+						    Database.insert(expenseTable, [item.name, item.cost, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')])
 						    .then(CashBalance.updateCashBalance);
 						    deferred.resolve();
 						});
