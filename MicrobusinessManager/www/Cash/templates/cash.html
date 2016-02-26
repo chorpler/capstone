@@ -16,6 +16,6 @@
           </label>
         </form>
       </div>
-			<button class="button button-block button-positive" ng-click="app.save(app.cashInfusion)" ng-disabled="cashForm.$invalid">{{"save_button" | translate}}</button>
+			<button class="button button-block button-positive" ng-click="app.save(app.cashInfusion)" ng-disabled="cashForm.$invalid || app.cashInfusion.amount < 1">{{"save_button" | translate}}</button>
     </ion-content>
 </ion-popover-view>
