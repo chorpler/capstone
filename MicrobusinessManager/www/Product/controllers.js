@@ -150,6 +150,7 @@
 			vm.choose = false;
 			vm.pick = '';
 			vm.activeItem = {};
+			vm.activeItem.date = new Date();
 			tempItem = {};
 			vm.editModal.show();
 		}
@@ -165,6 +166,11 @@
 			if (vm.editCategory) {
 				vm.choose = true;
 			}
+			if (vm.activeItem.category === '' || vm.activeItem.category === undefined) {
+				vm.enterCat = false;
+			} else {
+				vm.enterCat = true;
+			}
 			vm.show = false;
 			vm.editCategory = false;
 			chooseCategories($event);
@@ -175,7 +181,7 @@
 		}
 
 		function closePopoverCancel () {
-			if (!vm.editCategory && !vm.editOpen) {
+			if (!vm.editCategory && !vm.editOpen && !vm.enterCat) {
 				vm.pick = '';
 				vm.choose = false;
 				vm.show = false;
