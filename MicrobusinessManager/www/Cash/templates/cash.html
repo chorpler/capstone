@@ -5,15 +5,17 @@
     </ion-header-bar>
     <ion-content class="cash-container">
       <div class="list">
-        <label class="item item-input">
-          <span class="input-label">{{"cash_amount" | translate}}</span>
-          <input type="text" placeholder="$" ng-model="app.cashInfusion.amount">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">{{"cash_date" | translate}}</span>
-          <input type="date" ng-model="app.cashInfusion.date" required="required">
-        </label>
+        <form name="cashForm">
+          <label class="item item-input">
+            <span class="input-label">{{"cash_amount" | translate}}</span>
+            <input type="text" placeholder="$" ng-model="app.cashInfusion.amount" required="required">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">{{"cash_date" | translate}}</span>
+            <input type="date" ng-model="app.cashInfusion.date" required="required" required="required">
+          </label>
+        </form>
       </div>
-			<button class="button button-block button-positive" ng-click="app.save(app.cashInfusion)">{{"save_button" | translate}}</button>
+			<button class="button button-block button-positive" ng-click="app.save(app.cashInfusion)" ng-disabled="cashForm.$invalid">{{"save_button" | translate}}</button>
     </ion-content>
 </ion-popover-view>

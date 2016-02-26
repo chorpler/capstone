@@ -16,12 +16,12 @@
       <ion-item>
         <label class="item item-input">
           <i class="icon ion-social-usd placeholder-icon"></i>
-          <input type="text" ng-model="sales.saleTotal">
+          <input type="number" ng-model="sales.saleTotal">
         </label>
       </ion-item>
 
       <ion-item>
-        <button class="button button-block button-balanced" ng-click="sales.saveSale()">
+        <button class="button button-block button-balanced" ng-disabled="!sales.saleTotal" ng-click="sales.saveSale()">
           {{"sales_record" | translate}}
         </button>
       </ion-item>
