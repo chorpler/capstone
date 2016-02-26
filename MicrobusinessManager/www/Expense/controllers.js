@@ -136,7 +136,7 @@ angular.module('app.expenses')
 			if (language.type === 'es') {
 				important_title = "Importante!";
 				message_body = "Este es un nuevo gasto. No estas editando un registro de un gasto pasado." +
-				" Hemos llenado este formulario con los datos de tu más receinte gasto que coincide con este nombre.";
+				" Hemos llenado este formulario con los datos de tu más reciente gasto que coincide con este nombre.";
 				cancel_button = "Cancelar";
 				continue_button = "Continuar";
 			} else {
@@ -167,7 +167,7 @@ angular.module('app.expenses')
 		function showAlert () {
 			if (language.type === 'es') {
 				title_funds = "Buenas Noticias!";
-				message_body = "Tu Gasto se ha guardado exitosamente. Si deseas ver o editarlo, ve al Registro de Gastos en Reportes.";
+				message_body = "Tu Gasto se ha guardado exitosamente. Si deseas verlo o editarlo, ve al Registro de Gastos en Reportes.";
 			} else {
 				title_funds = "Success!";
 				message_body = "Your Expense has been recorded. If you want to see or edit it, go to the Expenses Log under Reports.";

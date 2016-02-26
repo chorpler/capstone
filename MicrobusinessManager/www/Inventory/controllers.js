@@ -169,6 +169,7 @@
 			vm.choose = false;
 			vm.pick = '';
 			vm.activeItem = {};
+			vm.activeItem.date = new Date();
 			tempItem = {};
 			vm.editModal.show();
 		}
@@ -184,6 +185,11 @@
 			if (vm.editCategory) {
 				vm.choose = true;
 			}
+			if (vm.activeItem.category === '' || vm.activeItem.category === undefined) {
+				vm.enterCat = false;
+			} else {
+				vm.enterCat = true;
+			}
 			vm.show = false;
 			vm.editCategory = false;
 			chooseCategories($event);
@@ -194,7 +200,7 @@
 		}
 
 		function closePopoverCancel () {
-			if (!vm.editCategory && !vm.editOpen) {
+			if (!vm.editCategory && !vm.editOpen && !vm.enterCat) {
 				vm.pick = '';
 				vm.choose = false;
 				vm.show = false;
@@ -248,8 +254,8 @@
 
 		function showConfirm () {
 			if (language.type === 'es') {
-				title_delete = "Borrar Articulo de Inventario";
-				message_body = "¿Estás seguro? Si le borras, tendrás que ir a Gastos y actualizar el correspondiente registro";
+				title_delete = "Borrar Artículo de Inventario";
+				message_body = "¿Estás seguro? Si lo borras, tendrás que ir a Gastos y actualizar el correspondiente registro";
 				cancel_button = "Cancelar";
 			} else {
 				title_delete = "Delete Inventory Item";
