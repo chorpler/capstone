@@ -2,7 +2,7 @@
 	angular.module('app.reports')
 	.controller('ReportsController', ReportsController);
 
-	function ReportsController ($scope, $ionicModal, $q, $state, Database, startDate, endDate, timeFrame, startingCash, 
+	function ReportsController ($scope, $ionicModal, $q, $state, Database, startDate, endDate, timeFrame, startingCash,
 								expenses, sales, cashInfusions, languages) {
 		var vm = this;
 
@@ -10,6 +10,7 @@
 		vm.closeIncomeStatement = closeIncomeStatement;
 		vm.loadSalesReport      = loadSalesReport;
 		vm.closeSalesReport     = closeSalesReport;
+		vm.openSalesLog         = openSalesLog;
 		vm.change 				= change;
 		vm.stateGo				= stateGo;
 		vm.openExpenseLog       = openExpenseLog;
@@ -159,8 +160,11 @@
 			});
 		}
 
+		function openSalesLog () {
+			$state.go('app.saleslog');
+		}
+
 		function openExpenseLog () {
-			console.log('OPEN EXPENSE LOG>>');
 			$state.go('app.expenselog');
 		}
 

@@ -2,6 +2,7 @@
 	angular.module('app.reports', [
 		'app',
 		'app.income-statement',
-		'app.expenselog'
+		'app.expenselog',
+		'app.saleslog'
 	]);
 })();
