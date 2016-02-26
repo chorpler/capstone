@@ -295,7 +295,7 @@
     }
 
     function selectProductsForSale (saleId) {
-      var query  = 'SELECT DISTINCT product.id, name, price, quantity FROM product INNER JOIN saleproduct ON product.id = saleproduct.productid WHERE saleproduct.saleid = ?';
+      var query  = 'SELECT DISTINCT saleproduct.id, saleproduct.saleid, saleproduct.productid, name, price, quantity FROM product INNER JOIN saleproduct ON product.id = saleproduct.productid WHERE saleproduct.saleid = ?';
       return deferred.promise.then(function () {
         return $cordovaSQLite.execute(db, query, [saleId]).then(function (response) {
           return response;
@@ -366,7 +366,7 @@
       var promises = [];
 
       var querySales = 'SELECT p.name as name, SUM(p.price * sp.quantity) as amount FROM product p ' +
-                        'INNER JOIN saleproduct sp ON p.id = sp.productid ' + 
+                        'INNER JOIN saleproduct sp ON p.id = sp.productid ' +
                         'INNER JOIN sale s ON sp.saleid = s.id ';
       var queryCash = 'SELECT \'Cash\' as name, SUM(amount) FROM cashInfusion';
       var queryExpenses = 'SELECT SUM(amount) as amount, ' + groupBy + ' as name FROM expense';

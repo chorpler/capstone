@@ -76,13 +76,18 @@
 		}
 
 		function save (editedSale) {
-			Database.update(saleTable, editedSale.id, [editedSale.date, editedSale.amount]);
+			console.log('SAVE!! ', editedSale);
+			Database.update(saleTable, editedSale.id, [editedSale.amount, moment(editedSale.date).format('YYYY-MM-DD HH:mm:ss')])
+				.then(function () {
+					editedSale.products.forEach(function (saleProduct) {
+						console.log('SALEPRODUCT> ', saleProduct);
+						Database.update(saleProductTable, saleProduct.id, [
+							saleProduct.saleid, saleProduct.productid, saleProduct.quantity
+						]);
+					});
+				});
 
-			editedSale.products.forEach(function (saleProduct) {
-				Database.update(saleProductTable, saleProduct.id, [
-					saleProduct.saleid, saleProduct.productid, saleProduct.quantity
-				]);
-			});
+			vm.editModal.hide();
 		}
 
 		function cancel () {
