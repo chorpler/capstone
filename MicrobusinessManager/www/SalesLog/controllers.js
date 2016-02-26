@@ -10,11 +10,27 @@
 		vm.endDate = endDate;
 		vm.language = {};
 		vm.change = change;
+		vm.currentSale = null;
+		vm.editSale = editSale;
+		vm.save = save;
+		vm.cancel = cancel;
+		vm.editModal = null;
+
+		var tempSale = null;
+		var saleTable = 'sale';
+		var saleProductTable = 'saleproduct';
 
 		function init () {
 			vm.sales = [];
 			vm.salesTotal = 0;
 			loadSalesProducts();
+
+			$ionicModal.fromTemplateUrl('SalesLog/templates/saleEditModal.html', {
+				scope: $scope,
+				animation: 'slide-in-right'
+			}).then(function (modal) {
+				vm.editModal = modal;
+			});
 		}
 
 		function loadSalesProducts () {
@@ -52,15 +68,34 @@
 			loadSalesProducts();
 		}
 
-		// TODO: SHOW THE SALE EDIT MODAL
+		function editSale (sale) {
+			vm.currentSale = sale;
+			tempSale = angular.copy(sale);
+			vm.editViewOpen = true;
+			vm.editModal.show();
+		}
+
+		function save (editedSale) {
+			Database.update(saleTable, editedSale.id, [editedSale.date, editedSale.amount]);
+
+			editedSale.products.forEach(function (saleProduct) {
+				Database.update(saleProductTable, saleProduct.id, [
+					saleProduct.saleid, saleProduct.productid, saleProduct.quantity
+				]);
+			});
+		}
+
+		function cancel () {
+			if (vm.currentSale) {
+				vm.currentSale = tempSale;
+			}
+			vm.editModal.hide();
+		}
 
 		// Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function () {
-			if (vm.incomeStatementModal) {
-				vm.incomeStatementModal.remove();
-			}
-			if (vm.salesReportModal) {
-				vm.salesReportModal.remove();
+			if (vm.editModal) {
+				vm.editModal.remove();
 			}
 		});
 

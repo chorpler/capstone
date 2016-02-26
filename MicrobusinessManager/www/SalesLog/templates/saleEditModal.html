@@ -1,0 +1,22 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">{{"edit_title" | translate}} {{"reports_sale" | translate}}</h1>
+		<div class="buttons">
+			<button class="button button-clear button-positive" ng-click="saleslog.showConfirm()">
+				<i class="icon ion-trash-b"></i>
+			</button>
+		</div>
+	</ion-header-bar>
+
+	<ion-content>
+		<div class="list">
+			<div class="item item-divider">{{"reports_date" | translate}} : {{saleslog.currentSale.date.format('MMM D, YYYY')}}</div>
+			<div class="item">{{saleslog.currentSale.amount | currency}}</div>
+			<div ng-repeat="product in saleslog.currentSale.products track by product.id">
+				<div class="item item-divider">{{product.name}} - {{"reports_price" | translate}}: {{product.price | currency}}</div>
+				<div class="item">{{"reports_qty" | translate}}: {{product.quantity}}</div>
+			</div>
+			<button class="button button-block button-assertive" ng-click="saleslog.cancel(saleslog.currentSale)">{{"cancel_button" | translate}}</button>
+		</div>
+	</ion-content>
+</ion-modal-view>
