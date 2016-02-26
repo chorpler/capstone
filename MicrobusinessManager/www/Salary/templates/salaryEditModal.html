@@ -1,6 +1,6 @@
 <ion-modal-view>
 	<ion-header-bar>
-		<h1 class="title">{{salary.editviewOpen ? 'Edit' : 'New'}} Salary Record</h1>
+		<h1 class="title">{{salary.editviewOpen ? "edit_title" : "new_title" | translate}} {{"salary_record" | translate}}</h1>
 		<div class="buttons">
 			<button class="button button-clear button-positive" ng-click="salary.showConfirm()" ng-show="salary.editviewOpen">
 				<i class="icon ion-trash-b"></i></button>
