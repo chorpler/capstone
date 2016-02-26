@@ -32,7 +32,8 @@
 				expenses: function (startDate, endDate, Database) {
 					return Database.select('expense', null, null, null, startDate, endDate).then(function (response) {
 						var items = [];
-						if (response.rows.length === 0) {
+
+						if (!response || response.rows.length === 0) {
 							return items;
 						}
 

@@ -2,14 +2,21 @@
 	angular.module('app.inventory')
 	.controller('InventoryController', InventoryController);
 
-	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems, languages, CashBalance) {
+	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems, languages, categories, $ionicPopover, CashBalance) {
+
 		var vm = this;
 
+		vm.categories = categories;
 		vm.items = inventoryItems;
 		vm.activeItem = null;
 		vm.totalAssets = 0;
 		vm.editModal = null;
 		vm.editOpen = false;
+		vm.editCategory = false;
+		vm.show = false;
+		vm.choose = false;
+		vm.enterCat = false;
+		vm.pick = '';
 
 		vm.editItem = editItem;
 		vm.save = save;
@@ -18,8 +25,13 @@
 		vm.deleteItem = deleteItem;
 		vm.clearSearch = clearSearch;
 		vm.showConfirm = showConfirm;
+		vm.chooseCategories = chooseCategories;
+		vm.chooseCategory = chooseCategory;
+		vm.closePopover = closePopover;
+		vm.closePopoverCancel = closePopoverCancel;
 
 		var tempItem = null;
+		var queryCategories = false;
 		var language = {};
 		var title_delete, message_body;
 		var productTable = 'product';
@@ -39,11 +51,19 @@
 			}).then(function (modal) {
 				vm.editModal = modal;
 			});
+			$ionicPopover.fromTemplateUrl('Inventory/templates/productInventoryCategories.html', {
+			    scope: $scope,
+			}).then(function(popover) {
+			    vm.prodCategories = popover;
+			});
 
 		}
 
 		function editItem (item) {
 			vm.editOpen = true;
+			vm.editCategory = true;
+			vm.enterCat = true;
+			vm.pick = 'choose';
 			vm.activeItem = item;
 			tempItem = angular.copy(item);
 			vm.editModal.show();
@@ -61,7 +81,7 @@
 						item.productid = productItem.id;
 						deferred.resolve();
 					} else {
-						return Database.insert(productTable, [item.name, item.price, item.id]).then(function (response) {
+						return Database.insert(productTable, [item.name, item.price, item.category, item.id]).then(function (response) {
 							item.productid = response.insertId;
 							deferred.resolve();
 						});
@@ -71,7 +91,7 @@
 				deferred.promise = Database.select(productTable, item.productid).then(function (product) {
 					if (product.rows.length > 0) {
 						productItem = product.rows.item(0);
-						Database.update(productTable, productItem.id, [productItem.name, productItem.price, null]);
+						Database.update(productTable, productItem.id, [productItem.name, productItem.price, item.category, null]);
 						item.productid = null;
 						deferred.resolve();
 					}
@@ -94,13 +114,13 @@
 							};
 							Database.update(inventoryTable, item.id, [item.name, item.quantity, item.productid]);
 							if (item.linkProduct)
-								Database.update(productTable, item.productid, [item.name, item.price, item.id]);
+								Database.update(productTable, item.productid, [item.name, item.price, item.category, item.id]);
 						} else {
 							vm.items.push(item);
 							Database.insert(inventoryTable, [item.name, item.quantity, item.productid]).then(function (response) {
 								item.id = response.insertId;
 								if (item.linkProduct)
-									Database.update(productTable, item.productid, [item.name, item.price, item.id]);
+									Database.update(productTable, item.productid, [item.name, item.price, item.category, item.id]);
 							});
 						}
 					});
@@ -114,12 +134,13 @@
 				deferred.promise.then(function () {
 					Database.update(inventoryTable, item.id, [item.name, item.quantity, item.productid]);
 					if (item.linkProduct)
-						Database.update(productTable, item.productid, [item.name, item.price, item.id]);
+						Database.update(productTable, item.productid, [item.name, item.price, item.category, item.id]);
 				});
 				// updateTotal();
 			}
 
 			vm.activeItem = null;
+			queryCategories = true;
 			vm.editModal.hide();
 		}
 
@@ -128,10 +149,13 @@
 				vm.activeItem.name = tempItem.name;
 				vm.activeItem.quantity = tempItem.quantity;
 				vm.activeItem.cost = tempItem.cost;
+				vm.activeItem.category = tempItem.category;
 				vm.activeItem.comments = tempItem.comments;
 				vm.activeItem.price = tempItem.price;
 				vm.activeItem.linkInventory = tempItem.linkInventory;
 				vm.activeItem = null;
+				vm.pick = '';
+				vm.show = false;
 			}
 
 			vm.editModal.hide();
@@ -139,9 +163,61 @@
 
 		function addNewItem () {
 			vm.editOpen = false;
+			vm.editCategory = false;
+			vm.enterCat = false;
+			vm.show = false;
+			vm.choose = false;
+			vm.pick = '';
 			vm.activeItem = {};
 			tempItem = {};
 			vm.editModal.show();
+		}
+
+		function chooseCategories ($event) {
+			if (queryCategories) {
+				getCategories();
+			}
+			vm.prodCategories.show($event);
+		}
+
+		function chooseCategory ($event) {
+			if (vm.editCategory) {
+				vm.choose = true;
+			}
+			vm.show = false;
+			vm.editCategory = false;
+			chooseCategories($event);
+		}
+
+		function closePopover () {
+			vm.prodCategories.hide();
+		}
+
+		function closePopoverCancel () {
+			if (!vm.editCategory && !vm.editOpen) {
+				vm.pick = '';
+				vm.choose = false;
+				vm.show = false;
+			} else if (vm.editOpen && vm.activeItem.category === '') {
+				vm.pick = '';
+			}
+			vm.prodCategories.hide();
+		}
+
+		function getCategories () {
+			vm.categories = [];
+
+			Database.select('category').then(function (response) {
+				var items = [];
+				if (response.rows.length === 0) {
+					return items;
+				}
+				for (var i = response.rows.length - 1; i >= 0; i--) {
+					var item = response.rows.item(i);
+					vm.categories.push(item);
+				}
+			});
+			queryCategories = false;
 		}
 
 		function deleteItem (item) {
@@ -151,7 +227,7 @@
 				Database.select(productTable, item.productid).then(function (response) {
 					if (response.rows.length > 0) {
 						var productItem = response.rows.item(0);
-						Database.update(productTable, productItem.id, [productItem.name, productItem.price, null]);
+						Database.update(productTable, productItem.id, [productItem.name, productItem.price, productItem.category, null]);
 					}
 				});
 			}
@@ -200,7 +276,10 @@
 
 		//Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function() {
-			vm.editModal.remove();
+			if (vm.editModal)
+				vm.editModal.remove();
+			if (vm.prodCategories)
+				vm.prodCategories.remove();
 		});
 
 		init();

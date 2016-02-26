@@ -47,6 +47,8 @@
 				$translate.use(selectedLanguage.type);
 			}
 		});
+
+		// Database.insert('cashInfusion', [500,  moment().format('YYYY-MM-DD HH:mm:ss')]);
 	}
 
 	function config ($stateProvider, $urlRouterProvider, $translateProvider) {
@@ -69,6 +71,7 @@
 			menu_salary: "Salary",
 			menu_reports: "Reports",
 			menu_settings: "Settings",
+			add_button: "Add",
 			cancel_button: "Cancel",
 			save_button: "Save",
 			login_button: "Log In",
@@ -81,6 +84,8 @@
 			sales_name: "Product",
 			sales_price: "Price",
 			sales_limit: "Limit",
+			sales_category: "Categories",
+			sales_all: "All",
 			sales_no_product: "You have not added any products. Go to the Products page and add some.",
 			sales_error_part1: " has only ",
 			sales_error_part2: " in inventory. You cannot sell more than ",
@@ -94,7 +99,15 @@
 			product_edit: "Edit",
 			product_new: "New",
 			product_title: " Product",
+			product_category: "Category",
+			product_new_Category: "New Category",
 			product_add_inventory: "Add Inventory",
+			product_Category_add: "Add",
+			product_Category_choose: "Choose",
+			product_input_category: "Input Category",
+			product_Category_choose_category: "Choose Category",
+			product_Category_existent_category: "Current Category",
+			product_category_name: "Category Name",
 			inventory_add_product: "Make Product",
 			inventory_name: "Name",
 			inventory_add_name: "Inventory Item Name",
@@ -158,7 +171,16 @@
 			edit_title: "Edit",
 			new_title: "New",
 			inventory_item: "Inventory Item",
-			cash_balance: 'Cash Balance'
+			cash_balance: 'Cash Balance',
+			'income_statement_profit': 'Profit (or Loss)',
+			'income_statement_income_header': 'Income',
+			'income_statement_total_income': 'Total Income',
+			'income_statement_expenses_header': 'Expenses',
+			'income_statement_fixed': 'Fixed',
+			'income_statement_variable': 'Variable',
+			'income_statement_total_expenses': 'Total Expenses',
+			'income_statement_type': 'Type',
+			'income_statement_name': 'Name'
 
 		});
 
@@ -172,6 +194,7 @@
 			menu_reports: "Reportes",
 			menu_settings: "Configuraciones",
 			cancel_button: "Cancelar",
+			add_button: "Agregar",
 			save_button: "Guardar",
 			login_button: "Accesar Cuenta",
 			logout_button: "Terminar Sesión",
@@ -183,6 +206,8 @@
 			sales_name: "Producto",
 			sales_price: "Precio",
 			sales_limit: "Límite",
+			sales_category: "Categorías",
+			sales_all: "Mostrar Todas",
 			sales_no_product: "No haz agregado ningún producto. Ve a Productos y agrega uno o más.",
 			sales_error_part1: " solo tiene ",
 			sales_error_part2: " en inventario. No puedes vender más de ",
@@ -196,7 +221,15 @@
 			product_edit: "Editar",
 			product_new: "Nuevo",
 			product_title: " Producto",
+			product_category: "Categoría",
+			product_new_Category: "Nueva Categoría",
+			product_input_category: "Ingresa Nombre de Categoría",
 			product_add_inventory: "Agregar al Inventario",
+			product_Category_add: "Agregar",
+			product_Category_choose: "Escoger",
+			product_category_name: "Nombre de Categoría",
+			product_Category_choose_category: "Escoge una Categoría",
+			product_Category_existent_category: "Categoría Actual",
 			inventory_add_product: "Es Producto",
 			inventory_name: "Artículo",
 			inventory_add_name: "Nombre del artículo de Inventario",
@@ -260,7 +293,16 @@
 			edit_title: "Editar",
 			new_title: "Nuevo",
 			inventory_item: "Artículo de Inventario",
-			cash_balance: 'Saldo'
+			cash_balance: 'Saldo',
+			'income_statement_profit': 'Ganancia (o Pérdida)',
+			'income_statement_income_header': 'Ingresos',
+			'income_statement_total_income': 'Ingresos Totales',
+			'income_statement_expenses_header': 'Gastos',
+			'income_statement_fixed': 'Fijo',
+			'income_statement_variable': 'Variable',
+			'income_statement_total_expenses': 'Gastos Totales',
+			'income_statement_type': 'Tipo',
+			'income_statement_name': 'Nombre'
 
 		});
 

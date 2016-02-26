@@ -1,5 +1,8 @@
 (function () {
 	angular.module('app.reports', [
-		'app', 'app.expenselog', 'app.saleslog'
+		'app',
+		'app.income-statement',
+		'app.expenselog',
+		'app.saleslog'
 	]);
 })();
