@@ -255,6 +255,20 @@ input.self-payment {
   margin-bottom: 2px;
 }
 
+.cash-title {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+
+.cash-container .item:first-child {
+  border-top: 1px solid #d3d3d3;
+}
+
+.cash-container .item:last-child {
+  border-bottom: 1px solid #d3d3d3;
+  margin-bottom: 2px;
+}
+
 .custom .item:first-child {
   border-top: 2px solid #666;
 }

@@ -180,7 +180,10 @@
 			income_statement_variable: 'Variable',
 			income_statement_total_expenses: 'Total Expenses',
 			income_statement_type: 'Type',
-			income_statement_name: 'Name'
+			income_statement_name: 'Name',
+			cash_title: "Cash Infusion",
+			cash_amount: "Amount",
+			cash_date: "Date"
 
 		});
 
@@ -302,7 +305,10 @@
 			income_statement_variable: 'Variable',
 			income_statement_total_expenses: 'Total Gastos',
 			income_statement_type: 'Tipo',
-			income_statement_name: 'Nombre'
+			income_statement_name: 'Nombre',
+			cash_title: "Infusión de Efectivo",
+			cash_amount: "Cantidad",
+			cash_date: "Fecha"
 
 		});
 
