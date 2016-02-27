@@ -47,7 +47,7 @@
 							</div>
 						</div>
 				</label>
-				<label class="item-stacked-label" ng-show="inventory.choose || inventory.editCategory || (inventory.choose &amp;&amp; inventory.activeItem.linkProduct)">
+				<label class="item-stacked-label" ng-show="inventory.choose || (inventory.editCategory && inventory.activeItem.category) || (inventory.choose &amp;&amp; inventory.activeItem.linkProduct)">
 					<span class="categoy-name">{{"product_category_name" | translate}}</span>
 					<p class="categories">{{inventory.activeItem.category}}</p>
 				</label>
