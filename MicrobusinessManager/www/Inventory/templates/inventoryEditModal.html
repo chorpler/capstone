@@ -30,7 +30,7 @@
 					<span class="input-label">{{"inv_exp_sal_date" | translate}}*</span>
 	    			<input placeholder="{{'inv_exp_sal_date' | translate}}*" type="date" ng-model="inventory.activeItem.date" required="required">
 	    		</label>
-				<ion-checkbox ng-model="inventory.activeItem.linkProduct">{{"inventory_add_product" | translate}}</ion-checkbox>
+				<ion-checkbox ng-model="inventory.activeItem.linkProduct" ng-click="inventory.clearProduct()">{{"inventory_add_product" | translate}}</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="inventory.activeItem.linkProduct">
 					<span class="input-label">{{"product_sales_price" | translate}}</span>
 					<input type="number" placeholder="{{'product_sales_price' | translate}}*" ng-model="inventory.activeItem.price" ng-required="inventory.activeItem.linkProduct">
@@ -39,10 +39,11 @@
 					<span class="input-label categories">{{"product_category" | translate}}*</span>
 						<div class="row category_options">
 							<div class="col col-50">
-								<ion-radio ng-model="inventory.pick" ng-value="'add'" ng-click="inventory.show = true; inventory.choose = false; inventory.editCategory = false; inventory.activeItem.category = ''; inventory.enterCat = false">{{"product_Category_add" | translate}}</ion-radio>
+								<ion-radio ng-model="inventory.pick" ng-value="'add'" ng-click="inventory.show = true; inventory.choose = false; inventory.editCategory = false; inventory.activeItem.category = ''; inventory.enterCat = false"
+								ng-required="inventory.activeItem.linkProduct && inventory.show===true">{{"product_Category_add" | translate}}</ion-radio>
 							</div>
 							<div class="col">
-								<ion-radio ng-model="inventory.pick" ng-value="'choose'" ng-click="inventory.chooseCategory($event)">{{"product_Category_choose" | translate}}</ion-radio>
+								<ion-radio ng-model="inventory.pick" ng-value="'choose'" ng-click="inventory.chooseCategory($event)" ng-required="inventory.activeItem.linkProduct && inventory.choose === true">{{"product_Category_choose" | translate}}</ion-radio>
 							</div>
 						</div>
 				</label>
@@ -52,7 +53,7 @@
 				</label>
 				<label class="item item-input item-floating-label" ng-show="inventory.show || (!inventory.categories.length &amp;&amp; inventory.activeItem.linkProduct)">
 					<span class="input-label">{{"product_new_Category" | translate}}</span>
-						<input type="text" placeholder="{{'product_input_category' | translate}}*" ng-model="inventory.activeItem.category" required="required">
+						<input type="text" placeholder="{{'product_input_category' | translate}}*" ng-model="inventory.activeItem.category" ng-required="inventory.activeItem.linkProduct">
 				</label>
 			</form>
 		</div>
