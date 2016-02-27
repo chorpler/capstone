@@ -29,6 +29,7 @@
 		vm.chooseCategory = chooseCategory;
 		vm.closePopover = closePopover;
 		vm.closePopoverCancel = closePopoverCancel;
+		vm.clearProduct = clearProduct;
 
 		var tempItem = null;
 		var queryCategories = false;
@@ -66,6 +67,7 @@
 			vm.pick = 'choose';
 			vm.activeItem = item;
 			tempItem = angular.copy(item);
+			getCategories();
 			vm.editModal.show();
 		}
 
@@ -142,6 +144,7 @@
 			vm.activeItem = null;
 			vm.show = false;
 			queryCategories = true;
+			getCategories();
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 			vm.editModal.hide();
 		}
@@ -174,7 +177,15 @@
 			vm.activeItem = {};
 			vm.activeItem.date = new Date();
 			tempItem = {};
+			getCategories();
 			vm.editModal.show();
+		}
+		function clearProduct () {
+			vm.activeItem.category = '';
+			vm.activeItem.price = null;
+			vm.pick = '';
+			vm.show = false;
+			vm.choose = false;
 		}
 
 		function chooseCategories ($event) {
