@@ -140,6 +140,7 @@
 			}
 
 			vm.activeItem = null;
+			vm.show = false;
 			queryCategories = true;
 			vm.editModal.hide();
 		}
@@ -185,7 +186,11 @@
 			if (vm.editCategory) {
 				vm.choose = true;
 			}
+			if (vm.activeItem.category && vm.choose === false) {
+				vm.activeItem.category = '';
+			}
 			if (vm.activeItem.category === '' || vm.activeItem.category === undefined) {
+				vm.activeItem.category = '';
 				vm.enterCat = false;
 			} else {
 				vm.enterCat = true;

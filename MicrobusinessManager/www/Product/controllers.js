@@ -166,6 +166,9 @@
 			if (vm.editCategory) {
 				vm.choose = true;
 			}
+			if (vm.activeItem.category && vm.choose === false) {
+				vm.activeItem.category = '';
+			}
 			if (vm.activeItem.category === '' || vm.activeItem.category === undefined) {
 				vm.enterCat = false;
 			} else {
