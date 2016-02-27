@@ -122,6 +122,7 @@
 			vm.editModal.hide();
 			vm.show = false;
 			queryCategories = true;
+			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 		}
 
 		function cancel () {
@@ -137,6 +138,7 @@
 				vm.pick = '';
 				vm.show = false;
 				vm.activeItem = null;
+				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 			}
 
 			vm.editModal.hide();
@@ -191,6 +193,7 @@
 			} else if (vm.editOpen && vm.activeItem.category === '') {
 				vm.pick = '';
 			}
+			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 			vm.prodCategories.hide();
 		}
 
