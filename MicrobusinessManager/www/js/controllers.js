@@ -13,9 +13,9 @@
 
 		function init () {
 			$ionicPopover.fromTemplateUrl('Cash/templates/cash.html', {
-			    scope: $scope,
+		  	scope: $scope,
 			}).then(function(popover) {
-			    vm.cashInf = popover;
+				vm.cashInf = popover;
 			});
 		}
 

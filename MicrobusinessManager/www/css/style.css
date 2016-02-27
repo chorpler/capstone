@@ -430,12 +430,14 @@ ion-content.sales {
 }*/
 
 .popover {
-  /*height: 250px;*/
-  /*height: auto !important;*/
   width: 250px;
 }
 
-ion-popover-view {
+/*.category-popover {
   top:150px !important;
   left:65px !important;
 }
+
+ion-popover-view .cash-popover {
+  margin-left :120px !important;
+}*/
