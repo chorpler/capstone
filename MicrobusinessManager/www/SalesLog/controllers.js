@@ -2,7 +2,7 @@
 	angular.module('app.expenselog')
 	.controller('SalesLogController', SalesLogController);
 
-	function SalesLogController ($scope, $ionicModal, Database, timeFrame, startDate, endDate) {
+	function SalesLogController ($scope, $ionicModal, $ionicPopup, Database, timeFrame, startDate, endDate, languages) {
 		var vm = this;
 
 		vm.startDate = startDate;
@@ -12,15 +12,23 @@
 		vm.change = change;
 		vm.currentSale = null;
 		vm.editSale = editSale;
+		vm.deleteSale = deleteSale;
 		vm.save = save;
 		vm.cancel = cancel;
 		vm.editModal = null;
+		vm.showConfirm = showConfirm;
 
 		var tempSale = null;
 		var saleTable = 'sale';
 		var saleProductTable = 'saleproduct';
 
 		function init () {
+			if (languages.length) {
+				for (var i = 0; i < languages.length; i++) {
+					vm.language.type = languages[0].type;
+				}
+			}
+
 			vm.sales = [];
 			vm.salesTotal = 0;
 			loadSalesProducts();
@@ -88,11 +96,50 @@
 			vm.editModal.hide();
 		}
 
+		function deleteSale (sale) {
+			Database.remove(saleTable, sale.id)
+			.then(function () {
+				vm.editModal.hide();
+				loadSalesProducts();
+			});
+		}
+
 		function cancel () {
 			if (vm.currentSale) {
 				vm.currentSale = tempSale;
 			}
 			vm.editModal.hide();
+		}
+
+		function showConfirm () {
+			var title_delete, message_body, cancel_button;
+			if (vm.language.type === 'es') {
+				title_delete = 'Borrar Gasto';
+				message_body = '¿Estás seguro?';
+				cancel_button = 'Cancelar';
+			}
+			else {
+				title_delete = 'Delete Expense';
+				message_body = 'Are you sure?';
+				cancel_button = 'Cancel';
+			}
+
+			$ionicPopup.confirm({
+				title: title_delete,
+				template: message_body,
+				buttons: [
+					{
+						text: cancel_button,
+						type: 'button-stable'},
+					{
+						text: '<b>Ok</b>',
+						type: 'button-positive',
+						onTap: function (e) {
+							vm.deleteSale(vm.currentSale);
+						}
+					}
+				]
+			});
 		}
 
 		// Cleanup the modal when we're done with it!
