@@ -1,11 +1,12 @@
-<ion-popover-view>
+<ion-popover-view style="top:150px !important;left:65px !important;">
     <ion-header-bar>
-      <h1 class="title">{{inventory.enterCat ? "product_Category_existent_category" : "product_Category_choose_category" | translate}}</h1>
+      <h1 class="title cash-title">{{inventory.enterCat ? "product_Category_existent_category" : "product_Category_choose_category" | translate}}</h1>
+      <button class="button button-assertive icon ion-android-close" ng-click="inventory.closePopoverCancel()"></button>
     </ion-header-bar>
     <ion-content class="productCategory">
 			<ion-list>
 				<ion-radio ng-repeat="category in inventory.categories | orderBy:'category'" ng-value="category.category" ng-click="inventory.closePopover(); inventory.choose = true;" ng-model="inventory.activeItem.category">{{category.category}}</ion-radio>
 			</ion-list>
-			<button class="button button-block button-assertive" ng-click="inventory.closePopoverCancel()">{{"cancel_button" | translate}}</button>
+			<!-- <button class="button button-block button-assertive" ng-click="inventory.closePopoverCancel()">{{"cancel_button" | translate}}</button> -->
     </ion-content>
 </ion-popover-view>
