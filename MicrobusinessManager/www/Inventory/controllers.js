@@ -142,6 +142,7 @@
 			vm.activeItem = null;
 			vm.show = false;
 			queryCategories = true;
+			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 			vm.editModal.hide();
 		}
 
@@ -157,6 +158,7 @@
 				vm.activeItem = null;
 				vm.pick = '';
 				vm.show = false;
+				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 			}
 
 			vm.editModal.hide();
@@ -213,7 +215,13 @@
 				vm.pick = '';
 			}
 			vm.prodCategories.hide();
+			closeKeyboard();
 		}
+
+		 function closeKeyboard () {
+			 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
+			 cordova.plugins.Keyboard.close();
+		 }
 
 		function getCategories () {
 			vm.categories = [];

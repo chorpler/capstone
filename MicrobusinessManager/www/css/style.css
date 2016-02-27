@@ -104,6 +104,11 @@
   margin-bottom: 10px;
 }
 
+.inventory-edit,
+.product_edit {
+  margin-bottom: 20px;
+}
+
 .expensesEdit .types {
   margin-bottom: 10px;
 }
