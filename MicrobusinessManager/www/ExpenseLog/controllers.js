@@ -2,15 +2,19 @@
 	angular.module('app.expenselog')
 	.controller('ExpenseLogController', ExpenseLogController);
 
-	function ExpenseLogController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, expenseItems, languages) {
+	function ExpenseLogController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, timeFrame, startDate, endDate, languages) {
 		var vm = this;
 
-		vm.log = expenseItems;
+		vm.log = [];
+		vm.reformattedList = {};
 		vm.activeExpense = null;
 		vm.editviewOpen = false;
 		vm.totalExpenses = 0;
 		vm.editModal = null;
 		vm.expenses = '';
+		vm.startDate = startDate;
+		vm.endDate = endDate;
+		vm.timeFrame = timeFrame;
 		vm.date = Date.now();
 
 		vm.editExpense = editExpense;
@@ -22,6 +26,7 @@
 		vm.clearSearch = clearSearch;
 		vm.showConfirm = showConfirm;
 		vm.isCheckboxChecked = isCheckboxChecked;
+		vm.change = change;
 
 		var tempExpense = null;
 		var language = {};
@@ -42,17 +47,47 @@
 				vm.editModal = modal;
 			});
 
-			vm.reformattedList = {};
+			loadExpenseItems(Database, startDate, endDate);
+		}
 
-			vm.log.forEach(function (record) {
-				var key = $filter('date')(record.date, 'mediumDate');
-				vm.reformattedList[key] = vm.reformattedList[key] || [];
-				vm.reformattedList[key].push(record);
+		function loadExpenseItems (Database, startDate, endDate) {
+			console.log('loadExpenseItems');
+			return Database.select('expense', null, null, null, startDate, endDate)
+			.then(function (response) {
+				console.log('RESPONSE>> ', response);
+				var items = [];
+				vm.reformattedList = {};
+				vm.log = items;
+
+				if (response.rows.length === 0) {
+					updateTotal();
+					return;
+				}
+
+				for (var i = response.rows.length - 1; i >= 0; i--) {
+					var item = response.rows.item(i);
+					item.amount = Number(item.amount);
+					item.date = moment(item.date).toDate();
+					items.push(item);
+				}
+
+				vm.log.forEach(function (record) {
+					var key = $filter('date')(record.date, 'mediumDate');
+					vm.reformattedList[key] = vm.reformattedList[key] || [];
+					vm.reformattedList[key].push(record);
+				});
+
+				vm.ischecked = false;
+
+				updateTotal();
 			});
+		}
 
-			vm.ischecked = false;
-
-			updateTotal();
+		function change (startDate, timeFrame) {
+			vm.startDate = startDate;
+			vm.timeFrame = timeFrame;
+			vm.endDate = moment(vm.startDate).endOf(vm.timeFrame.value);
+			loadExpenseItems(Database, vm.startDate, vm.endDate);
 		}
 
 		function editExpense (expense) {
@@ -131,6 +166,7 @@
 		}
 
 		function updateTotal () {
+			console.log('UPDATE TOTAL');
 			vm.totalExpenses = 0;
 			angular.forEach(vm.reformattedList, function (reports) {
 				vm.totalExpenses += reports.reduce(function (previousValue, currentExpense) {

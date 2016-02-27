@@ -10,7 +10,9 @@
       </button>
     </div>
   </ion-header-bar>
+
 	<ion-content class="expenses">
+    <report-header start-date="expenselog.startDate" end-date="expenselog.endDate" time-frame="expenselog.timeFrame" change="expenselog.change" language="expenselog.language" class="has-header"></report-header>
     <div class="card" ng-hide="expenselog.search">
       <div class="item item-divider">
         <span>{{"expenses_total_expenses" | translate}}</span>
