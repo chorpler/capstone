@@ -51,10 +51,8 @@
 		}
 
 		function loadExpenseItems (Database, startDate, endDate) {
-			console.log('loadExpenseItems');
 			return Database.select('expense', null, null, null, startDate, endDate)
 			.then(function (response) {
-				console.log('RESPONSE>> ', response);
 				var items = [];
 				vm.reformattedList = {};
 				vm.log = items;
@@ -107,20 +105,17 @@
 
 			vm.reformattedList[key] = vm.reformattedList[key] || [];
 
-			if (!item.id) {
-				Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
-					item.id = response.insertId;
-				});
-				vm.reformattedList[key].push(item);
-			}
-			else {
-				Database.update(expenseTable, item.id, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]);
-				if (key !== oldKey) {
-					vm.reformattedList[key].push(item);
-				}
-			}
+			Database.update(expenseTable, item.id, [
+				item.name,
+				item.amount,
+				item.expType,
+				item.comments,
+				moment(item.date).format('YYYY-MM-DD HH:mm:ss'),
+				item.type
+			]);
 
 			if (key !== oldKey) {
+				vm.reformattedList[key].push(item);
 				vm.reformattedList[oldKey].splice(vm.reformattedList[oldKey].indexOf(item), 1);
 			}
 
@@ -166,7 +161,6 @@
 		}
 
 		function updateTotal () {
-			console.log('UPDATE TOTAL');
 			vm.totalExpenses = 0;
 			angular.forEach(vm.reformattedList, function (reports) {
 				vm.totalExpenses += reports.reduce(function (previousValue, currentExpense) {
