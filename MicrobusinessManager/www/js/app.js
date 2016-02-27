@@ -125,6 +125,7 @@
 			expense_fixed: "Fixed",
 			expense_history: "Recent Expenses",
 			add_expense: "Add Expense",
+			salary_record: "Salary Record",
 			salary_expected: "Expected Salary",
 			commission_expected: "Expected Commission",
 			salary_register: "Register",
@@ -180,7 +181,10 @@
 			income_statement_variable: 'Variable',
 			income_statement_total_expenses: 'Total Expenses',
 			income_statement_type: 'Type',
-			income_statement_name: 'Name'
+			income_statement_name: 'Name',
+			cash_title: "Cash Infusion",
+			cash_amount: "Amount",
+			cash_date: "Date"
 
 		});
 
@@ -247,6 +251,7 @@
 			expense_fixed: "Fijo",
 			expense_history: "Gastos Recientes",
 			add_expense: "Agregar Gasto",
+			salary_record: "Registro de Sueldo",
 			salary_expected: "Sueldo Esperado",
 			commission_expected: "Comisión Esperada",
 			salary_register: "Registrar",
@@ -302,7 +307,10 @@
 			income_statement_variable: 'Variable',
 			income_statement_total_expenses: 'Total Gastos',
 			income_statement_type: 'Tipo',
-			income_statement_name: 'Nombre'
+			income_statement_name: 'Nombre',
+			cash_title: "Infusión de Efectivo",
+			cash_amount: "Cantidad",
+			cash_date: "Fecha"
 
 		});
 

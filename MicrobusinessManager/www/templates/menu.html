@@ -14,7 +14,7 @@
 
   <ion-side-menu side="left">
     <ion-header-bar class="darkside-menu" class="bar-stable">
-      <h1 class="title"><span>{{"cash_balance" | translate}}</span> {{app.cashBalance.CashBalance | currency}}</h1>
+      <h1 class="title" ng-click="app.showCash($event)"><span>{{"cash_balance" | translate}}</span> {{app.cashBalance.CashBalance | currency}}</h1>
     </ion-header-bar>
     <ion-content class="custom">
       <ion-list>
