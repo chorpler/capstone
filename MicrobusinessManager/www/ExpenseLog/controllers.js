@@ -216,7 +216,8 @@
 
 		// Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function () {
-			vm.editModal.remove();
+			if (vm.editModal)
+				vm.editModal.remove();
 		});
 
 		init();
