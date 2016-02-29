@@ -6,6 +6,6 @@
   },
   "dependencies": {
     "moment": "~2.11.1",
-    "numeral": "^1.5.3"
+    "angular-dynamic-locale": "0.1.30"
   }
 }
