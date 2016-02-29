@@ -5,6 +5,7 @@
     "ionic": "driftyco/ionic-bower#1.2.4"
   },
   "dependencies": {
-    "moment": "~2.11.1"
+    "moment": "~2.11.1",
+    "angular-dynamic-locale": "0.1.30"
   }
 }

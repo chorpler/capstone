@@ -2,7 +2,7 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages) {
+	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages, tmhDynamicLocale) {
 		var vm = this;
 
 		vm.userAccount = {};
@@ -39,7 +39,8 @@
 				for (var i = 0; i < languages.length; i++) {
 					vm.language.type = languages[0].type;
 				}
-			} else {
+			}
+			else {
 				var language = {};
 				vm.language.type = 'es';
 				language.type = vm.language.type;
@@ -69,13 +70,13 @@
 		}
 
 		function save (item) {
-
 			if (!item.id) {
 				Database.insert(salaryTable, [item.amount, item.type]).then(function (response) {
 					item.id = response.insertId;
 				});
 				vm.salary.push(item);
-			} else {
+			}
+			else {
 				Database.update(salaryTable, item.id, [item.amount, item.type]);
 			}
 			vm.activeSalary = null;
@@ -94,20 +95,25 @@
 		}
 
 		function changeLanguage (language) {
-			$translate.use(language.type).then(function(data) {
-        console.log("SUCCESS -> " + data);
+			$translate.use(language.type).then(function (data) {
+				if (language.type === 'es') {
+					tmhDynamicLocale.set('es-ec');
+				}
+				else if (language.type === 'en') {
+					tmhDynamicLocale.set('en-us');
+				}
 				if (!language.id) {
 					Database.insert(languageTable, [language.type]).then(function (response) {
 						language.id = response.insertId;
 					});
 					vm.languages.push(language);
-				} else {
+				}
+				else {
 					Database.update(languageTable, language.id, [language.type]);
 				}
-
-      }, function(error) {
-          console.log("ERROR -> " + error);
-      });
+			}, function (error) {
+					console.log("ERROR -> " + error);
+			});
 		}
 
 		function cancel () {
@@ -119,7 +125,6 @@
 
 			vm.editModal.hide();
 		}
-
 
 		function login () {
 			vm.loginModal.show();
