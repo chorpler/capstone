@@ -52,12 +52,6 @@
 			}).then(function (modal) {
 				vm.editModal = modal;
 			});
-			$ionicPopover.fromTemplateUrl('Inventory/templates/productInventoryCategories.html', {
-			    scope: $scope,
-			}).then(function(popover) {
-			    vm.prodCategories = popover;
-			});
-
 		}
 
 		function editItem (item) {
@@ -192,7 +186,12 @@
 			if (queryCategories) {
 				getCategories();
 			}
-			vm.prodCategories.show($event);
+			$ionicPopover.fromTemplateUrl('Inventory/templates/productInventoryCategories.html', {
+			    scope: $scope,
+			}).then(function(popover) {
+			    vm.prodCategories = popover;
+			    vm.prodCategories.show($event);
+			});
 		}
 
 		function chooseCategory ($event) {
@@ -214,7 +213,7 @@
 		}
 
 		function closePopover () {
-			vm.prodCategories.hide();
+			vm.prodCategories.remove();
 		}
 
 		function closePopoverCancel () {
@@ -225,7 +224,7 @@
 			} else if (vm.editOpen && vm.activeItem.category === '') {
 				vm.pick = '';
 			}
-			vm.prodCategories.hide();
+			vm.prodCategories.remove();
 			closeKeyboard();
 		}
 

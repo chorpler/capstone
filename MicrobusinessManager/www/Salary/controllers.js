@@ -91,7 +91,7 @@ angular.module('app.salary')
 						item.comments = 'my salary';
 					}
 					item.amount = vm.expectedSalary;
-					item.expType = 'Variable';
+					item.expType = 'variable';
 				}
 				item.date = new Date();
 				item.type = 'salary';

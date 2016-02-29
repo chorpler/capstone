@@ -435,14 +435,24 @@ ion-content.sales {
 }*/
 
 .popover {
-  width: 255px;
+  width: 70% !important;
+  left: 15% !important;
+  top: 25% !important;
 }
 
-/*.category-popover {
+.category-popover {
   top:150px !important;
   left:65px !important;
 }
 
 ion-popover-view .cash-popover {
   margin-left :120px !important;
-}*/
+}
+
+.card-list-header {
+  padding: 0;
+}
+
+.sales-edit .input-label {
+  width: 40%;
+}

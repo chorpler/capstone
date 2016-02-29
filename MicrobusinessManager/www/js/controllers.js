@@ -12,31 +12,32 @@
 		vm.cashInfusion = {};
 
 		function init () {
-			$ionicPopover.fromTemplateUrl('Cash/templates/cash.html', {
-		  	scope: $scope,
-			}).then(function(popover) {
-				vm.cashInf = popover;
-			});
+			
 		}
 
 		function showCash ($event) {
 			vm.cashInfusion.date = new Date();
-			vm.cashInf.show($event);
+			$ionicPopover.fromTemplateUrl('Cash/templates/cash.html', {
+		  	scope: $scope,
+			}).then(function(popover) {
+				vm.cashInf = popover;
+				vm.cashInf.show($event);
+			});
 		}
 
 		function save (item) {
 			Database.insert('cashInfusion', [item.amount,  moment(item.date).format('YYYY-MM-DD HH:mm:ss')])
 			.then(function (response) {
-        CashBalance.updateCashBalance();
+				CashBalance.updateCashBalance();
 				vm.cashInfusion = {};
-        return response.insertId;
-      });
-			vm.cashInf.hide();
+				return response.insertId;
+			});
+			vm.cashInf.remove();
 		}
 
 		function cancel () {
 			vm.cashInfusion = {};
-			vm.cashInf.hide();
+			vm.cashInf.remove();
 		}
 
 		$scope.$on('$destroy', function() {

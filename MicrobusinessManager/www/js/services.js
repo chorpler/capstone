@@ -315,23 +315,23 @@
 
 			queryExpense = queryExpense + ((startDate || endDate) ?
 														WHERE +
-														(startDate != null ? 'date >= ? ' +
-															(endDate != null ? AND + 'date <= ? ' : '') :
-															(endDate != null ? 'date <= ?' : '')
+														(startDate != null ? 'date > ? ' +
+															(endDate != null ? AND + 'date < ? ' : '') :
+															(endDate != null ? 'date < ?' : '')
 														) : '');
 
 			querySales = querySales + ((startDate || endDate) ?
 														WHERE +
-														(startDate != null ? 'date >= ? ' +
-															(endDate != null ? AND + 'date <= ? ' : '') :
-															(endDate != null ? 'date <= ?' : '')
+														(startDate != null ? 'date > ? ' +
+															(endDate != null ? AND + 'date < ? ' : '') :
+															(endDate != null ? 'date < ?' : '')
 														) : '');
 
 			queryCash = queryCash + ((startDate || endDate) ?
 														WHERE +
-														(startDate != null ? 'date >= ? ' +
-															(endDate != null ? AND + 'date <= ? ' : '') :
-															(endDate != null ? 'date <= ?' : '')
+														(startDate != null ? 'date > ? ' +
+															(endDate != null ? AND + 'date < ? ' : '') :
+															(endDate != null ? 'date < ?' : '')
 														) : '');
 
 			var query = queryStart + queryExpense + queryUnion + querySales + queryUnion + queryCash + queryEnd;
