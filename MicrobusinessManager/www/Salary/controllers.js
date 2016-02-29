@@ -45,13 +45,6 @@ angular.module('app.salary')
 				vm.paymentType = salary[i].type;
 			}
 
-			$ionicModal.fromTemplateUrl('Salary/templates/salaryEditModal.html', {
-				scope: $scope,
-				animation: 'slide-in-right'
-			}).then(function (modal) {
-				vm.editModal = modal;
-			});
-
 			vm.reformattedList = {};
 
 			vm.log.forEach(function (record) {
@@ -67,7 +60,7 @@ angular.module('app.salary')
 			vm.activeExpense = expense;
 			tempExpense = angular.copy(expense);
 			vm.editviewOpen = true;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function save (item) {
@@ -141,7 +134,7 @@ angular.module('app.salary')
 			vm.activeExpense = null;
 			vm.showErrorAlert = false;
 			updateTotal();
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function cancel () {
@@ -154,13 +147,13 @@ angular.module('app.salary')
 				vm.showErrorAlert = false;
 			}
 
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function addNewExpense () {
 			tempExpense = {};
 			vm.editviewOpen = false;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function deleteExpense (item) {
@@ -173,7 +166,7 @@ angular.module('app.salary')
 			vm.activeExpense = null;
 			updateTotal();
 			updateCashonHand();
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function updateTotal () {
@@ -258,6 +251,16 @@ angular.module('app.salary')
 				console.log('none');
 			});
 		}
+
+		var showEditModal  = function () {
+			$ionicModal.fromTemplateUrl('Salary/templates/salaryEditModal.html', {
+				scope: $scope,
+				animation: 'slide-in-right'
+			}).then(function (modal) {
+				vm.editModal = modal;
+				vm.editModal.show();
+			});
+		};
 
 		function updateCashonHand () {
 			Database.calculateCashOnHand().then(function (response) {
