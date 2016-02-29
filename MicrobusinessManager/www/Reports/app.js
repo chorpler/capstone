@@ -3,6 +3,7 @@
 		'app',
 		'app.income-statement',
 		'app.expenselog',
-		'app.saleslog'
+		'app.saleslog',
+		'app.activitylog'
 	]);
 })();

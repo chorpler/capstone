@@ -6,15 +6,15 @@
 					<i class="icon ion-chevron-right"></i>
 					{{"reports_income_statement" | translate}}
 				</ion-item>
-				<ion-item class="item item-icon-right" ng-click="reports.loadIncomeStatement()">
+				<ion-item class="item item-icon-right" ng-click="reports.stateGo('activitylog')">
 					<i class="icon ion-chevron-right"></i>
 					{{"reports_activity_log" | translate}}
 				</ion-item>
-				<ion-item class="item item-icon-right" ng-click="reports.openSalesLog()">
+				<ion-item class="item item-icon-right" ng-click="reports.stateGo('saleslog')">
 					<i class="icon ion-chevron-right"></i>
 					{{"reports_sales_reports" | translate}}
 				</ion-item>
-				<ion-item class="item item-icon-right" ng-click="reports.openExpenseLog()">
+				<ion-item class="item item-icon-right" ng-click="reports.stateGo('expenselog')">
 					<i class="icon ion-chevron-right"></i>
 					{{"reports_expense_log" | translate}}
 				</ion-item>

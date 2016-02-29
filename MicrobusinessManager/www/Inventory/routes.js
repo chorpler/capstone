@@ -70,7 +70,6 @@
 							var item = response.rows.item(i);
 							items.push(item);
 						}
-						console.log(items);
 						return items;
 					});
 				}

@@ -1,0 +1,42 @@
+<ion-view view-title="{{'reports_activity_log' | translate}}" class="income-statement">
+	<report-header start-date="activity.startDate" end-date="activity.endDate" time-frame="activity.timeFrame" change="activity.change" class="has-header"></report-header>
+	<ion-content>
+		<div></div>
+		<ion-list>
+			<ion-item>
+				<div class="row">
+					<div class="col">
+						<b>{{"reports_starting_cash" | translate}}</b>
+					</div>
+					<div class="col" ng-class="{negative : activity.startingCash < 0}">
+						{{activity.startingCash | currency}}
+					</div>
+				</div>
+			</ion-item>
+			<ion-item ng-repeat="item in activity.incomeStatement">
+				<div class="row">
+					<div class="col">
+						<b class="report-name">{{item.isExpense ? item.name : (item.isCash ? 'reports_cash' : 'reports_sale') | translate}}</b>
+						<span>{{item.date.format('MMM D, YYYY')}}</span>
+					</div>
+					<div class="col">
+						<span ng-show="!item.isExpense">{{item.amount | currency}}</span>
+					</div>
+					<div class="col negative">
+						<span ng-show="item.isExpense">{{item.amount | currency}}</span>
+					</div>
+				</div>
+			</ion-item>
+			<ion-item>
+				<div class="row">
+					<div class="col">
+						<b>{{"reports_ending_cash" | translate}}</b>
+					</div>
+					<div class="col" ng-class="{negative : activity.endingCash < 0}">
+						{{activity.endingCash | currency}}
+					</div>
+				</div>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>

@@ -49,16 +49,11 @@
 			}).then(function (modal) {
 				vm.editModal = modal;
 			});
-
-			$ionicPopover.fromTemplateUrl('Product/templates/productCategories.html', {
-			    scope: $scope,
-			}).then(function(popover) {
-			    vm.prodCategories = popover;
-			});
 		}
 
 		function editItem (item) {
 			vm.activeItem = item;
+			vm.activeItem.date = vm.activeItem.date || new Date();
 			vm.editOpen = true;
 			vm.enterCat = true;
 			vm.editCategory = true;
@@ -161,7 +156,12 @@
 			if (queryCategories) {
 				getCategories();
 			}
-			vm.prodCategories.show($event);
+			$ionicPopover.fromTemplateUrl('Product/templates/productCategories.html', {
+			    scope: $scope,
+			}).then(function(popover) {
+			    vm.prodCategories = popover;
+			    vm.prodCategories.show($event);
+			});
 		}
 
 		function chooseCategory ($event) {
@@ -182,7 +182,7 @@
 		}
 
 		function closePopover () {
-			vm.prodCategories.hide();
+			vm.prodCategories.remove();
 		}
 
 		function closePopoverCancel () {
@@ -194,7 +194,7 @@
 				vm.pick = '';
 			}
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-			vm.prodCategories.hide();
+			vm.prodCategories.remove();
 		}
 
 		function deleteItem (item) {

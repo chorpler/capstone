@@ -15,9 +15,9 @@
 		</div>
 		<div class="list card" ng-repeat="sale in saleslog.sales track by sale.id | orderBy: sale.date">
 			<div ng-click="saleslog.editSale(sale)">
-				<div class="item item-divider">
+				<div class="item item-divider card-list-header">
 					<div class="row">
-						<div class="col col-60">
+						<div class="col">
 							<span class="name-container">{{"reports_date" | translate}}: {{sale.date.format('MMM D, YYYY')}}</span>
 						</div>
 						<div class="col">
