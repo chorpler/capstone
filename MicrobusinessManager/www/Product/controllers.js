@@ -43,11 +43,15 @@
 					language.type = languages[0].type;
 				}
 			}
+		}
+
+		function showEditModal () {
 			$ionicModal.fromTemplateUrl('Product/templates/productEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
 				vm.editModal = modal;
+				vm.editModal.show();
 			});
 		}
 
@@ -59,7 +63,7 @@
 			vm.editCategory = true;
 			vm.pick = 'choose';
 			tempItem = angular.copy(item);
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function save (item) {
@@ -114,7 +118,7 @@
 			}
 
 			vm.activeItem = null;
-			vm.editModal.hide();
+			vm.editModal.remove();
 			vm.show = false;
 			queryCategories = true;
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -136,7 +140,7 @@
 				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 			}
 
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function addNewItem () {
@@ -149,7 +153,7 @@
 			vm.activeItem = {};
 			vm.activeItem.date = new Date();
 			tempItem = {};
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function chooseCategories ($event) {
@@ -209,7 +213,7 @@
 			}
 			Database.remove(productTable, item.id);
 			vm.activeItem = null;
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function clearSearch () {

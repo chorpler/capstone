@@ -36,22 +36,27 @@ angular.module('app.expenses')
 					language.type = languages[0].type;
 				}
 			}
+			
+
+			vm.ischecked = false;
+			updateTotal();
+		}
+
+		function showEditModal () {
 			$ionicModal.fromTemplateUrl('Expense/templates/expensesEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function (modal) {
 				vm.editModal = modal;
+				vm.editModal.show();
 			});
-
-			vm.ischecked = false;
-			updateTotal();
 		}
 
 		function editExpense (expense) {
 			vm.activeExpense = expense;
 			tempExpense = angular.copy(expense);
 			vm.editviewOpen = true;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function save (item) {
@@ -77,13 +82,13 @@ angular.module('app.expenses')
 
 			vm.activeExpense = null;
 			vm.ischecked = false;
-			vm.editModal.hide();
+			vm.editModal.remove();
 			showAlert();
 		}
 
 		function cancel () {
 			vm.activeExpense = null;
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function addNewExpense (expense) {
@@ -97,7 +102,7 @@ angular.module('app.expenses')
 			}
 			vm.activeExpense.date = new Date();
 			vm.editviewOpen = false;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function deleteExpense (item) {
@@ -109,7 +114,7 @@ angular.module('app.expenses')
 			Database.remove(expenseTable, item.id).then(CashBalance.updateCashBalance);
 			vm.activeExpense = null;
 			updateTotal();
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function updateTotal () {

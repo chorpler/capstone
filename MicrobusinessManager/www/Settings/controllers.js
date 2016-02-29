@@ -49,23 +49,32 @@
 				});
 				vm.languages.push(language);
 			}
+		}
 
+		function showLoginModal () {
 			$ionicModal.fromTemplateUrl('Settings/templates/login.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.loginModal = modal;
+				vm.loginModal.show();
 			});
+		}
 
+		function showRegisterModal () {
 			$ionicModal.fromTemplateUrl('Settings/templates/register.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.registerModal = modal;
+				vm.registerModal.show();
 			});
+		}
 
+		function showEditModal () {
 			$ionicModal.fromTemplateUrl('Settings/templates/salaryModal.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.editModal = modal;
+				vm.editModal.show();
 			});
 		}
 
@@ -80,18 +89,18 @@
 				Database.update(salaryTable, item.id, [item.amount, item.type]);
 			}
 			vm.activeSalary = null;
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function showEdit () {
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function editSalary (salaryItem) {
 			vm.activeSalary = salaryItem;
-			tempSalary = angular.copy(salaryItem);
+			tempSalary = angular.copy(salaryItem) || {};
 			vm.editviewOpen = true;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function changeLanguage (language) {
@@ -123,15 +132,15 @@
 				vm.activeSalary = null;
 			}
 
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function login () {
-			vm.loginModal.show();
+			showLoginModal();
 		}
 
 		function closeLogin () {
-			vm.loginModal.hide();
+			vm.loginModal.remove();
 		}
 
 		function submitLoginRequest () {
@@ -170,11 +179,11 @@
 		}
 
 		function register () {
-			vm.registerModal.show();
+			showRegisterModal();
 		}
 
 		function closeRegistration () {
-			vm.registerModal.hide();
+			vm.registerModal.remove();
 		}
 
 		function submitRegistrationRequest () {

@@ -31,18 +31,25 @@
       vm.error              = null;
       vm.currentEditProduct = null;
       vm.filter = '';
+    }
+
+    function showCheckoutModal () {
       $ionicModal.fromTemplateUrl('Sales/templates/checkoutModal.html', {
         scope: $scope,
         animation: 'slide-in-right'
       }).then(function (modal) {
         vm.checkoutModal = modal;
+        vm.checkoutModal.show();
       });
+    }
 
+    function showEditModal () {
       $ionicModal.fromTemplateUrl('Sales/templates/saleProductEditModal.html', {
         scope: $scope,
         animation: 'slide-in-right'
       }).then(function (modal) {
         vm.saleProductEditModal = modal;
+        vm.saleProductEditModal.show();
       });
     }
 
@@ -76,11 +83,11 @@
 
       vm.saleProducts = vm.products.filter(hasCount);
 
-      vm.checkoutModal.show();
+      showCheckoutModal();
     }
 
     function cancelCheckout () {
-      vm.checkoutModal.hide();
+      vm.checkoutModal.remove();
     }
 
     function overrideSaleTotal (price) {
@@ -89,11 +96,11 @@
 
     function editSaleProduct (product) {
       vm.currentEditProduct = product;
-      vm.saleProductEditModal.show();
+      showEditModal();
     }
 
     function doneEditSaleProduct () {
-      vm.saleProductEditModal.hide();
+      vm.saleProductEditModal.remove();
     }
 
     function saveSale () {
@@ -128,7 +135,7 @@
         });
 
         $q.all(promises).then(function () {
-          vm.checkoutModal.hide();
+          vm.checkoutModal.remove();
           resetSale();
         });
       });

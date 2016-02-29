@@ -32,12 +32,15 @@
 			vm.sales = [];
 			vm.salesTotal = 0;
 			loadSalesProducts();
+		}
 
+		function showEditModal () {
 			$ionicModal.fromTemplateUrl('SalesLog/templates/saleEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
 				vm.editModal = modal;
+				vm.editModal.show();
 			});
 		}
 
@@ -80,7 +83,7 @@
 			vm.currentSale = sale;
 			tempSale = angular.copy(sale);
 			vm.editViewOpen = true;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function save (editedSale) {
@@ -93,13 +96,13 @@
 					});
 				});
 
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function deleteSale (sale) {
 			Database.remove(saleTable, sale.id)
 			.then(function () {
-				vm.editModal.hide();
+				vm.editModal.remove();
 				loadSalesProducts();
 			});
 		}
@@ -108,7 +111,7 @@
 			if (vm.currentSale) {
 				vm.currentSale = tempSale;
 			}
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function showConfirm () {

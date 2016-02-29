@@ -46,11 +46,16 @@
 					language.type = languages[0].type;
 				}
 			}
+			
+		}
+
+		function showEditModal () {
 			$ionicModal.fromTemplateUrl('Inventory/templates/inventoryEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
 				vm.editModal = modal;
+				vm.editModal.show();
 			});
 		}
 
@@ -62,7 +67,7 @@
 			vm.activeItem = item;
 			tempItem = angular.copy(item);
 			getCategories();
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function save (item) {
@@ -140,7 +145,7 @@
 			queryCategories = true;
 			getCategories();
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function cancel () {
@@ -158,7 +163,7 @@
 				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 			}
 
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function addNewItem () {
@@ -172,7 +177,7 @@
 			vm.activeItem.date = new Date();
 			tempItem = {};
 			getCategories();
-			vm.editModal.show();
+			showEditModal();
 		}
 		function clearProduct () {
 			vm.activeItem.category = '';
@@ -262,7 +267,7 @@
 			}
 			Database.remove(inventoryTable, item.id);
 			// updateTotal();
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function updateTotal () {

@@ -40,14 +40,17 @@
 				}
 			}
 
+			loadExpenseItems(Database, startDate, endDate);
+		}
+
+		function showEditModal () {
 			$ionicModal.fromTemplateUrl('ExpenseLog/templates/expenseEditModal.html', {
 				scope: $scope,
 				animation: 'slide-in-right'
 			}).then(function (modal) {
 				vm.editModal = modal;
+				vm.editModal.show();
 			});
-
-			loadExpenseItems(Database, startDate, endDate);
 		}
 
 		function loadExpenseItems (Database, startDate, endDate) {
@@ -92,7 +95,7 @@
 			vm.activeExpense = expense;
 			tempExpense = angular.copy(expense);
 			vm.editviewOpen = true;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function save (item) {
@@ -126,7 +129,7 @@
 			vm.ischecked = false;
 			vm.activeExpense = null;
 			updateTotal();
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function cancel () {
@@ -139,13 +142,13 @@
 				vm.activeExpense = null;
 			}
 
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function addNewExpense () {
 			tempExpense = {};
 			vm.editviewOpen = false;
-			vm.editModal.show();
+			showEditModal();
 		}
 
 		function deleteExpense (item) {
@@ -157,7 +160,7 @@
 			Database.remove(expenseTable, item.id);
 			vm.activeExpense = null;
 			updateTotal();
-			vm.editModal.hide();
+			vm.editModal.remove();
 		}
 
 		function updateTotal () {
