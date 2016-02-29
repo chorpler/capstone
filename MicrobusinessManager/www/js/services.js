@@ -367,7 +367,7 @@
 			var querySales = 'SELECT p.name as name, SUM(p.price * sp.quantity) as amount FROM product p ' +
 												'INNER JOIN saleproduct sp ON p.id = sp.productid ' +
 												'INNER JOIN sale s ON sp.saleid = s.id ';
-			var queryCash = 'SELECT \'Cash\' as name, SUM(amount) FROM cashInfusion';
+			var queryCash = 'SELECT \'reports_cash\' as name, SUM(amount) FROM cashInfusion';
 			var queryExpenses = 'SELECT SUM(amount) as amount, ' + groupBy + ' as name FROM expense';
 			var queryUnion = ' UNION ';
 			var queryGroupBy = ' GROUP BY ';

@@ -21,8 +21,11 @@
 			</div>
 			<div ng-repeat="item in income.incomeStatement.incomeItems" class="item">
 				<div class="row">
-					<div class="col">
+					<div class="col" ng-if="item.name !== 'reports_cash'">
 						{{item.name}}
+					</div>
+					<div class="col" ng-if="item.name === 'reports_cash'">
+						{{item.name | translate}}
 					</div>
 					<div class="col">
 						{{item.amount | currency}}

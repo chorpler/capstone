@@ -134,7 +134,8 @@ angular.module('app.salary')
 			vm.activeExpense = null;
 			vm.showErrorAlert = false;
 			updateTotal();
-			vm.editModal.remove();
+			if (vm.editModal)
+				vm.editModal.remove();
 		}
 
 		function cancel () {
