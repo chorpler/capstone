@@ -456,3 +456,7 @@ ion-popover-view .cash-popover {
 .sales-edit .input-label {
   width: 40%;
 }
+
+.popover-arrow {
+  display: none !important;
+}
