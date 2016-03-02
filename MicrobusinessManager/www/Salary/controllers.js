@@ -216,6 +216,7 @@ angular.module('app.salary')
 		}
 
 		function showAlert () {
+			vm.cashAvailableAlert = $filter('number')(vm.cashAvailable, 2);
 			if (language.type === 'es') {
 				title_funds = "Fondos Insuficientes!";
 				message_body = "Solamente tienes disponible $";
@@ -227,7 +228,7 @@ angular.module('app.salary')
 			}
 			var alertPopup = $ionicPopup.alert({
 				title: title_funds,
-				template: message_body + vm.cashAvailable + message_body_2
+				template: message_body + vm.cashAvailableAlert + message_body_2
 			});
 
 			alertPopup.then(function(res) {
