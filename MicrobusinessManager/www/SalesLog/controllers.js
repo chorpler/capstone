@@ -117,12 +117,12 @@
 		function showConfirm () {
 			var title_delete, message_body, cancel_button;
 			if (vm.language.type === 'es') {
-				title_delete = 'Borrar Gasto';
+				title_delete = 'Borrar Venta';
 				message_body = '¿Estás seguro?';
 				cancel_button = 'Cancelar';
 			}
 			else {
-				title_delete = 'Delete Expense';
+				title_delete = 'Delete Sale';
 				message_body = 'Are you sure?';
 				cancel_button = 'Cancel';
 			}
