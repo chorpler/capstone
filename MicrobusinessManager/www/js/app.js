@@ -32,7 +32,7 @@
 			var selectedLanguage = {};
 			if (response.rows.length === 0) {
 				var language = {};
-				language.type = 'es';
+				language.type = 'en';
 				Database.insert(languageTable, [language.type]).then(function (response) {
 					language.id = response.insertId;
 				});
@@ -314,8 +314,8 @@
 
 		});
 
-		$translateProvider.preferredLanguage("es");
-		$translateProvider.fallbackLanguage("es");
+		$translateProvider.preferredLanguage("en");
+		$translateProvider.fallbackLanguage("en");
 
 
 		// if none of the above states are matched, use this as the fallback

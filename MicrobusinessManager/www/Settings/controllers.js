@@ -42,7 +42,7 @@
 			}
 			else {
 				var language = {};
-				vm.language.type = 'es';
+				vm.language.type = 'en';
 				language.type = vm.language.type;
 				Database.insert(languageTable, [language.type]).then(function (response) {
 					language.id = response.insertId;
