@@ -61,7 +61,7 @@ angular.module('app.expenses')
 
 		function save (item) {
 
-			Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss')]).then(function (response) {
+			Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), 'other']).then(function (response) {
 				CashBalance.updateCashBalance();
 				item.id = response.insertId;
 			});

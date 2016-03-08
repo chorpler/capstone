@@ -46,7 +46,7 @@
 
 		var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, expType, comments, date, type) VALUES (?, ?, ?, ?, ?, ?)';
 		var SELECT_EXPENSE = 'SELECT id, name, amount, expType, comments, date, type FROM expense';
-		var SELECT_EXP = 'SELECT name, amount, expType FROM expense GROUP BY name';
+		var SELECT_EXP = 'SELECT name, amount, expType, type FROM expense  WHERE type = \'other\' GROUP BY name';
 		var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, expType = ?, comments = ?, date = ?, type = ? ';
 		var REMOVE_EXPENSE = 'DELETE FROM expense';
 
