@@ -18,6 +18,14 @@
 	var languageTable = 'languages';
 	function run ($ionicPlatform, Database, $translate) {
 		$ionicPlatform.ready(function () {
+			navigator.globalization.getPreferredLanguage(function (language) {
+				$translate.use((language.value).split('=')[0]).then(function (data) {
+					console.log("SUCCESS -> " + data);
+				}, function (error) {
+					console.log("ERROR -> " + error);
+				});
+			}, null);
+
 			if (window.cordova && window.cordova.plugins.Keyboard) {
 				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 				cordova.plugins.Keyboard.disableScroll(true);
@@ -27,26 +35,26 @@
 				StatusBar.styleDefault();
 			}
 		});
-		Database.select('languages').then(function (response) {
-			var items = [];
-			var selectedLanguage = {};
-			if (response.rows.length === 0) {
-				var language = {};
-				language.type = 'es';
-				Database.insert(languageTable, [language.type]).then(function (response) {
-					language.id = response.insertId;
-				});
-			} else {
-				for (var i = response.rows.length - 1; i >= 0; i--) {
-					var item = response.rows.item(i);
-					items.push(item);
-				}
-				for (var k = 0; k < items.length; k++) {
-					selectedLanguage.type = items[0].type;
-				}
-				$translate.use(selectedLanguage.type);
-			}
-		});
+		// Database.select('languages').then(function (response) {
+		// 	var items = [];
+		// 	var selectedLanguage = {};
+		// 	if (response.rows.length === 0) {
+		// 		var language = {};
+		// 		language.type = 'es';
+		// 		Database.insert(languageTable, [language.type]).then(function (response) {
+		// 			language.id = response.insertId;
+		// 		});
+		// 	} else {
+		// 		for (var i = response.rows.length - 1; i >= 0; i--) {
+		// 			var item = response.rows.item(i);
+		// 			items.push(item);
+		// 		}
+		// 		for (var k = 0; k < items.length; k++) {
+		// 			selectedLanguage.type = items[0].type;
+		// 		}
+		// 		$translate.use(selectedLanguage.type);
+		// 	}
+		// });
 
 		// Database.insert('cashInfusion', [500,  moment().format('YYYY-MM-DD HH:mm:ss')]);
 	}
