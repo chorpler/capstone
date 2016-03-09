@@ -19,8 +19,11 @@
 	function run ($ionicPlatform, Database, $translate) {
 		$ionicPlatform.ready(function () {
 			navigator.globalization.getPreferredLanguage(function (language) {
-				$translate.use((language.value).split('=')[0]).then(function (data) {
+				$translate.use((language.value).split('-')[0]).then(function (data) {
 					console.log("SUCCESS -> " + data);
+					Database.insert(languageTable, [data]).then(function (response) {
+						language.id = response.insertId;
+					});
 				}, function (error) {
 					console.log("ERROR -> " + error);
 				});

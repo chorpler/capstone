@@ -40,15 +40,15 @@
 					vm.language.type = languages[0].type;
 				}
 			}
-			else {
-				var language = {};
-				vm.language.type = 'es';
-				language.type = vm.language.type;
-				Database.insert(languageTable, [language.type]).then(function (response) {
-					language.id = response.insertId;
-				});
-				vm.languages.push(language);
-			}
+			// else {
+			// 	var language = {};
+			// 	vm.language.type = 'es';
+			// 	language.type = vm.language.type;
+			// 	Database.insert(languageTable, [language.type]).then(function (response) {
+			// 		language.id = response.insertId;
+			// 	});
+			// 	vm.languages.push(language);
+			// }
 		}
 
 		function showLoginModal () {
