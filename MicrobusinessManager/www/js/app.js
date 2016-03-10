@@ -9,25 +9,63 @@
 		'app.sales',
 		'app.settings',
 		'app.salary',
-		'pascalprecht.translate'
+		'pascalprecht.translate',
+		'tmh.dynamicLocale'
 
 	])
 	.run(run)
 	.config(config);
 
 	var languageTable = 'languages';
-	function run ($ionicPlatform, Database, $translate) {
+	var selectedLanguage = {};
+	var items = [];
+	function run ($ionicPlatform, Database, $translate, tmhDynamicLocale) {
 		$ionicPlatform.ready(function () {
-			navigator.globalization.getPreferredLanguage(function (language) {
-				$translate.use((language.value).split('-')[0]).then(function (data) {
-					console.log("SUCCESS -> " + data);
-					Database.insert(languageTable, [data]).then(function (response) {
-						language.id = response.insertId;
-					});
-				}, function (error) {
-					console.log("ERROR -> " + error);
-				});
-			}, null);
+			Database.select(languageTable).then(function (response) {
+				if (response.rows.length === 0) {
+					navigator.globalization.getPreferredLanguage(function (language) {
+						var trimLanguage = (language.value).split('-')[0];
+						if (trimLanguage === 'en' || trimLanguage === 'es')	{
+							$translate.use(trimLanguage).then(function (data) {
+								if (data === 'es') {
+									tmhDynamicLocale.set('es-ec');
+								}
+								else if (data === 'en') {
+									tmhDynamicLocale.set('en-us');
+								}
+								Database.insert(languageTable, [data]).then(function (response) {
+									language.id = response.insertId;
+								});
+							}, function (error) {
+								console.log("ERROR -> " + error);
+							});
+						} else {
+							Database.insert(languageTable, ['en']).then(function (response) {
+								language.id = response.insertId;
+								$translate.use('en');
+								tmhDynamicLocale.set('en-us');
+							});
+						}
+					}, null);
+				} else {
+					for (var i = response.rows.length - 1; i >= 0; i--) {
+						var item = response.rows.item(i);
+						items.push(item);
+					}
+					for (var j = 0; j < items.length; j++) {
+						selectedLanguage.id = items[0].id;
+						selectedLanguage.type = items[0].type;
+					}
+					if (selectedLanguage.type === 'es') {
+						tmhDynamicLocale.set('es-ec');
+					}
+					else if (selectedLanguage.type === 'en') {
+						tmhDynamicLocale.set('en-us');
+					}
+					$translate.use(selectedLanguage.type);
+					Database.update(languageTable, selectedLanguage.id, [selectedLanguage.type]);
+				}
+			});
 
 			if (window.cordova && window.cordova.plugins.Keyboard) {
 				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -38,28 +76,6 @@
 				StatusBar.styleDefault();
 			}
 		});
-		// Database.select('languages').then(function (response) {
-		// 	var items = [];
-		// 	var selectedLanguage = {};
-		// 	if (response.rows.length === 0) {
-		// 		var language = {};
-		// 		language.type = 'es';
-		// 		Database.insert(languageTable, [language.type]).then(function (response) {
-		// 			language.id = response.insertId;
-		// 		});
-		// 	} else {
-		// 		for (var i = response.rows.length - 1; i >= 0; i--) {
-		// 			var item = response.rows.item(i);
-		// 			items.push(item);
-		// 		}
-		// 		for (var k = 0; k < items.length; k++) {
-		// 			selectedLanguage.type = items[0].type;
-		// 		}
-		// 		$translate.use(selectedLanguage.type);
-		// 	}
-		// });
-
-		// Database.insert('cashInfusion', [500,  moment().format('YYYY-MM-DD HH:mm:ss')]);
 	}
 
 	function config ($stateProvider, $urlRouterProvider, $translateProvider) {
@@ -325,8 +341,8 @@
 
 		});
 
-		$translateProvider.preferredLanguage("es");
-		$translateProvider.fallbackLanguage("es");
+		$translateProvider.preferredLanguage("en");
+		$translateProvider.fallbackLanguage("en");
 
 
 		// if none of the above states are matched, use this as the fallback
