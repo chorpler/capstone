@@ -30,7 +30,8 @@
 			remove: remove,
 			selectProductsForSale: selectProductsForSale,
 			calculateCashOnHand: calculateCashOnHand,
-			generateIncomeStatement: generateIncomeStatement
+			generateIncomeStatement: generateIncomeStatement,
+			getCommission: getCommission
 		};
 
 		var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
@@ -433,6 +434,22 @@
 					return incomeStatement;
 				});
 			});
+		}
+
+		function getCommission () {
+			var querySalary = 'SELECT amount FROM salary WHERE type = \'commission\' LIMIT 1';
+			var queryLastCommission = 'SELECT date FROM expense WHERE type = \'salary\' ORDER BY date LIMIT 1';
+			var queryCommission = 'select total(sale.amount * salary.amount / 100) as commission from sale ' +
+								'LEFT JOIN (' + querySalary + ') salary ' +
+								'WHERE sale.date > (' + queryLastCommission + ')';
+
+			return deferred.promise.then(function () {
+				return $cordovaSQLite.execute(db, queryCommission).then(function (response) {
+					return response.rows.item(0);
+				}, function (err) {
+					console.log(err);
+				})
+			}) 
 		}
 	}
 
