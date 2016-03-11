@@ -13,6 +13,7 @@ angular.module('app.salary')
 		vm.editModal = null;
 		vm.expenses = '';
 		vm.showErrorAlert = false;
+		vm.commission = null;
 		vm.cashAvailable = cashOnHand;
 		vm.date = Date.now();
 
@@ -26,7 +27,7 @@ angular.module('app.salary')
 		vm.showConfirm = showConfirm;
 		vm.showAlert = showAlert;
 		vm.showAlertCommission = showAlertCommission;
-		vm.commission = null;
+		vm.showCommissionInfo = showCommissionInfo;
 
 		var tempExpense = null;
 		var language = {};
@@ -70,10 +71,10 @@ angular.module('app.salary')
 				if (vm.paymentType === 'commission') {
 					if (language.type === 'es') {
 						item.name = 'Mi Comisión';
-						item.comments = 'Mi comisión de ' + vm.expectedSalary;
+						item.comments = 'Mi comisión de ' + vm.expectedSalary + '%';
 					} else {
 						item.name = 'My Commission';
-						item.comments = 'my commission of ' + vm.expectedSalary;
+						item.comments = 'my commission of ' + vm.expectedSalary + '%';
 					}
 					getCommission();
 					item.amount = vm.commission;
@@ -136,6 +137,7 @@ angular.module('app.salary')
 			vm.activeExpense = null;
 			vm.showErrorAlert = false;
 			updateTotal();
+			getCommission();
 			if (vm.editModal)
 				vm.editModal.remove();
 		}
@@ -238,7 +240,26 @@ angular.module('app.salary')
 			});
 		}
 
+		function showCommissionInfo () {
+			if (language.type === 'es') {
+				title_funds = "Información de Comisión!";
+				message_body = " que equivale a ";
+			} else {
+				title_funds = "Commission Info!";
+				message_body = " that equals to";
+			}
+			var alertPopup = $ionicPopup.alert({
+				title: title_funds,
+				template: vm.expectedSalary + '%'  + message_body + ' $' + vm.commission + '.'
+			});
+
+			alertPopup.then(function(res) {
+				console.log('none');
+			});
+		}
+
 		function showAlertCommission () {
+				vm.cashAvailableAlert = $filter('number')(vm.cashAvailable, 2);
 			if (language.type === 'es') {
 				title_funds = "Fondos Insuficientes!";
 				message_body = "Solamente tienes disponible $";
@@ -254,7 +275,7 @@ angular.module('app.salary')
 			}
 			var alertPopup = $ionicPopup.alert({
 				title: title_funds,
-				template: message_body + vm.cashAvailable + message_body_2 + vm.expectedSalary + message_body_3 + vm.commission + '.' + message_body_4
+				template: message_body + vm.cashAvailableAlert + message_body_2 + vm.expectedSalary + message_body_3 + vm.commission + '.' + message_body_4
 			});
 
 			alertPopup.then(function(res) {
