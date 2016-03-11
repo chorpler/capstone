@@ -448,8 +448,8 @@
 					return response.rows.item(0);
 				}, function (err) {
 					console.log(err);
-				})
-			}) 
+				});
+			}) ;
 		}
 	}
 

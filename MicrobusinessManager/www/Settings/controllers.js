@@ -90,6 +90,10 @@
 		function editSalary (salaryItem) {
 			vm.activeSalary = salaryItem;
 			tempSalary = angular.copy(salaryItem) || {};
+			if (!vm.activeSalary) {
+				vm.activeSalary = {};
+				vm.activeSalary.type = 'commission';
+			}
 			vm.editviewOpen = true;
 			showEditModal();
 		}

@@ -26,6 +26,7 @@ angular.module('app.salary')
 		vm.showConfirm = showConfirm;
 		vm.showAlert = showAlert;
 		vm.showAlertCommission = showAlertCommission;
+		vm.commission = null;
 
 		var tempExpense = null;
 		var language = {};
@@ -52,7 +53,7 @@ angular.module('app.salary')
 				vm.reformattedList[key] = vm.reformattedList[key] || [];
 				vm.reformattedList[key].push(record);
 			});
-
+			getCommission();
 			updateTotal();
 		}
 
@@ -69,12 +70,13 @@ angular.module('app.salary')
 				if (vm.paymentType === 'commission') {
 					if (language.type === 'es') {
 						item.name = 'Mi Comisión';
-						item.comments = 'Mi comisión de' + vm.expectedSalary + '% de ' + vm.cashAvailable;
+						item.comments = 'Mi comisión de ' + vm.expectedSalary;
 					} else {
 						item.name = 'My Commission';
-						item.comments = 'my commission of ' + vm.expectedSalary + '% of ' + vm.cashAvailable;
+						item.comments = 'my commission of ' + vm.expectedSalary;
 					}
-					item.amount = vm.cashAvailable * (vm.expectedSalary/100);
+					getCommission();
+					item.amount = vm.commission;
 				} else {
 					if (language.type === 'es') {
 						item.name = 'Mi Salario';
@@ -238,15 +240,21 @@ angular.module('app.salary')
 
 		function showAlertCommission () {
 			if (language.type === 'es') {
-				title_funds = "Fondos Disponibles";
-				message_body = "Tienes disponible $";
+				title_funds = "Fondos Insuficientes!";
+				message_body = "Solamente tienes disponible $";
+				message_body_2 = " y tu comisión del ";
+				message_body_3 = "% equivale a $";
+				message_body_4 =" Porfavor ajusta tu commisión en la página de configuraciones.";
 			} else {
-				title_delete = "Cash on Hand!";
+				title_funds = "Insufficient Funds!";
 				message_body = "You have on hand $";
+				message_body_2 = " and your commission of ";
+				message_body_3 = "% equals to $";
+				message_body_4 =" Please got the settings page and adjust your commission.";
 			}
 			var alertPopup = $ionicPopup.alert({
 				title: title_funds,
-				template: message_body + vm.cashAvailable + '.'
+				template: message_body + vm.cashAvailable + message_body_2 + vm.expectedSalary + message_body_3 + vm.commission + '.' + message_body_4
 			});
 
 			alertPopup.then(function(res) {
@@ -270,6 +278,12 @@ angular.module('app.salary')
 			});
 		}
 
+		function getCommission () {
+			Database.getCommission().then(function (response) {
+				 vm.commission = response.commission;
+				 console.log(vm.commission);
+			});
+		}
 		//Cleanup the modal when we're done with it!
 		$scope.$on('$destroy', function() {
 			if (vm.editModal)
