@@ -72,17 +72,19 @@
         </div>
       </div>
     </div>
-    <div class="list">
-      <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
+    <div class="card center">
+      <p>Acknowledgments</p>
+      <p>Rollins Center for Entreprenuership</p>
+      <!-- <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
         {{"login_button" | translate}}
       </button>
       <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.register()">
         {{"register_button" | translate}}
-      </button>
+      </button> -->
     </div>
 
-    <div class="card" ng-show="settings.userAccount.token">
-      <ion-list>
+    <!-- <div class="card" ng-show="settings.userAccount.token"> -->
+      <!-- <ion-list>
         <ion-item>
           {{"settings_username" | translate}}: {{settings.userAccount.user.username}}
         </ion-item>
@@ -97,7 +99,7 @@
             {{"logout_button" | translate}}
           </button>
         </ion-item>
-      </ion-list>
-    </div>
+      </ion-list> -->
+    <!-- </div> -->
   </ion-content>
 </ion-view>

@@ -16,7 +16,7 @@
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount text, expType text, comments text, date text, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
-										'quantity integer, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
+										'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount text, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
@@ -56,9 +56,9 @@
 		var UPDATE_SALE = 'UPDATE sale set amount = ?, date = ?';
 		var REMOVE_SALE = 'DELETE FROM sale';
 
-		var INSERT_SALE_PRODUCT = 'INSERT INTO saleproduct (saleid, productid, quantity) VALUES (?,?,?)';
-		var SELECT_SALE_PRODUCT = 'SELECT id, saleid, productid, quantity FROM saleproduct';
-		var UPDATE_SALE_PRODUCT = 'UPDATE saleproduct set saleid = ?, productid = ?, quantity = ?';
+		var INSERT_SALE_PRODUCT = 'INSERT INTO saleproduct (saleid, productid, quantity, saleprice) VALUES (?,?,?,?)';
+		var SELECT_SALE_PRODUCT = 'SELECT id, saleid, productid, quantity, saleprice FROM saleproduct';
+		var UPDATE_SALE_PRODUCT = 'UPDATE saleproduct set saleid = ?, productid = ?, quantity = ?, saleprice = ?';
 		var REMOVE_SALE_PRODUCT = 'DELETE FROM saleproduct';
 
 		var INSERT_SALARY = 'INSERT INTO salary (amount, type) VALUES (?, ?)';
@@ -449,7 +449,7 @@
 				}, function (err) {
 					console.log(err);
 				})
-			}) 
+			})
 		}
 	}
 

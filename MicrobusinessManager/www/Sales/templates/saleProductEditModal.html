@@ -1,46 +1,59 @@
 <ion-modal-view>
-  <ion-header-bar>
-    <button class="button button-clear" ng-click="sales.doneEditSaleProduct()">
-      <i class="icon ion-chevron-left back-color"></i>
-      <span class="back-color">{{"sales_edit_product_back" | translate}}</span>
-    </button>
+	<ion-header-bar>
+		<h1 class="title">{{"sales_edit_quantity" | translate}}</h1>
+	</ion-header-bar>
 
-    <h1 class="title">{{"sales_edit_quantity" | translate}}</h1>
-  </ion-header-bar>
+	<ion-content class="products">
+		<div class="list card center">
+			<div class="item-item-divider">
+				<div class="row">
+					<div class="col">
+						<span class="name-container">
+							{{sales.currentEditProduct.name}}
+						</span>
+					</div>
+				</div>
+			</div>
 
-  <ion-content class="products">
-    <div class="list card center">
-      <div class="item-item-divider">
-        <div class="row">
-          <div class="col">
-            <span class="name-container">
-              {{sales.currentEditProduct.name}}
-            </span>
-          </div>
-        </div>
-      </div>
+			<form name="saleProductForm">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">{{"product_sales_price" | translate}}</span>
+					<input name="saleprice"
+            type="number"
+            placeholder="{{'product_sales_price' | translate}}*"
+            ng-model="sales.currentEditProduct.saleprice"
+            required="required"
+            min="0"
+          />
+          <span ng-show="saleProductForm.saleprice.$error.min">
+            Negative price not allowed
+          </span>
+				</label>
+				<label class="item item-input item-floating-label">
+					<span class="input-label">{{"inventory_quantity" | translate}}</span>
+					<input name="quantity"
+            type="number"
+            placeholder="{{'inventory_quantity' | translate}}*"
+            ng-model="sales.currentEditProduct.count"
+            required="required"
+            min="0"
+            max="{{sales.currentEditProduct.limit}}"
+          />
+          <span ng-show="saleProductForm.quantity.$error.min || saleProductForm.quantity.$error.max">
+            Out of range
+          </span>
+				</label>
+				<button class="button button-balanced"
+          ng-disabled="saleProductForm.$invalid"
+          ng-click="sales.doneEditSaleProduct()">
+          Save
+        </button>
+        <button class="button button-assertive"
+          ng-click="sales.cancelEditSaleProduct()">
+          Cancel
+        </button>
+			</form>
 
-      <ion-item>
-        <div class="row">
-          <div class="col">
-            <button class="button button-icon" ng-click="sales.removeProduct(sales.currentEditProduct)">
-              <i class="icon ion-minus-round"></i>
-            </button>
-          </div>
-
-          <div class="col">
-            <div class="button button-icon">
-              {{sales.currentEditProduct.count}}
-            </div>
-          </div>
-
-          <div class="col">
-            <button class="button button-icon" ng-click="sales.addProduct(sales.currentEditProduct)">
-              <i class="icon ion-plus-round"></i>
-            </button>
-          </div>
-        </div>
-      </ion-item>
-    </div>
-  </ion-content>
+		</div>
+	</ion-content>
 </ion-modal-view>

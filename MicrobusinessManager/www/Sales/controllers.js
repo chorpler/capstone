@@ -8,6 +8,7 @@
 
     vm.products            = products;
     vm.categories          = categories;
+
     vm.addProduct          = addProduct;
     vm.removeProduct       = removeProduct;
     vm.checkout            = checkout;
@@ -17,12 +18,14 @@
     vm.resetSale           = resetSale;
     vm.editSaleProduct     = editSaleProduct;
     vm.doneEditSaleProduct = doneEditSaleProduct;
+    vm.cancelEditSaleProduct = cancelEditSaleProduct;
+
 
     var saleTable = 'sale';
     var saleProductTable = 'saleproduct';
     vm.filters = {};
-    console.log(vm.filters);
-
+    var tempEditProduct    = null;
+    var tempTotal = 0;
     function init () {
       vm.saleDate           = new Date();
       vm.saleTotal          = 0;
@@ -65,14 +68,18 @@
       }
       product.count += 1;
       vm.productCount += 1;
-      vm.saleTotal += product.price;
+      vm.saleTotal += product.saleprice;
+      tempTotal = vm.saleTotal;
+      console.log(tempTotal);
     }
 
     function removeProduct (product) {
       if (product.count > 0) {
         product.count -= 1;
         vm.productCount -= 1;
-        vm.saleTotal -= product.price;
+        vm.saleTotal -= product.saleprice;
+        tempTotal = vm.saleTotal;
+        console.log(tempTotal);
       }
     }
 
@@ -91,16 +98,38 @@
     }
 
     function overrideSaleTotal (price) {
-      vm.saleTotal = price;
+      if (price) {
+        updateSalesPrices(tempTotal);
+        tempTotal = price;
+      }
+    }
+
+    function updateSalesPrices() {
+      vm.saleProducts.forEach(function (product) {
+        product.saleprice = parseFloat(((vm.saleTotal * ((product.saleprice * product.count) / tempTotal)) / product.count).toFixed(2));
+      });
     }
 
     function editSaleProduct (product) {
+      tempEditProduct = angular.copy(product);
       vm.currentEditProduct = product;
       showEditModal();
     }
 
     function doneEditSaleProduct () {
+      vm.saleTotal = vm.saleProducts.reduce(function(total, product) {
+        return total + (product.saleprice * product.count);
+      }, 0);
+      vm.saleTotal = parseFloat(vm.saleTotal.toFixed(2));
+
+      tempTotal = vm.saleTotal;
       vm.saleProductEditModal.remove();
+    }
+
+    function cancelEditSaleProduct() {
+      vm.currentEditProduct.count = tempEditProduct.count;
+      vm.currentEditProduct.saleprice = tempEditProduct.saleprice;
+      doneEditSaleProduct();
     }
 
     function saveSale () {
@@ -150,6 +179,7 @@
       vm.saleProducts = [];
       vm.products.forEach(function (product) {
         product.count = 0;
+        product.saleprice = product.price;
       });
     }
 
