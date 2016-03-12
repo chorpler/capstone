@@ -61,7 +61,7 @@
           <div class="card-container">
             <div class="row">
               <div class="col col-50">
-                <span>{{"payment_amount" | translate}}</span>
+                <span>{{item.type === 'commission' ? 'salary_percentage' : 'payment_amount' | translate}}</span>
               </div>
               <div class="col col-50" ng-show="!settings.edit">
                 <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount}}%</span>

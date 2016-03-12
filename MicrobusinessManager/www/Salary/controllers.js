@@ -271,7 +271,7 @@ angular.module('app.salary')
 				message_body = "You have on hand $";
 				message_body_2 = " and your commission of ";
 				message_body_3 = "% equals to $";
-				message_body_4 =" Please got the settings page and adjust your commission.";
+				message_body_4 =" Please go to the settings page and adjust your commission.";
 			}
 			var alertPopup = $ionicPopup.alert({
 				title: title_funds,
