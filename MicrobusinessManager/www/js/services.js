@@ -441,7 +441,7 @@
 			var queryLastCommission = 'SELECT date FROM expense WHERE type = \'salary\' ORDER BY date LIMIT 1';
 			var queryCommission = 'select total(sale.amount * salary.amount / 100) as commission from sale ' +
 								'LEFT JOIN (' + querySalary + ') salary ' +
-								'WHERE sale.date > (' + queryLastCommission + ')';
+								'WHERE sale.date > (' + queryLastCommission + ') OR (' + queryLastCommission + ') IS NULL';
 
 			return deferred.promise.then(function () {
 				return $cordovaSQLite.execute(db, queryCommission).then(function (response) {

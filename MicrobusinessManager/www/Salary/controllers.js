@@ -302,7 +302,6 @@ angular.module('app.salary')
 		function getCommission () {
 			Database.getCommission().then(function (response) {
 				 vm.commission = response.commission;
-				 console.log(vm.commission);
 			});
 		}
 		//Cleanup the modal when we're done with it!

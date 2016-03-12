@@ -21,7 +21,6 @@
     var saleTable = 'sale';
     var saleProductTable = 'saleproduct';
     vm.filters = {};
-    console.log(vm.filters);
 
     function init () {
       vm.saleDate           = new Date();
