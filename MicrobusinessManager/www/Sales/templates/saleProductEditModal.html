@@ -5,18 +5,13 @@
 
 	<ion-content class="products">
 		<div class="list card center">
-			<div class="item-item-divider">
-				<div class="row">
-					<div class="col">
-						<span class="name-container">
-							{{sales.currentEditProduct.name}}
-						</span>
-					</div>
-				</div>
-			</div>
-
 			<form name="saleProductForm">
-				<label class="item item-input item-floating-label">
+        <div class="item item-divider">
+          <span class="name-container">
+            {{sales.currentEditProduct.name}}
+          </span>
+        </div>
+				<label class="item item-input">
 					<span class="input-label">{{"product_sales_price" | translate}}</span>
 					<input name="saleprice"
             type="number"
@@ -29,7 +24,7 @@
             Negative price not allowed
           </span>
 				</label>
-				<label class="item item-input item-floating-label">
+				<label class="item item-input">
 					<span class="input-label">{{"inventory_quantity" | translate}}</span>
 					<input name="quantity"
             type="number"
@@ -43,15 +38,17 @@
             Out of range
           </span>
 				</label>
-				<button class="button button-balanced"
-          ng-disabled="saleProductForm.$invalid"
-          ng-click="sales.doneEditSaleProduct()">
-          Save
-        </button>
-        <button class="button button-assertive"
-          ng-click="sales.cancelEditSaleProduct()">
-          Cancel
-        </button>
+        <div class="item">
+  				<button class="button button-full button-balanced"
+            ng-disabled="saleProductForm.$invalid"
+            ng-click="sales.doneEditSaleProduct()">
+            Save
+          </button>
+          <button class="button button-full button-assertive"
+            ng-click="sales.cancelEditSaleProduct()">
+            Cancel
+          </button>
+        </div>
 			</form>
 
 		</div>

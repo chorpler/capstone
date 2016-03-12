@@ -296,7 +296,7 @@
 		}
 
 		function selectProductsForSale (saleId) {
-			var query	= 'SELECT DISTINCT saleproduct.id, saleproduct.saleid, saleproduct.productid, name, price, quantity FROM product INNER JOIN saleproduct ON product.id = saleproduct.productid WHERE saleproduct.saleid = ?';
+			var query	= 'SELECT DISTINCT saleproduct.id, saleproduct.saleid, saleproduct.productid, name, saleprice, quantity FROM product INNER JOIN saleproduct ON product.id = saleproduct.productid WHERE saleproduct.saleid = ?';
 			return deferred.promise.then(function () {
 				return $cordovaSQLite.execute(db, query, [saleId]).then(function (response) {
 					return response;
@@ -365,7 +365,7 @@
 			};
 			var promises = [];
 
-			var querySales = 'SELECT p.name as name, SUM(p.price * sp.quantity) as amount FROM product p ' +
+			var querySales = 'SELECT p.name as name, SUM(sp.saleprice * sp.quantity) as amount FROM product p ' +
 												'INNER JOIN saleproduct sp ON p.id = sp.productid ' +
 												'INNER JOIN sale s ON sp.saleid = s.id ';
 			var queryCash = 'SELECT \'reports_cash\' as name, SUM(amount) FROM cashInfusion';
@@ -414,6 +414,11 @@
 			paramsIncome = paramsIncome.concat(paramsIncome);
 
 			return deferred.promise.then(function () {
+				select('saleproduct').then(function (response) {
+					for (var i = response.rows.length - 1; i >= 0; i--) {
+						console.log(response.rows.item(0));
+					}
+				})
 				promises.push($cordovaSQLite.execute(db, queryIncomeItems, paramsIncome).then(function (response) {
 					for (var i = response.rows.length - 1; i >= 0; i--) {
 						incomeStatement.incomeItems.push(response.rows.item(i));
