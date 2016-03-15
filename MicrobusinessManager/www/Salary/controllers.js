@@ -95,6 +95,22 @@ angular.module('app.salary')
 				tempExpense = item;
 			}
 
+			if (item.amount === 0 && vm.paymentType === 'commission') {
+				var title = '';
+				var body = '';
+				if (language.type === 'es') {
+					title = 'No ha hecho ninguna venta';
+					body = 'Su comisión será igual a 0, por favor haga una venta de primera'
+				} else {
+					title = 'You haven\'t made any sales yet';
+					body = 'Your current commission would be 0, please make a sale first'
+				}
+				return $ionicPopup.alert({
+					title: title,
+					template: body
+				});
+			}
+
 			var key = $filter('date')(vm.activeExpense.date, 'mediumDate');
 			var oldKey = $filter('date')(tempExpense.date, 'mediumDate');
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.microbusinessmanager761516" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>SEPI</name>
-  <description>&#xD;
-        Making Accounting Software Accessible&#xD;
+  <description>&#xD;&#xD;
+        Making Accounting Software Accessible&#xD;&#xD;
     </description>
-  <author email="you@example.com" href="http://example.com.com/">&#xD;
-      Your Name Here&#xD;
+  <author email="you@example.com" href="http://example.com.com/">&#xD;&#xD;
+      Your Name Here&#xD;&#xD;
   </author>
   <content src="index.html"/>
   <access origin="*"/>
