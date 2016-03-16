@@ -5,6 +5,7 @@
       <span class="back-color">{{"sales_edit_product_back" | translate}}</span>
     </button>
     <h1 class="title">{{"sales_checkout" | translate}}</h1>
+    <button class="button button-assertive" ng-click="sales.resetSale(); sales.checkoutModal.remove()">{{"cancel_sale_button" | translate}}</button>
   </ion-header-bar>
 
   <ion-content class="products">
@@ -16,7 +17,7 @@
       <ion-item>
         <label class="item item-input">
           <i class="icon ion-social-usd placeholder-icon"></i>
-          <input type="number" ng-model="sales.saleTotal">
+          <input type="number" ng-model="sales.saleTotal" ng-change="sales.overrideSaleTotal(sales.saleTotal)">
         </label>
       </ion-item>
 
@@ -44,7 +45,7 @@
               </div>
               <div class="col">
                 <span class="name-container">
-                  {{product.price | currency}}
+                  {{product.saleprice | currency}}
                 </span>
               </div>
               <div class="col">

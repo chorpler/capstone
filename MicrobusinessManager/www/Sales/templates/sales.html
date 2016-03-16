@@ -69,7 +69,7 @@
             <span class="name-container">{{"sales_name" | translate}}: {{product.name}}</span>
           </div>
           <div class="col">
-            <span class="amount-container">{{"sales_price" | translate}}: {{product.price | currency}}</span>
+            <span class="amount-container">{{"sales_price" | translate}}: {{product.saleprice | currency}}</span>
           </div>
           <div class="col" ng-show="product.inventoryid">
             <span class="amount-container">{{"sales_limit" | translate}}: {{product.limit}}</span>

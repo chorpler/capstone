@@ -8,6 +8,8 @@
 
     vm.products            = products;
     vm.categories          = categories;
+    vm.filters             = {};
+
     vm.addProduct          = addProduct;
     vm.removeProduct       = removeProduct;
     vm.checkout            = checkout;
@@ -17,10 +19,13 @@
     vm.resetSale           = resetSale;
     vm.editSaleProduct     = editSaleProduct;
     vm.doneEditSaleProduct = doneEditSaleProduct;
+    vm.cancelEditSaleProduct = cancelEditSaleProduct;
+
 
     var saleTable = 'sale';
     var saleProductTable = 'saleproduct';
-    vm.filters = {};
+    var tempEditProduct    = null;
+    var tempTotal = 0;
 
     function init () {
       vm.saleDate           = new Date();
@@ -64,14 +69,16 @@
       }
       product.count += 1;
       vm.productCount += 1;
-      vm.saleTotal += product.price;
+      vm.saleTotal += product.saleprice;
+      tempTotal = vm.saleTotal;
     }
 
     function removeProduct (product) {
       if (product.count > 0) {
         product.count -= 1;
         vm.productCount -= 1;
-        vm.saleTotal -= product.price;
+        vm.saleTotal -= product.saleprice;
+        tempTotal = vm.saleTotal;
       }
     }
 
@@ -90,16 +97,88 @@
     }
 
     function overrideSaleTotal (price) {
-      vm.saleTotal = price;
+      if (price) {
+        updateSalesPrices();
+        tempTotal = price;
+      }
+    }
+
+    function updateSalesPrices() {
+      var calcTotal = 0;
+      vm.saleProducts.forEach(function (product) {
+        product.saleprice = parseFloat(((vm.saleTotal * ((product.saleprice * product.count) / tempTotal)) / product.count).toFixed(2));
+        calcTotal += product.saleprice * product.count;
+      });
+
+      var diff = Math.round((vm.saleTotal - calcTotal) * 100);
+
+      var maxIterations = 5;
+      var iteration = 0;
+
+      while (diff !== 0 && iteration < maxIterations) {
+        var best = null;
+        for (var i = vm.saleProducts.length - 1; i >= 0; i--) {
+          var currentProduct = vm.saleProducts[i];
+          if (currentProduct.count === Math.abs(diff)) {
+            if (diff > 0) {
+              currentProduct.saleprice += 0.01;
+              diff -= currentProduct.count;
+            } else {
+              currentProduct.saleprice -= 0.01;
+              diff += currentProduct.count;
+            }
+            break;
+          }
+
+          if (best && Math.abs(diff) === Math.abs((currentProduct.count - best.count))) {
+            if ((diff > 0 && currentProduct.count > best.count) || (diff < 0 && currentProduct.count < best.count)) {
+              currentProduct.saleprice += 0.01;
+              best.saleprice -= 0.01;
+              diff = diff - currentProduct.count + best.count;
+            } else {
+              currentProduct.saleprice -= 0.01;
+              best.saleprice += 0.01;
+              diff = diff + currentProduct.count - best.count;
+            }
+          }
+
+          if (!best || ((best.count - Math.abs(diff)) > (currentProduct.count - Math.abs(diff)))) {
+            best = currentProduct;
+          }
+        }
+
+        if (diff > 0) {
+          best.saleprice += 0.01;
+          diff -= best.count;
+        } else if (diff < 0) {
+          best.saleprice -= 0.01;
+          diff += best.count;
+        }
+
+        iteration++;
+      }
     }
 
     function editSaleProduct (product) {
+      tempEditProduct = angular.copy(product);
       vm.currentEditProduct = product;
       showEditModal();
     }
 
     function doneEditSaleProduct () {
+      vm.saleTotal = vm.saleProducts.reduce(function(total, product) {
+        return total + (product.saleprice * product.count);
+      }, 0);
+      vm.saleTotal = parseFloat(vm.saleTotal.toFixed(2));
+
+      tempTotal = vm.saleTotal;
       vm.saleProductEditModal.remove();
+    }
+
+    function cancelEditSaleProduct() {
+      vm.currentEditProduct.count = tempEditProduct.count;
+      vm.currentEditProduct.saleprice = tempEditProduct.saleprice;
+      doneEditSaleProduct();
     }
 
     function saveSale () {
@@ -112,7 +191,7 @@
         var promises = [];
 
         vm.saleProducts.forEach(function (p) {
-          promises.push(Database.insert(saleProductTable, [saleId, p.id, p.count]));
+          promises.push(Database.insert(saleProductTable, [saleId, p.id, p.count, p.saleprice]));
 
           // Decrement inventory if applicable
           if (p.inventoryid) {
@@ -149,6 +228,7 @@
       vm.saleProducts = [];
       vm.products.forEach(function (product) {
         product.count = 0;
+        product.saleprice = product.price;
       });
     }
 
