@@ -87,8 +87,8 @@ angular.module('app.salary')
 						item.comments = 'my salary';
 					}
 					item.amount = vm.expectedSalary;
-					item.expType = 'variable';
 				}
+				item.expType = 'variable';
 				item.date = new Date();
 				item.type = 'salary';
 				vm.activeExpense = item;
@@ -171,6 +171,7 @@ angular.module('app.salary')
 			vm.activeExpense = null;
 			updateTotal();
 			updateCashonHand();
+			getCommission();
 			vm.editModal.remove();
 		}
 
