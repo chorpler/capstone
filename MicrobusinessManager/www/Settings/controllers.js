@@ -40,15 +40,6 @@
 					vm.language.type = languages[0].type;
 				}
 			}
-			else {
-				var language = {};
-				vm.language.type = 'en';
-				language.type = vm.language.type;
-				Database.insert(languageTable, [language.type]).then(function (response) {
-					language.id = response.insertId;
-				});
-				vm.languages.push(language);
-			}
 		}
 
 		function showLoginModal () {
@@ -99,6 +90,10 @@
 		function editSalary (salaryItem) {
 			vm.activeSalary = salaryItem;
 			tempSalary = angular.copy(salaryItem) || {};
+			if (!vm.activeSalary) {
+				vm.activeSalary = {};
+				vm.activeSalary.type = 'commission';
+			}
 			vm.editviewOpen = true;
 			showEditModal();
 		}
@@ -111,15 +106,18 @@
 				else if (language.type === 'en') {
 					tmhDynamicLocale.set('en-us');
 				}
-				if (!language.id) {
-					Database.insert(languageTable, [language.type]).then(function (response) {
-						language.id = response.insertId;
-					});
-					vm.languages.push(language);
-				}
-				else {
+				Database.select(languageTable).then(function (response) {
+					var items = [];
+
+					for (var i = response.rows.length - 1; i >= 0; i--) {
+						var item = response.rows.item(i);
+						items.push(item);
+					}
+					for (var j = 0; j < items.length; j++) {
+						language.id = items[0].id;
+					}
 					Database.update(languageTable, language.id, [language.type]);
-				}
+				});
 			}, function (error) {
 					console.log("ERROR -> " + error);
 			});

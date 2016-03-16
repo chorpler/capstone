@@ -9,15 +9,64 @@
 		'app.sales',
 		'app.settings',
 		'app.salary',
-		'pascalprecht.translate'
+		'pascalprecht.translate',
+		'tmh.dynamicLocale'
 
 	])
 	.run(run)
 	.config(config);
 
 	var languageTable = 'languages';
-	function run ($ionicPlatform, Database, $translate) {
+	var selectedLanguage = {};
+	var items = [];
+	function run ($ionicPlatform, Database, $translate, tmhDynamicLocale) {
 		$ionicPlatform.ready(function () {
+			Database.select(languageTable).then(function (response) {
+				if (response.rows.length === 0) {
+					navigator.globalization.getPreferredLanguage(function (language) {
+						var trimLanguage = (language.value).split('-')[0];
+						if (trimLanguage === 'en' || trimLanguage === 'es')	{
+							$translate.use(trimLanguage).then(function (data) {
+								if (data === 'es') {
+									tmhDynamicLocale.set('es-ec');
+								}
+								else if (data === 'en') {
+									tmhDynamicLocale.set('en-us');
+								}
+								Database.insert(languageTable, [data]).then(function (response) {
+									language.id = response.insertId;
+								});
+							}, function (error) {
+								console.log("ERROR -> " + error);
+							});
+						} else {
+							Database.insert(languageTable, ['en']).then(function (response) {
+								language.id = response.insertId;
+								$translate.use('en');
+								tmhDynamicLocale.set('en-us');
+							});
+						}
+					}, null);
+				} else {
+					for (var i = response.rows.length - 1; i >= 0; i--) {
+						var item = response.rows.item(i);
+						items.push(item);
+					}
+					for (var j = 0; j < items.length; j++) {
+						selectedLanguage.id = items[0].id;
+						selectedLanguage.type = items[0].type;
+					}
+					if (selectedLanguage.type === 'es') {
+						tmhDynamicLocale.set('es-ec');
+					}
+					else if (selectedLanguage.type === 'en') {
+						tmhDynamicLocale.set('en-us');
+					}
+					$translate.use(selectedLanguage.type);
+					Database.update(languageTable, selectedLanguage.id, [selectedLanguage.type]);
+				}
+			});
+
 			if (window.cordova && window.cordova.plugins.Keyboard) {
 				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 				cordova.plugins.Keyboard.disableScroll(true);
@@ -27,28 +76,6 @@
 				StatusBar.styleDefault();
 			}
 		});
-		Database.select('languages').then(function (response) {
-			var items = [];
-			var selectedLanguage = {};
-			if (response.rows.length === 0) {
-				var language = {};
-				language.type = 'en';
-				Database.insert(languageTable, [language.type]).then(function (response) {
-					language.id = response.insertId;
-				});
-			} else {
-				for (var i = response.rows.length - 1; i >= 0; i--) {
-					var item = response.rows.item(i);
-					items.push(item);
-				}
-				for (var k = 0; k < items.length; k++) {
-					selectedLanguage.type = items[0].type;
-				}
-				$translate.use(selectedLanguage.type);
-			}
-		});
-
-		// Database.insert('cashInfusion', [500,  moment().format('YYYY-MM-DD HH:mm:ss')]);
 	}
 
 	function config ($stateProvider, $urlRouterProvider, $translateProvider) {
@@ -105,7 +132,7 @@
 			product_add_inventory: "Add Inventory",
 			product_Category_add: "Add",
 			product_Category_choose: "Choose",
-			product_input_category: "Input Category",
+			product_input_category: "Enter name of new Category",
 			product_Category_choose_category: "Choose Category",
 			product_Category_existent_category: "Current Category",
 			product_category_name: "Category Name",
@@ -129,6 +156,7 @@
 			salary_record: "Salary Record",
 			salary_expected: "Expected Salary",
 			commission_expected: "Expected Commission",
+			salary_percentage: "Percentage",
 			salary_register: "Register",
 			salary_adjust: "Adjust",
 			salary_no_comission: "Go to Settings and Set Self Payment to use this feature.",
@@ -256,6 +284,7 @@
 			salary_record: "Registro de Sueldo",
 			salary_expected: "Sueldo Esperado",
 			commission_expected: "Comisión Esperada",
+			salary_percentage: "Porcentaje",
 			salary_register: "Registrar",
 			salary_adjust: "Ajustar",
 			salary_no_comission: "Ve a Configuraciones y establece el método de sueldo para usar esta función.",

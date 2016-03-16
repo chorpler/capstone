@@ -8,6 +8,7 @@
 
     vm.products            = products;
     vm.categories          = categories;
+    vm.filters             = {};
 
     vm.addProduct          = addProduct;
     vm.removeProduct       = removeProduct;
@@ -23,9 +24,9 @@
 
     var saleTable = 'sale';
     var saleProductTable = 'saleproduct';
-    vm.filters = {};
     var tempEditProduct    = null;
     var tempTotal = 0;
+
     function init () {
       vm.saleDate           = new Date();
       vm.saleTotal          = 0;
