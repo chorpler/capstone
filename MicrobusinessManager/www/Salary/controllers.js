@@ -99,11 +99,11 @@ angular.module('app.salary')
 				var title = '';
 				var body = '';
 				if (language.type === 'es') {
-					title = 'No ha hecho ninguna venta';
-					body = 'Su comisión será igual a 0, por favor haga una venta de primera'
+					title = 'No haz hecho ninguna venta';
+					body = 'Tu comisión sería igual a 0. Haz minimo una venta primero.';
 				} else {
 					title = 'You haven\'t made any sales yet';
-					body = 'Your current commission would be 0, please make a sale first'
+					body = 'Your current commission would be 0, please make a sale first.';
 				}
 				return $ionicPopup.alert({
 					title: title,
