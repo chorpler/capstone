@@ -7,8 +7,8 @@
 		var db;
 		var deferred = $q.defer();
 		$ionicPlatform.ready(function () {
-			// $cordovaSQLite.deleteDB('my.db');
-			db = $cordovaSQLite.openDB('my.db');
+			// $cordovaSQLite.deleteDB({ name: 'my.db', location: 'default' });
+			db = $cordovaSQLite.openDB({ name: 'my.db', iosDatabaseLocation: 'default' });
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
 										'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
