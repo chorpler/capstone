@@ -196,7 +196,6 @@
 				Database.insert(taxTable, [item.active, item.percentage]).then(function (response) {
 					item.id = response.insertId;
 				});
-				vm.salary.push(item);
 			}
 			else {
 				Database.update(taxTable, item.id, [item.active, item.percentage]);
