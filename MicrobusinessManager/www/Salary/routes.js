@@ -41,6 +41,7 @@
 							item.amount = Number(item.amount);
 							items.push(item);
 						}
+						console.log(items);
 						return items;
 					});
 				},

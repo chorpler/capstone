@@ -43,11 +43,11 @@
 					vm.activeTax = tax[0].active;
           if (vm.activeTax === true) {
             vm.tax_rate = tax[0].percentage;
-          } else {
-            vm.tax_rate = 0;
           }
 				}
-			}
+			} else {
+        vm.tax_rate = 0;
+      }
     }
 
     function showCheckoutModal () {

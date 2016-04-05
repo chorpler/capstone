@@ -258,6 +258,7 @@ angular.module('app.salary')
 		}
 
 		function showCommissionInfo () {
+			vm.commission = $filter('number')(vm.commission, 2);
 			if (language.type === 'es') {
 				title_funds = "Información de Comisión!";
 				message_body = " que equivale a ";

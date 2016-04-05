@@ -39,7 +39,7 @@
 		function init () {
 			if (vm.salary.length < 1) {
 				vm.activeSalary = {};
-				vm.activeSalary.type = 'salary';
+				// vm.activeSalary.type = 'salary';
 			}
 			if (languages.length) {
 				for (var i = 0; i < languages.length; i++) {
