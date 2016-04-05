@@ -199,9 +199,9 @@
     }
 
     function saveSale () {
-      vm.saleTotal = vm.saleTotal + (vm.saleTotal * vm.tax_rate/100);
-      $filter('number')(vm.saleTotal, 2);
-      Database.insert(saleTable, [vm.saleTotal, moment(vm.saleDate).format('YYYY-MM-DD HH:mm:ss')])
+      var saleTotal = vm.saleTotal + (vm.saleTotal * vm.tax_rate/100);
+      $filter('number')(saleTotal, 2);
+      Database.insert(saleTable, [saleTotal, moment(vm.saleDate).format('YYYY-MM-DD HH:mm:ss')])
       .then(function (response) {
         CashBalance.updateCashBalance();
         return response.insertId;
