@@ -2,7 +2,7 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages, tmhDynamicLocale) {
+	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax) {
 		var vm = this;
 
 		vm.userAccount = {};
@@ -10,6 +10,7 @@
 		vm.activeSalary = null;
 		vm.salary = salary;
 		vm.languages = languages;
+		vm.tax = tax;
 		vm.login = login;
 		vm.closeLogin = closeLogin;
 		vm.submitLoginRequest = submitLoginRequest;
@@ -19,16 +20,21 @@
 		vm.submitRegistrationRequest = submitRegistrationRequest;
 		vm.save = save;
 		vm.showEdit = showEdit;
+		vm.taxEdit = taxEdit;
 		vm.editSalary = editSalary;
 		vm.changeLanguage = changeLanguage;
 		vm.cancel = cancel;
+		vm.cancelTaxEdit = cancelTaxEdit;
+		vm.saveTaxEdit = saveTaxEdit;
 		vm.selfPayment = {};
 		vm.language = {};
 		vm.edit = false;
+		vm.tax_active = false;
 
 		var tempSalary = null;
 		var salaryTable = 'salary';
 		var languageTable = 'languages';
+		var taxTable = 'tax';
 
 		function init () {
 			if (vm.salary.length < 1) {
@@ -40,6 +46,19 @@
 					vm.language.type = languages[0].type;
 				}
 			}
+			if (tax.length) {
+				for (var j = 0; j < tax.length; j++) {
+					vm.activeTax = tax[0];
+					if (tax[0].active === false) {
+						vm.tax_active = false;
+					} else {
+						vm.tax_active = true;
+					}
+				}
+			} else {
+				vm.activeTax = [];
+			}
+
 		}
 
 		function showLoginModal () {
@@ -69,6 +88,15 @@
 			});
 		}
 
+		function showTaxModal () {
+			$ionicModal.fromTemplateUrl('Settings/templates/taxModal.html', {
+				scope: $scope
+			}).then(function (modal) {
+				vm.taxModal = modal;
+				vm.taxModal.show();
+			});
+		}
+
 		function save (item) {
 			if (!item.id) {
 				Database.insert(salaryTable, [item.amount, item.type]).then(function (response) {
@@ -84,6 +112,7 @@
 		}
 
 		function showEdit () {
+			vm.activeTax = {};
 			showEditModal();
 		}
 
@@ -96,6 +125,19 @@
 			}
 			vm.editviewOpen = true;
 			showEditModal();
+		}
+
+		function taxEdit (taxItem) {
+			getTax ().then(function () {
+				if (tax.length) {
+					vm.activeTax = tax[0];
+					console.log('here',vm.activeTax);
+				} else {
+					vm.activeTax = {};
+				}
+				tempTax = angular.copy(vm.activeTax) || {};
+				showTaxModal();
+			});
 		}
 
 		function changeLanguage (language) {
@@ -131,6 +173,56 @@
 			}
 
 			vm.editModal.remove();
+		}
+
+		function cancelTaxEdit () {
+			if (vm.activeTax) {
+				vm.activeTax.active = tempTax.active;
+				vm.activeTax.percentage = tempTax.percentage;
+				vm.activeTax = null;
+			}
+			vm.taxModal.remove();
+		}
+
+		function saveTaxEdit (item) {
+			if (item.active === true) {
+				vm.tax_active = true;
+			} else {
+				vm.tax_active = false;
+			}
+			item.active = item.active === false ? 0 : 1;
+			console.log('before save', vm.activeTax);
+			if (!item.id) {
+				Database.insert(taxTable, [item.active, item.percentage]).then(function (response) {
+					item.id = response.insertId;
+				});
+				vm.salary.push(item);
+			}
+			else {
+				Database.update(taxTable, item.id, [item.active, item.percentage]);
+			}
+
+			vm.activeTax = null;
+			// getTax ();
+			vm.taxModal.remove();
+		}
+
+		function getTax () {
+			return Database.select('tax').then(function (response) {
+				var items = [];
+				if (response.rows.length === 0) {
+					return items;
+				}
+				for (var i = response.rows.length - 1; i >= 0; i--) {
+					var item = response.rows.item(i);
+					console.log(item);
+					item.percentage = Number(item.percentage);
+					item.active = item.active === 0 ? false : true;
+					items.push(item);
+				}
+				console.log('get',items);
+				tax = items;
+			});
 		}
 
 		function login () {

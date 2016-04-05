@@ -20,6 +20,7 @@
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount text, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
 			deferred.resolve();
 		});
 
@@ -76,6 +77,11 @@
 		var UPDATE_CASH_INFUSION = 'UPDATE cashInfusion set amount = ?, date = ? ';
 		var REMOVE_CASH_INFUSION = 'DELETE FROM cashInfusion';
 
+		var INSERT_TAX = 'INSERT INTO tax (active, percentage) VALUES (?,?)';
+		var SELECT_TAX = 'SELECT id, active, percentage FROM tax';
+		var UPDATE_TAX = 'UPDATE tax set active = ?, percentage = ? ';
+		var REMOVE_TAX = 'DELETE FROM tax';
+
 		var WHERE = ' WHERE ';
 		var AND = ' AND ';
 		var WHERE_ID = 'id = ? ';
@@ -112,6 +118,9 @@
 					break;
 				case 'cashInfusion':
 					query = INSERT_CASH_INFUSION;
+					break;
+				case 'tax':
+					query = INSERT_TAX;
 					break;
 			}
 
@@ -156,6 +165,9 @@
 					break;
 				case 'cashInfusion':
 					query = SELECT_CASH_INFUSION;
+					break;
+				case 'tax':
+					query = SELECT_TAX;
 					break;
 			}
 
@@ -233,6 +245,9 @@
 				case 'cashInfusion':
 					query = UPDATE_CASH_INFUSION;
 					break;
+				case 'tax':
+					query = UPDATE_TAX;
+					break;
 			}
 
 			query += id ? WHERE + WHERE_ID : '';
@@ -279,6 +294,9 @@
 					break;
 				case 'cashInfusion':
 					query = REMOVE_CASH_INFUSION;
+					break;
+				case 'tax':
+					query = REMOVE_TAX;
 					break;
 			}
 

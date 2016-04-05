@@ -1,6 +1,6 @@
 <ion-view view-title="{{'menu_settings' | translate}}">
   <ion-content class="settings">
-    <div class="card">
+    <div class="list card">
       <div class="item item-divider">
         <span class="name-container">{{"settings_language_preference" | translate}}</span>
       </div>
@@ -13,8 +13,59 @@
           <option value="es">{{"spanish_language" | translate}}</option>
         </select>
       </label>
+      <div class="item item-divider">
+        <span class="name-container">{{"checkout_options" | translate}}</span>
+      </div>
+      <ion-item ng-click="settings.taxEdit()">
+        <div class="card-container-2">
+          <a class="item item-icon-right">
+            <i class="icon ion-chevron-right"></i>
+            <div class="row">
+              <div class="col">
+                <span class="name-container">{{"tax_name" | translate}}</span>
+              </div>
+              <div class="col">
+                <span class="amount-container">{{settings.tax_active ? "tax_active" : "tax_inactive" | translate}}</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </ion-item>
+      <div class="item item-divider">
+        <span class="name-container">{{"self_payment_settings" | translate}}</span>
+      </div>
+      <div ng-repeat="item in settings.salary" ng-if="settings.salary.length">
+        <ion-item ng-click="settings.editSalary(item)">
+          <div class="card-container-2">
+            <a class="item item-icon-right">
+              <i class="icon ion-chevron-right"></i>
+              <div class="row">
+                <div class="col">
+                  <span class="salary-name">{{item.type === 'commission' ? "commission_option" : "salary_option" | translate}}</span>
+                </div>
+                <div class="col">
+                  <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount}}%</span>
+                  <span class="salary-info" ng-if="item.type === 'salary'">{{item.amount | currency}}</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </ion-item>
+      </div>
+      <div ng-if="!settings.salary.length">
+        <ion-item ng-click="settings.editSalary(item)">
+          <div class="card-container-2">
+            <a class="item item-icon-right">
+              <i class="icon ion-chevron-right"></i>
+              <div class="row">
+                <span class="name-container">{{"salary_not_configured" | translate}}</span>
+              </div>
+            </a>
+          </div>
+        </ion-item>
+      </div>
     </div>
-    <div class="list list-inset" ng-if="settings.salary.length < 1">
+    <!-- <div class="list list-inset" ng-if="settings.salary.length < 1">
       <div class="item item-divider">
         <div class="devider-container">
           <div class="row">
@@ -28,8 +79,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div ng-repeat="item in settings.salary">
+    </div> -->
+    <!-- <div ng-repeat="item in settings.salary">
       <div class="list list-inset">
           <div class="item item-divider">
             <div class="devider-container">
@@ -71,7 +122,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="card center">
       <p>Acknowledgments</p>
       <p>Rollins Center for Entreprenuership</p>

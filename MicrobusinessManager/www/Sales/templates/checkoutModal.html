@@ -23,8 +23,11 @@
 
       <ion-item>
         <button class="button button-block button-balanced" ng-disabled="!sales.saleTotal" ng-click="sales.saveSale()">
-          {{"sales_record" | translate}}
+          {{"sales_record" | translate}} ${{sales.saleTotal + (sales.saleTotal * sales.tax_rate/100) | number:2}}
         </button>
+        <div class="center" ng-show="sales.activeTax">
+          {{"including_tax" | translate}}
+        </div>
       </ion-item>
     </div>
 
