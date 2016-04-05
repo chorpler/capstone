@@ -221,7 +221,8 @@
 			tax_name: "Sales Tax",
 			tax_inactive: "Inactive",
 			tax_active: "Active",
-			tax_enabled: "Enabled"
+			tax_enabled: "Enabled",
+			settings_acknowledgment: "Acknowledgments"
 
 		});
 
@@ -357,7 +358,8 @@
 			tax_name: "I.V.A",
 			tax_inactive: "Inactivo",
 			tax_active: "Activo",
-			tax_enabled: "Habilitado"
+			tax_enabled: "Habilitado",
+			settings_acknowledgment: "Reconocimiento"
 
 		});
 
