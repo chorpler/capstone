@@ -27,7 +27,7 @@
 	  		</label>
 				<div class="card" ng-show="salary.showErrorAlert">
 				  <div class="item item-text-wrap center">
-				    <span class="notAllowed">{{"salary_message_1" | translate}}{{salary.cashAvailable}} {{"salary_message_2" | translate}}</span>
+				    <span class="notAllowed">{{"salary_message_1" | translate}}{{salary.cashAvailable | number : 2}} {{"salary_message_2" | translate}}</span>
 				  </div>
 				</div>
 				<button class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense)" ng-disabled="expenseForm.$invalid">{{"save_button" | translate}}</button>

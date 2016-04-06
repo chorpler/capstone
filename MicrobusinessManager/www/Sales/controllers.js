@@ -47,6 +47,7 @@
 				}
 			} else {
         vm.tax_rate = 0;
+        vm.activeTax = false;
       }
     }
 

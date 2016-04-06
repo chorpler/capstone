@@ -65,64 +65,6 @@
         </ion-item>
       </div>
     </div>
-    <!-- <div class="list list-inset" ng-if="settings.salary.length < 1">
-      <div class="item item-divider">
-        <div class="devider-container">
-          <div class="row">
-            <div class="col col-90">
-              <span class="name-container">{{"self_payment_settings" | translate}}</span>
-            </div>
-            <div class="col col-10 edit-button" ng-show="!settings.edit">
-              <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
-                <i class="icon ion-plus-round"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <!-- <div ng-repeat="item in settings.salary">
-      <div class="list list-inset">
-          <div class="item item-divider">
-            <div class="devider-container">
-            <div class="row">
-              <div class="col col-90">
-                <span class="name-container">{{"self_payment_settings" | translate}}</span>
-              </div>
-              <div class="col col-10 edit-button" ng-show="!settings.edit">
-                <button class="button button-clear button-positive" ng-click="settings.editSalary(item)">
-          				<i class="icon ion-edit"></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="card-container">
-            <div class="row">
-              <div class="col col-50">
-                <span>{{"payment_method" | translate}}</span>
-              </div>
-              <div class="col col-50" ng-show="!settings.edit">
-                <span class="salary-info" ng-if="item.type === 'salary' || item.type === 'salario'">{{"salary_option" | translate}}</span>
-                <span class="salary-info" ng-if="item.type === 'commission' || item.type === 'comisión'">{{"commission_option" | translate}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="card-container">
-            <div class="row">
-              <div class="col col-50">
-                <span>{{item.type === 'commission' ? 'salary_percentage' : 'payment_amount' | translate}}</span>
-              </div>
-              <div class="col col-50" ng-show="!settings.edit">
-                <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount}}%</span>
-                <span class="salary-info" ng-if="item.type === 'salary'">{{item.amount | currency}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="card center">
       <p>{{"settings_acknowledgment" | translate}}</p>
       <p>Rollins Center for Entreprenuership</p>
