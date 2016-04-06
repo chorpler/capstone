@@ -131,7 +131,6 @@
 			getTax ().then(function () {
 				if (tax.length) {
 					vm.activeTax = tax[0];
-					console.log('here',vm.activeTax);
 				} else {
 					vm.activeTax = {};
 				}
@@ -179,7 +178,7 @@
 			if (vm.activeTax) {
 				vm.activeTax.active = tempTax.active;
 				vm.activeTax.percentage = tempTax.percentage;
-				vm.activeTax = null;
+				// vm.activeTax = null;
 			}
 			vm.taxModal.remove();
 		}
@@ -191,7 +190,6 @@
 				vm.tax_active = false;
 			}
 			item.active = item.active === false ? 0 : 1;
-			console.log('before save', vm.activeTax);
 			if (!item.id) {
 				Database.insert(taxTable, [item.active, item.percentage]).then(function (response) {
 					item.id = response.insertId;
@@ -201,7 +199,7 @@
 				Database.update(taxTable, item.id, [item.active, item.percentage]);
 			}
 
-			vm.activeTax = null;
+			// vm.activeTax = null;
 			// getTax ();
 			vm.taxModal.remove();
 		}
@@ -214,12 +212,10 @@
 				}
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var item = response.rows.item(i);
-					console.log(item);
 					item.percentage = Number(item.percentage);
 					item.active = item.active === 0 ? false : true;
 					items.push(item);
 				}
-				console.log('get',items);
 				tax = items;
 			});
 		}

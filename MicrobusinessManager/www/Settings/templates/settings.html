@@ -25,7 +25,8 @@
                 <span class="name-container">{{"tax_name" | translate}}</span>
               </div>
               <div class="col">
-                <span class="amount-container">{{settings.tax_active ? "tax_active" : "tax_inactive" | translate}}</span>
+                <span class="amount-container" ng-show="settings.tax_active">{{settings.activeTax.percentage}}%</span>
+                <span class="amount-container" ng-show="!settings.tax_active">{{"tax_inactive" | translate}}</span>
               </div>
             </div>
           </a>
