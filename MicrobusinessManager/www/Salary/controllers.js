@@ -59,8 +59,8 @@ angular.module('app.salary')
 		}
 
 		function editExpense (expense) {
-			console.log(expense);
 			vm.activeExpense = expense;
+			vm.activeExpense.amount = Number(expense.amount);
 			tempExpense = angular.copy(expense);
 			vm.editviewOpen = true;
 			showEditModal();
