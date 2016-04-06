@@ -59,8 +59,9 @@ angular.module('app.salary')
 		}
 
 		function editExpense (expense) {
+			console.log(expense);
 			vm.activeExpense = expense;
-			vm.activeExpense.amount = Number(expense.amount);
+			// vm.activeExpense.amount = Number(expense.amount);
 			tempExpense = angular.copy(expense);
 			vm.editviewOpen = true;
 			showEditModal();
@@ -79,6 +80,8 @@ angular.module('app.salary')
 					}
 					getCommission();
 					item.amount = vm.commission;
+					console.log('commission',item.amount);
+
 				} else {
 					if (language.type === 'es') {
 						item.name = 'Mi Salario';
@@ -87,7 +90,8 @@ angular.module('app.salary')
 						item.name = 'My Salary';
 						item.comments = 'my salary';
 					}
-					item.amount = vm.expectedSalary;
+					item.amount = Number(vm.expectedSalary);
+					console.log('amount', item.amount);
 				}
 				item.expType = 'variable';
 				item.date = new Date();
@@ -259,7 +263,7 @@ angular.module('app.salary')
 		}
 
 		function showCommissionInfo () {
-			vm.commission = $filter('number')(vm.commission, 2);
+			var displayCommission = $filter('number')(vm.commission, 2);
 			if (language.type === 'es') {
 				title_funds = "Información de Comisión!";
 				message_body = " que equivale a ";
@@ -269,7 +273,7 @@ angular.module('app.salary')
 			}
 			var alertPopup = $ionicPopup.alert({
 				title: title_funds,
-				template: vm.expectedSalary + '%'  + message_body + ' $' + vm.commission + '.'
+				template: vm.expectedSalary + '%'  + message_body + ' $' + displayCommission + '.'
 			});
 
 			alertPopup.then(function(res) {
@@ -320,6 +324,7 @@ angular.module('app.salary')
 
 		function getCommission () {
 			Database.getCommission().then(function (response) {
+				console.log(response);
 				 vm.commission = response.commission;
 			});
 		}
