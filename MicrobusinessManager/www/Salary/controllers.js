@@ -80,7 +80,8 @@ angular.module('app.salary')
 					}
 					getCommission();
 					item.amount = vm.commission;
-					console.log('commission',item.amount);
+					item.amount = Math.round(	item.amount * 100) / 100;
+					console.log('commission here',item.amount);
 
 				} else {
 					if (language.type === 'es') {
@@ -91,6 +92,7 @@ angular.module('app.salary')
 						item.comments = 'my salary';
 					}
 					item.amount = Number(vm.expectedSalary);
+					tem.amount = Math.round(	item.amount * 100) / 100;
 					console.log('amount', item.amount);
 				}
 				item.expType = 'variable';
