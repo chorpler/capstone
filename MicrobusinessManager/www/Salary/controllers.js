@@ -92,7 +92,7 @@ angular.module('app.salary')
 						item.comments = 'my salary';
 					}
 					item.amount = Number(vm.expectedSalary);
-					tem.amount = Math.round(	item.amount * 100) / 100;
+					item.amount = Math.round(item.amount * 100) / 100;
 					console.log('amount', item.amount);
 				}
 				item.expType = 'variable';
