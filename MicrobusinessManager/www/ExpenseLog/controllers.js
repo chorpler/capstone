@@ -2,7 +2,7 @@
 	angular.module('app.expenselog')
 	.controller('ExpenseLogController', ExpenseLogController);
 
-	function ExpenseLogController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, timeFrame, startDate, endDate, languages) {
+	function ExpenseLogController ($scope, $ionicModal, $filter, $ionicPopup, $q, Database, timeFrame, startDate, endDate, languages, CashBalance) {
 		var vm = this;
 
 		vm.log = [];
@@ -161,6 +161,7 @@
 			vm.activeExpense = null;
 			updateTotal();
 			vm.editModal.remove();
+			CashBalance.updateCashBalance();
 		}
 
 		function updateTotal () {
