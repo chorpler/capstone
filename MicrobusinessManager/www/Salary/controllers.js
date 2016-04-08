@@ -60,6 +60,7 @@ angular.module('app.salary')
 
 		function editExpense (expense) {
 			vm.activeExpense = expense;
+			// vm.activeExpense.amount = Number(expense.amount);
 			tempExpense = angular.copy(expense);
 			vm.editviewOpen = true;
 			showEditModal();
@@ -78,6 +79,8 @@ angular.module('app.salary')
 					}
 					getCommission();
 					item.amount = vm.commission;
+					item.amount = Math.round(	item.amount * 100) / 100;
+
 				} else {
 					if (language.type === 'es') {
 						item.name = 'Mi Salario';
@@ -86,7 +89,8 @@ angular.module('app.salary')
 						item.name = 'My Salary';
 						item.comments = 'my salary';
 					}
-					item.amount = vm.expectedSalary;
+					item.amount = Number(vm.expectedSalary);
+					item.amount = Math.round(item.amount * 100) / 100;
 				}
 				item.expType = 'variable';
 				item.date = new Date();
@@ -99,11 +103,11 @@ angular.module('app.salary')
 				var title = '';
 				var body = '';
 				if (language.type === 'es') {
-					title = 'No haz hecho ninguna venta';
-					body = 'Tu comisión sería igual a 0. Haz minimo una venta primero.';
+					title = 'No haz hecho ninguna venta!';
+					body = 'Tu comisión sería igual a $0. Haz minimo una venta primero.';
 				} else {
-					title = 'You haven\'t made any sales yet';
-					body = 'Your current commission would be 0, please make a sale first.';
+					title = 'You haven\'t made any sales yet!';
+					body = 'Your current commission would be $0. Please make a sale first.';
 				}
 				return $ionicPopup.alert({
 					title: title,
@@ -258,6 +262,7 @@ angular.module('app.salary')
 		}
 
 		function showCommissionInfo () {
+			var displayCommission = $filter('number')(vm.commission, 2);
 			if (language.type === 'es') {
 				title_funds = "Información de Comisión!";
 				message_body = " que equivale a ";
@@ -267,7 +272,7 @@ angular.module('app.salary')
 			}
 			var alertPopup = $ionicPopup.alert({
 				title: title_funds,
-				template: vm.expectedSalary + '%'  + message_body + ' $' + vm.commission + '.'
+				template: vm.expectedSalary + '%'  + message_body + ' $' + displayCommission + '.'
 			});
 
 			alertPopup.then(function(res) {

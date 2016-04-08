@@ -2,7 +2,7 @@
   angular.module('app.sales')
   .controller('SalesController', SalesController);
 
-  function SalesController ($scope, $ionicModal, $q, products, Database, categories, CashBalance) {
+  function SalesController ($scope, $ionicModal, $q, products, Database, categories, CashBalance, $filter, tax) {
 
     var vm = this;
 
@@ -20,6 +20,7 @@
     vm.editSaleProduct     = editSaleProduct;
     vm.doneEditSaleProduct = doneEditSaleProduct;
     vm.cancelEditSaleProduct = cancelEditSaleProduct;
+    vm.tax = tax;
 
 
     var saleTable = 'sale';
@@ -31,10 +32,23 @@
       vm.saleDate           = new Date();
       vm.saleTotal          = 0;
       vm.productCount       = 0;
+      vm.salesTax           = 0;
       vm.saleProducts       = [];
       vm.error              = null;
       vm.currentEditProduct = null;
       vm.filter = '';
+
+      if (tax.length) {
+				for (var j = 0; j < tax.length; j++) {
+					vm.activeTax = tax[0].active;
+          if (vm.activeTax === true) {
+            vm.tax_rate = tax[0].percentage;
+          }
+				}
+			} else {
+        vm.tax_rate = 0;
+        vm.activeTax = false;
+      }
     }
 
     function showCheckoutModal () {
@@ -115,6 +129,10 @@
       var maxIterations = 5;
       var iteration = 0;
 
+      if (vm.saleProducts.length === 0) {
+        return;
+      }
+
       while (diff !== 0 && iteration < maxIterations) {
         var best = null;
         for (var i = vm.saleProducts.length - 1; i >= 0; i--) {
@@ -182,7 +200,9 @@
     }
 
     function saveSale () {
-      Database.insert(saleTable, [vm.saleTotal, moment(vm.saleDate).format('YYYY-MM-DD HH:mm:ss')])
+      var saleTotal = vm.saleTotal + (vm.saleTotal * vm.tax_rate/100);
+      saleTotal = Math.round(saleTotal * 100) / 100;
+      Database.insert(saleTable, [saleTotal, moment(vm.saleDate).format('YYYY-MM-DD HH:mm:ss')])
       .then(function (response) {
         CashBalance.updateCashBalance();
         return response.insertId;

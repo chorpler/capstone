@@ -162,6 +162,7 @@
 			salary_no_comission: "Go to Settings and Set Self Payment to use this feature.",
 			salary_name: "Name",
 			salary_amount: "Amount",
+			salary_not_configured: "Not configured yet",
 			salary_comments: "Comments",
 			salary_Date: "Date",
 			salary_placeholder: "Salary ($)",
@@ -213,7 +214,15 @@
 			income_statement_name: 'Name',
 			cash_title: "Cash Infusion",
 			cash_amount: "Amount",
-			cash_date: "Date"
+			cash_date: "Date",
+			including_tax: "Including Tax",
+			checkout_options: "Tax Options",
+			edit_tax: "Edit Tax",
+			tax_name: "Sales Tax",
+			tax_inactive: "Inactive",
+			tax_active: "Active",
+			tax_enabled: "Enabled",
+			settings_acknowledgment: "Acknowledgments"
 
 		});
 
@@ -299,6 +308,7 @@
 			payment_method: "Método de Pago",
 			payment_amount: "Cantidad",
 			salary_option: "Salario",
+			salary_not_configured: "No ha sido configurado",
 			commission_option: "Comisión",
 			settings_username: "Nombre de Usuario",
 			settings_password: "Contraseña",
@@ -341,7 +351,15 @@
 			income_statement_name: 'Nombre',
 			cash_title: "Infusión de Efectivo",
 			cash_amount: "Cantidad",
-			cash_date: "Fecha"
+			cash_date: "Fecha",
+			including_tax: "I.V.A incluido",
+			checkout_options: "Opciones de Impuestos",
+			edit_tax: "Editar I.V.A",
+			tax_name: "I.V.A",
+			tax_inactive: "Inactivo",
+			tax_active: "Activo",
+			tax_enabled: "Habilitado",
+			settings_acknowledgment: "Reconocimiento"
 
 		});
 

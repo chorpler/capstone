@@ -41,6 +41,7 @@
 	margin-left: -16px;
 }
 
+.settings .icon.ion-chevron-right,
 .expenses .icon.ion-chevron-right,
 .salary .icon.ion-chevron-right,
 .inventory .icon.ion-chevron-right,
@@ -49,6 +50,7 @@
 	font-size: 14px;
 }
 
+.settings .name-container,
 .expenses .name-container,
 .salary .name-container,
 .inventory .name-container,
@@ -56,6 +58,7 @@
 	font-size: 17px;
 }
 
+.settings .amount-container,
 .expenses .amount-container,
 .salary .amount-container,
 .inventory .amount-container,
@@ -209,9 +212,24 @@ input.self-payment {
 .settings .devider-container {
   margin-bottom: -15px;
 }
+
 .settings .card-container {
   margin-top: -15px;
   margin-bottom: -15px;
+}
+
+.settings .card-container-2 {
+  margin-top: -28px;
+	margin-bottom: -28px;
+	width: 110%;
+	margin-left: -16px;
+}
+
+.settings .card-container-3 {
+  margin-top: -22px;
+	margin-bottom: -22px;
+	width: 110%;
+	margin-left: -16px;
 }
 
 .settings .salary-info {
