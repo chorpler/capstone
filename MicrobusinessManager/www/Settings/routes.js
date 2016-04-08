@@ -41,7 +41,6 @@
 							item.active = item.active === 0 ? false : true;
 							items.push(item);
 						}
-						console.log(items);
 						return items;
 					});
 				},
@@ -55,7 +54,6 @@
 							var item = response.rows.item(i);
 							items.push(item);
 						}
-						console.log(items);
 						return items;
 					});
 				}

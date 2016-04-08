@@ -59,7 +59,6 @@ angular.module('app.salary')
 		}
 
 		function editExpense (expense) {
-			console.log(expense);
 			vm.activeExpense = expense;
 			// vm.activeExpense.amount = Number(expense.amount);
 			tempExpense = angular.copy(expense);
@@ -81,7 +80,6 @@ angular.module('app.salary')
 					getCommission();
 					item.amount = vm.commission;
 					item.amount = Math.round(	item.amount * 100) / 100;
-					console.log('commission here',item.amount);
 
 				} else {
 					if (language.type === 'es') {
@@ -93,7 +91,6 @@ angular.module('app.salary')
 					}
 					item.amount = Number(vm.expectedSalary);
 					item.amount = Math.round(item.amount * 100) / 100;
-					console.log('amount', item.amount);
 				}
 				item.expType = 'variable';
 				item.date = new Date();
@@ -326,7 +323,6 @@ angular.module('app.salary')
 
 		function getCommission () {
 			Database.getCommission().then(function (response) {
-				console.log(response);
 				 vm.commission = response.commission;
 			});
 		}

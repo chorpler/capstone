@@ -432,11 +432,6 @@
 			paramsIncome = paramsIncome.concat(paramsIncome);
 
 			return deferred.promise.then(function () {
-				select('saleproduct').then(function (response) {
-					for (var i = response.rows.length - 1; i >= 0; i--) {
-						console.log(response.rows.item(0));
-					}
-				})
 				promises.push($cordovaSQLite.execute(db, queryIncomeItems, paramsIncome).then(function (response) {
 					for (var i = response.rows.length - 1; i >= 0; i--) {
 						incomeStatement.incomeItems.push(response.rows.item(i));

@@ -58,7 +58,6 @@
 							item.active = item.active === 0 ? false : true;
 							items.push(item);
 						}
-						console.log(items);
 						return items;
 					});
 				},
