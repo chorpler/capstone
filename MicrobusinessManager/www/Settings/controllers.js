@@ -97,7 +97,13 @@
 			});
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+			item.amount = item.amount && item.amount.replace ? 
+							Number(item.amount.replace(',','.')) : item.amount;
 			if (!item.id) {
 				Database.insert(salaryTable, [item.amount, item.type]).then(function (response) {
 					item.id = response.insertId;
@@ -183,7 +189,14 @@
 			vm.taxModal.remove();
 		}
 
-		function saveTaxEdit (item) {
+		function saveTaxEdit (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+			item.percentage = item.percentage && item.percentage.replace ?
+								Number(item.percentage.replace(',','.')) : item.percentage;
+
 			if (item.active === true) {
 				vm.tax_active = true;
 			} else {

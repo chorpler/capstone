@@ -70,7 +70,16 @@
 			showEditModal();
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+
+			item.quantity = item.quantity && item.quantity.replace ? Number(item.quantity.replace(',', '.')) : item.quantity;
+			item.cost = item.cost && item.cost.replace ? Number(item.cost.replace(',', '.')) : item.cost;
+			item.price = item.price && item.price.replace ? Number(item.price.replace(',', '.')) : item.price;
+
 			var deferred = $q.defer();
 			var productItem;
 			if (item.linkProduct && item.productid) {

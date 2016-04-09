@@ -1,21 +1,42 @@
 (function () {
-  angular.module('app')
-  .directive('selectClick', function() {
-    return {
-      restrict: 'A',
-      scope: true,
+	angular.module('app')
+	.directive('selectClick', selectClick)
+	.directive('smartFloat', smartFloat);
 
-      controller: function($scope, $element) {
+	function selectClick () {
+		return {
+			restrict: 'A',
+			scope: true,
 
-        $element.bind('click', function() {
-          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-        });
-        var select = $element.find('select');
-        select.bind('blur', function() {
-          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+			controller: function($scope, $element) {
+				$element.bind('click', function() {
+					cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
+				});
+				var select = $element.find('select');
+				select.bind('blur', function() {
+					cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+				});
+			}
+		};
+	};
 
-        });
-      }
-    };
-  });
+	function smartFloat () {
+		return {
+			require: 'ngModel',
+			link: function(scope, element, attrs, modelCtrl) {
+
+				modelCtrl.$parsers.push(function (inputValue) {
+
+					var transformedInput = inputValue ? inputValue.replace(/[^\d.,-]/g,'') : null;
+
+					if (transformedInput!=inputValue) {
+						modelCtrl.$setViewValue(transformedInput);
+						modelCtrl.$render();
+					}
+
+					return transformedInput;
+				});
+			}
+		};
+	}
 })();

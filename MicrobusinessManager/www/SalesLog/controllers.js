@@ -86,10 +86,19 @@
 			showEditModal();
 		}
 
-		function save (editedSale) {
+		function save (editedSale, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+
+			editedSale.amount = editedSale.amount && editedSale.amount.replace ?
+								Number(editedSale.amount.replace(',','.')) : editedSale.amount;
 			Database.update(saleTable, editedSale.id, [editedSale.amount, moment(editedSale.date).format('YYYY-MM-DD HH:mm:ss')])
 				.then(function () {
 					editedSale.products.forEach(function (saleProduct) {
+						saleProduct.quantity = saleProduct.quantity && saleProduct.quantity.replace ?
+												Number(saleProduct.quantity.replace(',','.')) : saleProduct.quantity;
 						Database.update(saleProductTable, saleProduct.id, [
 							saleProduct.saleid, saleProduct.productid, saleProduct.quantity
 						]);

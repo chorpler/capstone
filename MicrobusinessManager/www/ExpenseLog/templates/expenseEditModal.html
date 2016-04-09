@@ -12,13 +12,32 @@
 			<form name="expenseForm">
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"expense_name" | translate}}</span>
-					<input type="text" placeholder="{{'expense_name' | translate}}*" ng-model="expenselog.activeExpense.name" required="required">
+					<input type="text" name="name" placeholder="{{'expense_name' | translate}}*" ng-model="expenselog.activeExpense.name" required="required">
+					<div ng-show="expenseForm.name.$touched">
+						<span ng-show="expenseForm.name.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+					</div>
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"expense_amount" | translate}}</span>
-					<input type="number" placeholder="{{'expense_amount' | translate}}*" ng-model="expenselog.activeExpense.amount" required="required">
+					<input 	type="text"
+							smart-float 
+							name="amount"
+						   	ng-pattern="numberPattern"
+							placeholder="{{'expense_amount' | translate}}*" 
+							ng-model="expenselog.activeExpense.amount" 
+							required="required">
+					<div ng-show="expenseForm.amount.$touched">
+						<span ng-show="expenseForm.amount.$error.pattern" class="form-error">
+							{{"invalid_number_error" | translate}}
+						</span>
+						<span ng-show="expenseForm.amount.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+					</div>
 				</label>
-				<label class="item-stacked-label">
+				<label class="item item-stacked-label">
 					<span class="input-label expense_type">{{"expense_type" | translate}}*</span>
 					<div class="row types">
 						<div class="col">
@@ -27,6 +46,11 @@
 						<div class="col">
 							<ion-radio ng-model="expenselog.activeExpense.expType" ng-click="expenselog.isCheckboxChecked()" ng-value="'variable'">{{"expense_variable" | translate}}</ion-radio>
 						</div>
+					</div>
+					<div ng-show="expenseForm.$submitted">
+						<span ng-show="!expenselog.activeExpense.expType" class="form-error">
+							{{"required_error" | translate}}
+						</span>
 					</div>
 				</label>
 				<label class="item item-input item-floating-label">
@@ -37,11 +61,9 @@
 					<span class="input-label">{{"inv_exp_sal_date" | translate}}<span ng-show="!expenselog.editviewOpen">*</span></span>
 		    		<input placeholder="{{'inv_exp_sal_date' | translate}}" type="date" ng-model="expenselog.activeExpense.date" required="required">
 		  		</label>
-
+				<input type="submit" class="button button-block button-balanced" ng-click="expenselog.save(expenselog.activeExpense, expenseForm, $event)" value="{{'save_button' | translate}}"></input>
+				<button class="button button-block button-assertive" ng-click="expenselog.cancel(expenselog.activeExpense)">{{"cancel_button" | translate}}</button>
 			</form>
 		</div>
-		<button class="button button-block button-balanced" ng-click="expenselog.save(expenselog.activeExpense)" ng-disabled="expenseForm.$invalid">{{"save_button" | translate}}
-		</button>
-		<button class="button button-block button-assertive" ng-click="expenselog.cancel(expenselog.activeExpense)">{{"cancel_button" | translate}}</button>
 	</ion-content>
 </ion-modal-view>

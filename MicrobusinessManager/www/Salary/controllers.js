@@ -28,6 +28,7 @@ angular.module('app.salary')
 		vm.showAlert = showAlert;
 		vm.showAlertCommission = showAlertCommission;
 		vm.showCommissionInfo = showCommissionInfo;
+		vm.adjustExpectedSalary = adjustExpectedSalary;
 
 		var tempExpense = null;
 		var language = {};
@@ -66,7 +67,15 @@ angular.module('app.salary')
 			showEditModal();
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+
+			item.amount = item.amount && item.amount.replace ? 
+							Number(item.amount.replace(',','.')) : item.amount;
+							
 			if (item === null) {
 				item = {};
 				if (vm.paymentType === 'commission') {
@@ -78,7 +87,8 @@ angular.module('app.salary')
 						item.comments = 'my commission of ' + vm.expectedSalary + '%';
 					}
 					getCommission();
-					item.amount = vm.commission;
+					item.amount = vm.commission && vm.commission.replace ? 
+									Number(vm.commission.replace(',', '.')) : vm.commission;
 					item.amount = Math.round(	item.amount * 100) / 100;
 
 				} else {
@@ -90,7 +100,6 @@ angular.module('app.salary')
 						item.comments = 'my salary';
 					}
 					item.amount = Number(vm.expectedSalary);
-					item.amount = Math.round(item.amount * 100) / 100;
 				}
 				item.expType = 'variable';
 				item.date = new Date();
@@ -202,6 +211,12 @@ angular.module('app.salary')
 					return previousValue + currentExpense.amount;
 				}, 0);
 			});
+		}
+
+		function adjustExpectedSalary () {
+			vm.showAdjust = false;
+			vm.expectedSalary = vm.expectedSalary && vm.expectedSalary.replace ? 
+								Number(vm.expectedSalary.replace(',','.')) : vm.expectedSalary;
 		}
 
 		function getKeys (obj) {

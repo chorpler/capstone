@@ -98,7 +98,13 @@
 			showEditModal();
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+
+			item.amount = Number(item.amount.replace(',', '.'));
 			var key = $filter('date')(vm.activeExpense.date, 'mediumDate');
 			var oldKey = $filter('date')(tempExpense.date, 'mediumDate');
 

@@ -14,6 +14,22 @@
 .bold {
   font-weight: bold;
 }
+
+.form-error {
+  color: red;
+  font-size: .8em;
+  vertical-align: top;
+}
+
+.inline-container {
+  display: block;
+  text-align: left;
+}
+
+.input-container {
+  display: flex;
+}
+
 .button.button-stable {
   background-color: #d3d3d3;
 }
@@ -88,7 +104,6 @@
 .inventory-edit .categories,
 .product_edit .categories,
 .expensesEdit .expense_type {
-  margin-left: 16px;
   margin-top: 10px;
 }
 
@@ -98,7 +113,6 @@
   max-width: 200px;
   width: 35%;
   color: #444;
-  margin-left: 16px;
   margin-top: 10px;
 }
 

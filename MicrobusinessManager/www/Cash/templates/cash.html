@@ -1,21 +1,38 @@
 <ion-popover-view class="cash-popover">
-    <ion-header-bar>
-      <h1 class="title cash-title">{{"cash_title" | translate}}</h1>
-      <button class="button button-assertive icon ion-android-close" ng-click="app.cancel()"></button>
-    </ion-header-bar>
-    <ion-content class="cash-container">
-      <div class="list">
-        <form name="cashForm">
-          <label class="item item-input">
-            <span class="input-label">{{"cash_amount" | translate}}</span>
-            <input type="number" placeholder="$" ng-model="app.cashInfusion.amount" required="required">
-          </label>
-          <label class="item item-input">
-            <span class="input-label">{{"cash_date" | translate}}</span>
-            <input type="date" ng-model="app.cashInfusion.date" required="required" required="required">
-          </label>
-        </form>
-      </div>
-			<button class="button button-block button-positive" ng-click="app.save(app.cashInfusion)" ng-disabled="cashForm.$invalid || app.cashInfusion.amount < 1">{{"save_button" | translate}}</button>
-    </ion-content>
+	<ion-header-bar>
+		<h1 class="title cash-title">{{"cash_title" | translate}}</h1>
+		<button class="button button-assertive icon ion-android-close" ng-click="app.cancel()"></button>
+	</ion-header-bar>
+	<ion-content class="cash-container">
+		<div class="list">
+			<form name="cashForm">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">{{"cash_amount" | translate}}</span>
+					<input 	type="text"
+							name="amount"
+							smart-float
+							ng-pattern="numberPattern"
+							step="0.01" 
+							placeholder="{{'cash_amount' | translate}}" 
+							ng-model="app.cashInfusion.amount" 
+							required="required">
+					<div ng-show="cashForm.amount.$touched">
+						<span ng-show="cashForm.amount.$error.pattern" class="form-error">
+							{{"invalid_number_error" | translate}}
+						</span>
+						<span ng-show="cashForm.amount.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+					</div>
+
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"cash_date" | translate}}</span>
+					<input type="date" ng-model="app.cashInfusion.date" required="required" required="required">
+				</label>
+				<input type="submit" class="button button-block button-positive" ng-click="app.save(app.cashInfusion, cashForm, $event)" value="{{'save_button' | translate}}"></input>
+			</form>
+		</div>
+		
+	</ion-content>
 </ion-popover-view>

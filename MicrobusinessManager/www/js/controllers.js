@@ -25,7 +25,12 @@
 			});
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+			item.amount = item.amount && item.replace ? Number(item.amount.replace(',', '.')) : item.amount;
 			Database.insert('cashInfusion', [item.amount,  moment(item.date).format('YYYY-MM-DD HH:mm:ss')])
 			.then(function (response) {
 				CashBalance.updateCashBalance();

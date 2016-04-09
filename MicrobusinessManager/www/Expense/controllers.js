@@ -59,7 +59,13 @@ angular.module('app.expenses')
 			showEditModal();
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+
+			item.amount = item.amount && item.amount.replace ? Number(item.amount.replace(',', '.')) : item.amount;
 
 			Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), 'other']).then(function (response) {
 				CashBalance.updateCashBalance();
