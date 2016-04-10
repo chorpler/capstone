@@ -20,33 +20,33 @@
 			<div class="item item-text-wrap">
 				<div class="salary-container" ng-if="salary.salary.length > 0">
 					<div class="row">
-						<div class="total-container" 
-							 ng-if="!salary.showAdjust && salary.paymentType === 'salary'" 
+						<div class="total-container"
+							 ng-if="!salary.showAdjust && salary.paymentType === 'salary'"
 							 ng-class="{'notAllowed': salary.expectedSalary > salary.cashAvailable}">
 							{{salary.expectedSalary | currency}}
 						</div>
-						<div class="total-container" 
-							 ng-if="!salary.showAdjust && salary.paymentType === 'commission'" 
+						<div class="total-container"
+							 ng-if="!salary.showAdjust && salary.paymentType === 'commission'"
 							 ng-class="{'notAllowed': salary.expectedSalary > 100 || salary.commission > salary.cashAvailable}">
 							{{salary.expectedSalary}}%
 						</div>
-						<a 	class="button button-icon ion-ios-information info" 
+						<a 	class="button button-icon ion-ios-information info"
 							ng-if="(salary.expectedSalary > salary.cashAvailable || salary.commission > salary.cashAvailable) &amp;&amp; !salary.showAdjust &amp;&amp; salary.paymentType === 'salary'" ng-click="salary.showAlert()"></a>
-						<a 	class="button button-icon ion-ios-information info" 
-							ng-if="salary.commission > salary.cashAvailable" 
+						<a 	class="button button-icon ion-ios-information info"
+							ng-if="salary.commission > salary.cashAvailable"
 							ng-click="salary.showAlertCommission()"></a>
-						<a 	class="button button-icon ion-ios-information info" 
+						<a 	class="button button-icon ion-ios-information info"
 							ng-if="salary.paymentType === 'commission' && salary.commission <= salary.cashAvailable"
 							ng-click="salary.showCommissionInfo()"></a>
 						<form name="adjustSalary">
 							<div class="item item-input-inset salary-adjuster" ng-if="salary.showAdjust">
 								<label class="item-input-wrapper salary-input">
-									<input  type="text" 
+									<input  type="text"
 											name="expectedSalary"
 											smart-float
 											ng-pattern="numberPattern"
-											step="0.01" 
-											ng-model="salary.expectedSalary" 
+											step="0.01"
+											ng-model="salary.expectedSalary"
 											placeholder="{{'salary_option' | translate}}"
 											required="required">
 									<div ng-show="adjustSalary.expectedSalary.$touched || adjustSalary.$submitted">
@@ -60,7 +60,7 @@
 								</label>
 								<a 	class="button button-outline button-small icon ion-android-done"
 									ng-class="{'button-assertive' : adjustSalary.$invalid, 'button-balanced' : !adjustSalary.$invalid}"
-									ng-disabled="adjustSalary.$invalid || (salary.expectedSalary > 100 &amp;&amp; salary.paymentType === 'commission')" 
+									ng-disabled="adjustSalary.$invalid || (salary.expectedSalary > 100 &amp;&amp; salary.paymentType === 'commission')"
 									ng-click="salary.adjustExpectedSalary()">
 								</a>
 							</div>
@@ -68,16 +68,16 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<button class="button button-full button-positive record-button" 
-									ng-hide="salary.showAdjust" 
-									ng-disabled="(salary.expectedSalary > salary.cashAvailable || salary.commission > salary.cashAvailable)" 
-									ng-click="salary.save(salary.activeExpense)">
+							<button class="button button-full button-positive record-button"
+									ng-hide="salary.showAdjust"
+									ng-disabled="(salary.expectedSalary > salary.cashAvailable || salary.commission > salary.cashAvailable)"
+									ng-click="salary.save(salary.activeExpense, true)">
 									{{"salary_register" | translate}}
 							</button>
 						</div>
 						<div class="col">
-							<button class="button button-full button-positive adjust-button" 
-									ng-hide="salary.showAdjust || salary.paymentType === 'commission'" 
+							<button class="button button-full button-positive adjust-button"
+									ng-hide="salary.showAdjust || salary.paymentType === 'commission'"
 									ng-click="salary.showAdjust = true">
 									{{"salary_adjust" | translate}}
 							</button>
@@ -96,7 +96,7 @@
 				<div class="item item-divider" ng-hide="results.length < 1">
 					{{date | date:'mediumDate'}}
 				</div>
-				<ion-item ng-click="salary.editExpense(expense)" 
+				<ion-item ng-click="salary.editExpense(expense)"
 						  ng-repeat="expense in salary.reformattedList[date] | filter:salary.search as results">
 					<div class="card-container">
 						<a class="item item-icon-right">

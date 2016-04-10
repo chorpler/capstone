@@ -67,15 +67,18 @@ angular.module('app.salary')
 			showEditModal();
 		}
 
-		function save (item, form, $event) {
-			$event.stopPropagation();
-			if (form && form.$invalid) {
-				return;
+		function save (item, fromSalary, form, $event) {
+			if (!fromSalary) {
+				$event.stopPropagation();
+				if (form && form.$invalid) {
+					return;
+				}
+			}
+			if (item) {
+				item.amount = item.amount && item.amount.replace ?
+				Number(item.amount.replace(',','.')) : item.amount;				
 			}
 
-			item.amount = item.amount && item.amount.replace ? 
-							Number(item.amount.replace(',','.')) : item.amount;
-							
 			if (item === null) {
 				item = {};
 				if (vm.paymentType === 'commission') {
@@ -87,7 +90,7 @@ angular.module('app.salary')
 						item.comments = 'my commission of ' + vm.expectedSalary + '%';
 					}
 					getCommission();
-					item.amount = vm.commission && vm.commission.replace ? 
+					item.amount = vm.commission && vm.commission.replace ?
 									Number(vm.commission.replace(',', '.')) : vm.commission;
 					item.amount = Math.round(	item.amount * 100) / 100;
 
@@ -215,7 +218,7 @@ angular.module('app.salary')
 
 		function adjustExpectedSalary () {
 			vm.showAdjust = false;
-			vm.expectedSalary = vm.expectedSalary && vm.expectedSalary.replace ? 
+			vm.expectedSalary = vm.expectedSalary && vm.expectedSalary.replace ?
 								Number(vm.expectedSalary.replace(',','.')) : vm.expectedSalary;
 		}
 

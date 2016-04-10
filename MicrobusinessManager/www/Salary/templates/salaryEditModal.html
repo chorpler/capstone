@@ -20,13 +20,13 @@
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"salary_amount" | translate}}*</span>
-					<input 	type="text" 
+					<input 	type="text"
 							name="amount"
 							smart-float
 							ng-pattern="numberPattern"
-							step="0.01" 
-							placeholder="{{'salary_amount' | translate}}*" 
-							ng-model="salary.activeExpense.amount" 
+							step="0.01"
+							placeholder="{{'salary_amount' | translate}}*"
+							ng-model="salary.activeExpense.amount"
 							required="required">
 					<div ng-show="salaryForm.amount.$touched || salaryForm.$submitted">
 						<span ng-show="salaryForm.amount.$error.pattern" class="form-error">
@@ -57,7 +57,7 @@
 						</span>
 					</div>
 				</div>
-				<input type="submit" class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense, salaryForm, $event)" value="{{'save_button' | translate}}">
+				<input type="submit" class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense, false, salaryForm, $event)" value="{{'save_button' | translate}}">
 				<button class="button button-block button-assertive" ng-click="salary.cancel(salary.activeExpense)">{{"cancel_button" | translate}}</button>
 			</form>
 		</div>

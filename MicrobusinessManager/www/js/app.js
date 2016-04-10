@@ -366,7 +366,7 @@
 			tax_active: "Activo",
 			tax_enabled: "Habilitado",
 			settings_acknowledgment: "Reconocimiento",
-			required_error: 'No puedes dejar este campo en blanco',
+			required_error: 'Campo Requerido',
 			invalid_number_error: 'Número no válido',
 			negative_error: 'Número negativo no permitida',
 			out_of_range_error: 'Fuera de rango',
