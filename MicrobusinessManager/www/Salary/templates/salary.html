@@ -28,7 +28,7 @@
 						<div class="total-container"
 							 ng-if="!salary.showAdjust && salary.paymentType === 'commission'"
 							 ng-class="{'notAllowed': salary.expectedSalary > 100 || salary.commission > salary.cashAvailable}">
-							{{salary.expectedSalary}}%
+							{{salary.expectedSalary | number:2}}%
 						</div>
 						<a 	class="button button-icon ion-ios-information info"
 							ng-if="(salary.expectedSalary > salary.cashAvailable || salary.commission > salary.cashAvailable) &amp;&amp; !salary.showAdjust &amp;&amp; salary.paymentType === 'salary'" ng-click="salary.showAlert()"></a>
