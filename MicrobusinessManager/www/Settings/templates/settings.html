@@ -45,7 +45,7 @@
                   <span class="salary-name">{{item.type === 'commission' ? "commission_option" : "salary_option" | translate}}</span>
                 </div>
                 <div class="col">
-                  <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount}}%</span>
+                  <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount | number:2}}%</span>
                   <span class="salary-info" ng-if="item.type === 'salary'">{{item.amount | currency}}</span>
                 </div>
               </div>
