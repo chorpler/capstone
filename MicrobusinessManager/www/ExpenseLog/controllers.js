@@ -16,6 +16,7 @@
 		vm.endDate = endDate;
 		vm.timeFrame = timeFrame;
 		vm.date = Date.now();
+		vm.submitted = false;
 
 		vm.editExpense = editExpense;
 		vm.save = save;
@@ -104,6 +105,8 @@
 				return;
 			}
 
+			vm.submitted = true;
+
 			item.amount = Number(item.amount.replace(',', '.'));
 			var key = $filter('date')(vm.activeExpense.date, 'mediumDate');
 			var oldKey = $filter('date')(tempExpense.date, 'mediumDate');
@@ -136,9 +139,11 @@
 			vm.activeExpense = null;
 			updateTotal();
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function cancel () {
+			vm.submitted = true;
 			if (vm.activeExpense) {
 				vm.activeExpense.name = tempExpense.name;
 				vm.activeExpense.amount = tempExpense.amount;
@@ -149,6 +154,7 @@
 			}
 
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function addNewExpense () {

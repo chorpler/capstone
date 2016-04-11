@@ -19,10 +19,10 @@
 								name="amount"
 								smart-float
 								ng-pattern="numberPattern"
-								required="required" 
+								required="required"
 								ng-model="saleslog.currentSale.amount" />
 					</div>
-					<div ng-show="salesForm.amount.$touched || salesForm.$submitted">
+					<div ng-show="(salesForm.name.$touched || salesForm.$submitted) && !saleslog.submitted">
 						<span ng-show="salesForm.amount.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
 						</span>
@@ -36,14 +36,14 @@
 					<label class="item item-input inline-container">
 						<div class="input-container">
 							<span class="input-label">{{"reports_qty" | translate}}</span>
-							<input 	type="text" 
+							<input 	type="text"
 									name="quantity"
 									smart-float
 									ng-pattern="numberPattern"
-									required="required" 
+									required="required"
 									ng-model="product.quantity"/>
 						</div>
-						<div ng-show="salesForm.quantity.$touched || salesForm.$submitted">
+						<div ng-show="(salesForm.name.$touched || salesForm.$submitted) && !saleslog.submitted">
 							<span ng-show="salesForm.quantity.$error.pattern" class="form-error">
 								{{"invalid_number_error" | translate}}
 							</span>
@@ -54,7 +54,7 @@
 					</label>
 				</div>
 				<input type="submit" class="button button-block button-balanced" ng-click="saleslog.save(saleslog.currentSale, salesForm, $event)" value="{{'save_button' | translate}}">
-				<button class="button button-block button-assertive" 
+				<button class="button button-block button-assertive"
 						ng-click="saleslog.cancel(saleslog.currentSale)">
 					{{"cancel_button" | translate}}
 				</button>

@@ -9,6 +9,8 @@
 		vm.products            = products;
 		vm.categories          = categories;
 		vm.filters             = {};
+		vm.invalidTotal				 = false;
+		vm.submitted					 = false;
 
 		vm.addProduct          = addProduct;
 		vm.removeProduct       = removeProduct;
@@ -26,7 +28,7 @@
 		var saleTable = 'sale';
 		var saleProductTable = 'saleproduct';
 		var tempEditProduct    = null;
-		var tempTotal = 0;
+		var absoluteTotal = 0;
 
 		function init () {
 			vm.saleDate           = new Date();
@@ -85,7 +87,7 @@
 			product.count += 1;
 			vm.productCount += 1;
 			vm.saleTotal += product.saleprice;
-			tempTotal = vm.saleTotal;
+			absoluteTotal = vm.saleTotal;
 		}
 
 		function removeProduct (product) {
@@ -93,7 +95,7 @@
 				product.count -= 1;
 				vm.productCount -= 1;
 				vm.saleTotal -= product.saleprice;
-				tempTotal = vm.saleTotal;
+				absoluteTotal = vm.saleTotal;
 			}
 		}
 
@@ -103,7 +105,7 @@
 			}
 
 			vm.saleProducts = vm.products.filter(hasCount);
-			vm.displayTotal = vm.saleTotal;
+			vm.displayTotal = Math.round(	vm.saleTotal * 100) / 100;
 
 			showCheckoutModal();
 		}
@@ -113,19 +115,25 @@
 		}
 
 		function overrideSaleTotal (price) {
-			var price = price && price.replace ? price.replace(',','.') : price;
+			price = price && price.replace ? Number(price.replace(',','.')) : Number(price);
+			console.log(price);
 
-			if (price && parseFloat(price) !== NaN) {
+			if (price && !isNaN(parseFloat(price))) {
 				vm.saleTotal = Number(price);
 				updateSalesPrices();
-				tempTotal = price;
+				vm.invalidTotal = false;
+				// absoluteTotal = Number(price);
+			} else {
+				vm.invalidTotal = true;
 			}
 		}
 
 		function updateSalesPrices() {
 			var calcTotal = 0;
 			vm.saleProducts.forEach(function (product) {
-				product.saleprice = parseFloat(((vm.saleTotal * ((product.saleprice * product.count) / tempTotal)) / product.count).toFixed(2));
+				var temp = parseFloat(((vm.saleTotal * ((product.absoluteSalePrice * product.count) / absoluteTotal)) / product.count).toFixed(2));
+				product.saleprice = isNaN(temp) || temp === 0 ? product.saleprice : temp;
+				console.log(product.saleprice, vm.saleTotal, product.saleprice, product.count, absoluteTotal);
 				calcTotal += product.saleprice * product.count;
 			});
 
@@ -194,23 +202,27 @@
 				return;
 			}
 
+			vm.submitted = true;
+
 			vm.saleTotal = vm.saleProducts.reduce(function(total, product) {
 				product.saleprice = product.saleprice && product.saleprice.replace ?
 									Number(product.saleprice.replace(',','.')) : product.saleprice;
 				product.count = product.count && product.count.replace ?
 								Number(product.count.replace(',','.')) : product.count;
+				product.absoluteSalePrice = product.saleprice;
 				return total + (product.saleprice * product.count);
 			}, 0);
 			vm.saleTotal = parseFloat(vm.saleTotal.toFixed(2));
 
-			tempTotal = vm.saleTotal;
+			absoluteTotal = vm.saleTotal;
 			vm.saleProductEditModal.remove();
+			vm.submitted = false;
 		}
 
-		function cancelEditSaleProduct() {
+		function cancelEditSaleProduct(form, $event) {
 			vm.currentEditProduct.count = tempEditProduct.count;
 			vm.currentEditProduct.saleprice = tempEditProduct.saleprice;
-			doneEditSaleProduct();
+			doneEditSaleProduct(form, $event);
 		}
 
 		function saveSale (form, $event) {
@@ -218,6 +230,7 @@
 			if (form && form.$invalid) {
 				return;
 			}
+			vm.submitted = true;
 			vm.saleTotal = vm.saleTotal && vm.saleTotal.replace ?
 							Number(vm.saleTotal.replace(',','.')) : vm.saleTotal;
 			var saleTotal = vm.saleTotal + (vm.saleTotal * vm.tax_rate/100);
@@ -257,6 +270,7 @@
 					resetSale();
 				});
 			});
+			vm.submitted = false;
 		}
 
 		function resetSale () {

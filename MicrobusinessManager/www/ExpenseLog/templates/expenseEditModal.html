@@ -13,7 +13,7 @@
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"expense_name" | translate}}</span>
 					<input type="text" name="name" placeholder="{{'expense_name' | translate}}*" ng-model="expenselog.activeExpense.name" required="required">
-					<div ng-show="expenseForm.name.$touched">
+					<div ng-show="(expenseForm.name.$touched || expenseForm.$submitted) && !expenses.submitted">
 						<span ng-show="expenseForm.name.$error.required" class="form-error">
 							{{"required_error" | translate}}
 						</span>
@@ -22,13 +22,13 @@
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"expense_amount" | translate}}</span>
 					<input 	type="text"
-							smart-float 
+							smart-float
 							name="amount"
 						   	ng-pattern="numberPattern"
-							placeholder="{{'expense_amount' | translate}}*" 
-							ng-model="expenselog.activeExpense.amount" 
+							placeholder="{{'expense_amount' | translate}}*"
+							ng-model="expenselog.activeExpense.amount"
 							required="required">
-					<div ng-show="expenseForm.amount.$touched">
+					<div ng-show="(expenseForm.name.$touched || expenseForm.$submitted) && !expenses.submitted">
 						<span ng-show="expenseForm.amount.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
 						</span>
@@ -47,7 +47,7 @@
 							<ion-radio ng-model="expenselog.activeExpense.expType" ng-click="expenselog.isCheckboxChecked()" ng-value="'variable'">{{"expense_variable" | translate}}</ion-radio>
 						</div>
 					</div>
-					<div ng-show="expenseForm.$submitted">
+					<div ng-show="expenseForm.$submitted && !expenses.submitted">
 						<span ng-show="!expenselog.activeExpense.expType" class="form-error">
 							{{"required_error" | translate}}
 						</span>

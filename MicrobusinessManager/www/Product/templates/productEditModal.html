@@ -13,7 +13,7 @@
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"product_name" | translate}}</span>
 					<input type="text" name="name" placeholder="{{'product_name' | translate}}*" ng-model="products.activeItem.name" required="required">
-					<div ng-show="productsForm.name.$touched || productsForm.$submitted">
+					<div ng-show="(productsForm.name.$touched || productsForm.$submitted) && !products.submitted">
 						<span ng-show="productsForm.name.$error.required" class="form-error">
 							{{"required_error" | translate}}
 						</span>
@@ -26,10 +26,10 @@
 							step="0.01"
 							smart-float
 							ng-pattern="numberPattern"
-							placeholder="{{'product_sales_price' | translate}}*" 
-							ng-model="products.activeItem.price" 
+							placeholder="{{'product_sales_price' | translate}}*"
+							ng-model="products.activeItem.price"
 							required="required">
-					<div ng-show="productsForm.salesPrice.$touched || productsForm.$submitted">
+					<div ng-show="(productsForm.name.$touched || productsForm.$submitted) && !products.submitted">
 						<span ng-show="productsForm.salesPrice.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
 						</span>
@@ -48,7 +48,7 @@
 							<ion-radio ng-model="products.pick" ng-value="'choose'" ng-click="products.chooseCategory($event)">{{"product_Category_choose" | translate}}</ion-radio>
 						</div>
 					</div>
-					<div ng-show="productsForm.$submitted">
+					<div ng-show="productsForm.$submitted && !products.submitted">
 						<span ng-show="!products.activeItem.category" class="form-error">
 							{{"required_error" | translate}}
 						</span>
@@ -65,15 +65,15 @@
 				<ion-checkbox ng-model="products.activeItem.linkInventory">{{"product_add_inventory" | translate}}</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
 					<span class="input-label">{{"inventory_quantity" | translate}}</span>
-					<input 	type="text" 
+					<input 	type="text"
 							name="quantity"
 							smart-field
 							ng-pattern="numberPattern"
 							step="0.01"
-							placeholder="{{'inventory_quantity' | translate}}*" 
-							ng-model="products.activeItem.quantity" 
+							placeholder="{{'inventory_quantity' | translate}}*"
+							ng-model="products.activeItem.quantity"
 							ng-required="products.activeItem.linkInventory">
-					<div ng-show="productsForm.quantity.$touched || productsForm.$submitted">
+					<div ng-show="(productsForm.name.$touched || productsForm.$submitted) && !products.submitted">
 						<span ng-show="productsForm.quantity.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
 						</span>
@@ -84,15 +84,15 @@
 				</label>
 				<label class="item item-input item-floating-label" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
 					<span class="input-label">{{"inventory_total_cost" | translate}}</span>
-					<input 	type="text" 
+					<input 	type="text"
 							name="cost"
 							smart-field
 							ng-pattern="numberPattern"
-							step="0.01" 
-							placeholder="{{'inventory_total_cost' | translate}}*" 
-							ng-model="products.activeItem.cost" 
+							step="0.01"
+							placeholder="{{'inventory_total_cost' | translate}}*"
+							ng-model="products.activeItem.cost"
 							ng-required="products.activeItem.linkInventory">
-					<div ng-show="productsForm.cost.$touched || productsForm.$submitted">
+					<div ng-show="(productsForm.name.$touched || productsForm.$submitted) && !products.submitted">
 						<span ng-show="productsForm.cost.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
 						</span>
@@ -108,11 +108,11 @@
 				<label class="item item-input" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
 					<span class="input-label">{{"inv_exp_sal_date" | translate}}*</span>
 	    			<input placeholder="{{'inv_exp_sal_date' | translate}}" name="date" type="date" ng-model="products.activeItem.date" required="required">
-	    			<div ng-show="productsForm.$submitted">
-						<span ng-show="productsForm.date.$error.required" class="form-error">
-							{{"required_error" | translate}}
-						</span>
-					</div>
+	    			<div ng-show="productsForm.$submitted && !products.submitted">
+							<span ng-show="productsForm.date.$error.required" class="form-error">
+								{{"required_error" | translate}}
+							</span>
+						</div>
 	    		</label>
 				<input type="submit" class="button button-block button-balanced" ng-click="products.save(products.activeItem, productsForm, $event)" value="{{'save_button' | translate}}">
 				<button class="button button-block button-assertive" ng-click="products.cancel(products.activeItem)">{{"cancel_button" | translate}}</button>

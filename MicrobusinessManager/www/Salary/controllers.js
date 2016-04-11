@@ -16,6 +16,7 @@ angular.module('app.salary')
 		vm.commission = null;
 		vm.cashAvailable = cashOnHand;
 		vm.date = Date.now();
+		vm.submitted = false;
 
 		vm.editExpense = editExpense;
 		vm.save = save;
@@ -74,9 +75,10 @@ angular.module('app.salary')
 					return;
 				}
 			}
+			vm.submitted = true;
 			if (item) {
 				item.amount = item.amount && item.amount.replace ?
-				Number(item.amount.replace(',','.')) : item.amount;				
+				Number(item.amount.replace(',','.')) : item.amount;
 			}
 
 			if (item === null) {
@@ -109,6 +111,7 @@ angular.module('app.salary')
 				item.type = 'salary';
 				vm.activeExpense = item;
 				tempExpense = item;
+				vm.submitted = false;
 			}
 
 			if (item.amount === 0 && vm.paymentType === 'commission') {

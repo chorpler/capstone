@@ -17,6 +17,7 @@
 		vm.cancel = cancel;
 		vm.editModal = null;
 		vm.showConfirm = showConfirm;
+		vm.submitted = false;
 
 		var tempSale = null;
 		var saleTable = 'sale';
@@ -92,6 +93,8 @@
 				return;
 			}
 
+			vm.submitted = true;
+
 			editedSale.amount = editedSale.amount && editedSale.amount.replace ?
 								Number(editedSale.amount.replace(',','.')) : editedSale.amount;
 			Database.update(saleTable, editedSale.id, [editedSale.amount, moment(editedSale.date).format('YYYY-MM-DD HH:mm:ss')])
@@ -106,6 +109,7 @@
 				});
 
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function deleteSale (sale) {

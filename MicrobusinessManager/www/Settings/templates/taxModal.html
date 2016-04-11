@@ -19,16 +19,16 @@
 						<div class="input-container">
 							<span class="input-label">{{"salary_percentage" | translate}}</span>
 							<input 	type="text"
-									name="taxPercent" 
+									name="taxPercent"
 									smart-float
 									ng-pattern="numberPattern"
-									step="0.01" 
-									placeholder="%" 
-									ng-model="settings.activeTax.percentage" 
-									ng-required="settings.activeTax.active" 
+									step="0.01"
+									placeholder="%"
+									ng-model="settings.activeTax.percentage"
+									ng-required="settings.activeTax.active"
 									class="self-payment">
 						</div>
-						<div ng-show="taxForm.taxPercent.$touched || taxForm.$submitted">
+						<div ng-show="(taxForm.name.$touched || taxForm.$submitted) && !settings.submitted">
 							<span ng-show="taxForm.taxPercent.$error.pattern" class="form-error">
 								{{"invalid_number_error" | translate}}
 							</span>
@@ -39,11 +39,11 @@
 					</label>
 				</li>
 			</ul>
-			<input 	type="submit" 
-					class="button button-block button-balanced" 
-					ng-click="settings.saveTaxEdit(settings.activeTax, taxForm, $event)" 
+			<input 	type="submit"
+					class="button button-block button-balanced"
+					ng-click="settings.saveTaxEdit(settings.activeTax, taxForm, $event)"
 					value="{{'save_button' | translate}}">
-			<button class="button button-block button-assertive" 
+			<button class="button button-block button-assertive"
 					ng-click="settings.cancelTaxEdit(settings.activeTax)">
 				{{"cancel_button" | translate}}
 			</button>

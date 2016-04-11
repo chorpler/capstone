@@ -10,9 +10,10 @@
 		vm.save = save;
 		vm.cancel = cancel;
 		vm.cashInfusion = {};
+		vm.submitted = false;
 
 		function init () {
-			
+
 		}
 
 		function showCash ($event) {
@@ -30,6 +31,7 @@
 			if (form && form.$invalid) {
 				return;
 			}
+			vm.submitted = true;
 			item.amount = item.amount && item.replace ? Number(item.amount.replace(',', '.')) : item.amount;
 			Database.insert('cashInfusion', [item.amount,  moment(item.date).format('YYYY-MM-DD HH:mm:ss')])
 			.then(function (response) {
@@ -38,11 +40,14 @@
 				return response.insertId;
 			});
 			vm.cashInf.remove();
+			vm.submitted = false;
 		}
 
 		function cancel () {
+			vm.submitted = true;
 			vm.cashInfusion = {};
 			vm.cashInf.remove();
+			vm.submitted = false;
 		}
 
 		$scope.$on('$destroy', function() {

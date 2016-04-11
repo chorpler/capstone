@@ -12,11 +12,11 @@
 							name="amount"
 							smart-float
 							ng-pattern="numberPattern"
-							step="0.01" 
-							placeholder="{{'cash_amount' | translate}}" 
-							ng-model="app.cashInfusion.amount" 
+							step="0.01"
+							placeholder="{{'cash_amount' | translate}}"
+							ng-model="app.cashInfusion.amount"
 							required="required">
-					<div ng-show="cashForm.amount.$touched">
+					<div ng-show="(cashForm.amount.$touched || cashForm.$submitted) && !app.submitted">
 						<span ng-show="cashForm.amount.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
 						</span>
@@ -33,6 +33,6 @@
 				<input type="submit" class="button button-block button-positive" ng-click="app.save(app.cashInfusion, cashForm, $event)" value="{{'save_button' | translate}}"></input>
 			</form>
 		</div>
-		
+
 	</ion-content>
 </ion-popover-view>

@@ -49,7 +49,7 @@
 											ng-model="salary.expectedSalary"
 											placeholder="{{'salary_option' | translate}}"
 											required="required">
-									<div ng-show="adjustSalary.expectedSalary.$touched || adjustSalary.$submitted">
+									<div ng-show="(adjustSalary.name.$touched || adjustSalary.$submitted) && !salary.submitted">
 										<span ng-show="adjustSalary.expectedSalary.$error.pattern" class="form-error">
 											{{"invalid_number_error" | translate}}
 										</span>

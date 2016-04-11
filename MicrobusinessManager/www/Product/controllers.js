@@ -16,6 +16,7 @@
 		vm.choose = false;
 		vm.enterCat = false;
 		vm.pick = '';
+		vm.submitted = false;
 
 		vm.editItem = editItem;
 		vm.save = save;
@@ -71,6 +72,8 @@
 			if (form && form.$invalid) {
 				return;
 			}
+
+			vm.submitted = true;
 
 			item.price = item.price && item.price.replace ? Number(item.price.replace(',', '.')) : item.price;
 			item.quantity = item.quantity && item.quantity.replace ? Number(item.quantity.replace(',', '.')) : item.quantity;
@@ -131,9 +134,11 @@
 			vm.show = false;
 			queryCategories = true;
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+			vm.submitted = false;
 		}
 
 		function cancel () {
+			vm.submitted = true;
 			if (vm.activeItem) {
 				vm.activeItem.name = tempItem.name;
 				vm.activeItem.quantity = tempItem.quantity;
@@ -150,6 +155,7 @@
 			}
 
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function addNewItem () {

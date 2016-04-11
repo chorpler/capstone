@@ -18,14 +18,14 @@
 								type="text"
 								smart-float
 								step="0.01"
-								ng-pattern="numberPattern" 
+								ng-pattern="numberPattern"
 								placeholder="{{'product_sales_price' | translate}}*"
 								ng-model="sales.currentEditProduct.saleprice"
 								required="required"
 								min="0"
 						/>
 					</div>
-					<div ng-show="saleProductForm.saleprice.$touched || saleProductForm.$submitted">
+					<div ng-show="(saleProductForm.name.$touched || saleProductForm.$submitted) && !sales.submitted">
 						<span ng-show="saleProductForm.saleprice.$error.required" class="form-error">
 							{{"required_error" | translate}}
 						</span>
@@ -44,7 +44,7 @@
 								type="text"
 								smart-float
 								step="0.01"
-								ng-pattern="numberPattern" 
+								ng-pattern="numberPattern"
 								placeholder="{{'inventory_quantity' | translate}}*"
 								ng-model="sales.currentEditProduct.count"
 								required="required"
@@ -52,7 +52,7 @@
 								max="{{sales.currentEditProduct.limit}}"
 						/>
 					</div>
-					<div ng-show="saleProductForm.quantity.$touched || saleProductForm.$submitted">
+					<div ng-show="(saleProductForm.name.$touched || saleProductForm.$submitted) && !sales.submitted">
 						<span ng-show="saleProductForm.quantity.$error.required" class="form-error">
 							{{"required_error" | translate}}
 						</span>
@@ -66,12 +66,12 @@
 					</div>
 				</label>
 				<div class="item">
-					<input 	type="submit" 
+					<input 	type="submit"
 							class="button button-block button-balanced"
 							ng-click="sales.doneEditSaleProduct(saleProductForm, $event)"
 							value="{{'save_button' | translate}}">
 					<button class="button button-block button-assertive"
-							ng-click="sales.cancelEditSaleProduct()">
+							ng-click="sales.cancelEditSaleProduct(saleProductForm, $event)">
 						{{"cancel_button" | translate}}
 					</button>
 				</div>

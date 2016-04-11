@@ -80,7 +80,7 @@
 
 	}
 
-	function config ($stateProvider, $urlRouterProvider, $translateProvider) {
+	function config ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
 		$stateProvider
 		.state('app', {
 			url: '/app',
@@ -89,6 +89,7 @@
 			controller: 'AppController',
 			controllerAs: 'app'
 		});
+		$ionicConfigProvider.views.swipeBackEnabled(false);
 
 
 		$translateProvider.translations('en', {

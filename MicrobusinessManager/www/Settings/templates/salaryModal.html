@@ -20,13 +20,13 @@
 							name="amount"
 							smart-float
 							ng-pattern="numberPattern"
-							step="0.01" 
-							placeholder="{{settings.activeSalary.type === 'salary' ? '($)' : '(%)'}}" 
-							ng-model="settings.activeSalary.amount" 
-							required="required" 
+							step="0.01"
+							placeholder="{{settings.activeSalary.type === 'salary' ? '($)' : '(%)'}}"
+							ng-model="settings.activeSalary.amount"
+							required="required"
 							class="self-payment">
 				</div>
-				<div ng-show="salaryForm.amount.$touched || salaryForm.$submitted">
+				<div ng-show="(salaryForm.name.$touched || salaryForm.$submitted) && !settings.submitted">
 					<span ng-show="salaryForm.amount.$error.pattern" class="form-error">
 						{{"invalid_number_error" | translate}}
 					</span>
@@ -36,7 +36,7 @@
 				</div>
 			</label>
 			<input 	type="submit"
-					class="button button-block button-balanced" 
+					class="button button-block button-balanced"
 					ng-click="settings.save(settings.activeSalary, salaryForm, $event)"
 					value="{{'save_button' | translate}}">
 			<button class="button button-block button-assertive" ng-click="settings.cancel(settings.activeSalary)">

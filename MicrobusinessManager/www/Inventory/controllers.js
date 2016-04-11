@@ -17,6 +17,7 @@
 		vm.choose = false;
 		vm.enterCat = false;
 		vm.pick = '';
+		vm.submitted = false;
 
 		vm.editItem = editItem;
 		vm.save = save;
@@ -46,7 +47,7 @@
 					language.type = languages[0].type;
 				}
 			}
-			
+
 		}
 
 		function showEditModal () {
@@ -75,6 +76,8 @@
 			if (form && form.$invalid) {
 				return;
 			}
+
+			vm.submitted = true;
 
 			item.quantity = item.quantity && item.quantity.replace ? Number(item.quantity.replace(',', '.')) : item.quantity;
 			item.cost = item.cost && item.cost.replace ? Number(item.cost.replace(',', '.')) : item.cost;
@@ -155,9 +158,11 @@
 			getCategories();
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function cancel () {
+			vm.submitted = true;
 			if (vm.activeItem) {
 				vm.activeItem.name = tempItem.name;
 				vm.activeItem.quantity = tempItem.quantity;
@@ -173,6 +178,7 @@
 			}
 
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function addNewItem () {

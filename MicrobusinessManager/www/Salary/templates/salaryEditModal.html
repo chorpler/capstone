@@ -12,7 +12,7 @@
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"salary_name" | translate}}*</span>
 					<input type="text" name="name" placeholder="{{'salary_name' | translate}}*" ng-model="salary.activeExpense.name" required="required">
-					<div ng-show="salaryForm.name.$touched || salaryForm.$submitted">
+					<div ng-show="(salaryForm.name.$touched || salaryForm.$submitted) && !salary.submitted">
 						<span ng-show="salaryForm.name.$error.required" class="form-error">
 							{{"required_error" | translate}}
 						</span>
@@ -28,7 +28,7 @@
 							placeholder="{{'salary_amount' | translate}}*"
 							ng-model="salary.activeExpense.amount"
 							required="required">
-					<div ng-show="salaryForm.amount.$touched || salaryForm.$submitted">
+					<div ng-show="(salaryForm.name.$touched || salaryForm.$submitted) && !salary.submitted">
 						<span ng-show="salaryForm.amount.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
 						</span>
@@ -44,7 +44,7 @@
 				<label class="item item-input">
 					<span class="input-label">{{"salary_Date" | translate}}*</span>
 					<input placeholder="{{'salary_Date' | translate}}*" name="date" type="date" ng-model="salary.activeExpense.date" required="required">
-					<div ng-show="salaryForm.$submitted">
+					<div ng-show="salaryForm.$submitted && !salary.submitted">
 						<span ng-show="salaryForm.date.$error.required" class="form-error">
 							{{"required_error" | translate}}
 						</span>

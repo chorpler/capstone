@@ -20,14 +20,14 @@
 				<ion-item>
 					<label class="item item-input">
 						<i class="icon ion-social-usd placeholder-icon"></i>
-						<input  type="text" 
+						<input  type="text"
 								name="saleTotal"
 								smart-float
-								ng-pattern="numberPattern" 
-								ng-model="sales.displayTotal" 
+								ng-pattern="numberPattern"
+								ng-model="sales.displayTotal"
 								ng-change="sales.overrideSaleTotal(sales.displayTotal)"
 								required="required">
-						<div ng-show="salesRegisterForm.saleTotal.$touched || salesRegisterForm.$submitted">
+						<div ng-show="(salesRegisterForm.name.$touched || salesRegisterForm.$submitted) && !sales.submitted">
 							<span ng-show="salesRegisterForm.saleTotal.$error.pattern" class="form-error">
 								{{"invalid_number_error" | translate}}
 							</span>
@@ -39,18 +39,20 @@
 				</ion-item>
 
 				<ion-item>
-					<input 	type="submit" 
-							class="button button-block button-balanced" 
-							ng-click="sales.saveSale(salesRegisterForm, $event)" 
+					<input 	type="submit"
+							ng-disabled="sales.invalidTotal"
+							class="button button-block button-balanced"
+							ng-click="sales.saveSale(salesRegisterForm, $event)"
 							ng-if="sales.activeTax"
-							value="{{'sales_record' | translate}} $ {{sales.saleTotal + (sales.saleTotal * sales.tax_rate/100) | number:2}}">
-						
-					<input 	type="submit" 
-							class="button button-block button-balanced" 
-							ng-click="sales.saveSale(salesRegisterForm, $event)" 
+							value="{{'sales_record' | translate}} $ {{!sales.invalidTotal ? sales.saleTotal + (sales.saleTotal * sales.tax_rate/100) : 0 | number:2}}">
+
+					<input 	type="submit"
+							ng-disabled="sales.invalidTotal"
+							class="button button-block button-balanced"
+							ng-click="sales.saveSale(salesRegisterForm, $event)"
 							ng-if="!sales.activeTax"
-							value="{{'sales_record' | translate}} $ {{sales.saleTotal | number:2}}">
-						
+							value="{{'sales_record' | translate}} $ {{!sales.invalidTotal ? sales.saleTotal : 0 | number:2}}">
+
 					<div class="center" ng-show="sales.activeTax">
 						{{"including_tax" | translate}}
 					</div>
