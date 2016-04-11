@@ -19,7 +19,7 @@
 	var languageTable = 'languages';
 	var selectedLanguage = {};
 	var items = [];
-	function run ($ionicPlatform, Database, $translate, tmhDynamicLocale) {
+	function run ($rootScope, $ionicPlatform, Database, $translate, tmhDynamicLocale) {
 		$ionicPlatform.ready(function () {
 			Database.select(languageTable).then(function (response) {
 				if (response.rows.length === 0) {
@@ -75,10 +75,12 @@
 			if (window.StatusBar) {
 				StatusBar.styleDefault();
 			}
+			$rootScope.numberPattern = '[0-9]+([,\.][0-9]+)?';
 		});
+
 	}
 
-	function config ($stateProvider, $urlRouterProvider, $translateProvider) {
+	function config ($stateProvider, $urlRouterProvider, $translateProvider, $ionicConfigProvider) {
 		$stateProvider
 		.state('app', {
 			url: '/app',
@@ -87,6 +89,7 @@
 			controller: 'AppController',
 			controllerAs: 'app'
 		});
+		$ionicConfigProvider.views.swipeBackEnabled(false);
 
 
 		$translateProvider.translations('en', {
@@ -222,8 +225,12 @@
 			tax_inactive: "Inactive",
 			tax_active: "Active",
 			tax_enabled: "Enabled",
-			settings_acknowledgment: "Acknowledgments"
-
+			settings_acknowledgment: "Acknowledgments",
+			required_error: 'Required Field',
+			invalid_number_error: 'Invalid Number',
+			negative_error: 'Negative number not allowed',
+			out_of_range_error: 'Out of range',
+			commission_too_high_error: 'Commission cannot be higher than 100%'
 		});
 
 		$translateProvider.translations('es', {
@@ -359,7 +366,12 @@
 			tax_inactive: "Inactivo",
 			tax_active: "Activo",
 			tax_enabled: "Habilitado",
-			settings_acknowledgment: "Reconocimiento"
+			settings_acknowledgment: "Reconocimiento",
+			required_error: 'Campo Requerido',
+			invalid_number_error: 'Número no válido',
+			negative_error: 'Número negativo no permitida',
+			out_of_range_error: 'Fuera de rango',
+			commission_too_high_error: 'La Comisión no puede ser superior al 100%'
 
 		});
 

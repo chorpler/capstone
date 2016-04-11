@@ -13,6 +13,7 @@ angular.module('app.expenses')
 		vm.expenses = '';
 		vm.date = Date.now();
 		vm.activeExpense = {};
+		vm.submitted = false;
 
 		vm.editExpense = editExpense;
 		vm.save = save;
@@ -36,7 +37,7 @@ angular.module('app.expenses')
 					language.type = languages[0].type;
 				}
 			}
-			
+
 
 			vm.ischecked = false;
 			updateTotal();
@@ -59,7 +60,15 @@ angular.module('app.expenses')
 			showEditModal();
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+
+			vm.submitted = true;
+
+			item.amount = item.amount && item.amount.replace ? Number(item.amount.replace(',', '.')) : item.amount;
 
 			Database.insert(expenseTable, [item.name, item.amount, item.expType, item.comments, moment(item.date).format('YYYY-MM-DD HH:mm:ss'), 'other']).then(function (response) {
 				CashBalance.updateCashBalance();
@@ -84,11 +93,14 @@ angular.module('app.expenses')
 			vm.ischecked = false;
 			vm.editModal.remove();
 			showAlert();
+			vm.submitted = false;
 		}
 
 		function cancel () {
+			vm.submitted = true;
 			vm.activeExpense = null;
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function addNewExpense (expense) {

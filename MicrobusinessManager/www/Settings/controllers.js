@@ -30,6 +30,7 @@
 		vm.language = {};
 		vm.edit = false;
 		vm.tax_active = false;
+		vm.submitted = false;
 
 		var tempSalary = null;
 		var salaryTable = 'salary';
@@ -97,7 +98,14 @@
 			});
 		}
 
-		function save (item) {
+		function save (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+			vm.submitted = true;
+			item.amount = item.amount && item.amount.replace ?
+							Number(item.amount.replace(',','.')) : item.amount;
 			if (!item.id) {
 				Database.insert(salaryTable, [item.amount, item.type]).then(function (response) {
 					item.id = response.insertId;
@@ -109,6 +117,7 @@
 			}
 			vm.activeSalary = null;
 			vm.editModal.remove();
+			vm.submitted = false;
 		}
 
 		function showEdit () {
@@ -175,15 +184,25 @@
 		}
 
 		function cancelTaxEdit () {
+			vm.submitted = true;
 			if (vm.activeTax) {
 				vm.activeTax.active = tempTax.active;
 				vm.activeTax.percentage = tempTax.percentage;
 				// vm.activeTax = null;
 			}
 			vm.taxModal.remove();
+			vm.submitted = false;
 		}
 
-		function saveTaxEdit (item) {
+		function saveTaxEdit (item, form, $event) {
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+			vm.submitted = true;
+			item.percentage = item.percentage && item.percentage.replace ?
+								Number(item.percentage.replace(',','.')) : item.percentage;
+
 			if (item.active === true) {
 				vm.tax_active = true;
 			} else {
@@ -202,6 +221,7 @@
 			// vm.activeTax = null;
 			// getTax ();
 			vm.taxModal.remove();
+			vm.submitted = false;
 		}
 
 		function getTax () {

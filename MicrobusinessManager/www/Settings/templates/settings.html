@@ -25,7 +25,7 @@
                 <span class="name-container">{{"tax_name" | translate}}</span>
               </div>
               <div class="col">
-                <span class="amount-container" ng-show="settings.tax_active">{{settings.activeTax.percentage}}%</span>
+                <span class="amount-container" ng-show="settings.tax_active">{{settings.activeTax.percentage | number: 2}}%</span>
                 <span class="amount-container" ng-show="!settings.tax_active">{{"tax_inactive" | translate}}</span>
               </div>
             </div>
@@ -45,7 +45,7 @@
                   <span class="salary-name">{{item.type === 'commission' ? "commission_option" : "salary_option" | translate}}</span>
                 </div>
                 <div class="col">
-                  <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount}}%</span>
+                  <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount | number:2}}%</span>
                   <span class="salary-info" ng-if="item.type === 'salary'">{{item.amount | currency}}</span>
                 </div>
               </div>

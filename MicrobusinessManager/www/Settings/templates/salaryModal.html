@@ -3,22 +3,45 @@
 		<h1 class="title">{{"self_payment_settings" | translate}}</h1>
 	</ion-header-bar>
 	<ion-content class="expensesEdit">
-    <form name="salaryForm">
-      <label select-click class="item item-input item-select">
-        <div class="input-label">
-          {{"payment_method" | translate}}
-        </div>
-        <select ng-model="settings.activeSalary.type">
-          <option value="commission">{{"commission_option" | translate}}</option>
-          <option value="salary">{{"salary_option" | translate}}</option>
-        </select>
-      </label>
-      <label class="item item-input">
-        <span class="input-label">{{settings.activeSalary.type === 'salary' ? "payment_amount": "salary_percentage" | translate}}</span>
-        <input type="number" placeholder="{{settings.activeSalary.type === 'salary' ? '($)' : '(%)'}}" ng-model="settings.activeSalary.amount" required="required" class="self-payment">
-      </label>
-      <button class="button button-block button-balanced" ng-click="settings.save(settings.activeSalary)" ng-disabled="salaryForm.$invalid || (settings.activeSalary.type === 'commission' && settings.activeSalary.amount > 100)">{{"save_button" | translate}}</button>
-      <button class="button button-block button-assertive" ng-click="settings.cancel(settings.activeSalary)">{{"cancel_button" | translate}}</button>
-    </form>
+		<form name="salaryForm">
+			<label select-click class="item item-input item-select">
+				<div class="input-label">
+					{{"payment_method" | translate}}
+				</div>
+				<select ng-model="settings.activeSalary.type">
+					<option value="commission">{{"commission_option" | translate}}</option>
+					<option value="salary">{{"salary_option" | translate}}</option>
+				</select>
+			</label>
+			<label class="item item-input inline-container">
+				<div class="input-container">
+					<span class="input-label">{{settings.activeSalary.type === 'salary' ? "payment_amount": "salary_percentage" | translate}}</span>
+					<input 	type="text"
+							name="amount"
+							smart-float
+							ng-pattern="numberPattern"
+							step="0.01"
+							placeholder="{{settings.activeSalary.type === 'salary' ? '($)' : '(%)'}}"
+							ng-model="settings.activeSalary.amount"
+							required="required"
+							class="self-payment">
+				</div>
+				<div ng-show="(salaryForm.name.$touched || salaryForm.$submitted) && !settings.submitted">
+					<span ng-show="salaryForm.amount.$error.pattern" class="form-error">
+						{{"invalid_number_error" | translate}}
+					</span>
+					<span ng-show="salaryForm.amount.$error.required" class="form-error">
+						{{"required_error" | translate}}
+					</span>
+				</div>
+			</label>
+			<input 	type="submit"
+					class="button button-block button-balanced"
+					ng-click="settings.save(settings.activeSalary, salaryForm, $event)"
+					value="{{'save_button' | translate}}">
+			<button class="button button-block button-assertive" ng-click="settings.cancel(settings.activeSalary)">
+				{{"cancel_button" | translate}}
+			</button>
+		</form>
 	</ion-content>
 </ion-modal-view>

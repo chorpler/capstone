@@ -21,6 +21,7 @@
           function pushProduct (product) {
             product.price = Number(product.price);
             product.saleprice = Number(product.price);
+            product.absoluteSalePrice = Number(product.price);
             product.count = 0;
             product.limit = "N/A";
 

@@ -4,33 +4,60 @@
 		<div class="buttons">
 			<button class="button button-clear button-positive" ng-click="salary.showConfirm()" ng-show="salary.editviewOpen">
 				<i class="icon ion-trash-b"></i></button>
-  	</div>
+	</div>
 	</ion-header-bar>
 	<ion-content class="expensesEdit">
 		<div class="list">
-			<form name="expenseForm">
+			<form name="salaryForm">
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"salary_name" | translate}}*</span>
-					<input type="text" placeholder="{{'salary_name' | translate}}*" ng-model="salary.activeExpense.name" required="required">
+					<input type="text" name="name" placeholder="{{'salary_name' | translate}}*" ng-model="salary.activeExpense.name" required="required">
+					<div ng-show="(salaryForm.name.$touched || salaryForm.$submitted) && !salary.submitted">
+						<span ng-show="salaryForm.name.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+					</div>
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"salary_amount" | translate}}*</span>
-					<input type="number" placeholder="{{'salary_amount' | translate}}*" ng-model="salary.activeExpense.amount" required="required">
+					<input 	type="text"
+							name="amount"
+							smart-float
+							ng-pattern="numberPattern"
+							step="0.01"
+							placeholder="{{'salary_amount' | translate}}*"
+							ng-model="salary.activeExpense.amount"
+							required="required">
+					<div ng-show="(salaryForm.name.$touched || salaryForm.$submitted) && !salary.submitted">
+						<span ng-show="salaryForm.amount.$error.pattern" class="form-error">
+							{{"invalid_number_error" | translate}}
+						</span>
+						<span ng-show="salaryForm.amount.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+					</div>
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"salary_comments" | translate}}</span>
-	    		<textarea placeholder="{{'salary_comments' | translate}}" ng-model="salary.activeExpense.comments"></textarea>
-	  		</label>
+				<textarea placeholder="{{'salary_comments' | translate}}" ng-model="salary.activeExpense.comments"></textarea>
+				</label>
 				<label class="item item-input">
-					<span class="input-label">{{"salary_Date" | translate}}*<span ng-show="!salary.editviewOpen">*</span></span>
-	    		<input placeholder="{{'salary_Date' | translate}}*" type="date" ng-model="salary.activeExpense.date" required="required">
-	  		</label>
+					<span class="input-label">{{"salary_Date" | translate}}*</span>
+					<input placeholder="{{'salary_Date' | translate}}*" name="date" type="date" ng-model="salary.activeExpense.date" required="required">
+					<div ng-show="salaryForm.$submitted && !salary.submitted">
+						<span ng-show="salaryForm.date.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+					</div>
+				</label>
 				<div class="card" ng-show="salary.showErrorAlert">
-				  <div class="item item-text-wrap center">
-				    <span class="notAllowed">{{"salary_message_1" | translate}}{{salary.cashAvailable | number : 2}} {{"salary_message_2" | translate}}</span>
-				  </div>
+					<div class="item item-text-wrap center">
+						<span class="notAllowed">
+							{{"salary_message_1" | translate}}{{salary.cashAvailable | number : 2}} {{"salary_message_2" | translate}}
+						</span>
+					</div>
 				</div>
-				<button class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense)" ng-disabled="expenseForm.$invalid">{{"save_button" | translate}}</button>
+				<input type="submit" class="button button-block button-balanced" ng-click="salary.save(salary.activeExpense, false, salaryForm, $event)" value="{{'save_button' | translate}}">
 				<button class="button button-block button-assertive" ng-click="salary.cancel(salary.activeExpense)">{{"cancel_button" | translate}}</button>
 			</form>
 		</div>

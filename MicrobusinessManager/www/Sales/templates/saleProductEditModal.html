@@ -6,51 +6,76 @@
 	<ion-content class="products">
 		<div class="list card center">
 			<form name="saleProductForm">
-        <div class="item item-divider">
-          <span class="name-container">
-            {{sales.currentEditProduct.name}}
-          </span>
-        </div>
-				<label class="item item-input">
-					<span class="input-label">{{"product_sales_price" | translate}}</span>
-					<input name="saleprice"
-            type="number"
-            placeholder="{{'product_sales_price' | translate}}*"
-            ng-model="sales.currentEditProduct.saleprice"
-            required="required"
-            min="0"
-          />
-          <span ng-show="saleProductForm.saleprice.$error.min">
-            Negative price not allowed
-          </span>
+				<div class="item item-divider">
+					<span class="name-container">
+						{{sales.currentEditProduct.name}}
+					</span>
+				</div>
+				<label class="item item-input inline-container">
+					<div class="input-container">
+						<span class="input-label">{{"product_sales_price" | translate}}</span>
+						<input 	name="saleprice"
+								type="text"
+								smart-float
+								step="0.01"
+								ng-pattern="numberPattern"
+								placeholder="{{'product_sales_price' | translate}}*"
+								ng-model="sales.currentEditProduct.saleprice"
+								required="required"
+								min="0"
+						/>
+					</div>
+					<div ng-show="(saleProductForm.name.$touched || saleProductForm.$submitted) && !sales.submitted">
+						<span ng-show="saleProductForm.saleprice.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+						<span ng-show="saleProductForm.saleprice.$error.pattern" class="form-error">
+							{{"invalid_number_error" | translate}}
+						</span>
+						<span ng-show="saleProductForm.saleprice.$error.min" class="form-error">
+							{{"negative_error" | translate}}
+						</span>
+					</div>
 				</label>
-				<label class="item item-input">
-					<span class="input-label">{{"inventory_quantity" | translate}}</span>
-					<input name="quantity"
-            type="number"
-            placeholder="{{'inventory_quantity' | translate}}*"
-            ng-model="sales.currentEditProduct.count"
-            required="required"
-            min="0"
-            max="{{sales.currentEditProduct.limit}}"
-          />
-          <span ng-show="saleProductForm.quantity.$error.min || saleProductForm.quantity.$error.max">
-            Out of range
-          </span>
+				<label class="item item-input inline-container">
+					<div class="input-container">
+						<span class="input-label">{{"inventory_quantity" | translate}}</span>
+						<input 	name="quantity"
+								type="text"
+								smart-float
+								step="0.01"
+								ng-pattern="numberPattern"
+								placeholder="{{'inventory_quantity' | translate}}*"
+								ng-model="sales.currentEditProduct.count"
+								required="required"
+								min="0"
+								max="{{sales.currentEditProduct.limit}}"
+						/>
+					</div>
+					<div ng-show="(saleProductForm.name.$touched || saleProductForm.$submitted) && !sales.submitted">
+						<span ng-show="saleProductForm.quantity.$error.required" class="form-error">
+							{{"required_error" | translate}}
+						</span>
+						<span ng-show="saleProductForm.quantity.$error.pattern" class="form-error">
+							{{"invalid_number_error" | translate}}
+						</span>
+						<span ng-show="saleProductForm.quantity.$error.min || saleProductForm.quantity.$error.max"
+							class="form-error">
+							{{"out_of_range_error" | translate}}
+						</span>
+					</div>
 				</label>
-        <div class="item">
-  				<button class="button button-full button-balanced"
-            ng-disabled="saleProductForm.$invalid"
-            ng-click="sales.doneEditSaleProduct()">
-            Save
-          </button>
-          <button class="button button-full button-assertive"
-            ng-click="sales.cancelEditSaleProduct()">
-            Cancel
-          </button>
-        </div>
+				<div class="item">
+					<input 	type="submit"
+							class="button button-block button-balanced"
+							ng-click="sales.doneEditSaleProduct(saleProductForm, $event)"
+							value="{{'save_button' | translate}}">
+					<button class="button button-block button-assertive"
+							ng-click="sales.cancelEditSaleProduct(saleProductForm, $event)">
+						{{"cancel_button" | translate}}
+					</button>
+				</div>
 			</form>
-
 		</div>
 	</ion-content>
 </ion-modal-view>

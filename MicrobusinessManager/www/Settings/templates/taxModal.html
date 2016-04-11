@@ -3,26 +3,50 @@
 		<h1 class="title">{{"edit_tax" | translate}}</h1>
 	</ion-header-bar>
 	<ion-content class="expensesEdit">
-    <form name="taxForm">
+		<form name="taxForm">
 			<ul class="list">
-        <li class="item item-toggle">
-           {{"tax_enabled" | translate}}
-           <label class="toggle toggle-positive">
-             <input type="checkbox" ng-model="settings.activeTax.active">
-             <div class="track">
-               <div class="handle"></div>
-             </div>
-           </label>
-        </li>
-				<li>
-					<label class="item item-input">
-						<span class="input-label">{{"salary_percentage" | translate}}</span>
-						<input type="number" placeholder="%" ng-model="settings.activeTax.percentage" required="required" class="self-payment">
+				<li class="item item-toggle">
+					{{"tax_enabled" | translate}}
+					<label class="toggle toggle-positive">
+						<input type="checkbox" ng-model="settings.activeTax.active">
+						<div class="track">
+							<div class="handle"></div>
+						</div>
 					</label>
 				</li>
-      </ul>
-      <button class="button button-block button-balanced" ng-click="settings.saveTaxEdit(settings.activeTax)" ng-disabled="taxForm.$invalid || (settings.activeTax.percentage > 100)">{{"save_button" | translate}}</button>
-      <button class="button button-block button-assertive" ng-click="settings.cancelTaxEdit(settings.activeTax)">{{"cancel_button" | translate}}</button>
-    </form>
+				<li>
+					<label class="item item-input inline-container">
+						<div class="input-container">
+							<span class="input-label">{{"salary_percentage" | translate}}</span>
+							<input 	type="text"
+									name="taxPercent"
+									smart-float
+									ng-pattern="numberPattern"
+									step="0.01"
+									placeholder="%"
+									ng-model="settings.activeTax.percentage"
+									ng-required="settings.activeTax.active"
+									class="self-payment">
+						</div>
+						<div ng-show="(taxForm.name.$touched || taxForm.$submitted) && !settings.submitted">
+							<span ng-show="taxForm.taxPercent.$error.pattern" class="form-error">
+								{{"invalid_number_error" | translate}}
+							</span>
+							<span ng-show="taxForm.taxPercent.$error.required" class="form-error">
+								{{"required_error" | translate}}
+							</span>
+						</div>
+					</label>
+				</li>
+			</ul>
+			<input 	type="submit"
+					class="button button-block button-balanced"
+					ng-click="settings.saveTaxEdit(settings.activeTax, taxForm, $event)"
+					value="{{'save_button' | translate}}">
+			<button class="button button-block button-assertive"
+					ng-click="settings.cancelTaxEdit(settings.activeTax)">
+				{{"cancel_button" | translate}}
+			</button>
+		</form>
 	</ion-content>
 </ion-modal-view>
