@@ -2,13 +2,26 @@
 	angular.module('app.reports')
 	.controller('ReportsController', ReportsController);
 
-	function ReportsController ($state) {
+	function ReportsController ($state, $ionicPopover, $ionicHistory) {
 		var vm = this;
 
 		vm.stateGo = stateGo;
+		vm.showPopupMenu = showPopupMenu;
+		vm.closeIncomeStatement = closeIncomeStatement;
 
 		function stateGo (state) {
-			$state.go('app.' + state);
+			var appstate = 'app.' + state;
+			console.log("Going to state " + appstate + " ...");
+			$state.go(appstate);
+		}
+
+		function showPopupMenu() {
+			console.log("Reports: showing Popup Menu ...");
+		}
+
+		function closeIncomeStatement() {
+			console.log("Reports: closing Income Statement ...");
+			$ionicHistory.goBack();
 		}
 	}
 })();

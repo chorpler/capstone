@@ -1,11 +1,13 @@
 (function () {
 	angular.module('app')
+	// .controller('AppController', ['$scope', '$q', '$ionicModal', 'ReportService', AppController]);
 	.controller('AppController', AppController);
 
 	function AppController (CashBalance, $scope, $ionicPopover, Database) {
 		var vm = this;
 
 		vm.cashBalance = CashBalance;
+		// vm.reportService = ReportService;
 		vm.showCash = showCash;
 		vm.save = save;
 		vm.cancel = cancel;

@@ -1,37 +1,37 @@
 .darkside-menu h1.title {
-  font-size: 24px !important;
+	font-size: 24px !important;
 }
 
 .darkside-menu h1.title span {
-  font-size: 14px;
-  font-weight: 400;
+	font-size: 14px;
+	font-weight: 400;
 }
 
 .center {
-  text-align: center;
+	text-align: center;
 }
 
 .bold {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 .form-error {
-  color: red;
-  font-size: .8em;
-  vertical-align: top;
+	color: red;
+	font-size: .8em;
+	vertical-align: top;
 }
 
 .inline-container {
-  display: block;
-  text-align: left;
+	display: block;
+	text-align: left;
 }
 
 .input-container {
-  display: flex;
+	display: flex;
 }
 
 .button.button-stable {
-  background-color: #d3d3d3;
+	background-color: #d3d3d3;
 }
 
 .inventory .header,
@@ -44,7 +44,7 @@
 }
 
 .back-color {
-  color: #1C86EE;
+	color: #1C86EE;
 }
 
 .expenses .card-container,
@@ -98,87 +98,87 @@
 }
 
 .item-radio .radio-icon {
-  color: #39e600;
+	color: #39e600;
 }
 
 .inventory-edit .categories,
 .product_edit .categories,
 .expensesEdit .expense_type {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .inventory-edit .categoy-name,
 .product_edit .categoy-name {
-  font-size: 16px;
-  max-width: 200px;
-  width: 35%;
-  color: #444;
-  margin-top: 10px;
+	font-size: 16px;
+	max-width: 200px;
+	width: 35%;
+	color: #444;
+	margin-top: 10px;
 }
 
 .inventory-edit .category_options,
 .product_edit .category_options {
-  margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .inventory-edit,
 .product_edit {
-  margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .expensesEdit .types {
-  margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .salary .salary-container {
-  margin-bottom: -20px;
+	margin-bottom: -20px;
 }
 
 .salary .salary-adjuster {
-  margin-top: -10px;
+	margin-top: -10px;
 }
 
 .salary .salary-input {
-  height: 35px;
-  margin-left: 30px;
+	height: 35px;
+	margin-left: 30px;
 }
 
 .salary .record-button {
-  font-size: 15px;
-  margin-top: 10px;
-  margin-bottom: 20px;
+	font-size: 15px;
+	margin-top: 10px;
+	margin-bottom: 20px;
 }
 
 .salary .adjust-button {
-  margin-top: 10px;
-  margin-bottom: 20px;
-  background-color: #b0b0b0;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	background-color: #b0b0b0;
 }
 
 .salary .adjust-button:active {
-  background-color: #d3d3d3;
+	background-color: #d3d3d3;
 }
 
 .salary .notAllowed {
-  color: red;
+	color: red;
 }
 
 .salary .salary-container .no-comission {
-  font-weight: 600;
-  margin-bottom: 10px;
-  margin-top: -5px;
-  text-align: center;
+	font-weight: 600;
+	margin-bottom: 10px;
+	margin-top: -5px;
+	text-align: center;
 }
 
 .salary .info {
-  margin-top: -20px;
-  font-size: 22px;
-  color: #FFD700;
+	margin-top: -20px;
+	font-size: 22px;
+	color: #FFD700;
 }
 
 .expensesEdit .notAllowed{
-  color: red;
-  font-weight: 600;
+	color: red;
+	font-weight: 600;
 }
 
 .col {
@@ -215,47 +215,47 @@ input.self-payment {
 }
 
 .settings .edit-button {
-  margin-top: -18px !important;
+	margin-top: -18px !important;
 }
 
 .settings .icon.ion-edit,
 .settings .icon.ion-plus-round {
-  color: #708090 !important;
+	color: #708090 !important;
 }
 
 .settings .devider-container {
-  margin-bottom: -15px;
+	margin-bottom: -15px;
 }
 
 .settings .card-container {
-  margin-top: -15px;
-  margin-bottom: -15px;
+	margin-top: -15px;
+	margin-bottom: -15px;
 }
 
 .settings .card-container-2 {
-  margin-top: -28px;
+	margin-top: -28px;
 	margin-bottom: -28px;
 	width: 110%;
 	margin-left: -16px;
 }
 
 .settings .card-container-3 {
-  margin-top: -22px;
+	margin-top: -22px;
 	margin-bottom: -22px;
 	width: 110%;
 	margin-left: -16px;
 }
 
 .settings .salary-info {
-  font-weight: bold;
-  text-transform: capitalize;
+	font-weight: bold;
+	text-transform: capitalize;
 }
 
 .bar-header {
-    border: 0px !important;
-    border-bottom-color: transparent !important;
-    background-image: none !important;
-    border-bottom: none !important;
+		border: 0px !important;
+		border-bottom-color: transparent !important;
+		background-image: none !important;
+		border-bottom: none !important;
 }
 
 .bar-subheader {
@@ -263,20 +263,20 @@ input.self-payment {
 }
 
 .icon.ion-refresh.icon-reset {
-  font-size: 16px;
+	font-size: 16px;
 }
 
 .custom {
-  background-color: #343434 !important;
+	background-color: #343434 !important;
  }
 
  .custom .item {
-  background-color: transparent;
-  border:none;
-  border-top: none;
-  border-bottom:none;
-  border-color: #666;
-  color: white;
+	background-color: transparent;
+	border:none;
+	border-top: none;
+	border-bottom:none;
+	border-color: #666;
+	color: white;
 }
 
 .custom .item:active a {
@@ -284,41 +284,41 @@ input.self-payment {
 }
 
 .productCategory .item:first-child {
-  border-top: 1px solid #d3d3d3;
+	border-top: 1px solid #d3d3d3;
 }
 
 .productCategory .item:last-child {
-  border-bottom: 1px solid #d3d3d3;
-  margin-bottom: 2px;
+	border-bottom: 1px solid #d3d3d3;
+	margin-bottom: 2px;
 }
 
 .cash-title {
-  font-size: 15px !important;
-  font-weight: 600 !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
 }
 
 .cash-container .item:first-child {
-  border-top: 1px solid #d3d3d3;
+	border-top: 1px solid #d3d3d3;
 }
 
 .cash-container .item:last-child {
-  border-bottom: 1px solid #d3d3d3;
-  margin-bottom: 2px;
+	border-bottom: 1px solid #d3d3d3;
+	margin-bottom: 2px;
 }
 
 .custom .item:first-child {
-  border-top: 2px solid #666;
+	border-top: 2px solid #666;
 }
 
 .custom .item-complex .item-content, .dark .item-radio .item-content {
-  background-color: transparent;
+	background-color: transparent;
 }
 
 .custom h2,
 .custom h3,
 .custom p,
 .custom a {
-  color: white;
+	color: white;
 	font-weight: 600;
 	font-size: 18px;
 }
@@ -334,20 +334,20 @@ input.self-payment {
 }
 
 .slide-in-right {
-  -webkit-transform: translateX(100%);
-    transform: translateX(100%); }
+	-webkit-transform: translateX(100%);
+		transform: translateX(100%); }
 
 .slide-in-right.ng-enter, .slide-in-right > .ng-enter {
-  -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
-  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
+	-webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+	transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
 
 .slide-in-right.ng-enter-active, .slide-in-right > .ng-enter-active {
-  -webkit-transform: translateX(0);
-    transform: translateX(0); }
+	-webkit-transform: translateX(0);
+		transform: translateX(0); }
 
 .slide-in-right.ng-leave, .slide-in-right > .ng-leave {
-  -webkit-transition: all ease-in-out 250ms;
-  transition: all ease-in-out 250ms; }
+	-webkit-transition: all ease-in-out 250ms;
+	transition: all ease-in-out 250ms; }
 
 .report-header .date-range {
 	display: flex;
@@ -355,140 +355,165 @@ input.self-payment {
 }
 
 .report-header .date-range div {
-  font-size: 1.4em;
-  line-height: 47px;
+	font-size: 1.4em;
+	line-height: 47px;
 }
 
 .product-qty {
-  margin-top: 8px;
+	margin-top: 8px;
 }
 
 .report-name {
-  display: block;
+	display: block;
 }
 
 .income-statement .row .col:not(:first-child) {
-  text-align: center;
+	text-align: center;
 }
 
 .negative {
-  color: red;
+	color: red;
 }
 
 .income-statement report-header,
 .sales-report report-header {
-  display: block;
-  z-index: 1000;
-  position: absolute;
-  width: 100%;
-  background-color: white;
+	display: block;
+	z-index: 1000;
+	position: absolute;
+	width: 100%;
+	background-color: white;
 }
 
 .income-statement ion-content,
 .sales-report ion-content {
-  top: 138px !important;
+	top: 138px !important;
 }
 
 .platform-ios .income-statement ion-content,
 .platform-ios .sales-report ion-content {
-  top: 160px !important;
+	top: 160px !important;
 }
 
 .sales .no-products,
 .sales-report .no-reports {
-  font-weight: 600 !important;
+	font-weight: 600 !important;
 }
 
 .sales {
-  margin-top: -5px;
+	margin-top: -5px;
 }
 
 .salesMore {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .sales .category {
-  margin-bottom: -25px;
+	margin-bottom: -25px;
 }
 
 .sales .category-title {
-  margin-bottom: -5px;
+	margin-bottom: -5px;
 }
 
 .sales .activeCategory {
-  background: #666666 !important;
-  color: white;
+	background: #666666 !important;
+	color: white;
 }
 
 .sales .activeAll:active {
-  font-weight: lighter;
+	font-weight: lighter;
 }
 
 .sales .activeAll {
-  color: #666666;
-  font-weight: bold;
+	color: #666666;
+	font-weight: bold;
 }
 
 .sales .notActive {
-  color: #666666;
-  font-weight: normal;
+	color: #666666;
+	font-weight: normal;
 }
 
 .sales .default {
-  background: #bfbfbf;
-  color: white;
+	background: #bfbfbf;
+	color: white;
 }
 
 .sales .category:last-of-type {
-  margin-bottom: 18px;
+	margin-bottom: 18px;
 }
 
 ion-content.sales {
-  top: 241px !important;
+	top: 241px !important;
 }
 
 .income-statement .bar-footer button {
-  width: 50%;
+	width: 50%;
 }
 
 .income-statement .col {
-  text-transform: capitalize;
+	text-transform: capitalize;
 }
 
 .income-statement .card .item {
-  padding: 0;
+	padding: 0;
 }
 
 .income-statement .item-divider {
-  font-weight: 700;
+	font-weight: 700;
 }
 /*.platform-android ion-popover-view.fit {
-  margin-top: 10px !important;
+	margin-top: 10px !important;
 }*/
 
+/* 
 .popover {
-  width: 70% !important;
-  left: 15% !important;
-  top: 25% !important;
+	width: 70% !important;
+	left: 15% !important;
+	top: 25% !important;
 }
 
 .category-popover {
-  top:150px !important;
-  left:65px !important;
+	top:150px !important;
+	left:65px !important;
 }
 
 ion-popover-view .cash-popover {
-  margin-left :120px !important;
+	margin-left :120px !important;
 }
-
+ */
 .card-list-header {
-  padding: 0;
+	padding: 0;
 }
 
 .sales-edit .input-label {
-  width: 40%;
+	width: 40%;
 }
 
 .popover-arrow {
-  display: none !important;
+	display: none !important;
+}
+
+/* 
+.category-menu-popup {
+	width: auto !important;
+	right: 0% !important;
+	top: 50px !important;
+	left:  auto !important;
+}
+*/
+
+.category-menu-popup {
+	height: 120px !important;
+	width: 150px !important;
+	top: 75px !important;
+	right: 0px !important;
+	border: thin solid black;
+	text-align: right !important;
+	margin-left: auto !important;
+}
+
+.button-generate-pdf-text {
+	font-size: 1em;
+	font-weight: normal;
 }

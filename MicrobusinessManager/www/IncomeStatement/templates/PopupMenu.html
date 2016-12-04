@@ -1,0 +1,21 @@
+<ion-popover-view id="PopupMenu001" class="category-menu-popup">
+	<ion-header-bar>
+		<h1 class="title">Menu</h1>
+	</ion-header-bar>
+	<ion-content>
+		<!-- <div class="card"> -->
+<!-- 			<ion-list>
+				<ion-item class="item item-icon-right" ng-click="income.generatePDF()">
+					<button class="button button-icon icon ion-android-document button-generate-pdf-text">
+						<span class="button-generate-pdf-text">{{"str_generate_pdf" | translate}}</span>
+					</button>
+				</ion-item>
+			</ion-list> -->
+			<div class="list">
+				<a class="item" target="_blank" ng-click="income.generatePDF()">
+					<icon class="icon ion-android-document"></icon>
+					{{"str_generate_pdf" | translate}}
+				</a>
+			</div>
+		<!-- </div> -->
+</ion-popover-view>

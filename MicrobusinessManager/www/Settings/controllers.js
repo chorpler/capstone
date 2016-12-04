@@ -2,7 +2,7 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax) {
+	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user) {
 		var vm = this;
 
 		vm.userAccount = {};
@@ -12,6 +12,10 @@
 		vm.languages = languages;
 		vm.tax = tax;
 		vm.login = login;
+		vm.closeUser = closeUser;
+		vm.cancelUserEdit = cancelUserEdit;
+		vm.saveUserEdit = saveUserEdit;
+		vm.userEdit = userEdit;
 		vm.closeLogin = closeLogin;
 		vm.submitLoginRequest = submitLoginRequest;
 		vm.logout = logout;
@@ -31,13 +35,28 @@
 		vm.edit = false;
 		vm.tax_active = false;
 		vm.submitted = false;
+		vm.user_filled = false;
+		vm.organization = user;
+
 
 		var tempSalary = null;
 		var salaryTable = 'salary';
 		var languageTable = 'languages';
 		var taxTable = 'tax';
+		var userTable = 'user';
 
 		function init () {
+			console.log("Settings init!");
+			if(vm.organization && vm.organization.name) {
+				console.log("VM.organization: ");
+				console.log(vm.organization);
+				vm.user_filled = true;
+			} else {
+				console.log("No vm.organization!");
+				vm.organization = {};
+				vm.user_filled = false;
+			}
+
 			if (vm.salary.length < 1) {
 				vm.activeSalary = {};
 				// vm.activeSalary.type = 'salary';
@@ -123,6 +142,11 @@
 		function showEdit () {
 			vm.activeTax = {};
 			showEditModal();
+		}
+
+		function showUser () {
+			vm.organization = {};
+			showUserModal();
 		}
 
 		function editSalary (salaryItem) {
@@ -238,6 +262,89 @@
 				}
 				tax = items;
 			});
+		}
+
+		function userEdit (userItem) {
+			console.log("Now in userEdit");
+			getUserData().then(function() {
+				if (vm.organization && vm.organization.name) {
+					vm.activeOrg = organization;
+				} else {
+					vm.activeOrg = {};
+				}
+				tempOrg = angular.copy(vm.activeOrg) || {};
+				showUserModal();
+			});
+		}
+
+		function showUserModal () {
+			console.log("Now in showUserModal");
+			$ionicModal.fromTemplateUrl('Settings/templates/userModal.html', {
+				scope: $scope
+			}).then(function (modal) {
+				vm.userModal = modal;
+				vm.userModal.show();
+			});
+		}
+
+		function closeUser () {
+			console.log("Now in closeUser");
+			vm.userModal.remove();
+		}
+
+		function getUserData() {
+			console.log("Now in getUserData");
+			return Database.select('user').then(function (response) {
+				var items = [];
+				if (response.rows.length === 0) {
+					return items;
+				}
+				for (var i = response.rows.length - 1; i >= 0; i--) {
+					var item = response.rows.item(i);
+					var orgname = item.orgname;
+					var representative = item.representative;
+					var address = item.address;
+					items.push(item);
+				}
+				// user = items;
+				vm.organization = items[0];
+				organization = items[0];
+			});
+		}
+
+		function saveUserEdit (item, form, $event) {
+			console.log("Now in saveUserEdit");
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+			vm.submitted = true;
+			if(!item.id) {
+	 			Database.insert(userTable, [item.name, item.representative, item.address, item.email, item.phone]).then(function(response) {
+	 				item.id = response.insertId;
+				});
+			} else {
+				Database.update(userTable, item.id, [item.name, item.representative, item.address, item.email, item.phone]);
+			}
+
+			// vm.activeTax = null;
+			// getTax ();
+			vm.userModal.remove();
+			vm.submitted = false;
+		}
+
+		function cancelUserEdit () {
+			console.log("Now in cancelUserEdit");
+			vm.submitted = true;
+			vm.organization = {};
+			vm.organization.name = tempOrg.name;
+			vm.organization.representative = tempOrg.representative;
+			vm.organization.address = tempOrg.address;
+			vm.organization.email = tempOrg.email;
+			vm.organization.phone = tempOrg.phone;
+			// vm.activeTax = null;
+			vm.userModal.remove();
+			vm.submitted = false;
 		}
 
 		function login () {

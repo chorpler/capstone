@@ -1,7 +1,125 @@
 (function () {
 	angular.module('app')
 	.factory('Database', Database)
-	.factory('CashBalance', CashBalance);
+	.factory('CashBalance', CashBalance)
+	.factory('ReportService', ['$q', ReportService]);
+
+	function ReportService($q) {
+		function createPdf(invoice) {
+			return $q(function(resolve, reject) {
+				var dd = createDocumentDefinition(invoice);
+				var pdf = pdfMake.createPdf(dd);
+
+				pdf.getBase64(function(output) {
+					resolve(base64ToUint8Array(output));
+				});
+			});
+		}
+
+		var service = {
+			createPdf: createPdf
+		};
+		return service;
+	}
+
+	function base64ToUint8Array(base64) {
+		var raw = atob(base64);
+		var uint8Array = new Uint8Array(raw.length);
+		for (var i = 0; i < raw.length; i++) {
+			uint8Array[i] = raw.charCodeAt(i);
+		}
+		return uint8Array;
+	}
+
+	function createDocumentDefinition(invoice) {
+		var items = invoice.Items.map(function(item) {
+			return [item.Description, item.Quantity, item.Price];
+		});
+
+		var dd = {
+			content: [
+				{ text: 'INVOICE', style: 'header'},
+				{ text: invoice.Date, alignment: 'right'},
+
+				{ text: 'From', style: 'subheader'},
+				invoice.AddressFrom.Name,
+				invoice.AddressFrom.Address,
+				invoice.AddressFrom.Country,		
+
+				{ text: 'To', style: 'subheader'},
+				invoice.AddressTo.Name,
+				invoice.AddressTo.Address,
+				invoice.AddressTo.Country,  
+
+				{ text: 'Items', style: 'subheader'},
+				{
+					style: 'itemsTable',
+					table: {
+						widths: ['*', 75, 75],
+						body: [
+							[ 
+								{ text: 'Description', style: 'itemsTableHeader' },
+								{ text: 'Quantity', style: 'itemsTableHeader' },
+								{ text: 'Price', style: 'itemsTableHeader' },
+							]
+						].concat(items)
+					}
+				},
+				{
+					style: 'totalsTable',
+					table: {
+						widths: ['*', 75, 75],
+						body: [
+							[
+								'',
+								'Subtotal',
+								invoice.Subtotal,
+							],
+							[
+								'',
+								'Shipping',
+								invoice.Shipping,
+							],
+							[
+								'',
+								'Total',
+								invoice.Total,
+							]
+						]
+					},
+					layout: 'noBorders'
+				},
+			],
+			styles: {
+				header: {
+					fontSize: 20,
+					bold: true,
+					margin: [0, 0, 0, 10],
+					alignment: 'right'
+				},
+				subheader: {
+					fontSize: 16,
+					bold: true,
+					margin: [0, 20, 0, 5]
+				},
+				itemsTable: {
+					margin: [0, 5, 0, 15]
+				},
+				itemsTableHeader: {
+					bold: true,
+					fontSize: 13,
+					color: 'black'
+				},
+				totalsTable: {
+					bold: true,
+					margin: [0, 30, 0, 0]
+				}
+			},
+			defaultStyle: {
+			}
+		}
+		return dd;
+	}
 
 	function Database ($ionicPlatform, $cordovaSQLite, $q) {
 		var db;
@@ -21,6 +139,7 @@
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, address text, email text, phone text)');
 			deferred.resolve();
 		});
 
@@ -82,6 +201,11 @@
 		var UPDATE_TAX = 'UPDATE tax set active = ?, percentage = ? ';
 		var REMOVE_TAX = 'DELETE FROM tax';
 
+		var INSERT_USER = 'INSERT INTO user (name, representative, address, email, phone) VALUES (?,?,?,?,?)';
+		var SELECT_USER = 'SELECT id, name, representative, address, email, phone FROM user';
+		var UPDATE_USER = 'UPDATE user set name = ?, representative = ?, address = ?, email = ?, phone = ? ';
+		var REMOVE_USER = 'DELETE FROM user';
+
 		var WHERE = ' WHERE ';
 		var AND = ' AND ';
 		var WHERE_ID = 'id = ? ';
@@ -121,6 +245,9 @@
 					break;
 				case 'tax':
 					query = INSERT_TAX;
+					break;
+				case 'user':
+					query = INSERT_USER;
 					break;
 			}
 
@@ -168,6 +295,9 @@
 					break;
 				case 'tax':
 					query = SELECT_TAX;
+					break;
+				case 'user':
+					query = SELECT_USER;
 					break;
 			}
 
@@ -248,6 +378,9 @@
 				case 'tax':
 					query = UPDATE_TAX;
 					break;
+				case 'user':
+					query = UPDATE_USER;
+					break;
 			}
 
 			query += id ? WHERE + WHERE_ID : '';
@@ -297,6 +430,9 @@
 					break;
 				case 'tax':
 					query = REMOVE_TAX;
+					break;
+				case 'user':
+					query = REMOVE_USER;
 					break;
 			}
 

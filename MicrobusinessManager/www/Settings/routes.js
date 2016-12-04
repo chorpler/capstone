@@ -29,6 +29,27 @@
 						return items;
 					});
 				},
+				user: function (Database) {
+					return Database.select('user').then(function (response) {
+						var items = [];
+						if (response.rows.length === 0) {
+							return items;
+						}
+						for (var i = response.rows.length - 1; i >= 0; i--) {
+							var item = response.rows.item(i);
+							var userid = item.id;
+							var name = item.name;
+							var representative = item.representative;
+							var address = item.address;
+							var email = item.email;
+							var phone = item.phone;
+							items.push(item);
+						}
+						// user = items;
+						// organization = items;
+						return items[0];
+					});
+				},
 				tax: function (Database) {
 					return Database.select('tax').then(function (response) {
 						var items = [];

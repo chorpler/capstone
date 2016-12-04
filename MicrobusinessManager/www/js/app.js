@@ -2,6 +2,7 @@
 	angular.module('app', [
 		'ionic',
 		'ngCordova',
+		'pdf',
 		'app.expenses',
 		'app.inventory',
 		'app.products',
@@ -21,6 +22,7 @@
 	var items = [];
 	function run ($rootScope, $ionicPlatform, Database, $translate, tmhDynamicLocale) {
 		$ionicPlatform.ready(function () {
+			
 			Database.select(languageTable).then(function (response) {
 				if (response.rows.length === 0) {
 					navigator.globalization.getPreferredLanguage(function (language) {
@@ -230,7 +232,20 @@
 			invalid_number_error: 'Invalid Number',
 			negative_error: 'Negative number not allowed',
 			out_of_range_error: 'Out of range',
-			commission_too_high_error: 'Commission cannot be higher than 100%'
+			commission_too_high_error: 'Commission cannot be higher than 100%',
+			user_options: 'Organization Info',
+			org_title: 'Organization',
+			org_name: 'Organization Name',
+			org_rep: 'Representative',
+			org_address: 'Address',
+			user_email: 'E-mail Address',
+			user_phone: 'Phone',
+			user_filled: 'Entered',
+			user_empty: 'Not Entered',
+			str_generate_pdf: 'Generate PDF',
+			str_import: 'Import',
+			str_export: 'Export',
+			str_sendto: 'Send to …'
 		});
 
 		$translateProvider.translations('es', {
@@ -371,8 +386,20 @@
 			invalid_number_error: 'Número no válido',
 			negative_error: 'Número negativo no permitida',
 			out_of_range_error: 'Fuera de rango',
-			commission_too_high_error: 'La Comisión no puede ser superior al 100%'
-
+			commission_too_high_error: 'La Comisión no puede ser superior al 100%',
+			user_options: 'Información de la Organización',
+			org_title: 'Organización',
+			org_name: 'Nombre de la Organización',
+			org_rep: 'Representante',
+			org_address: 'Dirección',
+			user_email: 'Correo Electrónico',
+			user_phone: 'Teléfono',
+			user_filled: 'Entró',
+			user_empty: 'No Entró',
+			str_generate_pdf: 'Generar PDF',
+			str_import: 'Importar',
+			str_export: 'Exportar',
+			str_sendto: 'Enviar a …'
 		});
 
 		$translateProvider.preferredLanguage("en");

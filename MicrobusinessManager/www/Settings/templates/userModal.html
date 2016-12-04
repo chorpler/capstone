@@ -1,0 +1,81 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">{{"user_options" | translate}}</h1>
+		<div class="buttons">
+			<button class="button button-clear" ng-click="settings.closeUser()">
+				<span class="back-color">{{'close_button' | translate}}</span></button>
+		</div>
+	</ion-header-bar>
+	<ion-content>
+		<div class="card" ng-show="settings.userRegistration.error">
+			<div class="item item-text-wrap assertive">
+				Error: {{settings.userRegistration.error}}
+			</div>
+		</div>
+		<form name = "registerform" ng-submit="settings.submitRegistrationRequest()">
+			<div class="list">
+				<label class="item item-input">
+					<span class="input-label">{{"settings_username" | translate}}*</span>
+					<input type="text" ng-model="settings.userRegistration.username" required="required">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_password" | translate}}*</span>
+					<input type="password" ng-model="settings.userRegistration.password" required="required">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_confirm_password" | translate}}*</span>
+					<input type="password" ng-model="settings.userRegistration.confirmPassword" required="required">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_email" | translate}}</span>
+					<input type="email" ng-model="settings.userRegistration.email">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_phone" | translate}}</span>
+					<input type="text" ng-model="settings.userRegistration.phone">
+				</label>
+				<label class="item">
+					<button class="button button-block button-positive" type="submit" ng-disabled="registerform.$invalid">{{"register_button" | translate}}</button>
+				</label>
+			</div>
+		</form>
+	</ion-content>
+</ion-modal-view>
+
+
+
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">{{"user_options" | translate}}</h1>
+	</ion-header-bar>
+	<ion-content class="userEdit">
+		<form name="userForm">
+			<ion-list class="list" id="userList">
+				<ion-item class="item-divider center" id="user-list-org-title">{{"org_title" | translate}}</ion-item>
+				<label class="item item-input" id="user-list-org-name-label" name="name">
+					<span class="input-label">{{"org_name" | translate}}</span><input type="text" placeholder="{{'org_name' | translate}}" ng-model="settings.organization.name">
+				</label>
+				<label class="item item-input" id="user-list-org-rep-label" name="representative">
+					<span class="input-label">{{"org_rep" | translate}}</span><input type="text" placeholder="{{'org_rep' | translate}}" ng-model="settings.organization.representative">
+				</label>
+				<label class="item item-input" id="user-list-org-address-label" name="address">
+					<span class="input-label">{{"org_address" | translate}}</span><textarea rows="5" type="text" placeholder="{{'org_address' | translate}}" ng-model="settings.organization.address"></textarea>
+				</label>
+				<label class="item item-input" id="user-list-org-email-label" name="email">
+					<span class="input-label">{{"user_email" | translate}}</span><input type="text" placeholder="{{'user_email' | translate}}" ng-model="settings.organization.email">
+				</label>
+				<label class="item item-input" id="user-list-org-phone-label" name="phone">
+					<span class="input-label">{{"user_phone" | translate}}</span><input type="text" placeholder="{{'user_phone' | translate}}" ng-model="settings.organization.phone">
+				</label>
+			</ion-list>
+			<input	type="submit"
+					class="button button-block button-balanced"
+					ng-click="settings.saveUserEdit(settings.organization, taxForm, $event)"
+					value="{{'save_button' | translate}}">
+			<button class="button button-block button-assertive"
+					ng-click="settings.cancelUserEdit(settings.organization)">
+				{{"cancel_button" | translate}}
+			</button>
+		</form>
+	</ion-content>
+</ion-modal-view>
