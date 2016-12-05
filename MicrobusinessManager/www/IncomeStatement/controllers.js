@@ -1,9 +1,12 @@
 (function () {
 	angular.module('app.income-statement')
-	.controller('IncomeStatementController', IncomeStatementController)
+	.controller('IncomeStatementController', ['IncomeStatementService', '', IncomeStatementController])
 
-	function IncomeStatementController (startDate, endDate, timeFrame, incomeStatement, Database, $scope, $state, $q, $ionicPopover, $ionicHistory) {
+	function IncomeStatementController (startDate, endDate, timeFrame, incomeStatement, Database, $scope, $state, $q, $ionicPopover, $ionicHistory, $ionicModal, IncomeStatementService) {
 		var vm = this;
+
+		setDefaultsForPdfViewer($scope);
+
 
 		vm.startDate = startDate;
 		vm.endDate = endDate;
@@ -12,6 +15,7 @@
 		vm.showPopupMenu = showPopupMenu;
 		vm.closeIncomeStatement = closeIncomeStatement;
 		vm.generatePDF = generatePDF;
+		vm.getUserInfo = getUserInfo;
 		vm.groupBy = 'name';
 		vm.ionicPopover = $ionicPopover;
 
@@ -27,6 +31,11 @@
 			vm.incomeStatement.incomeItems.sort(sortByName);
 			vm.incomeStatement.expenseItems.sort(sortByName);
 			calculateTotals();
+			vm.generatePDF();
+			$scope.$on('$destroy', function() {
+				Log.l("IncomeStatement.controller: Cleaning up scope and removing pdfModal...")
+				vm.pdfModal.remove();
+			});
 		}
 
 		function change (startDate, timeFrame) {
@@ -49,6 +58,22 @@
 				calculateTotals();
 			});
 		}
+
+		function getUserInfo(Database) {
+			return Database.select('user').then(function (response) {
+				var items = [];
+				if (response.rows.length === 0) {
+					return items;
+				}
+				for (var i = response.rows.length - 1; i >= 0; i--) {
+					var item = response.rows.item(i);
+					items.push(item);
+				}
+				// user = items;
+				// organization = items;
+				return items[0];
+			});
+		},
 
 		function calculateTotals () {
 			vm.totalIncome = vm.incomeStatement.incomeItems.reduce(function (prev, curr) {
@@ -74,11 +99,11 @@
 		}
 
 		function showPopupMenu() {
-			console.log("IA: showing Popup Menu ...");
+			Log.l("IA: showing Popup Menu ...");
 			$ionicPopover.fromTemplateUrl('IncomeStatement/templates/PopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
-				console.log("IA: now in function after ionicPopover.fromTemplateUrl() ...")
+				Log.l("IA: now in function after ionicPopover.fromTemplateUrl() ...")
 				$scope.popover = popover;
 				vm.popover = popover;
 				// popover.show(".income-statement-menu")
@@ -86,53 +111,87 @@
 
 
 			$scope.openPopover = function($event) {
-				console.log("IA: now in scope.openPopover()")
+				Log.l("IA: now in scope.openPopover()")
 				vm.popover.show($event);
 				var headerbar = angular.element(".income-statement-bar");
 				var barHeight = headerbar.height();
-				console.log("IA: Menu bar is " + barHeight + "px height");
+				Log.l("IA: Menu bar is " + barHeight + "px height");
 				var elPopover = $("#PopupMenu001");
 				var popTop = elPopover.position().top;
-				console.log("elPopover has top " + popTop);
+				Log.l("elPopover has top " + popTop);
 				var newPopTop = barHeight + 1 + "px";
 				elPopover.css("top", newPopTop);
-				console.log("elPopover now has top " + newPopTop);
+				Log.l("elPopover now has top " + newPopTop);
 				// vm.popover.positionView(".ion-android-menu", vm.popover);
 				// vm.popover.show(".ion-android-menu");
 				// vm.popover.positionView(".ion-android-menu", vm.popover);
 			};
 			$scope.closePopover = function() {
-				console.log("IA: now in scope.closePopover()")
+				Log.l("IA: now in scope.closePopover()")
 				vm.popover.hide();
 			};
 			
 			//Cleanup the popover when we're done with it!
 			$scope.$on('$destroy', function() {
-				console.log("IA: now in scope.on('destroy')");
+				Log.l("IA: now in scope.on('destroy')");
 				vm.popover.remove();
 			});
 			// Execute action on hidden popover
 			$scope.$on('popover.hidden', function() {
-				console.log("IA: now in scope.on('popover.hidden')");
+				Log.l("IA: now in scope.on('popover.hidden')");
 			// Execute action
 			});
 			// Execute action on remove popover
 			$scope.$on('popover.removed', function() {
-				console.log("IA: now in scope.on('popover.removed')");
+				Log.l("IA: now in scope.on('popover.removed')");
 			// Execute action
 			});
 		}
 
 		function closeIncomeStatement() {
-			console.log("IA: closing Income Statement ...");
+			Log.l("IA: closing Income Statement ...");
 			$ionicHistory.goBack();
 		}
 
 		function generatePDF() {
-			console.log("IA: Now in generatePDF()");
+			Log.l("IA: Now in generatePDF()");
+			// Initialize the modal view.
+			$ionicModal.fromTemplateUrl('IncomeStatement/templates/pdf-viewer.html', {
+				scope: $scope,
+				animation: 'slide-in-up'
+			}).then(function (modal) {
+				vm.modal = modal;
+				vm.pdfModal = modal;
+			});
 		}
 
+		function createReport() {
+			IncomeStatementService.createPdf(invoice).then(function(pdf) {
+				var blob = new Blob([pdf], {type: 'application/pdf'});
+				$scope.pdfUrl = URL.createObjectURL(blob);
 
+				// Display the modal view
+				vm.modal.show();
+			});
+
+		}
+
+		function setDefaultsForPdfViewer($scope) {
+			$scope.scroll = 0;
+			$scope.loading = 'loading';
+
+			$scope.onError = function (error) {
+				Log.e(error);
+			};
+
+			$scope.onLoad = function () {
+				$scope.loading = '';
+			};
+
+			$scope.onProgress = function (progress) {
+				Log.l(progress);
+			};
+		}
 
 		init();
 	}

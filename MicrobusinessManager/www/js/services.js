@@ -31,7 +31,8 @@
 		return uint8Array;
 	}
 
-	function createDocumentDefinition(invoice) {
+	function createDocumentDefinition(report, user) {
+		var invoice = report;
 		var items = invoice.Items.map(function(item) {
 			return [item.Description, item.Quantity, item.Price];
 		});
