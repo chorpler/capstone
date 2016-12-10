@@ -21,7 +21,8 @@
 		vm.endDate = endDate;
 		vm.timeFrame = timeFrame;
 		vm.incomeStatement = incomeStatement;
-		vm.showPopupMenu = showPopupMenu;
+		vm.createPopupMenu = createPopupMenu;
+		vm.closePopupMenu = closePopupMenu;
 		vm.closeIncomeStatement = closeIncomeStatement;
 		vm.generatePDF = generatePDF;
 		vm.getUserInfo = getUserInfo;
@@ -31,6 +32,7 @@
 		vm.createPDFEmail = createPDFEmail;
 		vm.createPDFPopupMenu = createPDFPopupMenu;
 		vm.openPDFPopover = openPDFPopover;
+		vm.closePDFPopupMenu = closePDFPopupMenu;
 		vm.user = user;
 		vm.groupBy = 'name';
 		vm.ionicPopover = $ionicPopover;
@@ -60,10 +62,9 @@
 			vm.incomeStatement.expenseItems.sort(sortByName);
 			calculateTotals();
 			// setDefaultsForPdfViewer($scope);
-			vm.showPopupMenu($scope);
-			vm.showPDFPopupMenu($scope);
+			vm.createPopupMenu($scope);
 			vm.generatePDF();
-			vm.createPDFPopupMenu();
+			vm.createPDFPopupMenu($scope);
 			$scope.$on('$destroy', function() {
 				Log.l("IncomeStatement.controller: Cleaning up scope and removing pdfModal...")
 				vm.pdfModal.remove();
@@ -153,29 +154,24 @@
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("IA: now in function after ionicPopover.fromTemplateUrl('PDFPopupMenu') ...");
-				$scope.pdfPopover = popover;
-				vm.pdfPopover = popover;
+				$scope.pdfMenuPopover = popover;
+				vm.pdfMenuPopover = popover;
 				// popover.show(".income-statement-menu")
 			});
 
-			vm.vmScope.closePDFPopover = function() {
-				Log.l("IA: now in scope.closePDFPopover()")
-				vm.pdfPopover.hide();
-			};
-
 			//Cleanup the popover when we're done with it!
 			vm.vmScope.$on('$destroy', function() {
-				Log.l("IA: now in scope.on('destroy') for pdfPopover");
-				vm.pdfPopover.remove();
+				Log.l("IA: now in scope.on('destroy') for pdfMenuPopover");
+				vm.pdfMenuPopover.remove();
 			});
 			// Execute action on hidden popover
-			vm.vmScope.$on('pdfPopover.hidden', function() {
-				Log.l("IA: now in scope.on('pdfPopover.hidden')");
+			vm.vmScope.$on('pdfMenuPopover.hidden', function() {
+				Log.l("IA: now in scope.on('pdfMenuPopover.hidden')");
 				// Execute action
 			});
 			// Execute action on remove popover
-			vm.vmScope.$on('pdfPopover.removed', function() {
-				Log.l("IA: now in scope.on('pdfPopover.removed')");
+			vm.vmScope.$on('pdfMenuPopover.removed', function() {
+				Log.l("IA: now in scope.on('pdfMenuPopover.removed')");
 				// Execute action
 			});
 		}
@@ -183,7 +179,7 @@
 		function openPDFPopover($event) {
 			Log.l("IA: now in openPDFPopover()")
 			// vm.popover.show($event);
-			vm.pdfPopover.show('.ion-android-menu');
+			vm.pdfMenuPopover.show('.ion-android-menu');
 			var headerbar = angular.element(".income-statement-bar");
 			var hbar = $("ion-header-bar");
 			var hbarheight = hbar.height();
@@ -197,7 +193,14 @@
 			Log.l("elPopover now has top " + newPopTop);
 		}
 
-		function showPopupMenu($scope) {
+		function closePDFPopupMenu() {
+			Log.l("IA: Now in closePDFMenu() ...");
+			vm.pdfMenuPopover.hide();
+			vm.closePDFViewer();
+			vm.closePopupMenu();
+		}
+
+		function createPopupMenu($scope) {
 			Log.l("IA: showing Popup Menu ...");
 			$ionicPopover.fromTemplateUrl('IncomeStatement/templates/PopupMenu.html', {
 				scope: $scope
@@ -206,28 +209,39 @@
 				$scope.popover = popover;
 				vm.popover = popover;
 				// popover.show(".income-statement-menu")
+				//Cleanup the popover when we're done with it!
+				vm.vmScope.$on('$destroy', function() {
+					Log.l("IA: now in scope.on('destroy')");
+					vm.popover.remove();
+				});
+				// Execute action on hidden popover
+				vm.vmScope.$on('popover.hidden', function() {
+					Log.l("IA: now in scope.on('popover.hidden')");
+					// Execute action
+				});
+				// Execute action on remove popover
+				vm.vmScope.$on('popover.removed', function() {
+					Log.l("IA: now in scope.on('popover.removed')");
+					// Execute action
+				});
 			});
 
-			vm.vmScope.closePopover = function() {
-				Log.l("IA: now in scope.closePopover()")
-				vm.popover.hide();
-			};
 
-			//Cleanup the popover when we're done with it!
-			vm.vmScope.$on('$destroy', function() {
-				Log.l("IA: now in scope.on('destroy')");
-				vm.popover.remove();
-			});
-			// Execute action on hidden popover
-			vm.vmScope.$on('popover.hidden', function() {
-				Log.l("IA: now in scope.on('popover.hidden')");
-				// Execute action
-			});
-			// Execute action on remove popover
-			vm.vmScope.$on('popover.removed', function() {
-				Log.l("IA: now in scope.on('popover.removed')");
-				// Execute action
-			});
+			// //Cleanup the popover when we're done with it!
+			// vm.vmScope.$on('$destroy', function() {
+			// 	Log.l("IA: now in scope.on('destroy')");
+			// 	vm.popover.remove();
+			// });
+			// // Execute action on hidden popover
+			// vm.vmScope.$on('popover.hidden', function() {
+			// 	Log.l("IA: now in scope.on('popover.hidden')");
+			// 	// Execute action
+			// });
+			// // Execute action on remove popover
+			// vm.vmScope.$on('popover.removed', function() {
+			// 	Log.l("IA: now in scope.on('popover.removed')");
+			// 	// Execute action
+			// });
 		}
 
 		function openPopover($event) {
@@ -250,6 +264,11 @@
 			// vm.popover.positionView(".ion-android-menu", vm.popover);
 		}
 
+		function closePopupMenu() {
+			Log.l("IA: now in scope.closePopupMenu()")
+			vm.popover.hide();
+		}
+
 		function closeIncomeStatement() {
 			Log.l("IA: closing Income Statement ...");
 			$state.go('app.reports');
@@ -259,7 +278,7 @@
 		function closePDFViewer() {
 			Log.l("IA: Now in closePDFViewer()...");
 			// vm.pdfModal.hide();
-			vm.pdfModal.remove();
+			vm.pdfModal.hide();
 		}
 
 		function emailPDF() {
