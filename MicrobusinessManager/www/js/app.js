@@ -11,8 +11,8 @@
 		'app.settings',
 		'app.salary',
 		'pascalprecht.translate',
-		'tmh.dynamicLocale'
-
+		'tmh.dynamicLocale',
+		'ui.router'
 	])
 	.run(run)
 	.config(config);
@@ -238,14 +238,15 @@
 			org_name: 'Organization Name',
 			org_rep: 'Representative',
 			org_address: 'Address',
-			user_email: 'E-mail Address',
+			user_email: 'Email Address',
 			user_phone: 'Phone',
 			user_filled: 'Entered',
 			user_empty: 'Not Entered',
 			str_generate_pdf: 'Generate PDF',
 			str_import: 'Import',
 			str_export: 'Export',
-			str_sendto: 'Send to …'
+			str_sendto: 'Send to …',
+			str_emailpdf: 'Email PDF'
 		});
 
 		$translateProvider.translations('es', {
@@ -399,11 +400,15 @@
 			str_generate_pdf: 'Generar PDF',
 			str_import: 'Importar',
 			str_export: 'Exportar',
-			str_sendto: 'Enviar a …'
+			str_sendto: 'Enviar a …',
+			str_emailpdf: 'Envíe PDF por Correo Electrónico'
 		});
 
 		$translateProvider.preferredLanguage("en");
 		$translateProvider.fallbackLanguage("en");
+
+		// Enable sanitization via escaping of HTML
+		$translateProvider.useSanitizeValueStrategy('sanitize');
 
 
 		// if none of the above states are matched, use this as the fallback

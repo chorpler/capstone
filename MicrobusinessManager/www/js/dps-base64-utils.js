@@ -513,24 +513,35 @@
 		return Array.prototype.slice.call(list || [], 0);
 	}
 
+	function titlecaseLowercaseWords(a,b,c,d,e) {
+		return b+c.toUpperCase()+d+e;
+	}
+
+	function titleCase(str) {
+		var wordsRx = /(^|\s)([a-z])([a-z]*)(\s|$)/g;
+		return str.replace(wordsRx, titlecaseLowercaseWords);
+	}
 
 
-	u.isFunc   = isFunction     ;
-	u.isNum    = isNumber       ;
-	u.isBool   = isBoolean      ;
-	u.isStr    = isString       ;
-	u.isArr    = isArray        ;
-	u.isObj    = isObject       ;
-	u.isUndef  = isUndefined    ;
-	u.isDef    = isDefined      ;
-	u.sizeOf   = sizeOfObject   ;
-	u.merge    = merge          ;
-	u.blankOut = blankOutObject ;
-	u.slice    = slice          ;
-	u.rotate   = arrayRotate    ;
-	u.salength = sparseLength   ;
-	u.last     = lastElement    ;
-	u.toArray  = toArray        ;
+
+
+	u.isFunc    = isFunction     ;
+	u.isNum     = isNumber       ;
+	u.isBool    = isBoolean      ;
+	u.isStr     = isString       ;
+	u.isArr     = isArray        ;
+	u.isObj     = isObject       ;
+	u.isUndef   = isUndefined    ;
+	u.isDef     = isDefined      ;
+	u.sizeOf    = sizeOfObject   ;
+	u.merge     = merge          ;
+	u.blankOut  = blankOutObject ;
+	u.slice     = slice          ;
+	u.rotate    = arrayRotate    ;
+	u.salength  = sparseLength   ;
+	u.last      = lastElement    ;
+	u.toArray   = toArray        ;
+	u.titleCase = titleCase      ;
 
 	Object.defineProperty(u, "toScript", {
 		"configurable": true,
@@ -550,7 +561,7 @@ function globalizeFunc(funcName) {
 	}
 }
 
-var fns = ['isFunc', 'isNum', 'isBool', 'isStr', 'isArr', 'isObj', 'isUndef', 'isDef', 'sizeOf', 'merge', 'blankOut', 'slice', 'rotate', 'salength', 'last', 'toArray'];
+var fns = ['isFunc', 'isNum', 'isBool', 'isStr', 'isArr', 'isObj', 'isUndef', 'isDef', 'sizeOf', 'merge', 'blankOut', 'slice', 'rotate', 'salength', 'last', 'toArray', 'titleCase'];
 
 for(var name in fns) {
 	globalizeFunc(fns[name]);

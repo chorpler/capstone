@@ -1,10 +1,10 @@
 (function () {
 	angular.module('app')
 	.factory('Database', Database)
-	.factory('CashBalance', CashBalance)
-	.factory('ReportService', ['$q', ReportService]);
+	.factory('CashBalance', CashBalance);
+	// .factory('ReportService', ['$q', ReportService]);
 
-	function ReportService($q) {
+/*	function ReportService($q) {
 		function createPdf(invoice) {
 			return $q(function(resolve, reject) {
 				var dd = createDocumentDefinition(invoice);
@@ -120,7 +120,7 @@
 			}
 		}
 		return dd;
-	}
+	}*/
 
 	function Database ($ionicPlatform, $cordovaSQLite, $q) {
 		var db;

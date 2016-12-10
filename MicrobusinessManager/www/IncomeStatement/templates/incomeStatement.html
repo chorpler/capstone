@@ -1,25 +1,31 @@
-<ion-view class="income-statement" hide-nav-bar="true">
-<!-- <ion-view view-title="{{'reports_income_statement' | translate}}" class="income-statement"> -->
+<!-- <ion-view class="income-statement"> -->
+
+<ion-view view-title="{{'reports_income_statement' | translate}}" class="income-statement">
+	<ion-nav-buttons side="right">
+		<button class="button button-icon icon ion-android-menu" ng-click="income.openPopover($event)"></button>
+	</ion-nav-buttons>
 <!-- <ion-view view-title="test3" class="income-statement"> -->
-	<ion-header-bar align-title="left" class="income-statement-bar">
+<!-- 	<ion-header-bar align-title="left" class="income-statement-bar">
 		<div class="buttons">
-			<!-- <button class="button button-clear" ng-click="reports.closeIncomeStatement()"> -->
 			<button class="button button-icon icon ion-android-arrow-back" ng-click="income.closeIncomeStatement()">
-				<!-- <span class="back-color">{{"close_button" | translate}}</span> -->
 			</button>
 		</div>
 		<h1 class="title">{{'reports_income_statement' | translate}}</h1>
-<!-- 		<div class="buttons">
-			<button class="button button-icon icon ion-navicon" ng-click="reports.closeIncomeStatement()">{{"menu_title" | translate}}</button>
-		</div> -->
 		<div class="buttons">
-			<!-- <button class="button button-icon icon ion-android-menu" ng-click="income.showPopupMenu($event)"></button> -->
-			<button class="button button-icon icon ion-android-menu" ng-click="openPopover($event)"></button>
+			<button class="button button-icon icon ion-android-menu" ng-click="income.openPopover($event)"></button>
 		</div>
-
-	</ion-header-bar>
+	</ion-header-bar> -->
+<!-- 	<ion-header-bar class="bar-light bar-subheader">
+		<div class="buttons">
+			<button class="button button-icon icon ion-android-arrow-back" ng-click="income.closeIncomeStatement()">CLOSE</button>
+		</div>
+		<div class="buttons">
+			<button class="button button-icon icon ion-android-menu pull-right" ng-click="income.openPopover($event)"></button>
+		</div>
+	</div>
+	</ion-header-bar> -->
 	<report-header start-date="income.startDate" end-date="income.endDate" time-frame="income.timeFrame" change="income.change" class="has-header"></report-header>
-	<ion-content class="has-footer">
+	<ion-content class="has-footer has-header">
 		<div class="card">
 			<div class="item item-divider">
 				<div class="row">
