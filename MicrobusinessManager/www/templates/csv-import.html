@@ -1,0 +1,19 @@
+<ion-modal-view class="csv-import-viewer">
+<!-- 	<ion-nav-buttons side="right">
+		<button class="button button-icon icon ion-android-menu" ng-click="income.openPDFPopover($event)"></button>
+	</ion-nav-buttons> -->
+	<ion-header-bar>
+		<h1 class="title">CSV Import</h1>
+	</ion-header-bar>
+	<ion-content>
+		<ng-csv-import 
+			content="csv.content"
+			material
+			md-button-class="md-icon-button md-raised md-accent"
+			md-svg-icon="file:ic_file_upload_24px"
+			header="csv.header"
+			separator="csv.separator"
+			result="csv.result"
+			accept="csv.accept"></ng-csv-import>
+	</ion-content>
+</ion-modal-view>

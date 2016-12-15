@@ -1,103 +1,105 @@
 <ion-view view-title="{{'menu_sales' | translate}}">
-  <div class="list card has-header">
-      <div class="item item-divider">
-        <div class="row center">
-          <div class="col">
-            <span class="name-container">
-              Total: {{sales.saleTotal | currency}}
-            </span>
-          </div>
-          <div class="col">
-            <span class="name-container">
-              {{"menu_products" | translate}}: {{sales.productCount}}
-            </span>
-          </div>
-          <div class="col">
-            <div class="assertive" ng-click="sales.resetSale()">
-              {{"sales_reset" | translate}}
-            </div>
-          </div>
-        </div>
-      </div>
+	<div class="list card has-header">
+			<div class="item item-divider">
+				<div class="row center">
+					<div class="col">
+						<span class="name-container">
+							Total: {{sales.saleTotal | currency}}
+						</span>
+					</div>
+					<div class="col">
+						<span class="name-container">
+							{{"menu_products" | translate}}: {{sales.productCount}}
+						</span>
+					</div>
+					<div class="col">
+						<div class="assertive" ng-click="sales.resetSale()">
+							{{"sales_reset" | translate}}
+						</div>
+					</div>
+				</div>
+			</div>
 
-      <ion-item>
-        <div class="button button-block button-balanced" ng-click="sales.checkout()">
-          {{"sales_checkout" | translate}}
-        </div>
-      </ion-item>
-  </div>
-  <ion-content class="sales" ng-class="{salesMore: sales.saleTotal >= 20}">
-    <div class="card" ng-show="sales.error">
-      <div class="item item-text-wrap assertive center">
-        <!-- {{sales.error}} -->
-        {{sales.productError.name}} {{"sales_error_part1" | translate}} {{sales.productError.limit}}  {{"sales_error_part2" | translate}} {{sales.productError.limit}}.
-      </div>
-    </div>
-    <div class="card" ng-if="sales.products.length">
-      <div class="item item-divider">
-        <div class="row" class="category-title">
-          <div class="col col-70">
-            <span class="category_title">{{"sales_category" | translate}}</span>
-          </div>
-          <div class="col col-30">
-            <!-- <button class="button button-small button-outline button-dark" ng-click="sales.filter=''">
-              All
-            </button> -->
-            <div class="activeAll" ng-click="sales.filter=''; all = true" ng-class="{activeAll: all, notActive: sales.filter !== ''}">
-              {{"sales_all" | translate}}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div ng-repeat="category in sales.categories" class="category">
-        <div class="row" ng-if="$even">
-          <div class="col col-50"
-            ng-repeat="category in [sales.categories[$index],sales.categories[$index + 1]]">
-            <button ng-hide="!category.category" class="button button-block default" ng-click="sales.filter = category.category" ng-class="{'activeCategory': sales.filter === category.category}">
-              {{category.category}}
-            </button>
-          </div>
-        </div>
-      </div>
-      </label>
-      </div>
-    </div>
-    <div class="list card" ng-repeat="product in sales.products | filter:sales.filter as results track by product.id">
-      <div class="item item-divider">
-        <div class="row center">
-          <div class="col">
-            <span class="name-container">{{"sales_name" | translate}}: {{product.name}}</span>
-          </div>
-          <div class="col">
-            <span class="amount-container">{{"sales_price" | translate}}: {{product.saleprice | currency}}</span>
-          </div>
-          <div class="col" ng-show="product.inventoryid">
-            <span class="amount-container">{{"sales_limit" | translate}}: {{product.limit}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="row center">
-        <div class="col">
-          <button class="button-icon" ng-click="sales.removeProduct(product)">
-            <i class="icon ion-minus-round"></i>
-          </button>
-        </div>
-        <div class="col">
-          <div class="button-icon product-qty">
-            {{product.count}}
-          </div>
-        </div>
-        <div class="col">
-          <button class="button-icon" ng-click="sales.addProduct(product)">
-            <i class="icon ion-plus-round"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="card" ng-if="sales.products.length === 0">
-      <div class="item item-text-wrap center">
-        <span class="no-products">{{"sales_no_product" | translate}}</span>
-      </div>
-    </div>
-  </ion-content>
+			<ion-item>
+				<div class="button button-block button-balanced" ng-click="sales.checkout()">
+					{{"sales_checkout" | translate}}
+				</div>
+			</ion-item>
+			<ion-item>
+
+	</div>
+	<ion-content class="sales" ng-class="{salesMore: sales.saleTotal >= 20}">
+		<div class="card" ng-show="sales.error">
+			<div class="item item-text-wrap assertive center">
+				<!-- {{sales.error}} -->
+				{{sales.productError.name}} {{"sales_error_part1" | translate}} {{sales.productError.limit}}  {{"sales_error_part2" | translate}} {{sales.productError.limit}}.
+			</div>
+		</div>
+		<div class="card" ng-if="sales.products.length">
+			<div class="item item-divider">
+				<div class="row" class="category-title">
+					<div class="col col-70">
+						<span class="category_title">{{"sales_category" | translate}}</span>
+					</div>
+					<div class="col col-30">
+						<!-- <button class="button button-small button-outline button-dark" ng-click="sales.filter=''">
+							All
+						</button> -->
+						<div class="activeAll" ng-click="sales.filter=''; all = true" ng-class="{activeAll: all, notActive: sales.filter !== ''}">
+							{{"sales_all" | translate}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-repeat="category in sales.categories" class="category">
+				<div class="row" ng-if="$even">
+					<div class="col col-50"
+						ng-repeat="category in [sales.categories[$index],sales.categories[$index + 1]]">
+						<button ng-hide="!category.category" class="button button-block default" ng-click="sales.filter = category.category" ng-class="{'activeCategory': sales.filter === category.category}">
+							{{category.category}}
+						</button>
+					</div>
+				</div>
+			</div>
+			</label>
+			</div>
+		</div>
+		<div class="list card" ng-repeat="product in sales.products | filter:sales.filter as results track by product.id">
+			<div class="item item-divider">
+				<div class="row center">
+					<div class="col">
+						<span class="name-container">{{"sales_name" | translate}}: {{product.name}}</span>
+					</div>
+					<div class="col">
+						<span class="amount-container">{{"sales_price" | translate}}: {{product.saleprice | currency}}</span>
+					</div>
+					<div class="col" ng-show="product.inventoryid">
+						<span class="amount-container">{{"sales_limit" | translate}}: {{product.limit}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="row center">
+				<div class="col">
+					<button class="button-icon" ng-click="sales.removeProduct(product)">
+						<i class="icon ion-minus-round"></i>
+					</button>
+				</div>
+				<div class="col">
+					<div class="button-icon product-qty">
+						{{product.count}}
+					</div>
+				</div>
+				<div class="col">
+					<button class="button-icon" ng-click="sales.addProduct(product)">
+						<i class="icon ion-plus-round"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="card" ng-if="sales.products.length === 0">
+			<div class="item item-text-wrap center">
+				<span class="no-products">{{"sales_no_product" | translate}}</span>
+			</div>
+		</div>
+	</ion-content>
 </ion-view>

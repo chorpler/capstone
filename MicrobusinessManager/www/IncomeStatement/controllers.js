@@ -7,13 +7,15 @@
 	// function IncomeStatementController (startDate, endDate, timeFrame, incomeStatement, Database, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, user, IncomeStatementService) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, Database, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, user, IncomeStatementService) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, Database, user, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, IncomeStatementService) {
-	function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, pdfService, Database, user, $filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaEmailComposer) {
+	function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, pdfService, Database, user, $filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, createPdf, Database, user, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal) {
 		var vm = this;
 		var win = window;
 
 		win.cordovaFile = $cordovaFile;
 		win.cordovaEmail = $cordovaEmailComposer;
+		win.persist = $persist;
+		win.sepiDatabase = Database;
 
 		vm.vmScope = $scope;
 		vm.openPopover = openPopover;
@@ -43,6 +45,7 @@
 		vm.reportData = {};
 		vm.pdfblob = null;
 		vm.pdfFile = null;
+
 		// vm.createPdf = pdfService.createPdf;
 		// vm.isrService = IncomeStatementService;
 
@@ -52,6 +55,9 @@
 
 		vm.change = change;
 		vm.changeGroupBy = changeGroupBy;
+
+		vm.pdfViewerTitle = "Income Statement";
+		vm.pdfViewerNumber = 1;
 
 		function init() {
 			Log.l("IAR: Now running init...");
@@ -150,7 +156,7 @@
 
 		function createPDFPopupMenu($scope) {
 			Log.l("IA: showing PDFPopup Menu ...");
-			$ionicPopover.fromTemplateUrl('IncomeStatement/templates/PDFPopupMenu.html', {
+			$ionicPopover.fromTemplateUrl('templates/PDFPopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("IA: now in function after ionicPopover.fromTemplateUrl('PDFPopupMenu') ...");
@@ -225,33 +231,16 @@
 					// Execute action
 				});
 			});
-
-
-			// //Cleanup the popover when we're done with it!
-			// vm.vmScope.$on('$destroy', function() {
-			// 	Log.l("IA: now in scope.on('destroy')");
-			// 	vm.popover.remove();
-			// });
-			// // Execute action on hidden popover
-			// vm.vmScope.$on('popover.hidden', function() {
-			// 	Log.l("IA: now in scope.on('popover.hidden')");
-			// 	// Execute action
-			// });
-			// // Execute action on remove popover
-			// vm.vmScope.$on('popover.removed', function() {
-			// 	Log.l("IA: now in scope.on('popover.removed')");
-			// 	// Execute action
-			// });
 		}
 
 		function openPopover($event) {
 			Log.l("IA: now in scope.openPopover()")
 			// vm.popover.show($event);
-			vm.popover.show('.ion-android-menu');
+			vm.popover.show('.ion-more');
+/*
 			var headerbar = angular.element(".income-statement-bar");
 			var hbar = $("ion-header-bar");
 			var hbarheight = hbar.height();
-			// var barHeight = headerbar.height();
 			Log.l("IA: Menu bar height is %d px", hbarheight);
 			var elPopover = $("#PopupMenu001");
 			var popTop = elPopover.position().top;
@@ -259,6 +248,7 @@
 			var newPopTop = hbarheight + "px";
 			elPopover.css("top", newPopTop);
 			Log.l("elPopover now has top " + newPopTop);
+*/
 			// vm.popover.positionView(".ion-android-menu", vm.popover);
 			// vm.popover.show(".ion-android-menu");
 			// vm.popover.positionView(".ion-android-menu", vm.popover);
@@ -315,7 +305,7 @@
 		function generatePDF() {
 			Log.l("IA: Now in generatePDF()");
 			// Initialize the modal view.
-			$ionicModal.fromTemplateUrl('IncomeStatement/templates/pdf-viewer.html', {
+			$ionicModal.fromTemplateUrl('templates/pdf-viewer.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function(modal) {
@@ -338,7 +328,7 @@
 				win.pdfFileURL = vm.pdfFileURL;
 				// vm.vmScope.pdfUrl = URL.createObjectURL(blob);
 				vm.vmScope.pdfUrl = vm.pdfFileURL;
-				$cordovaFile.createFile(cordova.file.dataDirectory, "IncomeStatement.pdf", true).then(function(success) {
+				$cordovaFile.writeFile(cordova.file.externalDataDirectory, "IncomeStatement.pdf", blob, true).then(function(success) {
 					Log.l("Success creating PDF file!");
 					Log.l(success);
 					vm.pdfFile = success;
@@ -369,112 +359,6 @@
 				Log.l(progress);
 			};
 		}
-
-/*		function base64ToUint8Array(base64) {
-			var raw = atob(base64);
-			var uint8Array = new Uint8Array(raw.length);
-			for (var i = 0; i < raw.length; i++) {
-				uint8Array[i] = raw.charCodeAt(i);
-			}
-			return uint8Array;
-		}
-
-		function createDocumentDefinition(report, user) {
-			var isr = report;
-			var items = isr.incomeItems.map(function(item) {
-				return [item.name, item.amount];
-			});
-			var expitems = isr.expenseItems.map(function(item) {
-				return [item.name, item.amount];
-			});
-
-			var userid = user.id;
-			var orgname = user.name;
-			var representative = user.representative;
-			var address = user.address;
-			var email = user.email;
-			var phone = user.phone;
-			var title = report.timeFrame + " Income Statement";
-			var dateRange = isr.startDate + " - " + isr.endDate;
-			var totalIncome = isr.totalIncome;
-			var totalExpenses = isr.totalExpenses;
-			var totalProfit = isr.totalProfit;
-
-			var dd = {
-				content: [
-					{ text: title, style: 'header' },
-					{ text: dateRange, alignment: 'right' },
-
-					// { text: '', style: 'subheader'},
-					{ text: 'ORGANIZATION', style: 'subheader' },
-					orgname,
-					representative,
-					address,
-
-
-					{ text: 'Income/Expenses', style: 'subheader' }, {
-						style: 'itemsTable',
-						table: {
-							widths: ['*', 75],
-							body: [
-								[
-									{ text: 'Name', style: 'itemsTableHeader' },
-									{ text: 'Amount', style: 'itemsTableHeader' }
-								]
-							].concat(items).concat(expitems)
-						}
-					}, {
-						style: 'totalsTable',
-						table: {
-							widths: ['*', 75],
-							body: [
-								[
-									'Total Income',
-									totalIncome,
-								],
-								[
-									'Total Expenses',
-									totalExpenses,
-								],
-								[
-									'Total Profit',
-									totalProfit,
-								]
-							]
-						},
-						layout: 'noBorders'
-					},
-				],
-				styles: {
-					header: {
-						fontSize: 20,
-						bold: true,
-						margin: [0, 0, 0, 10],
-						alignment: 'right'
-					},
-					subheader: {
-						fontSize: 16,
-						bold: true,
-						margin: [0, 20, 0, 5]
-					},
-					itemsTable: {
-						margin: [0, 5, 0, 15]
-					},
-					itemsTableHeader: {
-						bold: true,
-						fontSize: 13,
-						color: 'black'
-					},
-					totalsTable: {
-						bold: true,
-						margin: [0, 30, 0, 0]
-					}
-				},
-				defaultStyle: {}
-			}
-			return dd;
-		}
-*/
 
 		init();
 	}

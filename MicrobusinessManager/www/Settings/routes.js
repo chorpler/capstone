@@ -37,16 +37,9 @@
 						}
 						for (var i = response.rows.length - 1; i >= 0; i--) {
 							var item = response.rows.item(i);
-							var userid = item.id;
-							var name = item.name;
-							var representative = item.representative;
-							var address = item.address;
-							var email = item.email;
-							var phone = item.phone;
+							/* id, name, representative, street1, street2, city, state, postal, email, phone */
 							items.push(item);
 						}
-						// user = items;
-						// organization = items;
 						return items[0];
 					});
 				},

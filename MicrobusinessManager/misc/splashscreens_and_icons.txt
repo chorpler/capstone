@@ -1,0 +1,6 @@
+for %f in (port land) do ( for %g in (ldpi mdpi hdpi xhdpi xxhdpi xxxhdpi) do xcopy "resources\android\splash\drawable-%f-%g-screen.png" "platforms\android\res\drawable-"
+
+for %f in (port land) do ( for %g in (ldpi mdpi hdpi xhdpi) do xcopy "resources\android\splash\drawable-%f-%g-screen.png" "platforms\android\res\drawable-%f-%g\screen.png" )
+
+for %g in (ldpi mdpi hdpi xhdpi) do xcopy /y "resources\android\icon\drawable-%g-icon.png" "platforms\android\res\mipmap-%g\icon.png")
+

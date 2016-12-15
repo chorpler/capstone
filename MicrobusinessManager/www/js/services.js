@@ -1,146 +1,30 @@
-(function () {
+(function() {
 	angular.module('app')
-	.factory('Database', Database)
-	.factory('CashBalance', CashBalance);
+		.factory('Database', Database)
+		.factory('CashBalance', CashBalance);
 	// .factory('ReportService', ['$q', ReportService]);
 
-/*	function ReportService($q) {
-		function createPdf(invoice) {
-			return $q(function(resolve, reject) {
-				var dd = createDocumentDefinition(invoice);
-				var pdf = pdfMake.createPdf(dd);
-
-				pdf.getBase64(function(output) {
-					resolve(base64ToUint8Array(output));
-				});
-			});
-		}
-
-		var service = {
-			createPdf: createPdf
-		};
-		return service;
-	}
-
-	function base64ToUint8Array(base64) {
-		var raw = atob(base64);
-		var uint8Array = new Uint8Array(raw.length);
-		for (var i = 0; i < raw.length; i++) {
-			uint8Array[i] = raw.charCodeAt(i);
-		}
-		return uint8Array;
-	}
-
-	function createDocumentDefinition(report, user) {
-		var invoice = report;
-		var items = invoice.Items.map(function(item) {
-			return [item.Description, item.Quantity, item.Price];
-		});
-
-		var dd = {
-			content: [
-				{ text: 'INVOICE', style: 'header'},
-				{ text: invoice.Date, alignment: 'right'},
-
-				{ text: 'From', style: 'subheader'},
-				invoice.AddressFrom.Name,
-				invoice.AddressFrom.Address,
-				invoice.AddressFrom.Country,		
-
-				{ text: 'To', style: 'subheader'},
-				invoice.AddressTo.Name,
-				invoice.AddressTo.Address,
-				invoice.AddressTo.Country,  
-
-				{ text: 'Items', style: 'subheader'},
-				{
-					style: 'itemsTable',
-					table: {
-						widths: ['*', 75, 75],
-						body: [
-							[ 
-								{ text: 'Description', style: 'itemsTableHeader' },
-								{ text: 'Quantity', style: 'itemsTableHeader' },
-								{ text: 'Price', style: 'itemsTableHeader' },
-							]
-						].concat(items)
-					}
-				},
-				{
-					style: 'totalsTable',
-					table: {
-						widths: ['*', 75, 75],
-						body: [
-							[
-								'',
-								'Subtotal',
-								invoice.Subtotal,
-							],
-							[
-								'',
-								'Shipping',
-								invoice.Shipping,
-							],
-							[
-								'',
-								'Total',
-								invoice.Total,
-							]
-						]
-					},
-					layout: 'noBorders'
-				},
-			],
-			styles: {
-				header: {
-					fontSize: 20,
-					bold: true,
-					margin: [0, 0, 0, 10],
-					alignment: 'right'
-				},
-				subheader: {
-					fontSize: 16,
-					bold: true,
-					margin: [0, 20, 0, 5]
-				},
-				itemsTable: {
-					margin: [0, 5, 0, 15]
-				},
-				itemsTableHeader: {
-					bold: true,
-					fontSize: 13,
-					color: 'black'
-				},
-				totalsTable: {
-					bold: true,
-					margin: [0, 30, 0, 0]
-				}
-			},
-			defaultStyle: {
-			}
-		}
-		return dd;
-	}*/
-
-	function Database ($ionicPlatform, $cordovaSQLite, $q) {
-		var db;
+	function Database($ionicPlatform, $cordovaSQLite, $q) {
+		var db = null;
+		var dbname = 'my.db';
+		var dbparams = { name: dbname, iosDatabaseLocation: 'default' };
 		var deferred = $q.defer();
-		$ionicPlatform.ready(function () {
-			// $cordovaSQLite.deleteDB({ name: 'my.db', location: 'default' });
-			db = $cordovaSQLite.openDB({ name: 'my.db', iosDatabaseLocation: 'default' });
+		$ionicPlatform.ready(function() {
+			db = $cordovaSQLite.openDB(dbparams);
+			window.sepidb = db;
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
-										'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
+				'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
-										'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
+				'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
-										'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
+				'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, address text, email text, phone text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
 			deferred.resolve();
 		});
 
@@ -152,7 +36,9 @@
 			selectProductsForSale: selectProductsForSale,
 			calculateCashOnHand: calculateCashOnHand,
 			generateIncomeStatement: generateIncomeStatement,
-			getCommission: getCommission
+			getCommission: getCommission,
+			getDB: getDB,
+			getDBNew: getDBNew
 		};
 
 		var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
@@ -202,9 +88,9 @@
 		var UPDATE_TAX = 'UPDATE tax set active = ?, percentage = ? ';
 		var REMOVE_TAX = 'DELETE FROM tax';
 
-		var INSERT_USER = 'INSERT INTO user (name, representative, address, email, phone) VALUES (?,?,?,?,?)';
-		var SELECT_USER = 'SELECT id, name, representative, address, email, phone FROM user';
-		var UPDATE_USER = 'UPDATE user set name = ?, representative = ?, address = ?, email = ?, phone = ? ';
+		var INSERT_USER = 'INSERT INTO user (name, representative, street1, street2, city, state, postal, email, phone) VALUES (?,?,?,?,?,?,?,?,?)';
+		var SELECT_USER = 'SELECT id, name, representative, street1, street2, city, state, postal, email, phone FROM user';
+		var UPDATE_USER = 'UPDATE user set name = ?, representative = ?, street1 = ?, street2 = ?, city = ?, state = ?, postal = ?, email = ?, phone = ? ';
 		var REMOVE_USER = 'DELETE FROM user';
 
 		var WHERE = ' WHERE ';
@@ -217,7 +103,7 @@
 
 		return service;
 
-		function insert (table, params) {
+		function insert(table, params) {
 			var query;
 			switch (table) {
 				case 'product':
@@ -252,16 +138,16 @@
 					break;
 			}
 
-			return deferred.promise.then(function () {
-				return $cordovaSQLite.execute(db, query, params).then(function (response) {
+			return deferred.promise.then(function() {
+				return $cordovaSQLite.execute(db, query, params).then(function(response) {
 					return response;
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				});
 			});
 		}
 
-		function select (table, id, name, type, startDate, endDate) {
+		function select(table, id, name, type, startDate, endDate) {
 			var query;
 			switch (table) {
 				case 'product':
@@ -335,17 +221,17 @@
 				whereClause = true;
 			}
 
-			return deferred.promise.then(function () {
+			return deferred.promise.then(function() {
 				return $cordovaSQLite.execute(db, query, params)
-					.then(function (response) {
+					.then(function(response) {
 						return response;
-					}, function (err) {
+					}, function(err) {
 						console.log(err);
 					});
 			});
 		}
 
-		function update (table, id, params) {
+		function update(table, id, params) {
 			if (!id) {
 				return;
 			}
@@ -389,16 +275,16 @@
 				params.push(id);
 			}
 
-			return deferred.promise.then(function () {
-				return $cordovaSQLite.execute(db, query, params).then(function (response) {
+			return deferred.promise.then(function() {
+				return $cordovaSQLite.execute(db, query, params).then(function(response) {
 					return response;
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				});
 			});
 		}
 
-		function remove (table, id) {
+		function remove(table, id) {
 			if (!id) {
 				return;
 			}
@@ -441,27 +327,27 @@
 
 			var params = id ? [id] : [];
 
-			return deferred.promise.then(function () {
-				return $cordovaSQLite.execute(db, query, params).then(function (response) {
+			return deferred.promise.then(function() {
+				return $cordovaSQLite.execute(db, query, params).then(function(response) {
 					return response;
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				});
 			});
 		}
 
-		function selectProductsForSale (saleId) {
-			var query	= 'SELECT DISTINCT saleproduct.id, saleproduct.saleid, saleproduct.productid, name, saleprice, quantity FROM product INNER JOIN saleproduct ON product.id = saleproduct.productid WHERE saleproduct.saleid = ?';
-			return deferred.promise.then(function () {
-				return $cordovaSQLite.execute(db, query, [saleId]).then(function (response) {
+		function selectProductsForSale(saleId) {
+			var query = 'SELECT DISTINCT saleproduct.id, saleproduct.saleid, saleproduct.productid, name, saleprice, quantity FROM product INNER JOIN saleproduct ON product.id = saleproduct.productid WHERE saleproduct.saleid = ?';
+			return deferred.promise.then(function() {
+				return $cordovaSQLite.execute(db, query, [saleId]).then(function(response) {
 					return response;
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				});
 			});
 		}
 
-		function calculateCashOnHand (startDate, endDate) {
+		function calculateCashOnHand(startDate, endDate) {
 			var queryStart = 'SELECT total(amount) as total FROM ';
 			var queryExpense = '(SELECT total(amount) * -1 as amount FROM expense ';
 			var queryUnion = ' UNION ';
@@ -470,25 +356,25 @@
 			var queryEnd = ')';
 
 			queryExpense = queryExpense + ((startDate || endDate) ?
-														WHERE +
-														(startDate != null ? 'date > ? ' +
-															(endDate != null ? AND + 'date < ? ' : '') :
-															(endDate != null ? 'date < ?' : '')
-														) : '');
+				WHERE +
+				(startDate != null ? 'date > ? ' +
+					(endDate != null ? AND + 'date < ? ' : '') :
+					(endDate != null ? 'date < ?' : '')
+				) : '');
 
 			querySales = querySales + ((startDate || endDate) ?
-														WHERE +
-														(startDate != null ? 'date > ? ' +
-															(endDate != null ? AND + 'date < ? ' : '') :
-															(endDate != null ? 'date < ?' : '')
-														) : '');
+				WHERE +
+				(startDate != null ? 'date > ? ' +
+					(endDate != null ? AND + 'date < ? ' : '') :
+					(endDate != null ? 'date < ?' : '')
+				) : '');
 
 			queryCash = queryCash + ((startDate || endDate) ?
-														WHERE +
-														(startDate != null ? 'date > ? ' +
-															(endDate != null ? AND + 'date < ? ' : '') :
-															(endDate != null ? 'date < ?' : '')
-														) : '');
+				WHERE +
+				(startDate != null ? 'date > ? ' +
+					(endDate != null ? AND + 'date < ? ' : '') :
+					(endDate != null ? 'date < ?' : '')
+				) : '');
 
 			var query = queryStart + queryExpense + queryUnion + querySales + queryUnion + queryCash + queryEnd;
 
@@ -504,16 +390,16 @@
 
 			params = params.concat(params).concat(params);
 
-			return deferred.promise.then(function () {
-				return $cordovaSQLite.execute(db, query, params).then(function (response) {
+			return deferred.promise.then(function() {
+				return $cordovaSQLite.execute(db, query, params).then(function(response) {
 					return response;
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				});
 			});
 		}
 
-		function generateIncomeStatement (startDate, endDate, groupBy) {
+		function generateIncomeStatement(startDate, endDate, groupBy) {
 			var incomeStatement = {
 				incomeItems: [],
 				expenseItems: []
@@ -521,8 +407,8 @@
 			var promises = [];
 
 			var querySales = 'SELECT p.name as name, SUM(sp.saleprice * sp.quantity) as amount FROM product p ' +
-												'INNER JOIN saleproduct sp ON p.id = sp.productid ' +
-												'INNER JOIN sale s ON sp.saleid = s.id ';
+				'INNER JOIN saleproduct sp ON p.id = sp.productid ' +
+				'INNER JOIN sale s ON sp.saleid = s.id ';
 			var queryCash = 'SELECT \'reports_cash\' as name, SUM(amount) FROM cashInfusion';
 			var queryExpenses = 'SELECT SUM(amount) as amount, ' + groupBy + ' as name FROM expense';
 			var queryUnion = ' UNION ';
@@ -530,25 +416,25 @@
 			var groupByName = ' name ';
 
 			querySales = querySales + ((startDate || endDate) ?
-														WHERE +
-														(startDate != null ? 'date >= ? ' +
-															(endDate != null ? AND + 'date <= ? ' : '') :
-															(endDate != null ? 'date <= ?' : '')
-														) : '');
+				WHERE +
+				(startDate != null ? 'date >= ? ' +
+					(endDate != null ? AND + 'date <= ? ' : '') :
+					(endDate != null ? 'date <= ?' : '')
+				) : '');
 
 			queryCash = queryCash + ((startDate || endDate) ?
-														WHERE +
-														(startDate != null ? 'date >= ? ' +
-															(endDate != null ? AND + 'date <= ? ' : '') :
-															(endDate != null ? 'date <= ?' : '')
-														) : '');
+				WHERE +
+				(startDate != null ? 'date >= ? ' +
+					(endDate != null ? AND + 'date <= ? ' : '') :
+					(endDate != null ? 'date <= ?' : '')
+				) : '');
 
 			queryExpenses = queryExpenses + ((startDate || endDate) ?
-														WHERE +
-														(startDate != null ? 'date >= ? ' +
-															(endDate != null ? AND + 'date <= ? ' : '') :
-															(endDate != null ? 'date <= ?' : '')
-														) : '');
+				WHERE +
+				(startDate != null ? 'date >= ? ' +
+					(endDate != null ? AND + 'date <= ? ' : '') :
+					(endDate != null ? 'date <= ?' : '')
+				) : '');
 
 			var queryIncomeItems = querySales + queryGroupBy + groupByName + queryUnion + queryCash + queryGroupBy + groupByName;
 			var queryExpenseItems = queryExpenses + queryGroupBy + groupBy;
@@ -568,58 +454,66 @@
 
 			paramsIncome = paramsIncome.concat(paramsIncome);
 
-			return deferred.promise.then(function () {
-				promises.push($cordovaSQLite.execute(db, queryIncomeItems, paramsIncome).then(function (response) {
+			return deferred.promise.then(function() {
+				promises.push($cordovaSQLite.execute(db, queryIncomeItems, paramsIncome).then(function(response) {
 					for (var i = response.rows.length - 1; i >= 0; i--) {
 						incomeStatement.incomeItems.push(response.rows.item(i));
 					}
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				}));
 
-				promises.push($cordovaSQLite.execute(db, queryExpenseItems, paramsExpense).then(function (response) {
+				promises.push($cordovaSQLite.execute(db, queryExpenseItems, paramsExpense).then(function(response) {
 					for (var i = response.rows.length - 1; i >= 0; i--) {
 						incomeStatement.expenseItems.push(response.rows.item(i));
 					}
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				}));
 
-				return $q.all(promises).then(function () {
+				return $q.all(promises).then(function() {
 					return incomeStatement;
 				});
 			});
 		}
 
-		function getCommission () {
+		function getCommission() {
 			var querySalary = 'SELECT amount FROM salary WHERE type = \'commission\' LIMIT 1';
 			var queryLastCommission = 'SELECT date FROM expense WHERE type = \'salary\' ORDER BY date DESC LIMIT 1';
 			var queryCommission = 'select total(sale.amount * salary.amount / 100) as commission from sale ' +
-								'LEFT JOIN (' + querySalary + ') salary ' +
-								'WHERE sale.date > (' + queryLastCommission + ') OR (' + queryLastCommission + ') IS NULL';
+				'LEFT JOIN (' + querySalary + ') salary ' +
+				'WHERE sale.date > (' + queryLastCommission + ') OR (' + queryLastCommission + ') IS NULL';
 
-			return deferred.promise.then(function () {
-				return $cordovaSQLite.execute(db, queryCommission).then(function (response) {
+			return deferred.promise.then(function() {
+				return $cordovaSQLite.execute(db, queryCommission).then(function(response) {
 					return response.rows.item(0);
-				}, function (err) {
+				}, function(err) {
 					console.log(err);
 				})
 			})
 		}
-	}
 
-	function CashBalance (Database) {
+		function getDB() {
+			return db;
+		}
+
+		function getDBNew() {
+			return dbparams;
+		}
+	};
+
+	function CashBalance(Database) {
 		var currentCashBalance;
 
 		var service = {
-			get CashBalance () {
+			get CashBalance() {
 				return currentCashBalance;
 			},
-			set CashBalance (val) {
+			set CashBalance(val) {
 				return currentCashBalance = val;
 			},
-			updateCashBalance: function () {
-				return Database.calculateCashOnHand().then(function (response) {
+			updateCashBalance: function() {
+				return Database.calculateCashOnHand().then(function(response) {
 					return currentCashBalance = response.rows.item(0).total;
 				});
 			}
@@ -627,8 +521,8 @@
 
 		init();
 
-		function init () {
-			Database.calculateCashOnHand().then(function (response) {
+		function init() {
+			Database.calculateCashOnHand().then(function(response) {
 				currentCashBalance = response.rows.item(0).total;
 			});
 		}
@@ -636,3 +530,4 @@
 		return service;
 	}
 })();
+

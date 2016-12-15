@@ -5,7 +5,12 @@
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 	<title></title>
 
+	<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+
 	<link href="lib/ionic/css/ionic.css" rel="stylesheet">
+	<link href="css/foundation-icons.css" rel="stylesheet">
+	<link href="css/font-awesome.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
 
 	<!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
@@ -13,8 +18,9 @@
 	-->
 
 	<!-- Custom scripts for logging, base64 utilities, etc. -->
+	<script type="text/javascript" src="js/console.js"></script>
 	<script type="text/javascript" src="js/dps-logging.js"></script>
-	<script type="text/javascript" src="js/dps-base64-utils.js"></script>
+	<script type="text/javascript" src="js/dps-utils.js"></script>
 
 	<!-- jquery -->
 	<script src="lib/jquery/dist/jquery.js"></script>
@@ -30,17 +36,24 @@
 	<!-- SQLite Plugin -->
 	<script type="text/javascript" src="lib/js/SQLitePlugin.js"></script>
 
+	<!-- Angular Components -->
+	<script type="text/javascript" src="lib/angular-csv-import/dist/angular-csv-import.js"></script>
+
+	<!-- Other libraries -->
 	<script src="lib/moment/moment.js"></script>
 	<script src="lib/angular/i18n/angular-locale_es-ec.js"></script>
 	<script src="lib/angular-dynamic-locale/tmhDynamicLocale.min.js"></script>
+	<script src="js/angular-translate.min.js"></script>
+	<script src="lib/ngstorage/ngStorage.js"></script>
+	<script src="lib/ng-persist/dist/ng-persist.js"></script>
 	<script src="lib/pdfmake/build/pdfmake.js"></script>
 	<script src="lib/pdfmake/build/vfs_fonts.js"></script>
 	<script src="lib/pdfjs-dist/build/pdf.combined.js"></script>
 	<script src="lib/angular-pdf/dist/angular-pdf.js"></script>
+	<script src="lib/js-xlsx/dist/xlsx.js"></script>
 
-	<!-- your app's js -->
+	<!-- This app's personal code -->
 	<script src="js/app.js"></script>
-	<script src="js/angular-translate.min.js"></script>
 	<script src="js/filters.js"></script>
 	<script src="js/services.js"></script>
 	<script src="js/directives.js"></script>
@@ -48,6 +61,7 @@
 
 	<script src="ActivityLog/app.js"></script>
 	<script src="ActivityLog/routes.js"></script>
+	<script src="ActivityLog/services.js"></script>
 	<script src="ActivityLog/controllers.js"></script>
 
 	<script src="Expense/app.js"></script>

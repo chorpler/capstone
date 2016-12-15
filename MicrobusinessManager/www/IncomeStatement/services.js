@@ -85,6 +85,11 @@
 		var orgname = user.name;
 		var representative = user.representative;
 		var address = user.address;
+		var street1 = user.street1;
+		var street2 = user.street2;
+		var city = user.city;
+		var state = user.state;
+		var postal = user.postal;
 		var email = user.email;
 		var phone = user.phone;
 		var title = timespan + " Income Statement";
@@ -98,187 +103,195 @@
 		var strIncome = afilter('currency')(totalIncome, "$", 2);
 		var strExpenses = afilter('currency')(totalExpenses, "$", 2);
 		var strProfit = afilter('currency')(totalProfit, "$", 2);
+
+		var address = "";
+		if(street2) {
+			address = street1 + "\n" + street2 + "\n" + city + " " + state + " " + postal;
+		} else {
+			address = street1 + "\n" + city + " " + state + " " + postal;
+		}
+
 		Log.l("userid: %s, orgname: %s, rep: %s, address: %s, email: %s, phone: %s, title: %s, dateRange: %s, totalI: %s, totalE: %s, totalP: %s", userid, orgname, representative, address, email, phone, title, dateRange, strIncome, strExpenses, strProfit);
 
 		var dd = {
-      "content": [
-        {
-          "text": title,
-          "style": "header"
-        },
-        {
-          "text": dateRange,
-          "style": "header"
-        },
-        { "style": "organizationheader",
-          "stack": [
-          orgname,
-          representative,
-          address,
-          ]
-        },
-        {
-          "text": "Income",
-          "style": "subheader"
-        },
-        {
-          "style": "itemsTable",
-          "table": {
-            "widths": [
-              "*",
-              75
-            ],
-            "body": [
-              [
-                {
-                  "text": "Name",
-                  "style": "itemsTableHeader"
-                },
-                {
-                  "text": "Amount",
-                  "style": "itemsTableHeader"
-                }
-              ]
-            ].concat(items)
-          }
-        },
-        {
-          "style": "totalsTable",
-          "table": {
-            "widths": [
-              "*",
-              75
-            ],
-            "body": [
-              [
-                "Total Income",
-                strIncome
-              ]
-            ]
-          },
-          "layout": "noBorders"
-        },
-        {
-          "text": "Expenses",
-          "style": "subheader"
-        },
-        {
-          "style": "itemsTable",
-          "table": {
-            "widths": [
-              "*",
-              75
-            ],
-            "body": [
-              [
-                {
-                  "text": "Name",
-                  "style": "itemsTableHeader"
-                },
-                {
-                  "text": "Amount",
-                  "style": "itemsTableHeader"
-                }
-              ]
-            ].concat(expitems)
-          }
-        },
-        {
-          "style": "totalsTable",
-          "table": {
-            "widths": [
-              "*",
-              75
-            ],
-            "body": [
-              [
-                "Total Expenses",
-                strExpenses
-              ]
-            ]
-          },
-          "layout": "noBorders"
-        },
-        {
-          "style": "totalsTable",
-          "table": {
-            "widths": [
-              "*",
-              75
-            ],
-            "body": [
-              [
-                "Total Profit",
-                strProfit
-              ]
-            ]
-          },
-          "layout": "noBorders"
-        }
-      ],
-      "styles": {
-        "header": {
-          "fontSize": 20,
-          "bold": true,
-          "margin": [
-            0,
-            0,
-            0,
-            10
-          ],
-          "alignment": "right"
-        },
-        "subheader": {
-          "fontSize": 16,
-          "bold": true,
-          "margin": [
-            0,
-            15,
-            0,
-            5
-          ]
-        },
-        "organizationheader": {
-          "fontSize": 14,
-          "bold": false,
-          "margin": [
-            0,
-            5,
-            0,
-            5
-          ]
-        },
-        "itemsTable": {
-          "margin": [
-            0,
-            5,
-            0,
-            0
-          ]
-        },
-        "itemsTableHeader": {
-          "bold": true,
-          "fontSize": 13,
-          "color": "black"
-        },
-        "rightAlign": {
-          "alignment": "right"
-        },
-        "totalsTable": {
-        	"alignment": "right",
-          "bold": true,
-          "margin": [
-            0,
-            5,
-            0,
-            0
-          ]
-        }
-      },
-      "defaultStyle": {}
-    };
-    return dd;
-  }
+			"content": [
+				{
+					"text": title,
+					"style": "header"
+				},
+				{
+					"text": dateRange,
+					"style": "header"
+				},
+				{ "style": "organizationheader",
+					"stack": [
+					orgname,
+					representative,
+					address,
+					]
+				},
+				{
+					"text": "Income",
+					"style": "subheader"
+				},
+				{
+					"style": "itemsTable",
+					"table": {
+						"widths": [
+							"*",
+							75
+						],
+						"body": [
+							[
+								{
+									"text": "Name",
+									"style": "itemsTableHeader"
+								},
+								{
+									"text": "Amount",
+									"style": "itemsTableHeader"
+								}
+							]
+						].concat(items)
+					}
+				},
+				{
+					"style": "totalsTable",
+					"table": {
+						"widths": [
+							"*",
+							75
+						],
+						"body": [
+							[
+								"Total Income",
+								strIncome
+							]
+						]
+					},
+					"layout": "noBorders"
+				},
+				{
+					"text": "Expenses",
+					"style": "subheader"
+				},
+				{
+					"style": "itemsTable",
+					"table": {
+						"widths": [
+							"*",
+							75
+						],
+						"body": [
+							[
+								{
+									"text": "Name",
+									"style": "itemsTableHeader"
+								},
+								{
+									"text": "Amount",
+									"style": "itemsTableHeader"
+								}
+							]
+						].concat(expitems)
+					}
+				},
+				{
+					"style": "totalsTable",
+					"table": {
+						"widths": [
+							"*",
+							75
+						],
+						"body": [
+							[
+								"Total Expenses",
+								strExpenses
+							]
+						]
+					},
+					"layout": "noBorders"
+				},
+				{
+					"style": "totalsTable",
+					"table": {
+						"widths": [
+							"*",
+							75
+						],
+						"body": [
+							[
+								"Total Profit",
+								strProfit
+							]
+						]
+					},
+					"layout": "noBorders"
+				}
+			],
+			"styles": {
+				"header": {
+					"fontSize": 20,
+					"bold": true,
+					"margin": [
+						0,
+						0,
+						0,
+						10
+					],
+					"alignment": "right"
+				},
+				"subheader": {
+					"fontSize": 16,
+					"bold": true,
+					"margin": [
+						0,
+						15,
+						0,
+						5
+					]
+				},
+				"organizationheader": {
+					"fontSize": 14,
+					"bold": false,
+					"margin": [
+						0,
+						5,
+						0,
+						5
+					]
+				},
+				"itemsTable": {
+					"margin": [
+						0,
+						5,
+						0,
+						0
+					]
+				},
+				"itemsTableHeader": {
+					"bold": true,
+					"fontSize": 13,
+					"color": "black"
+				},
+				"rightAlign": {
+					"alignment": "right"
+				},
+				"totalsTable": {
+					"alignment": "right",
+					"bold": true,
+					"margin": [
+						0,
+						5,
+						0,
+						0
+					]
+				}
+			},
+			"defaultStyle": {}
+		};
+		return dd;
+	}
 
 })();
 

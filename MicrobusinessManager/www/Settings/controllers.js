@@ -2,8 +2,12 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $ionicModal, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user) {
+	function SettingsController ($scope, $q, $ionicModal, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user, $cordovaFileTransfer, $timeout, $ionicPopover, $persist) {
 		var vm = this;
+
+		var win = window;
+		win.sepi = {};
+		win.sepi.persist = $persist;
 
 		vm.userAccount = {};
 		vm.userRegistration = {};
@@ -12,6 +16,7 @@
 		vm.languages = languages;
 		vm.tax = tax;
 		vm.login = login;
+		vm.downloadCSVFile = downloadCSVFile;
 		vm.closeUser = closeUser;
 		vm.cancelUserEdit = cancelUserEdit;
 		vm.saveUserEdit = saveUserEdit;
@@ -37,6 +42,21 @@
 		vm.submitted = false;
 		vm.user_filled = false;
 		vm.organization = user;
+		vm.createPopupMenu = createPopupMenu;
+		vm.showPopupMenu = showPopupMenu;
+		vm.closePopupMenu = closePopupMenu;
+		vm.createDownloadModal = createDownloadModal;
+		vm.showDownloadModal =showDownloadModal;
+		vm.closeDownloadModal = closeDownloadModal;
+		vm.createExportModal = createExportModal;
+		vm.showExportModal = showExportModal;
+		vm.closeExportModal = closeExportModal;
+		vm.exportSettings = exportSettings;
+		vm.downloadModal = null;
+		vm.exportModal = null;
+		vm.downloadFile = {};
+		vm.downloadProgress = 0;
+		vm.fileChooser = window.fileChooser;
 
 
 		var tempSalary = null;
@@ -78,6 +98,10 @@
 			} else {
 				vm.activeTax = [];
 			}
+
+			vm.createPopupMenu($scope);
+			vm.createDownloadModal($scope);
+			// vm.createExportModal($scope);
 
 		}
 
@@ -265,7 +289,7 @@
 		}
 
 		function userEdit (userItem) {
-			console.log("Now in userEdit");
+			Log.l("Settings: Now in userEdit()");
 			getUserData().then(function() {
 				if (vm.organization && vm.organization.name) {
 					vm.activeOrg = organization;
@@ -301,9 +325,9 @@
 				}
 				for (var i = response.rows.length - 1; i >= 0; i--) {
 					var item = response.rows.item(i);
-					var orgname = item.orgname;
-					var representative = item.representative;
-					var address = item.address;
+					// var orgname = item.orgname;
+					// var representative = item.representative;
+					// var address = item.address;
 					items.push(item);
 				}
 				// user = items;
@@ -320,11 +344,11 @@
 			}
 			vm.submitted = true;
 			if(!item.id) {
-	 			Database.insert(userTable, [item.name, item.representative, item.address, item.email, item.phone]).then(function(response) {
+	 			Database.insert(userTable, [item.name, item.representative, item.street1, item.street2, item.city, item.state, item.postal, item.email, item.phone]).then(function(response) {
 	 				item.id = response.insertId;
 				});
 			} else {
-				Database.update(userTable, item.id, [item.name, item.representative, item.address, item.email, item.phone]);
+				Database.update(userTable, item.id, [item.name, item.representative, item.street1, item.street2, item.city, item.state, item.postal, item.email, item.phone]);
 			}
 
 			// vm.activeTax = null;
@@ -339,13 +363,197 @@
 			vm.organization = {};
 			vm.organization.name = tempOrg.name;
 			vm.organization.representative = tempOrg.representative;
-			vm.organization.address = tempOrg.address;
+			vm.organization.street1 = tempOrg.street1;
+			vm.organization.street2 = tempOrg.street2;
+			vm.organization.city = tempOrg.city;
+			vm.organization.state = tempOrg.state;
+			vm.organization.postal = tempOrg.postal;
 			vm.organization.email = tempOrg.email;
 			vm.organization.phone = tempOrg.phone;
 			// vm.activeTax = null;
 			vm.userModal.remove();
 			vm.submitted = false;
 		}
+
+		function createDownloadModal($scope) {
+			Log.l("Settings: now in createDownloadModal() ...");
+			$ionicModal.fromTemplateUrl('Settings/templates/download.html', {
+				scope: $scope
+			}).then(function (modal) {
+				Log.l("Settings: created, now setting vm.downloadModal ...");
+				vm.downloadModal = modal;
+				$scope.$on('$destroy', function() {
+					Log.l("Settings: now in scope.on('destroy')");
+					vm.downloadModal.remove();
+				});
+				// vm.downloadModal.show();
+			});
+		}
+
+		function showDownloadModal() {
+			Log.l("Settings: now in showDownloadModal() ...");
+			vm.popover.hide();
+			vm.downloadModal.show();
+		}
+
+		function closeDownloadModal() {
+			Log.l("Settings: now in closeDownload() ...");
+			vm.downloadModal.hide();
+		}
+		
+		function createExportModal($scope) {
+			Log.l("Settings: now in createExportModal() ...");
+			$ionicModal.fromTemplateUrl('Settings/templates/export.html', {
+				scope: $scope
+			}).then(function (modal) {
+				Log.l("Settings: created, now setting vm.exportModal ...");
+				vm.exportModal = modal;
+				$scope.$on('$destroy', function() {
+					Log.l("Settings: now in scope.on('destroy')");
+					vm.exportModal.remove();
+				});
+				// vm.downloadModal.show();
+			});
+		}
+
+		function showExportModal() {
+			Log.l("Settings: now in showExportModal() ...");
+			vm.popover.hide();
+			vm.exportModal.show();
+		}
+
+		function closeExportModal() {
+			Log.l("Settings: now in closeExportModal() ...");
+			vm.exportModal.hide();
+		}
+
+		// Setttings model:
+		// user: 
+		function exportSettings() {
+			Log.l("Settings: now in exportSettings() ...");
+			var dbparams = Database.getDB();
+			Log.l("exportSettings() got database results:");
+			Log.l(dbparams);
+			var exportSuccess = function(json, count) {
+				Log.l("exportSettings(): Successfully exported " + count + " SQL statements to JSON.");
+				Log.l(json);
+				var ns = "mysepi";
+				Log.l("Now trying to persist to 'database_json' ...");
+				$persist.set(ns, 'database_json', JSON.stringify(json)).then(function(res) {
+					Log.l("exportSettings(): Successfully persisted json database.");
+					Log.l(res);
+				}, function(err) {
+					Log.l("exportSettings(): Could not persist json database!");
+					Log.l(err);
+				});
+			};
+			var exportFailure = function(err) {
+				Log.l("exportSettings(): Failed to export DB to JSON.");
+				Log.l(err);
+			};
+			cordova.plugins.sqlitePorter.exportDbToJson(dbparams, {successFn: exportSuccess, errorFn: exportFailure});
+			// vm.fileChooser.open(function(res) {
+			// 	var uri = res;
+			// 	Log.l("Successfully chose file, uri:");
+			// 	Log.l(uri);
+			// }, function(err) {
+			// 	Log.l("Error choosing file.");
+			// 	Log.l(err);
+			// });
+
+		}
+		
+		function downloadCSVFile() {
+			Log.l("Settings: now in downloadCSVFile() ...");
+			if (!vm.downloadFile.fileurl) {
+				vm.downloadFile.error = 'Please enter URL!';
+				return;
+			}
+
+			var url = vm.downloadFile.fileurl;
+			var filename = "importdata.csv";
+			var targetPath = cordova.file.dataDirectory + filename;
+			var trustHosts = true;
+			var options = {};
+
+			$cordovaFileTransfer.download(url, targetPath, options, trustHosts)
+			.then(function(res) {
+				Log.l("Successfully downloaded " + url);
+			}, function(err) {
+				Log.l("Error downloading " + url);
+			}, function(progress) {
+				$timeout(function() {
+					$vm.downloadProgress = (progess.loaded / progress.total) * 100;
+				});
+			});
+		
+		}
+
+		function importOldSettings() {
+			
+		}
+
+		function createPopupMenu($scope) {
+			Log.l("Settings: creating Popup Menu ...");
+			$ionicPopover.fromTemplateUrl('Settings/templates/SettingsPopupMenu.html', {
+				scope: $scope
+			}).then(function(popover) {
+				Log.l("Settings: now in function after ionicPopover.fromTemplateUrl(SettingsPopupMenu) ...");
+				$scope.popover = popover;
+				vm.popover = popover;
+				// popover.show(".income-statement-menu")
+				//Cleanup the popover when we're done with it!
+				$scope.$on('$destroy', function() {
+					Log.l("Settings: now in scope.on('destroy')");
+					vm.popover.remove();
+				});
+				// Execute action on hidden popover
+				$scope.$on('popover.hidden', function() {
+					Log.l("Settings: now in scope.on('popover.hidden')");
+					// Execute action
+				});
+				// Execute action on remove popover
+				$scope.$on('popover.removed', function() {
+					Log.l("Settings: now in scope.on('popover.removed')");
+					// Execute action
+				});
+			});
+
+		}
+
+		function showPopupMenu($event) {
+			Log.l("Settings: now in scope.openPopupMenu()")
+			// vm.popover.show($event);
+			vm.popover.show('.ion-more');
+			var headerbar = angular.element(".income-statement-bar");
+			var hbar = $("ion-header-bar");
+			var hbarheight = hbar.height();
+			// var barHeight = headerbar.height();
+			Log.l("Settings: Menu bar height is %d px", hbarheight);
+			var elPopover = $("#PopupMenu003");
+			var popTop = elPopover.position().top;
+			Log.l("elPopover has top " + popTop);
+			var newPopTop = hbarheight + "px";
+			elPopover.css("top", newPopTop);
+			Log.l("elPopover now has top " + newPopTop);
+			// vm.popover.positionView(".ion-android-menu", vm.popover);
+			// vm.popover.show(".ion-android-menu");
+			// vm.popover.positionView(".ion-android-menu", vm.popover);
+		}
+
+		function closePopupMenu() {
+			Log.l("Settings: now in scope.closePopupMenu()")
+			vm.popover.hide();
+		}
+
+
+
+
+
+
+
+
+
 
 		function login () {
 			showLoginModal();

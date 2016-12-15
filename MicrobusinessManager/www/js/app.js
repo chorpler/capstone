@@ -2,6 +2,9 @@
 	angular.module('app', [
 		'ionic',
 		'ngCordova',
+		'ngCsvImport',
+		'ngStorage',
+		'ng-persist',
 		'pdf',
 		'app.expenses',
 		'app.inventory',
@@ -238,6 +241,11 @@
 			org_name: 'Organization Name',
 			org_rep: 'Representative',
 			org_address: 'Address',
+			org_street1: 'Street Address 1',
+			org_street2: 'Street Address 2',
+			org_city: 'City',
+			org_state: 'State',
+			org_postal: 'ZIP Code',
 			user_email: 'Email Address',
 			user_phone: 'Phone',
 			user_filled: 'Entered',
@@ -246,7 +254,16 @@
 			str_import: 'Import',
 			str_export: 'Export',
 			str_sendto: 'Send to …',
-			str_emailpdf: 'Email PDF'
+			str_emailpdf: 'Email PDF',
+			str_download: 'Download',
+			str_downloading: 'Downloading',
+			str_download_csv: 'Download CSV',
+			str_url: 'URL',
+			str_error: 'Error',
+			str_settings: 'Settings',
+			str_download_settings: 'Download Settings',
+			str_import_settings: 'Import Settings',
+			str_export_settings: 'Export Settings'
 		});
 
 		$translateProvider.translations('es', {
@@ -393,6 +410,11 @@
 			org_name: 'Nombre de la Organización',
 			org_rep: 'Representante',
 			org_address: 'Dirección',
+			org_street1: 'Dirección 1',
+			org_street2: 'Dirección 2',
+			org_city: 'Ciudad',
+			org_state: 'Estado',
+			org_postal: 'Codigo postal',
 			user_email: 'Correo Electrónico',
 			user_phone: 'Teléfono',
 			user_filled: 'Entró',
@@ -401,7 +423,16 @@
 			str_import: 'Importar',
 			str_export: 'Exportar',
 			str_sendto: 'Enviar a …',
-			str_emailpdf: 'Envíe PDF por Correo Electrónico'
+			str_emailpdf: 'Envíe PDF por Correo Electrónico',
+			str_download: 'Descargar',
+			str_downloading: 'Descargando',
+			str_download_csv: 'Descargar CSV',
+			str_url: 'URL',
+			str_error: 'Error',
+			str_settings: 'Configuración',
+			str_download_settings: 'Descargar Configuración',
+			str_import_settings: 'Importar Configuración',
+			str_export_settings: 'Exportar Configuración'
 		});
 
 		$translateProvider.preferredLanguage("en");

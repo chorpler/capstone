@@ -1,4 +1,7 @@
 <ion-view view-title="{{'reports_activity_log' | translate}}" class="income-statement">
+	<ion-nav-buttons side="right">
+		<button class="button button-icon icon ion-more" ng-click="activity.showPopupMenu($event)"></button>
+	</ion-nav-buttons>
 	<report-header start-date="activity.startDate" end-date="activity.endDate" time-frame="activity.timeFrame" change="activity.change" class="has-header"></report-header>
 	<ion-content>
 		<div></div>

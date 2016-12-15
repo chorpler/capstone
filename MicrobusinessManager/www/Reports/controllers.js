@@ -11,7 +11,7 @@
 
 		function stateGo (state) {
 			var appstate = 'app.' + state;
-			console.log("Going to state " + appstate + " ...");
+			Log.l("Going to state " + appstate);
 			$state.go(appstate);
 		}
 

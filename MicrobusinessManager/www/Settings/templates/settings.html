@@ -1,115 +1,119 @@
 <ion-view view-title="{{'menu_settings' | translate}}">
-  <ion-content class="settings">
-    <div class="list card">
-      <div class="item item-divider">
-        <span class="name-container">{{"settings_language_preference" | translate}}</span>
-      </div>
-      <label select-click class="item item-input item-select">
-        <div class="input-label">
-          {{"settings_language_options" | translate}}
-        </div>
-        <select ng-model="settings.language.type" ng-change="settings.changeLanguage(settings.language)">
-          <option value="en">{{"english_language" | translate}}</option>
-          <option value="es">{{"spanish_language" | translate}}</option>
-        </select>
-      </label>
-      <div class="item item-divider">
-        <span class="name-container">{{"user_options" | translate}}</span>
-      </div>
-      <ion-item ng-click="settings.userEdit()">
-        <div class="card-container-2">
-          <a class="item item-icon-right">
-            <i class="icon ion-chevron-right"></i>
-            <div class="row">
-              <div class="col">
-                <span class="amount-container" ng-show="settings.organization && settings.organization.name">{{settings.organization.name}}</span>
-                <span class="amount-container" ng-show="!(settings.organization && settings.organization.name)">{{"user_empty" | translate}}</span>
-              </div>
-            </div>
-          </a>
-        </div>
-      </ion-item>
-      <div class="item item-divider">
-        <span class="name-container">{{"checkout_options" | translate}}</span>
-      </div>
-      <ion-item ng-click="settings.taxEdit()">
-        <div class="card-container-2">
-          <a class="item item-icon-right">
-            <i class="icon ion-chevron-right"></i>
-            <div class="row">
-              <div class="col">
-                <span class="name-container">{{"tax_name" | translate}}</span>
-              </div>
-              <div class="col">
-                <span class="amount-container" ng-show="settings.tax_active">{{settings.activeTax.percentage | number: 2}}%</span>
-                <span class="amount-container" ng-show="!settings.tax_active">{{"tax_inactive" | translate}}</span>
-              </div>
-            </div>
-          </a>
-        </div>
-      </ion-item>
-      <div class="item item-divider">
-        <span class="name-container">{{"self_payment_settings" | translate}}</span>
-      </div>
-      <div ng-repeat="item in settings.salary" ng-if="settings.salary.length">
-        <ion-item ng-click="settings.editSalary(item)">
-          <div class="card-container-2">
-            <a class="item item-icon-right">
-              <i class="icon ion-chevron-right"></i>
-              <div class="row">
-                <div class="col">
-                  <span class="salary-name">{{item.type === 'commission' ? "commission_option" : "salary_option" | translate}}</span>
-                </div>
-                <div class="col">
-                  <span class="salary-info" ng-if="item.type === 'commission'">{{item.amount | number:2}}%</span>
-                  <span class="salary-info" ng-if="item.type === 'salary'">{{item.amount | currency}}</span>
-                </div>
-              </div>
-            </a>
-          </div>
-        </ion-item>
-      </div>
-      <div ng-if="!settings.salary.length">
-        <ion-item ng-click="settings.editSalary(item)">
-          <div class="card-container-3">
-            <a class="item item-icon-right">
-              <i class="icon ion-chevron-right"></i>
-              <div class="row">
-                <span class="name-container">{{"salary_not_configured" | translate}}</span>
-              </div>
-            </a>
-          </div>
-        </ion-item>
-      </div>
-    </div>
-    <div class="card center">
-      <p>{{"settings_acknowledgment" | translate}}</p>
-      <p>Rollins Center for Entreprenuership</p>
-      <!-- <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
-        {{"login_button" | translate}}
-      </button>
-      <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.register()">
-        {{"register_button" | translate}}
-      </button> -->
-    </div>
+	<ion-nav-buttons side="right">
+		<button class="button button-icon icon ion-more" ng-click="settings.showPopupMenu($event)"></button>
+	</ion-nav-buttons>
+	<ion-content class="settings">
+		<div class="list card">
+			<div class="item item-divider">
+				<span class="name-container">{{"settings_language_preference" | translate}}</span>
+			</div>
+			<label select-click class="item item-input item-select">
+				<div class="input-label">
+					{{"settings_language_options" | translate}}
+				</div>
+				<select ng-model="settings.language.type" ng-change="settings.changeLanguage(settings.language)">
+					<option value="en">{{"english_language" | translate}}</option>
+					<option value="es">{{"spanish_language" | translate}}</option>
+				</select>
+			</label>
+			<div class="item item-divider">
+				<span class="name-container">{{"user_options" | translate}}</span>
+			</div>
+			<ion-item ng-click="settings.userEdit()">
+				<div class="card-container-2">
+					<a class="item item-icon-right">
+						<i class="icon ion-chevron-right"></i>
+						<div class="row">
+							<div class="col">
+								<span class="amount-container" ng-show="settings.organization && settings.organization.name">{{settings.organization.name}}</span>
+								<span class="amount-container" ng-show="!(settings.organization && settings.organization.name)">{{"user_empty" | translate}}</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</ion-item>
+			<div class="item item-divider">
+				<span class="name-container">{{"checkout_options" | translate}}</span>
+			</div>
+			<ion-item ng-click="settings.taxEdit()">
+				<div class="card-container-2">
+					<a class="item item-icon-right">
+						<i class="icon ion-chevron-right"></i>
+						<div class="row">
+							<div class="col">
+								<span class="name-container">{{"tax_name" | translate}}</span>
+							</div>
+							<div class="col">
+								<span class="amount-container" ng-show="settings.tax_active">{{settings.activeTax.percentage | number: 2}}%</span>
+								<span class="amount-container" ng-show="!settings.tax_active">{{"tax_inactive" | translate}}</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</ion-item>
+			<div class="item item-divider">
+				<span class="name-container">{{"self_payment_settings" | translate}}</span>
+			</div>
+			<div ng-repeat="item in settings.salary" ng-if="settings.salary.length">
+				<ion-item ng-click="settings.editSalary(item)">
+					<div class="card-container-2">
+						<a class="item item-icon-right">
+							<i class="icon ion-chevron-right"></i>
+							<div class="row">
+								<div class="col">
+									<span class="salary-name">{{item.type === 'commission' ? "commission_option" : "salary_option" | translate}}</span>
+								</div>
+								<div class="col">
+									<span class="salary-info" ng-if="item.type === 'commission'">{{item.amount | number:2}}%</span>
+									<span class="salary-info" ng-if="item.type === 'salary'">{{item.amount | currency}}</span>
+								</div>
+							</div>
+						</a>
+					</div>
+				</ion-item>
+			</div>
+			<div ng-if="!settings.salary.length">
+				<ion-item ng-click="settings.editSalary(item)">
+					<div class="card-container-3">
+						<a class="item item-icon-right">
+							<i class="icon ion-chevron-right"></i>
+							<div class="row">
+								<span class="name-container">{{"salary_not_configured" | translate}}</span>
+							</div>
+						</a>
+					</div>
+				</ion-item>
+			</div>
+			
+		</div>
+		<div class="card center">
+			<p>{{"settings_acknowledgment" | translate}}</p>
+			<p>Rollins Center for Entrepreneurship</p>
+			<!-- <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
+				{{"login_button" | translate}}
+			</button>
+			<button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.register()">
+				{{"register_button" | translate}}
+			</button> -->
+		</div>
 
-    <!-- <div class="card" ng-show="settings.userAccount.token"> -->
-      <!-- <ion-list>
-        <ion-item>
-          {{"settings_username" | translate}}: {{settings.userAccount.user.username}}
-        </ion-item>
-        <ion-item>
-          {{"settings_email" | translate}}: {{settings.userAccount.user.email}}
-        </ion-item>
-        <ion-item>
-          {{"settings_phone" | translate}}: {{settings.userAccount.user.phone}}
-        </ion-item>
-        <ion-item>
-          <button class="button button-block button-assertive" ng-click="settings.logout()">
-            {{"logout_button" | translate}}
-          </button>
-        </ion-item>
-      </ion-list> -->
-    <!-- </div> -->
-  </ion-content>
+		<!-- <div class="card" ng-show="settings.userAccount.token"> -->
+			<!-- <ion-list>
+				<ion-item>
+					{{"settings_username" | translate}}: {{settings.userAccount.user.username}}
+				</ion-item>
+				<ion-item>
+					{{"settings_email" | translate}}: {{settings.userAccount.user.email}}
+				</ion-item>
+				<ion-item>
+					{{"settings_phone" | translate}}: {{settings.userAccount.user.phone}}
+				</ion-item>
+				<ion-item>
+					<button class="button button-block button-assertive" ng-click="settings.logout()">
+						{{"logout_button" | translate}}
+					</button>
+				</ion-item>
+			</ion-list> -->
+		<!-- </div> -->
+	</ion-content>
 </ion-view>

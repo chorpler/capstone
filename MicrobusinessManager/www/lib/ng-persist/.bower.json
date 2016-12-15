@@ -1,0 +1,33 @@
+{
+  "name": "ng-persist",
+  "homepage": "https://github.com/AlexDisler/ng-persist",
+  "authors": [
+    "Alex Disler <alexdisler@gmail.com>"
+  ],
+  "description": "Store data on mobile devices that persists even if the user reinstalls the app",
+  "main": "dist/ng-persist.js",
+  "keywords": [
+    "ionic",
+    "cordova",
+    "angular",
+    "storage"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "3a6fd2b909",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "3a6fd2b90991ab15b21d55e2c986fd0ef8dc8533"
+  },
+  "_source": "https://github.com/AlexDisler/ng-persist.git",
+  "_target": "*",
+  "_originalSource": "ng-persist",
+  "_direct": true
+}

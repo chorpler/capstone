@@ -1,0 +1,42 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<!-- <h1 class="title">{{'login_button' | translate}}</h1> -->
+		<h1 class="title">{{"str_export_csv" | translate}}</h1>
+		<div class="buttons">
+			<button class="button button-clear back-color" ng-click="settings.closeExportModal()">
+				<span class="back-color">{{"cancel_button" | translate}}</span></button>
+		</div>
+	</ion-header-bar>
+	<ion-content>
+		<div class="card" ng-show="settings.exportFile.error">
+			<div class="item item-text-wrap assertive">
+				{{"str_error" | translate}}: {{settings.exportFile.error}}
+			</div>
+		</div>
+		<div class="list">
+			<label class="item">
+				<!-- <button class="button button-block button-positive" type="submit" ng-disabled="loginForm.$invalid">{{"login_button" | translate}}</button> -->
+				<button class="button button-block button-positive" type="submit" ng-disabled="exportForm.$invalid">{{"str_download" | translate}}</button>
+			</label>
+		</div>
+		<form name="downloadForm" ng-submit="settings.exportSettings()">
+			<div class="list">
+				<label class="item item-input item-stacked-label">
+					<!-- <span class="input-label">{{"settings_username" | translate}}*</span> -->
+					<span class="input-label">{{"str_url" | translate}}</span>
+					<!-- <ion-input type="url" placeholder="Enter URL" ng-model="settings.fileToDownload" required="required"> -->
+					<input type="url" placeholder="Enter URL" ng-model="settings.exportFile" required="required">
+				</label>
+				<label class="item">
+					<!-- <button class="button button-block button-positive" type="submit" ng-disabled="loginForm.$invalid">{{"login_button" | translate}}</button> -->
+					<button class="button button-block button-positive" type="submit" ng-disabled="exportForm.$invalid">{{"str_download" | translate}}</button>
+				</label>
+			</div>
+		</form>
+		<div class="card" ng-show="vm.downloadProgress > 0">
+			<div class="item item-text-wrap assertive">
+				{{"str_downloading" | translate}}: {{vm.downloadProgress}}%
+			</div>
+		</div>
+	</ion-content>
+</ion-modal-view>

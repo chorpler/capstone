@@ -561,7 +561,7 @@ ion-popover-view .cash-popover {
 	margin-bottom: 0px;
 	padding: 2px;
 	text-align: left;
-	font-size: 2em;
+	font-size: 21px !important;
 	font-weight: normal;
 	vertical-align: middle !important;
 	/* border: thin solid black !important; */
@@ -579,8 +579,12 @@ ion-popover-view .cash-popover {
 	/* border: thin solid black; */
 }
 
-.popup-menu-item-text {
-	
+.popup-menu-icon {
+	font-size: 20px;
+}
+.popup-menu-text {
+	font-size: 20px;
+	font-weight: bold;
 }
 
 .popup-menu-item-text::before {

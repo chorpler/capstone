@@ -3,8 +3,13 @@
 	// .controller('AppController', ['$scope', '$q', '$ionicModal', 'ReportService', AppController]);
 	.controller('AppController', AppController);
 
-	function AppController (CashBalance, $scope, $ionicPopover, Database) {
+	function AppController (CashBalance, $scope, $ionicPopover, $cordovaSQLite, Database) {
 		var vm = this;
+		var win = window;
+		
+		win.DB = Database;
+		win.scope = $scope;
+		win.cSQL = $cordovaSQLite;
 
 		vm.cashBalance = CashBalance;
 		// vm.reportService = ReportService;

@@ -18,15 +18,21 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
-    "cordova-plugin-device",
+    "cordova-plugin-app-version",
+    "cordova-plugin-compat",
     "cordova-plugin-console",
-    "cordova-plugin-whitelist",
+    "cordova-plugin-device",
+    "cordova-plugin-file",
+    "cordova-plugin-file-opener2",
+    "cordova-plugin-file-transfer",
+    "cordova-plugin-globalization",
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
+    "cordova-plugin-whitelist",
     "ionic-plugin-keyboard",
-    "cordova-sqlite-storage",
-    "cordova-plugin-globalization",
-    "cordova-plugin-file"
+    "cordova-plugin-camera",
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-secure-storage"
   ],
   "cordovaPlatforms": [
     "android",
