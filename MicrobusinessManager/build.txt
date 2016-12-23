@@ -1,0 +1,22 @@
+ionic plugin add cordova-plugin-app-version --save
+ionic plugin add cordova-plugin-camera --save
+ionic plugin add cordova-plugin-compat --save
+ionic plugin add cordova-plugin-console --save
+ionic plugin add cordova-plugin-datepicker --save
+ionic plugin add cordova-plugin-device --save
+ionic plugin add cordova-plugin-file --save
+ionic plugin add cordova-plugin-file-opener2 --save
+ionic plugin add cordova-plugin-file-transfer --save
+ionic plugin add cordova-plugin-globalization --save
+ionic plugin add cordova-plugin-inappbrowser --save
+ionic plugin add cordova-plugin-ios-keychain --save
+ionic plugin add cordova-plugin-secure-storage --save
+ionic plugin add cordova-plugin-splashscreen --save
+ionic plugin add cordova-plugin-statusbar --save
+ionic plugin add cordova-plugin-whitelist --save
+ionic plugin add cordova-plugin-x-socialsharing --save
+ionic plugin add cordova-sqlite-ext --save
+ionic plugin add ionic-plugin-keyboard --save
+ionic plugin add com.megster.cordova.FileChooser --save
+ionic plugin add uk.co.workingedge.cordova.plugin.sqliteporter --save
+
