@@ -1,1 +1,9 @@
 /.idea
+MicrobusinessManager/hooks/
+node_modules/
+MicrobusinessManager/node_modules/
+MicrobusinessManager/platforms/
+MicrobusinessManager/plugins/
+../MicrobusinessManagerAPI/
+my-release-key.keystore
+*.keystore
