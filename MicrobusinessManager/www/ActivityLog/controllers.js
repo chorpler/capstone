@@ -11,7 +11,9 @@
 		var win = window;
 		win.vm = vm;
 		win.cFile = $cordovaFile;
-
+		var fileDirectory = cordova.file.dataDirectory;
+		vm.fileDirectory = fileDirectory;
+		win.sepi.fileDirectory = fileDirectory;
 
 		$scope.vm = vm;
 
@@ -375,7 +377,7 @@
 
 		function convertToDataURL(cordovaURL) {
 			Log.l("AL: Now in convertToDataURL()...");
-			var dir = cordova.file.externalDataDirectory;
+			var dir = fileDirectory;
 			var fname = "ActivityLog.pdf";
 			var d = $q.defer();
 			convertToFileEntry(cordovaURL).then(function(res) {
@@ -442,7 +444,7 @@
 				win.pdfFileURL = vm.pdfFileURL;
 				// vm.vmScope.pdfUrl = URL.createObjectURL(blob);
 				vm.vmScope.pdfUrl = vm.pdfFileURL;
-				$cordovaFile.writeFile(cordova.file.externalDataDirectory, "ActivityLog.pdf", blob, true).then(function(res) {
+				$cordovaFile.writeFile(fileDirectory, "ActivityLog.pdf", blob, true).then(function(res) {
 					Log.l("AL: Success creating PDF file!");
 					Log.l(res);
 					vm.pdfFile = res;

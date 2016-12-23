@@ -12,13 +12,17 @@
 		var vm = this;
 		var win = window;
 		win.vm = vm;
-		win.sepi = {};
+		win.sepi = win.sepi || {};
 		win.sepi.scope = $scope;
 
 		win.cordovaFile = $cordovaFile;
 		win.cordovaEmail = $cordovaEmailComposer;
 		win.persist = $persist;
 		win.sepiDatabase = Database;
+
+		var fileDirectory = cordova.file.dataDirectory;
+		vm.fileDirectory = fileDirectory;
+		win.sepi.fileDirectory = fileDirectory;
 
 		vm.vmScope = $scope;
 		vm.openPopover = openPopover;
@@ -331,7 +335,7 @@
 				win.pdfFileURL = vm.pdfFileURL;
 				// vm.vmScope.pdfUrl = URL.createObjectURL(blob);
 				vm.vmScope.pdfUrl = vm.pdfFileURL;
-				$cordovaFile.writeFile(cordova.file.externalDataDirectory, "IncomeStatement.pdf", blob, true).then(function(success) {
+				$cordovaFile.writeFile(fileDirectory, "IncomeStatement.pdf", blob, true).then(function(success) {
 					Log.l("Success creating PDF file!");
 					Log.l(success);
 					vm.pdfFile = success;

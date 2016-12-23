@@ -11,8 +11,12 @@
 		vm.scope = $scope;
 		vm.vmScope = $scope;
 
-		win.sepi = {};
+		win.sepi = win.sepi || {};
 		win.sepi.filter = $filter;
+
+		var fileDirectory = cordova.file.dataDirectory;
+		vm.fileDirectory = fileDirectory;
+		win.sepi.fileDirectory = fileDirectory;
 
 		vm.log = [];
 		vm.reformattedList = {};
@@ -451,7 +455,7 @@
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
 				vm.vmScope.pdfUrl = vm.pdfFileURL;
-				$cordovaFile.writeFile(cordova.file.externalDataDirectory, "ExpenseLog.pdf", blob, true).then(function(res) {
+				$cordovaFile.writeFile(fileDirectory, "ExpenseLog.pdf", blob, true).then(function(res) {
 					Log.l("EL: Success creating PDF file!");
 					Log.l(res);
 					vm.pdfFile = res;
