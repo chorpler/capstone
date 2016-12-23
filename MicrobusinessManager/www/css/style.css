@@ -537,6 +537,7 @@ ion-popover-view .cash-popover {
 
 .menulist {
 	/* border: thin solid black; */
+	width: 100%;
 }
 
 .menulist .list {
@@ -548,6 +549,7 @@ ion-popover-view .cash-popover {
 	align-items: flex-start;
 	align-content: center;
 	padding: 0 !important;
+	width: 100%;
 }
 
 .menulist .item {
@@ -564,6 +566,7 @@ ion-popover-view .cash-popover {
 	font-size: 21px !important;
 	font-weight: normal;
 	vertical-align: middle !important;
+	width: 100%;
 	/* border: thin solid black !important; */
 }
 
@@ -611,4 +614,36 @@ ion-popover-view.fit ion-content {
 	flex: 1;
 	height: 40px !important;
 	margin: 0 !important;
+}
+
+.download-progress-card {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.progress-list, .download-progress-list {
+	width: 100%;
+	text-align: center;
+}
+
+.progress-list-item, .download-progress-label {
+	width: 100%;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.progress-label {
+	font-size: 1.5em;
+	font-weight: bold;
+	text-align: center;
+}
+
+.download-file-progress {
+	width: 100%;
+	margin: 5px 0px;
 }

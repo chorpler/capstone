@@ -1,0 +1,22 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<h1 class="title">{{"str_format_preferences" | translate}}</h1>
+	</ion-header-bar>
+	<ion-content class="formats-preferences">
+		<form name="formatsForm">
+			<ion-list class="list">
+				<label class="item item-input">
+					<span class="input-label">{{"str_date_format" | translate}}</span><input type="text" placeholder="YYYY-MM-DD" ng-model="settings.formats.dateformat">
+				</label>
+			</ion-list>
+			<input type="submit"
+					class="button button-block button-balanced"
+					ng-click="settings.saveFormatsEdit(settings.formats, formatsForm, $event)"
+					value="{{'save_button' | translate}}">
+			<button class="button button-block button-assertive"
+					ng-click="settings.cancelFormatsEdit()">
+				{{"cancel_button" | translate}}
+			</button>
+		</form>
+	</ion-content>
+</ion-modal-view>

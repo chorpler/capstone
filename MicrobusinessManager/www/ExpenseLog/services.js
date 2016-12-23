@@ -1,10 +1,11 @@
 (function() {
-	angular.module('app.activitylog')
-	.factory('ALpdfService', ['$q', '$filter', ALpdfService]);
+	angular.module('app.expenselog')
+	.factory('ELpdfService', ['$q', '$filter', '$translate', ELpdfService]);
 
-	function ALpdfService($q, $filter) {
+	function ELpdfService($q, $filter, $translate) {
 		var cfilter = $filter;
-		function createPdf(report, user, reportData) {
+		function createExpenseLogPdf(report, user, reportData) {
+			Log.l("Now in createExpenseLogPdf() ...");
 			return $q(function(resolve, reject) {
 				Log.l("AL: Now in pdfService.createPdf() ... report and user are:");
 				Log.l(JSON.stringify(report));
@@ -21,7 +22,7 @@
 
 
 		var service = {
-			createActivityLogPdf: createPdf
+			createExpenseLogPdf: createExpenseLogPdf
 		};
 		return service;
 	}
@@ -36,67 +37,55 @@
 		return uint8Array;
 	}
 
+	function dateSort(a,b) {
+		return a.date > b.date ? 1 : a.date < b.date ? -1 : 0;
+	}
+
 	function createDocumentDefinition(report, user, reportData, afilter) {
 		Log.l("Now in createDocumentDefinition() ...");
 
 		var dateFormat = win.dateFormat || "YYYY-MM-DD";
-		// report consists of sales, expenses, and cashInfusions, concatenated into one array
-		// sales: id, amount, date
+		// report consists of expenses
 		// expenses: id, name, amount, expType, comments, date, type
-		// cashInfusions: id, amount, date
-		var alr = report;
+		var elr = report;
 		var rdata = reportData;
 		Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
-		var transactions = null;
-		if(!report || !report.length) {
+		var rawTransactions = [], transactions = [];
+		// if(!report || !report.length) {
+		if(isEmpty(report)) {
 			transactions = null;
 		} else {
-			transactions = alr.map(function(transaction) {
-				var tr = transaction;
-				var arrItem = [];
-				var incCell = {"style": "incomeCell"};
-				var expCell = {"style": "expenseCell"};
-				if(tr.isCash) {
-					// Transaction is a cash infusion
-					var amt = afilter('currency')(tr.amount, "$", 2);
-					var dt = moment(tr.date).format(dateFormat);
-					incCell.text = amt;
-					arrItem.push(dt);
-					arrItem.push("Cash");
-					arrItem.push(incCell);
-					arrItem.push("");
-				} else if(tr.isExpense) {
-					// Transaction is an expense
-					var amt = afilter('currency')(tr.amount, "$", 2);
-					var dt = moment(tr.date).format(dateFormat);
-					expCell.text = amt;
-					arrItem.push(dt);
-					arrItem.push(tr.name);
-					arrItem.push("");
-					arrItem.push(expCell);
-				} else {
-					// Transaction is a sale
-					var amt = afilter('currency')(tr.amount, "$", 2);
-					var dt = moment(tr.date).format(dateFormat);
-					incCell.text = amt;
-					arrItem.push(dt);
-					arrItem.push("Sale");
-					arrItem.push(incCell);
-					arrItem.push("");
+			for(var date in elr) {
+				var tr = elr[date];
+				for(var idx in tr) {
+					rawTransactions.push(tr[idx]);
 				}
-				return arrItem;
-				// return [item.name, item.amount];
-			});
+			}
+			rawTransactions = rawTransactions.sort(dateSort);
+			Log.l("rawTransactions is:\n%s", JSON.stringify(rawTransactions, false, 2));
+			for(var idx in rawTransactions) {
+				var expense = rawTransactions[idx];
+				var arrItem = [];
+				var expCell = {"style": "rightAlign"};
+				var expName = expense.name;
+				var strDate = moment(expense.date).format(dateFormat);
+				var amt = afilter('currency')(expense.amount, "$", 2);
+				expCell.text = amt;
+				arrItem.push(strDate);
+				arrItem.push(expName);
+				arrItem.push(expCell);
+				transactions.push(arrItem);
+			}
 		}
 
 		var time = rdata.timeFrame.value;
 		var timespan = "";
 		if(time == 'day') {
-			timespan = afilter('translate')("str_daily");
+			timespan = "str_daily";
 		} else if(time == 'week') {
-			timespan = afilter('translate')("str_weekly");
+			timespan = "str_weekly";
 		} else if(time == 'month') {
-			timespan = afilter('translate')("str_monthly");
+			timespan = "str_monthly";
 		}
 
 		var userid = user.id;
@@ -110,37 +99,22 @@
 		var postal = user.postal;
 		var email = user.email;
 		var phone = user.phone;
-		var reportTitle = afilter('translate')("reports_activity_log");
-		var title = reportTitle + ": " + timespan;
-		// var title = timespan + " Activity Log";
+		var title = afilter('translate')("reports_expense_log") + ": " + afilter('translate')(timespan);
 		// title = titleCase(title);
 		var startDate = moment(rdata.startDate);
 		var endDate = moment(rdata.endDate);
 		var strStartDate = startDate.format(dateFormat);
 		var strEndDate = endDate.format(dateFormat);
 		var strDateRange = strStartDate + " - " + strEndDate;
-		var startingCash = rdata.startingCash;
-		var endingCash = rdata.endingCash;
-		var cashInfusions = rdata.cashInfusions;
-		var strStartingCash = afilter('currency')(startingCash, "$", 2);
-		var strEndingCash = afilter('currency')(endingCash, "$", 2);
-		var strcashInfusions = afilter('currency')(cashInfusions, "$", 2);
 		var totalSales = rdata.totalSales;
 		var totalExpenses = rdata.totalExpenses;
-		var totalCashInfusions = rdata.totalCashInfusions;
-		var totalIncome = totalCashInfusions + totalSales;
 		var strTotalExpenses = afilter('currency')(totalExpenses, "$", 2);
-		var strTotalIncome = afilter('currency')(totalIncome, "$", 2);
-		var strStartingCashHeader = afilter('translate')("reports_starting_cash");
-		var strEndingCashHeader = afilter('translate')("reports_ending_cash");
+		var strTotalExpensesHeader = afilter('translate')("str_total_expenses");
 		var strDateHeader = afilter('translate')("str_date");
 		var strNameHeader = afilter('translate')("str_name");
-		var strIncomeHeader = afilter('translate')("str_income");
-		var strExpensesHeader = afilter('translate')("str_expense");
-		var strTotalIncomeHeader = afilter('translate')("str_total_income");
-		var strTotalExpensesHeader = afilter('translate')("str_total_expenses");
+		var strExpenseHeader = afilter('translate')("str_expenses");
 
-		Log.l("Total income: %s. Total expenses: %s.", strTotalIncome, strTotalExpenses);
+		Log.l("Total expenses: %s.", strTotalExpenses);
 
 		var address = "";
 		if(street2) {
@@ -166,11 +140,7 @@
 					"style": "itemsTableHeader"
 				},
 				{
-					"text": strIncomeHeader,
-					"style": "itemsTableHeader"
-				},
-				{
-					"text": strExpensesHeader,
+					"text": strExpenseHeader,
 					"style": "itemsTableHeader"
 				}
 			]
@@ -181,7 +151,7 @@
 			"table": {
 				"headerRows": 1,
 				"keepWithHeaderRows": 1,
-				"widths": [ 75, "*", 75, 75 ],
+				"widths": [ 75, "*", 75 ],
 				"body": [
 					[
 						{
@@ -193,52 +163,28 @@
 							"style": "itemsTableHeader"
 						},
 						{
-							"text": strIncomeHeader,
-							"style": "itemsTableHeader"
-						},
-						{
-							"text": strExpensesHeader,
+							"text": strExpenseHeader,
 							"style": "itemsTableHeader"
 						}
 					],
-					[
-						{"text": strStartDate, "fillColor": "gainsboro"},
-						{"text": strStartingCashHeader, "fillColor": "gainsboro"},
-						{"text": strStartingCash, "style": "cashCell", "colSpan": 2, "fillColor": "gainsboro"}
-					]
 				]
 			}
 		};
 
-		var strNoTransactions = "(" + afilter('translate')("str_time_period_no_transactions");
+		var strNoExpenses = "(" + afilter('translate')("str_time_period_no_expenses") + ")";
 
 		if(transactions == null) {
 			Log.l("transactions is null, setting bodyItems to 'no transactions'");
-			bodyItems = [ [ {"text": strNoTransactions, "colSpan": 4, "style": "emptyRow"} ] ];
+			bodyItems = [ [ {"text": strNoExpenses, "colSpan": 3, "style": "emptyRow"} ] ];
 		} else {
 			Log.l("transactions is not null!");
 			bodyItems = transactions;
 		}
 
-		var endingCashRow = [
-			[
-				{"text": strEndDate, "fillColor": "gainsboro"},
-				{"text": strEndingCashHeader, "fillColor": "gainsboro"},
-				{"text": strEndingCash, "style": "cashCell", "colSpan": 2, "fillColor": "gainsboro"}
-			]
-		];
-
 		var totalsRow = [
 			[
 				"",
-				{"text": strTotalIncomeHeader, "style": "totalCell"},
-				"",
-				{"text": strTotalIncome, "style": "incomeCell"}
-			],
-			[
-				"",
 				{"text": strTotalExpensesHeader, "style": "totalCell"},
-				"",
 				{"text": strTotalExpenses, "style": "expenseCell"}
 			]
 		];
@@ -246,7 +192,7 @@
 
 		Log.l("BodyItems is:\n%s", JSON.stringify(bodyItems, false, 2));
 
-		transTable.table.body = transTable.table.body.concat(bodyItems).concat(endingCashRow);
+		transTable.table.body = transTable.table.body.concat(bodyItems);
 
 		Log.l("TransTable is now:\n%s", JSON.stringify(transTable, false, 2));
 		Log.l(transTable);
@@ -353,12 +299,13 @@
 				{
 					"style": "totalsTable",
 					"table": {
-						"widths": [ 75, "*", 75, 75 ],
+						"widths": [ 75, "*", 75 ],
 						"body": totalsRow
 					},
 					"layout": "noBorders"
 				}
 			]
+
 		};
 		return dd;
 	}

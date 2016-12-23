@@ -53,7 +53,22 @@
 						// organization = items;
 						return items[0];
 					});
+				},
+				formats: function (Database) {
+					return Database.select('formats').then(function (response) {
+						var items = [];
+						if (response.rows.length === 0) {
+							return items;
+						}
+						for (var i = response.rows.length - 1; i >= 0; i--) {
+							var item = response.rows.item(i);
+							/* id, dateformat */
+							items.push(item);
+						}
+						return items[0];
+					});
 				}
+
 /*				,
 				createPDF: pdfServiceProvider.createPDF*/
 			}

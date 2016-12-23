@@ -1,9 +1,11 @@
 (function() {
 	angular.module('app')
 		.factory('Database', Database)
-		.factory('CashBalance', CashBalance);
+		.factory('CashBalance', CashBalance)
+		.factory('$cordovaSQLitePorter', ['$q', '$window', cordovaSQLitePorter]);
 	// .factory('ReportService', ['$q', ReportService]);
 
+	// function Database($ionicPlatform, $cordovaSQLite, $q) {
 	function Database($ionicPlatform, $cordovaSQLite, $q) {
 		var db = null;
 		var dbname = 'my.db';
@@ -25,6 +27,7 @@
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
 			deferred.resolve();
 		});
 
@@ -38,7 +41,8 @@
 			generateIncomeStatement: generateIncomeStatement,
 			getCommission: getCommission,
 			getDB: getDB,
-			getDBNew: getDBNew
+			getDBNew: getDBNew,
+			getFormats: getFormats
 		};
 
 		var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
@@ -93,6 +97,11 @@
 		var UPDATE_USER = 'UPDATE user set name = ?, representative = ?, street1 = ?, street2 = ?, city = ?, state = ?, postal = ?, email = ?, phone = ? ';
 		var REMOVE_USER = 'DELETE FROM user';
 
+		var INSERT_FORMATS = 'INSERT INTO formats (dateformat) VALUES (?)';
+		var SELECT_FORMATS = 'SELECT id, dateformat FROM formats';
+		var UPDATE_FORMATS = 'UPDATE formats set dateformat = ? ';
+		var REMOVE_FORMATS = 'DELETE FROM formats';
+
 		var WHERE = ' WHERE ';
 		var AND = ' AND ';
 		var WHERE_ID = 'id = ? ';
@@ -135,6 +144,8 @@
 					break;
 				case 'user':
 					query = INSERT_USER;
+				case 'formats':
+					query = INSERT_FORMATS;
 					break;
 			}
 
@@ -185,6 +196,9 @@
 					break;
 				case 'user':
 					query = SELECT_USER;
+					break;
+				case 'formats':
+					query = SELECT_FORMATS;
 					break;
 			}
 
@@ -268,6 +282,9 @@
 				case 'user':
 					query = UPDATE_USER;
 					break;
+				case 'formats':
+					query = UPDATE_FORMATS;
+					break;
 			}
 
 			query += id ? WHERE + WHERE_ID : '';
@@ -320,6 +337,9 @@
 					break;
 				case 'user':
 					query = REMOVE_USER;
+					break;
+				case 'formats':
+					query = REMOVE_FORMATS;
 					break;
 			}
 
@@ -500,6 +520,29 @@
 		function getDBNew() {
 			return dbparams;
 		}
+
+		function getFormats() {
+			var d = $q.defer();
+			var db = 'formats';
+			var query = 'SELECT id, dateformat FROM formats';
+			return d.promise.then(function() {
+				return $cordovaSQLite.execute(db, query, params)
+					.then(function(res) {
+							var items = [];
+							if (!res || !res.rows || !res.rows.length || res.rows.length === 0) {
+								return items;
+							}
+							for (var i = res.rows.length - 1; i >= 0; i--) {
+								var item = res.rows.item(i);
+								/* id, dateformat */
+								items.push(item);
+							}
+							return items[0];
+					}, function(err) {
+						Log.l(err);
+					});
+			});
+		}
 	};
 
 	function CashBalance(Database) {
@@ -528,6 +571,134 @@
 		}
 
 		return service;
+	}
+
+	function cordovaSQLitePorter($q, $window) {
+
+		var cdv = $window.cordova;
+		var plugins = cdv.plugins;
+		var sqlitePorter = plugins.sqlitePorter;
+
+		function checkDB(db) {
+			if(isObj(db) && db.transaction) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function isBad(db) {
+			return !checkDB(db);
+		}
+
+		function importSQL(db, sql) {
+			var d = $q.defer();
+			if(isBad(db)) {
+				d.reject("db is not correct database type, it must be be a WebSQL-style object and have .transaction() method!");
+			} else {
+				sqlitePorter.importSqlToDb(db, sql, 
+					{ successFn:
+						function(count) {
+							d.resolve(count);
+						}, errorFn:
+						function(err) {
+							d.reject(err);
+						}, progressFn:
+						function(count, totalCount) {
+							d.notify([count, totalCount]);
+						}
+					}
+				);
+			}
+			return d.promise;
+		}
+
+		function exportSQL(db, dataOnly) {
+			var d = $q.defer();
+			if(isBad(db)) {
+				d.reject("db is not correct database type, it must be be a WebSQL-style object and have .transaction() method!");
+			} else {
+				var exportDataOnly = dataOnly ? true : false;
+				sqlitePorter.exportDbToSql(db, { successFn: function(sql, count) {
+					d.resolve([sql, count]);
+				}, dataOnly: exportDataOnly});
+			}
+			return d.promise;
+		}
+
+		function importJSON(db, json, batchInsertSize) {
+			var d = $q.defer();
+			if(isBad(db)) {
+				d.reject("db is not correct database type, it must be be a WebSQL-style object and have .transaction() method!");
+			} else {
+				var batchSize = batchInsertSize || 250;
+				sqlitePorter.importJsonToDb(db, json, { successFn: function(count) {
+					d.resolve(count);
+				}, errorFn: function(err) {
+					d.reject(err);
+				}, progressFn: function(count, totalCount) {
+					d.notify([count, totalCount]);
+				}, batchInsertSize: batchSize});
+			}
+			return d.promise;
+		}
+
+		function exportJSON(db, dataOnly) {
+			var d = $q.defer();
+			if(isBad(db)) {
+				d.reject("db is not correct database type, it must be be a WebSQL-style object and have .transaction() method!");
+			} else {
+				var exportDataOnly = dataOnly ? true : false;
+				sqlitePorter.exportDbToJson(db,
+					{ successFn:
+						function(json, count) {
+							d.resolve([json, count]);
+						}, dataOnly: exportDataOnly
+					}
+				);
+			}
+			return d.promise;
+		}
+
+		function wipeDB(db) {
+			var d = $q.defer();
+			if(isBad(db)) {
+				d.reject("db is not correct database type, it must be be a WebSQL-style object and have .transaction() method!");
+			} else {
+				sqlitePorter.wipeDb(db,
+					{ successFn:
+						function(count) {
+							d.resolve(count);
+						}, errorFn:
+						function(err) {
+							d.reject(err);
+						}, progressFn:
+						function(count, totalCount) {
+							d.notify([count, totalCount]);
+						}
+					}
+				);
+			}
+			return d.promise;
+		}
+
+		var service = {
+			checkDB: checkDB,
+			isBad: isBad,
+			importSQL: importSQL,
+			exportSQL: exportSQL,
+			importJSON: importJSON,
+			exportJSON: exportJSON,
+			wipeDB: wipeDB
+		};
+
+		return service;
+		// function init() {
+
+		// }
+		// init();
+
+
 	}
 })();
 

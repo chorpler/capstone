@@ -1,4 +1,7 @@
 <ion-view class="sales-report" view-title="{{'reports_sales_reports' | translate}}">
+	<ion-nav-buttons side="right">
+		<button class="button button-icon icon ion-more menu-button-sales-log" ng-click="saleslog.showPopupMenu($event)"></button>
+	</ion-nav-buttons>
 	<ion-header-bar>
 		<h1 class="title">{{"reports_sales_reports" | translate}}</h1>
 	</ion-header-bar>
@@ -13,7 +16,9 @@
 				<span>{{saleslog.salesTotal | currency}}</span>
 			</div>
 		</div>
-		<div class="list card" ng-repeat="sale in saleslog.sales track by sale.id | orderBy: sale.date">
+		<!-- <div class="list card" ng-repeat="sale in saleslog.sales track by sale.id | orderBy: sale.date"> -->
+		<!-- <div class="list card" ng-repeat="sale in saleslog.sales track by sale.id"> -->
+		<div class="list card" ng-repeat="sale in saleslog.sales | orderBy: sale.date track by sale.id">
 			<div ng-click="saleslog.editSale(sale)">
 				<div class="item item-divider card-list-header">
 					<div class="row">

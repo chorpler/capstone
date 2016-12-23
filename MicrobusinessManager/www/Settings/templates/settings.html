@@ -1,6 +1,6 @@
 <ion-view view-title="{{'menu_settings' | translate}}">
 	<ion-nav-buttons side="right">
-		<button class="button button-icon icon ion-more" ng-click="settings.showPopupMenu($event)"></button>
+		<button class="button button-icon icon ion-more settings-menu-icon" ng-click="settings.showPopupMenu($event)"></button>
 	</ion-nav-buttons>
 	<ion-content class="settings">
 		<div class="list card">
@@ -16,6 +16,21 @@
 					<option value="es">{{"spanish_language" | translate}}</option>
 				</select>
 			</label>
+			<div class="item item-divider">
+				<span class="name-container">{{"str_format_preferences" | translate}}</span>
+			</div>
+			<ion-item ng-click="settings.formatsEdit()">
+				<div class="card-container-2">
+					<a class="item item-icon-right">
+						<i class="icon ion-chevron-right"></i>
+						<div class="row">
+							<div class="col">
+								<span class="amount-container">{{"str_date" | translate}}: {{settings.formats.dateformat}}</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</ion-item>
 			<div class="item item-divider">
 				<span class="name-container">{{"user_options" | translate}}</span>
 			</div>

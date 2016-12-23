@@ -418,6 +418,18 @@
 		// return typeof arg != 'undefined';
 	}
 
+	function isEmpty(arg) {
+		if(isArray(arg)) {
+			return arg.length === 0 ? true : false;
+		} else if(isObject(arg)) {
+			return Object.getOwnPropertyNames(arg).length === 0 ? true : false;
+		} else if(isString(arg)) {
+			return arg.length === 0 ? true : false;
+		} else {
+			return true;
+		}
+	}
+
 		/**
 	 * Set or clear the hashkey for an object.
 	 * @param obj object
@@ -657,6 +669,7 @@
 	u.isUndef   = isUndefined    ;
 	u.isDef     = isDefined      ;
 	u.sizeOf    = sizeOfObject   ;
+	u.isEmpty   = isEmpty        ;
 	u.merge     = merge          ;
 	u.blankOut  = blankOutObject ;
 	u.slice     = slice          ;
@@ -686,7 +699,7 @@ function globalizeFunc(funcName) {
 	}
 }
 
-var fns = ['isFunc', 'isNum', 'isBool', 'isStr', 'isArr', 'isObj', 'isUndef', 'isDef', 'sizeOf', 'merge', 'blankOut', 'slice', 'rotate', 'salength', 'last', 'toArray', 'titleCase', 'csv2json', 'json2csv'];
+var fns = ['isFunc', 'isNum', 'isBool', 'isStr', 'isArr', 'isObj', 'isUndef', 'isDef', 'sizeOf', 'isEmpty', 'merge', 'blankOut', 'slice', 'rotate', 'salength', 'last', 'toArray', 'titleCase', 'csv2json', 'json2csv'];
 
 for(var name in fns) {
 	globalizeFunc(fns[name]);

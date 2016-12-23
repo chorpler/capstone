@@ -27,9 +27,20 @@
 				</label>
 			</div>
 		</form>
-		<div class="card" ng-show="vm.downloadProgress > 0">
-			<div class="item item-text-wrap assertive">
-				{{"str_downloading" | translate}}: {{vm.downloadProgress}}%
+		<div class="card download-progress-card" ng-show="settings.downloadProgress > 0">
+			<div class="list download-progress-list">
+				<div class="item progress-list-item">
+					<div class="download-progress-label">
+						{{"str_downloading" | translate}}: {{settings.downloadProgress}}%
+					</div>
+					<progress class="download-file-progress" max="100" value="{{settings.downloadProgress}}"></progress>
+				</div>
+				<div class="item progress-list-item">
+					<button class="button button-block button-assertive"
+							ng-click="settings.closeDownloadModal()">
+						{{"str_ok" | translate}}
+					</button>
+				</div>
 			</div>
 		</div>
 	</ion-content>

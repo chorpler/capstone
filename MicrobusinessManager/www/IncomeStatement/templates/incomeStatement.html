@@ -2,7 +2,7 @@
 
 <ion-view view-title="{{'reports_income_statement' | translate}}" class="income-statement">
 	<ion-nav-buttons side="right">
-		<button class="button button-icon icon ion-more" ng-click="income.openPopover($event)"></button>
+		<button class="button button-icon icon ion-more menu-button-income-statement" ng-click="income.openPopover($event)"></button>
 	</ion-nav-buttons>
 	<report-header start-date="income.startDate" end-date="income.endDate" time-frame="income.timeFrame" change="income.change" class="has-header"></report-header>
 	<ion-content class="has-footer has-header">

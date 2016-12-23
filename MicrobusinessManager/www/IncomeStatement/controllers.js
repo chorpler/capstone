@@ -7,10 +7,13 @@
 	// function IncomeStatementController (startDate, endDate, timeFrame, incomeStatement, Database, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, user, IncomeStatementService) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, Database, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, user, IncomeStatementService) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, Database, user, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, IncomeStatementService) {
-	function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, pdfService, Database, user, $filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist) {
+	function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, ISpdfService, Database, user, formats, $filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, createPdf, Database, user, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal) {
 		var vm = this;
 		var win = window;
+		win.vm = vm;
+		win.sepi = {};
+		win.sepi.scope = $scope;
 
 		win.cordovaFile = $cordovaFile;
 		win.cordovaEmail = $cordovaEmailComposer;
@@ -26,7 +29,7 @@
 		vm.createPopupMenu = createPopupMenu;
 		vm.closePopupMenu = closePopupMenu;
 		vm.closeIncomeStatement = closeIncomeStatement;
-		vm.generatePDF = generatePDF;
+		vm.createPDFModal = createPDFModal;
 		vm.getUserInfo = getUserInfo;
 		vm.createReport = createReport;
 		vm.closePDFViewer = closePDFViewer;
@@ -36,11 +39,12 @@
 		vm.openPDFPopover = openPDFPopover;
 		vm.closePDFPopupMenu = closePDFPopupMenu;
 		vm.user = user;
+		vm.formats = formats;
 		vm.groupBy = 'name';
 		vm.ionicPopover = $ionicPopover;
 		vm.getIncomeStatement = getIncomeStatement;
 		vm.Database = Database;
-		vm.createPDF = pdfService.createPdf;
+		vm.createPDF = ISpdfService.createPdf;
 		vm.pdfModal = {};
 		vm.reportData = {};
 		vm.pdfblob = null;
@@ -69,7 +73,7 @@
 			calculateTotals();
 			// setDefaultsForPdfViewer($scope);
 			vm.createPopupMenu($scope);
-			vm.generatePDF();
+			vm.createPDFModal($scope);
 			vm.createPDFPopupMenu($scope);
 			$scope.$on('$destroy', function() {
 				Log.l("IncomeStatement.controller: Cleaning up scope and removing pdfModal...")
@@ -155,28 +159,27 @@
 		}
 
 		function createPDFPopupMenu($scope) {
-			Log.l("IA: showing PDFPopup Menu ...");
+			Log.l("IA: creating PDFPopup Menu ...");
 			$ionicPopover.fromTemplateUrl('templates/PDFPopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("IA: now in function after ionicPopover.fromTemplateUrl('PDFPopupMenu') ...");
 				$scope.pdfMenuPopover = popover;
 				vm.pdfMenuPopover = popover;
-				// popover.show(".income-statement-menu")
 			});
 
 			//Cleanup the popover when we're done with it!
-			vm.vmScope.$on('$destroy', function() {
+			$scope.$on('$destroy', function() {
 				Log.l("IA: now in scope.on('destroy') for pdfMenuPopover");
 				vm.pdfMenuPopover.remove();
 			});
 			// Execute action on hidden popover
-			vm.vmScope.$on('pdfMenuPopover.hidden', function() {
+			$scope.$on('pdfMenuPopover.hidden', function() {
 				Log.l("IA: now in scope.on('pdfMenuPopover.hidden')");
 				// Execute action
 			});
 			// Execute action on remove popover
-			vm.vmScope.$on('pdfMenuPopover.removed', function() {
+			$scope.$on('pdfMenuPopover.removed', function() {
 				Log.l("IA: now in scope.on('pdfMenuPopover.removed')");
 				// Execute action
 			});
@@ -185,18 +188,17 @@
 		function openPDFPopover($event) {
 			Log.l("IA: now in openPDFPopover()")
 			// vm.popover.show($event);
-			vm.pdfMenuPopover.show('.ion-android-menu');
-			var headerbar = angular.element(".income-statement-bar");
-			var hbar = $("ion-header-bar");
-			var hbarheight = hbar.height();
-			// var barHeight = headerbar.height();
-			Log.l("IA: Menu bar height is %d px", hbarheight);
-			var elPopover = $("#PopupMenu002");
-			var popTop = elPopover.position().top;
-			Log.l("elPopover has top " + popTop);
-			var newPopTop = hbarheight + "px";
-			elPopover.css("top", newPopTop);
-			Log.l("elPopover now has top " + newPopTop);
+			vm.pdfMenuPopover.show('.menu-button-pdf-viewer');
+			// var headerbar = angular.element(".income-statement-bar");
+			// var hbar = $("ion-header-bar");
+			// var hbarheight = hbar.height();
+			// Log.l("IA: Menu bar height is %d px", hbarheight);
+			// var elPopover = $("#PopupMenu002");
+			// var popTop = elPopover.position().top;
+			// Log.l("elPopover has top " + popTop);
+			// var newPopTop = hbarheight + "px";
+			// elPopover.css("top", newPopTop);
+			// Log.l("elPopover now has top " + newPopTop);
 		}
 
 		function closePDFPopupMenu() {
@@ -207,7 +209,7 @@
 		}
 
 		function createPopupMenu($scope) {
-			Log.l("IA: showing Popup Menu ...");
+			Log.l("IA: creating Popup Menu ...");
 			$ionicPopover.fromTemplateUrl('IncomeStatement/templates/PopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
@@ -216,17 +218,17 @@
 				vm.popover = popover;
 				// popover.show(".income-statement-menu")
 				//Cleanup the popover when we're done with it!
-				vm.vmScope.$on('$destroy', function() {
+				$scope.$on('$destroy', function() {
 					Log.l("IA: now in scope.on('destroy')");
 					vm.popover.remove();
 				});
 				// Execute action on hidden popover
-				vm.vmScope.$on('popover.hidden', function() {
+				$scope.$on('popover.hidden', function() {
 					Log.l("IA: now in scope.on('popover.hidden')");
 					// Execute action
 				});
 				// Execute action on remove popover
-				vm.vmScope.$on('popover.removed', function() {
+				$scope.$on('popover.removed', function() {
 					Log.l("IA: now in scope.on('popover.removed')");
 					// Execute action
 				});
@@ -236,7 +238,7 @@
 		function openPopover($event) {
 			Log.l("IA: now in scope.openPopover()")
 			// vm.popover.show($event);
-			vm.popover.show('.ion-more');
+			vm.popover.show('.menu-button-income-statement');
 /*
 			var headerbar = angular.element(".income-statement-bar");
 			var hbar = $("ion-header-bar");
@@ -302,8 +304,8 @@
 			});
 		}
 
-		function generatePDF() {
-			Log.l("IA: Now in generatePDF()");
+		function createPDFModal($scope) {
+			Log.l("IA: Now in createPDFModal()");
 			// Initialize the modal view.
 			$ionicModal.fromTemplateUrl('templates/pdf-viewer.html', {
 				scope: $scope,
@@ -319,6 +321,7 @@
 		function createReport() {
 			Log.l("IAR: Now running createReport()...");
 			// vm.createPdf(vm.incomeStatement, vm.user).then(function(pdf) {
+			vm.popover.hide();
 			vm.createPDF(vm.incomeStatement, vm.user, vm.reportData).then(function(pdf) {
 				Log.l("IAR: Now in function after IncomeStatementService.createPDF()...")
 				var blob = new Blob([pdf], { type: 'application/pdf' });

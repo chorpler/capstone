@@ -1,0 +1,25 @@
+<ion-popover-view id="PopupMenu005" class="category-menu-popup fit">
+<!-- 	<ion-header-bar>
+		<h1 class="title">Menu</h1>
+	</ion-header-bar> -->
+	<ion-content class="menucontent">
+		<!-- <div class="card"> -->
+<!-- 			<ion-list>
+				<ion-item class="item item-icon-right" ng-click="income.generatePDF()">
+					<button class="button button-icon icon ion-android-document button-generate-pdf-text">
+						<span class="button-generate-pdf-text">{{"str_generate_pdf" | translate}}</span>
+					</button>
+				</ion-item>
+			</ion-list> -->
+
+		<ion-list class="menulist">
+			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
+				<!-- <icon class="icon ion-android-document"></icon><span class="popup-menu-item-text">{{"str_generate_pdf" | translate}}</span> -->
+				<button class="button button-full button-icon icon ion-android-document" ng-click="expenselog.createReport()">{{"str_generate_pdf" | translate}}</button>
+			</ion-item>
+			<ion-item class="ionic-item-icon-left popup-menu-item">
+			<button class="button button-full button-icon icon ion-close" ng-click="expenselog.closeExpenseLog()">{{"close_button" | translate}}</button>
+			</ion-item>
+		</ion-list>
+
+</ion-popover-view>

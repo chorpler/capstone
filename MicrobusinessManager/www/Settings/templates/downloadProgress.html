@@ -1,0 +1,13 @@
+<ion-modal-view>
+	<ion-content>
+		<div class="list progress-list">
+			<div class="item item-text-wrap assertive progress-list-item">
+				<label class="label progress-label">Downloading</label>
+				<progress class="download-file-progress" max="100" value="settings.downloadFile.progress"></progress>
+			</div>
+			<label class="item">
+				<button class="button button-full button-positive" ng-click="settings.downloadOK()">{{"str_ok" | translate}}</button>
+			</label>
+		</div>
+	</ion-content>
+</ion-modal-view>

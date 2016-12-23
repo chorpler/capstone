@@ -1,8 +1,8 @@
 (function() {
-	angular.module('app.activitylog')
-	.factory('ALpdfService', ['$q', '$filter', ALpdfService]);
+	angular.module('app.saleslog')
+	.factory('pdfService', ['$q', '$filter', pdfService]);
 
-	function ALpdfService($q, $filter) {
+	function pdfService($q, $filter) {
 		var cfilter = $filter;
 		function createPdf(report, user, reportData) {
 			return $q(function(resolve, reject) {
@@ -39,7 +39,6 @@
 	function createDocumentDefinition(report, user, reportData, afilter) {
 		Log.l("Now in createDocumentDefinition() ...");
 
-		var dateFormat = win.dateFormat || "YYYY-MM-DD";
 		// report consists of sales, expenses, and cashInfusions, concatenated into one array
 		// sales: id, amount, date
 		// expenses: id, name, amount, expType, comments, date, type
@@ -59,7 +58,7 @@
 				if(tr.isCash) {
 					// Transaction is a cash infusion
 					var amt = afilter('currency')(tr.amount, "$", 2);
-					var dt = moment(tr.date).format(dateFormat);
+					var dt = moment(tr.date).format("YYYY-MM-DD");
 					incCell.text = amt;
 					arrItem.push(dt);
 					arrItem.push("Cash");
@@ -68,7 +67,7 @@
 				} else if(tr.isExpense) {
 					// Transaction is an expense
 					var amt = afilter('currency')(tr.amount, "$", 2);
-					var dt = moment(tr.date).format(dateFormat);
+					var dt = moment(tr.date).format("YYYY-MM-DD");
 					expCell.text = amt;
 					arrItem.push(dt);
 					arrItem.push(tr.name);
@@ -77,7 +76,7 @@
 				} else {
 					// Transaction is a sale
 					var amt = afilter('currency')(tr.amount, "$", 2);
-					var dt = moment(tr.date).format(dateFormat);
+					var dt = moment(tr.date).format("YYYY-MM-DD");
 					incCell.text = amt;
 					arrItem.push(dt);
 					arrItem.push("Sale");
@@ -92,11 +91,11 @@
 		var time = rdata.timeFrame.value;
 		var timespan = "";
 		if(time == 'day') {
-			timespan = afilter('translate')("str_daily");
+			timespan = "Daily";
 		} else if(time == 'week') {
-			timespan = afilter('translate')("str_weekly");
+			timespan = "Weekly";
 		} else if(time == 'month') {
-			timespan = afilter('translate')("str_monthly");
+			timespan = "Monthly";
 		}
 
 		var userid = user.id;
@@ -110,14 +109,12 @@
 		var postal = user.postal;
 		var email = user.email;
 		var phone = user.phone;
-		var reportTitle = afilter('translate')("reports_activity_log");
-		var title = reportTitle + ": " + timespan;
-		// var title = timespan + " Activity Log";
+		var title = timespan + " Activity Log";
 		// title = titleCase(title);
 		var startDate = moment(rdata.startDate);
 		var endDate = moment(rdata.endDate);
-		var strStartDate = startDate.format(dateFormat);
-		var strEndDate = endDate.format(dateFormat);
+		var strStartDate = startDate.format("YYYY-MM-DD");
+		var strEndDate = endDate.format("YYYY-MM-DD");
 		var strDateRange = strStartDate + " - " + strEndDate;
 		var startingCash = rdata.startingCash;
 		var endingCash = rdata.endingCash;
@@ -131,14 +128,6 @@
 		var totalIncome = totalCashInfusions + totalSales;
 		var strTotalExpenses = afilter('currency')(totalExpenses, "$", 2);
 		var strTotalIncome = afilter('currency')(totalIncome, "$", 2);
-		var strStartingCashHeader = afilter('translate')("reports_starting_cash");
-		var strEndingCashHeader = afilter('translate')("reports_ending_cash");
-		var strDateHeader = afilter('translate')("str_date");
-		var strNameHeader = afilter('translate')("str_name");
-		var strIncomeHeader = afilter('translate')("str_income");
-		var strExpensesHeader = afilter('translate')("str_expense");
-		var strTotalIncomeHeader = afilter('translate')("str_total_income");
-		var strTotalExpensesHeader = afilter('translate')("str_total_expenses");
 
 		Log.l("Total income: %s. Total expenses: %s.", strTotalIncome, strTotalExpenses);
 
@@ -158,19 +147,19 @@
 		var tableBody = [
 			[
 				{
-					"text": strDateHeader,
+					"text": "Date",
 					"style": "itemsTableHeader"
 				},
 				{
-					"text": strNameHeader,
+					"text": "Name",
 					"style": "itemsTableHeader"
 				},
 				{
-					"text": strIncomeHeader,
+					"text": "Income",
 					"style": "itemsTableHeader"
 				},
 				{
-					"text": strExpensesHeader,
+					"text": "Expense",
 					"style": "itemsTableHeader"
 				}
 			]
@@ -185,36 +174,34 @@
 				"body": [
 					[
 						{
-							"text": strDateHeader,
+							"text": "Date",
 							"style": "itemsTableHeader"
 						},
 						{
-							"text": strNameHeader,
+							"text": "Name",
 							"style": "itemsTableHeader"
 						},
 						{
-							"text": strIncomeHeader,
+							"text": "Income",
 							"style": "itemsTableHeader"
 						},
 						{
-							"text": strExpensesHeader,
+							"text": "Expense",
 							"style": "itemsTableHeader"
 						}
 					],
 					[
-						{"text": strStartDate, "fillColor": "gainsboro"},
-						{"text": strStartingCashHeader, "fillColor": "gainsboro"},
-						{"text": strStartingCash, "style": "cashCell", "colSpan": 2, "fillColor": "gainsboro"}
+						strStartDate,
+						"Starting Cash",
+						{"text": strStartingCash, "style": "cashCell", "colSpan": 2}
 					]
 				]
 			}
 		};
 
-		var strNoTransactions = "(" + afilter('translate')("str_time_period_no_transactions");
-
 		if(transactions == null) {
 			Log.l("transactions is null, setting bodyItems to 'no transactions'");
-			bodyItems = [ [ {"text": strNoTransactions, "colSpan": 4, "style": "emptyRow"} ] ];
+			bodyItems = [ [ {"text": "(No transactions in this time period)", "colSpan": 4, "style": "emptyRow"} ] ];
 		} else {
 			Log.l("transactions is not null!");
 			bodyItems = transactions;
@@ -222,22 +209,22 @@
 
 		var endingCashRow = [
 			[
-				{"text": strEndDate, "fillColor": "gainsboro"},
-				{"text": strEndingCashHeader, "fillColor": "gainsboro"},
-				{"text": strEndingCash, "style": "cashCell", "colSpan": 2, "fillColor": "gainsboro"}
+				strEndDate,
+				"Ending Cash",
+				{"text": strEndingCash, "style": "cashCell", "colSpan": 2}
 			]
 		];
 
 		var totalsRow = [
 			[
 				"",
-				{"text": strTotalIncomeHeader, "style": "totalCell"},
+				{"text": "Total Income", "style": "totalCell"},
 				"",
 				{"text": strTotalIncome, "style": "incomeCell"}
 			],
 			[
 				"",
-				{"text": strTotalExpensesHeader, "style": "totalCell"},
+				{"text": "Total Expenses", "style": "totalCell"},
 				"",
 				{"text": strTotalExpenses, "style": "expenseCell"}
 			]
@@ -252,9 +239,32 @@
 		Log.l(transTable);
 
 		var dd = {
-			"defaultStyle": {
-				"margin": [ 0, 5, 0, 0 ]
-			},
+			"content": [
+				{
+					"text": title,
+					"style": "header"
+				},
+				{
+					"text": strDateRange,
+					"style": "header"
+				},
+				{ "style": "organizationheader",
+					"stack": [
+						orgname,
+						representative,
+						address
+					]
+				},
+				transTable,
+				{
+					"style": "totalsTable",
+					"table": {
+						"widths": [ 75, "*", 75, 75 ],
+						"body": totalsRow
+					},
+					"layout": "noBorders"
+				}
+			],
 			"styles": {
 				"header": {
 					"fontSize": 20,
@@ -333,32 +343,9 @@
 					"margin": [ 0, 40, 0, 0 ]
 				}
 			},
-			"content": [
-				{
-					"text": title,
-					"style": "header"
-				},
-				{
-					"text": strDateRange,
-					"style": "header"
-				},
-				{ "style": "organizationheader",
-					"stack": [
-						orgname,
-						representative,
-						address
-					]
-				},
-				transTable,
-				{
-					"style": "totalsTable",
-					"table": {
-						"widths": [ 75, "*", 75, 75 ],
-						"body": totalsRow
-					},
-					"layout": "noBorders"
-				}
-			]
+			"defaultStyle": {
+				"margin": [ 0, 5, 0, 0 ]
+			}
 		};
 		return dd;
 	}
