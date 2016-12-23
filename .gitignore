@@ -4,6 +4,7 @@ node_modules/
 MicrobusinessManager/node_modules/
 MicrobusinessManager/platforms/
 MicrobusinessManager/plugins/
+MicrobusinessManager/resources/
 ../MicrobusinessManagerAPI/
 my-release-key.keystore
 *.keystore
