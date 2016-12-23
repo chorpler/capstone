@@ -21,6 +21,11 @@
 
 		win.vm = vm;
 
+		// var fileDirectory = fileDirectory;
+		var fileDirectory = cordova.file.dataDirectory;
+		vm.fileDirectory = fileDirectory;
+		win.sepi.fileDirectory = fileDirectory;
+
 		vm.userAccount = {};
 		vm.userRegistration = {};
 		vm.activeSalary = null;
@@ -671,7 +676,7 @@
 
 			var url = vm.downloadFile.fileurl;
 			var filename = "importdata.xlsx";
-			var targetPath = cordova.file.externalDataDirectory + filename;
+			var targetPath = fileDirectory + filename;
 			var trustHosts = true;
 			var options = {};
 
@@ -719,7 +724,7 @@
 			}
 			var wbBlob = new Blob([s2ab(wboutfile)],{type: filetype});
 
-			$cordovaFile.writeFile(cordova.file.externalDataDirectory, filename, wbBlob, true ).then(function(res) {
+			$cordovaFile.writeFile(fileDirectory, filename, wbBlob, true ).then(function(res) {
 				Log.l("saveExportSpreadsheet(): Successfully saved file '%s'.", filename);
 				Log.l(res);
 			}).catch(function(err) {
@@ -731,7 +736,7 @@
 		function readImportSpreadsheet() {
 			Log.l("Settings: now in readImportSpreadsheet() ...");
 			var filename = "importdata.xlsx";
-			$cordovaFile.readAsBinaryString(cordova.file.externalDataDirectory, filename).then(function(res) {
+			$cordovaFile.readAsBinaryString(fileDirectory, filename).then(function(res) {
 				Log.l("Successfully read file %s.", filename);
 				win.file1 = res;
 				var workbook = XLSX.read(res, {type: 'binary'});
