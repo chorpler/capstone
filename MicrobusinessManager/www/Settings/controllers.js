@@ -10,14 +10,14 @@
 		win.sepi.persist = $persist;
 		win.sepi.scope = $scope;
 		win.sepi.db = Database;
-		win.sepi.cDF = $cordovaDownloadFile;
+		win.sepi.cFT = $cordovaFileTransfer;
 		var rs = $rootScope;
 		rs = $rootScope;
 		vm.code = rs.code;
 		win.sepi.code = $rootScope.code;
 		win.sepi.rs = $rootScope;
 		win.cSQLP = $cordovaSQLitePorter;
-		win.cDF = $cordovaDownloadFile;
+		win.cFT = $cordovaFileTransfer;
 
 		win.vm = vm;
 
