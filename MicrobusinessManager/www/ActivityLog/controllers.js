@@ -11,6 +11,9 @@
 		var win = window;
 		win.vm = vm;
 		win.cFile = $cordovaFile;
+
+		win.sepi = win.sepi || {};
+		
 		var fileDirectory = cordova.file.dataDirectory;
 		vm.fileDirectory = fileDirectory;
 		win.sepi.fileDirectory = fileDirectory;
