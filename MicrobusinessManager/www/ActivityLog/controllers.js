@@ -5,20 +5,24 @@
 
 	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
 	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, IonicNative, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
-	function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
+	function ActivityLogController ($filter, $ionicPopover, $scope, $rootScope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
 		var vm = this;
 
 		var win = window;
-		win.vm = vm;
-		win.cFile = $cordovaFile;
+
+		var rs = $rootScope;
+
+		var code = rs.code || {};
 
 		win.sepi = win.sepi || {};
-		
+
 		var fileDirectory = cordova.file.dataDirectory;
 		vm.fileDirectory = fileDirectory;
-		win.sepi.fileDirectory = fileDirectory;
 
 		$scope.vm = vm;
+		win.vm = vm;
+		win.cFile = $cordovaFile;
+		win.sepi.fileDirectory = fileDirectory;
 
 		vm.startDate = startDate;
 		vm.timeFrame = timeFrame;
@@ -41,7 +45,7 @@
 		vm.emailPDF = emailPDF;
 		vm.createPDFEmail = createPDFEmail;
 		vm.createPDFPopupMenu = createPDFPopupMenu;
-		vm.openPDFPopover = openPDFPopover;
+		vm.pdfMenuPopover = pdfMenuPopover;
 		vm.closePDFPopupMenu = closePDFPopupMenu;
 		vm.pdfMenuPopover = null;
 		vm.closeActivityLog = closeActivityLog;
@@ -219,26 +223,27 @@
 
 		function createPopupMenu($scope) {
 			Log.l("AL: showing Popup Menu ...");
-			$ionicPopover.fromTemplateUrl('ActivityLog/templates/PopupMenu.html', {
+			return $ionicPopover.fromTemplateUrl('ActivityLog/templates/PopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("AL: now in function after ionicPopover.fromTemplateUrl(PopupMenu) ...");
 				$scope.popover = popover;
 				vm.popover = popover;
+				$scope.popupMenu = popover;
 				vm.popupMenu = popover;
 
 				$scope.$on('$destroy', function() {
 					Log.l("AL: now in scope.on('destroy')");
-					vm.popover.remove();
+					vm.popupMenu.remove();
 				});
 				// Execute action on hidden popover
-				$scope.$on('popover.hidden', function() {
-					Log.l("AL: now in scope.on('popover.hidden')");
+				$scope.$on('popupMenu.hidden', function() {
+					Log.l("AL: now in scope.on('popupMenu.hidden')");
 					// Execute action
 				});
 				// Execute action on remove popover
-				$scope.$on('popover.removed', function() {
-					Log.l("AL: now in scope.on('popover.removed')");
+				$scope.$on('popupMenu.removed', function() {
+					Log.l("AL: now in scope.on('popupMenu.removed')");
 					// Execute action
 				});
 			});
@@ -247,32 +252,17 @@
 		function showPopupMenu($event) {
 			Log.l("AL: now in scope.openPopover()")
 			vm.popupMenu.show('.menu-button-activity-log');
-/*
-			var headerbar = angular.element(".income-statement-bar");
-			var hbar = $("ion-header-bar");
-			var hbarheight = hbar.height();
-			Log.l("AL: Menu bar height is %d px", hbarheight);
-			var elPopover = $("#PopupMenu004");
-			var popTop = elPopover.position().top;
-			Log.l("elPopover has top " + popTop);
-			var newPopTop = hbarheight + "px";
-			elPopover.css("top", newPopTop);
-			Log.l("elPopover now has top " + newPopTop);
-*/
-			// vm.popover.positionView(".ion-android-menu", vm.popover);
-			// vm.popover.show(".ion-android-menu");
-			// vm.popover.positionView(".ion-android-menu", vm.popover);
 		}
 
 
 		function closePopupMenu() {
 			Log.l("AL: now in scope.closePopupMenu()")
-			vm.popover.hide();
+			vm.popupMenu.hide();
 		}
 
 		function createPDFPopupMenu($scope) {
 			Log.l("AL: creating PDFPopupMenu ...");
-			$ionicPopover.fromTemplateUrl('templates/PDFPopupMenu.html', {
+			return $ionicPopover.fromTemplateUrl('ActivityLog/templates/PDFPopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("AL: now in function after ionicPopover.fromTemplateUrl('PDFPopupMenu') ...");
@@ -298,20 +288,11 @@
 			});
 		}
 
-		function openPDFPopover($event) {
-			Log.l("AL: now in openPDFPopover()")
-			// vm.popover.show($event);
+
+		function openPDFPopupMenu($event) {
+			Log.l("AL: now in pdfMenuPopover()")
+			// vm.pdfMenuPopover.show($event);
 			vm.pdfMenuPopover.show('.menu-button-pdf-viewer');
-			// var headerbar = angular.element(".income-statement-bar");
-			// var hbar = $("ion-header-bar");
-			// var hbarheight = hbar.height();
-			// Log.l("AL: Menu bar height is %d px", hbarheight);
-			// var elPopover = $("#PopupMenu002");
-			// var popTop = elPopover.position().top;
-			// Log.l("elPopover has top " + popTop);
-			// var newPopTop = hbarheight + "px";
-			// elPopover.css("top", newPopTop);
-			// Log.l("elPopover now has top " + newPopTop);
 		}
 
 		function closePDFPopupMenu() {
@@ -346,7 +327,7 @@
 				SocialSharing.shareViaEmail(body, subject, to, [], [], attachments).then(function(res) {
 				// $cordovaEmailComposer.open(pdfmail).then(function(success) {
 					Log.l("User sent e-mail successfully!");
-					Log.l("Now canceling PDF display!");
+					Log.l("Now closing PDF display!");
 					vm.closePDFViewer();
 				}).catch(function(err) {
 					Log.l("User canceled e-mail!");
@@ -367,11 +348,12 @@
 		function createPDFModal($scope) {
 			Log.l("AL: Now in generatePDF()");
 			// Initialize the modal view.
-			$ionicModal.fromTemplateUrl('templates/pdf-viewer.html', {
+			return $ionicModal.fromTemplateUrl('ActivityLog/templates/pdf-viewer.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function(modal) {
 				$scope.modal = modal;
+				$scope.pdfModal = modal;
 				vm.modal = modal;
 				vm.pdfModal = modal;
 				vm.setDefaultsForPdfViewer($scope);
