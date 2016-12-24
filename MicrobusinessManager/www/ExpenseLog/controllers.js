@@ -482,19 +482,24 @@
 		function setDefaultsForPdfViewer(pdfScope) {
 			pdfScope.scroll = 0;
 			pdfScope.loading = 'loading';
+			pdfScope.pdfLoaded = false;
 			vm.loading = pdfScope.loading;
 			pdfScope.pdfViewerTitle = vm.pdfViewerTitle;
 			pdfScope.pdfViewerNumber = vm.pdfViewerNumber;
 
-			pdfScope.onError = function(err) {
-				Log.e(err);
+			pdfScope.onError = function(error) {
+				Log.l("EL: Got pdfScope.onError!");
+				Log.l(error);
 			};
 
 			pdfScope.onLoad = function() {
+				Log.l("EL: Got pdfScope.onLoad!");
 				pdfScope.loading = '';
+				pdfScope.pdfLoaded = true;
 			};
 
 			pdfScope.onProgress = function(progress) {
+				Log.l("EL: Got pdfScope.onProgress!");
 				Log.l(progress);
 			};
 		}

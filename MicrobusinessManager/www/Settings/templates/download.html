@@ -13,35 +13,39 @@
 				{{"str_error"|translate}}: {{settings.downloadFile.error}}
 			</div>
 		</div>
-		<form name="downloadForm" ng-submit="settings.downloadCSVFile()">
+		<!-- <form name="downloadForm"> -->
 			<div class="list">
 				<label class="item item-input item-stacked-label">
-					<!-- <span class="input-label">{{"settings_username" | translate}}*</span> -->
 					<span class="input-label">{{"str_url" | translate}}</span>
-					<!-- <ion-input type="url" placeholder="Enter URL" ng-model="settings.fileToDownload" required="required"> -->
-					<input type="url" placeholder="Enter URL" ng-model="settings.downloadFile.fileurl" required="required">
+					<!-- <input type="url" placeholder="Enter URL" ng-model="settings.downloadFile.fileurl" required="required"> -->
+					<input type="url" placeholder="Enter URL" ng-model="settings.downloadFile.fileurl">
 				</label>
 				<label class="item">
-					<!-- <button class="button button-block button-positive" type="submit" ng-disabled="loginForm.$invalid">{{"login_button" | translate}}</button> -->
-					<button class="button button-block button-positive" type="submit" ng-disabled="downloadForm.$invalid">{{"str_download" | translate}}</button>
+					<!-- <button class="button button-block button-positive" ng-disabled="downloadForm.$invalid" ng-click="settings.downloadCSVFile()">{{"str_download" | translate}}</button> -->
+					<button class="button button-block button-positive" ng-click="settings.downloadCSVFile()">{{"str_download" | translate}}</button>
 				</label>
 			</div>
-		</form>
-		<div class="card download-progress-card" ng-show="settings.downloadProgress > 0">
+			<!-- <div class="item progress-list-item" ng-show="settings.downloadProgress > 0"> -->
+			<div class="item progress-list-item">
+				<div class="download-progress-label">
+					{{"str_downloading" | translate}}: {{settings.downloadProgress}}%
+				</div>
+				<progress class="download-file-progress" max="100" value="{{settings.downloadProgress}}"></progress>
+			</div>
+			<div class="item progress-list-item">
+				<!-- <input	type="submit" class="button button-block button-assertive" ng-click="settings.saveDownloadModal(settings.downloadFile, downloadForm, $event)" value="{{'str_ok' | translate}}"> -->
+				<button class="button button-block button-assertive" ng-disabled="settings.downloadDone == false" ng-click="settings.closeDownloadModal()">{{"str_ok" | translate}}</button>
+			</div>
+		<!-- </form> -->
+<!-- 		<div class="card download-progress-card" ng-show="settings.downloadProgress > 0">
 			<div class="list download-progress-list">
 				<div class="item progress-list-item">
-					<div class="download-progress-label">
-						{{"str_downloading" | translate}}: {{settings.downloadProgress}}%
-					</div>
-					<progress class="download-file-progress" max="100" value="{{settings.downloadProgress}}"></progress>
-				</div>
-				<div class="item progress-list-item">
-					<button class="button button-block button-assertive"
+					<button ng-disabled="settings.downloadDone == false" class="button button-block button-assertive"
 							ng-click="settings.closeDownloadModal()">
 						{{"str_ok" | translate}}
 					</button>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</ion-content>
 </ion-modal-view>

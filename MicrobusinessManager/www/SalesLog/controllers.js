@@ -491,7 +491,7 @@
 
 			pdfScope.onError = function(err) {
 				Log.l("SL: PDFViewer error event received!");
-				Log.e(err);
+				Log.l(err);
 			};
 
 			pdfScope.onLoad = function() {

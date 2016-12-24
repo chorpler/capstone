@@ -376,16 +376,21 @@
 		function setDefaultsForPdfViewer(pdfScope) {
 			pdfScope.scroll = 0;
 			pdfScope.loading = 'loading';
+			pdfScope.pdfLoaded = false;
 
 			pdfScope.onError = function(error) {
-				Log.e(error);
+				Log.l("IA: Got pdfScope.onError!");
+				Log.l(error);
 			};
 
 			pdfScope.onLoad = function() {
+				Log.l("IA: Got pdfScope.onLoad!");
 				pdfScope.loading = '';
+				pdfScope.pdfLoaded = true;
 			};
 
 			pdfScope.onProgress = function(progress) {
+				Log.l("IA: Got pdfScope.onProgress!");
 				Log.l(progress);
 			};
 		}

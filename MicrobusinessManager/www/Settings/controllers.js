@@ -18,6 +18,9 @@
 		win.sepi.rs = $rootScope;
 		win.cSQLP = $cordovaSQLitePorter;
 		win.cFT = $cordovaFileTransfer;
+		vm.scopes = vm.scopes || {};
+		vm.scopes.root = $rootScope;
+		vm.scopes.settings = $scope;
 
 		win.vm = vm;
 
@@ -27,6 +30,7 @@
 		win.sepi.fileDirectory = fileDirectory;
 
 		vm.userAccount = {};
+		vm.downloadDone = false;
 		vm.userRegistration = {};
 		vm.activeSalary = null;
 		vm.salary = salary;
@@ -73,6 +77,8 @@
 		vm.createDownloadModal = createDownloadModal;
 		vm.showDownloadModal =showDownloadModal;
 		vm.closeDownloadModal = closeDownloadModal;
+		vm.cancelDownloadModal = cancelDownloadModal;
+		vm.saveDownloadModal = saveDownloadModal;
 		vm.createExportModal = createExportModal;
 		vm.showExportModal = showExportModal;
 		vm.closeExportModal = closeExportModal;
@@ -88,6 +94,9 @@
 		vm.fileChooser = window.fileChooser;
 		vm.jsonImport = {};
 		vm.workbook = null;
+		// vm.modals = vm.modals || {};
+		vm.modals = vm.modals || {popupMenu: [], download: [], formats: [], export: []};
+		win.modals = vm.modals;
 
 		// win.showPopupYesNo = vm.showPopupYesNo;
 
@@ -133,39 +142,27 @@
 				vm.activeTax = [];
 			}
 
-
-
 			// vm.downloadFile.fileurl = "https://docs.google.com/spreadsheets/d/17SAlhDDJXnb60X6xZwKx7BGiaoVsnl6uEtqNCJo_Mv4/pub?output=xlsx";
 			vm.downloadFile.fileurl = "https://docs.google.com/spreadsheets/d/11KQKk92RJFsi7N7EC6pzXtxwEXhXWhrxaIaoyrhri6U/pub?output=xlsx";
 
-			// vm.createPopupMenu($scope);
-			// vm.createDownloadModal($scope);
-			// vm.createExportModal($scope);
-
 			vm.DB = Database.getDB();
 			win.DB1 = vm.DB;
+			vm.createPopupMenu(vm.scopes.settings);
+			// vm.createPopupMenu($scope).then(function(res) {
+				// return vm.createDownloadModal($scope);
+			// }).then(function(res) {
+				// return vm.createExportModal($scope);
+			// }).then(function(res) {
+				Log.l("Settings: Init() finished!");
+			// });
 		}
-
-		// function showPopupYesNo(title, text) {
-		// 	var arrButtons = [
-		// 		{text: 'No', type: 'button-calm', onTap: function(e) { return false;}},
-		// 		{text: 'Yes', type: 'button-assertive', onTap: function(e) { return true;}}
-		// 	];
-		// 	var yesnopopup = $ionicPopup.show({
-		// 		title: title,
-		// 		template: text,
-		// 		cssClass: 'PopupConfirm',
-		// 		buttons: arrButtons
-		// 	});
-
-		// 	return yesnopopup;
-		// }
 
 		function showLoginModal () {
 			$ionicModal.fromTemplateUrl('Settings/templates/login.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.loginModal = modal;
+				vm.scopes.loginModal = $scope;
 				vm.loginModal.show();
 			});
 		}
@@ -175,6 +172,7 @@
 				scope: $scope
 			}).then(function (modal) {
 				vm.registerModal = modal;
+				vm.scopes.registerModal = $scope;
 				vm.registerModal.show();
 			});
 		}
@@ -184,6 +182,7 @@
 				scope: $scope
 			}).then(function (modal) {
 				vm.editModal = modal;
+				vm.scopes.salaryModal = $scope;
 				vm.editModal.show();
 			});
 		}
@@ -193,6 +192,7 @@
 				scope: $scope
 			}).then(function (modal) {
 				vm.taxModal = modal;
+				vm.scopes.taxModal = $scope;
 				vm.taxModal.show();
 			});
 		}
@@ -358,22 +358,25 @@
 		}
 
 		function showUserModal () {
-			console.log("Now in showUserModal");
+			Log.l("Settings: Now in showUserModal() ...");
 			$ionicModal.fromTemplateUrl('Settings/templates/userModal.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.userModal = modal;
+				vm.scopes.userModal = $scope;
+				// vm.modals.user = modal;
+				vm.modals.user.push(modal);
 				vm.userModal.show();
 			});
 		}
 
 		function closeUser () {
-			console.log("Now in closeUser");
+			Log.l("Now in closeUser");
 			vm.userModal.remove();
 		}
 
 		function getUserData() {
-			console.log("Now in getUserData");
+			Log.l("Now in getUserData");
 			return Database.select('user').then(function (response) {
 				var items = [];
 				if (response.rows.length === 0) {
@@ -393,7 +396,7 @@
 		}
 
 		function saveUserEdit (item, form, $event) {
-			console.log("Now in saveUserEdit");
+			Log.l("Settings: Now in saveUserEdit() ...");
 			$event.stopPropagation();
 			if (form && form.$invalid) {
 				return;
@@ -445,22 +448,25 @@
 		}
 
 		function showFormatsModal () {
-			console.log("Now in showFormatsModal");
+			Log.l("Settings: Now in showFormatsModal() ...");
 			$ionicModal.fromTemplateUrl('Settings/templates/formatsModal.html', {
 				scope: $scope
 			}).then(function (modal) {
 				vm.formatsModal = modal;
+				vm.scopes.formatsModal = $scope;
+				// vm.modals.formats = modal;
+				vm.modals.formats.push(modal);
 				vm.formatsModal.show();
 			});
 		}
 
 		function closeFormats () {
-			console.log("Now in closeUser");
+			Log.l("Settings: Now in closeFormats");
 			vm.formatsModal.remove();
 		}
 
 		function getFormatsData() {
-			console.log("Now in getFormatsData");
+			Log.l("Settings: Now in getFormatsData");
 			return Database.select('formats').then(function (response) {
 				var items = [];
 				if (response.rows.length === 0) {
@@ -480,7 +486,7 @@
 		}
 
 		function saveFormatsEdit (item, form, $event) {
-			console.log("Settings: now in saveFormatsEdit");
+			Log.l("Settings: now in saveFormatsEdit");
 			$event.stopPropagation();
 			if (form && form.$invalid) {
 				return;
@@ -517,6 +523,10 @@
 			}).then(function (modal) {
 				Log.l("Settings: created, now setting vm.downloadModal ...");
 				vm.downloadModal = modal;
+				$scope.downloadModal = modal;
+				vm.scopes.downloadModal = $scope;
+				// vm.modals.download = modal;
+				vm.modals.download.push(modal);
 				vm.downloadModal.show();
 				$scope.$on('$destroy', function() {
 					Log.l("Settings: now in scope.on('destroy')");
@@ -527,58 +537,103 @@
 		}
 
 		function showDownloadModal() {
-			Log.l("Settings: now in showDownloadModal() ...");
-			// vm.popover.remove();
-			vm.createDownloadModal($scope);
-			// vm.downloadModal.show();
+			// Log.l("Settings: now in showDownloadModal() ...");
+			closePopupMenu();
+			// vm.popupMenu.remove();
+			// vm.createDownloadModal($scope);
+			vm.downloadDone = false;
+			$scope.downloadDone = false;
+			// vm.popupMenu.hide();
+			// vm.popupMenu.remove();
+			Log.l("Settings: Now in showDownloadModal()...");
+			createDownloadModal($scope);
+			// $ionicModal.fromTemplateUrl('Settings/templates/download.html', {
+			// 	scope: $scope
+			// }).then(function (modal) {
+			// 	vm.downloadModal = modal;
+			// 	$scope.downloadModal = modal;
+			// 	vm.downloadModal.show();
+			// });
 		}
+			// vm.downloadModal.show();
+		// }
 
 		function closeDownloadModal() {
-			Log.l("Settings: now in closeDownload() ...");
+			Log.l("Settings: now in closeDownloadModal() ...");
 			// vm.downloadModal.hide();
 			vm.downloadModal.remove();
-		}
-		
-		function showDownloadProgress ($event) {
-			vm.downloadProgress = 0;
-			$ionicPopover.fromTemplateUrl('Settings/templates/downloadProgress.html', {
-		  	scope: $scope,
-			}).then(function(popover) {
-				vm.downloadProgressPopover = popover;
-				vm.downloadProgressPopover.show($event);
-			});
+			closePopupMenu();
 		}
 
+		function cancelDownloadModal () {
+			Log.l("Settings: Now in cancelDownloadModal");
+			vm.submitted = true;
+			// vm.activeTax = null;
+			vm.downloadModal.remove();
+			vm.submitted = false;
+		}
+
+		function saveDownloadModal (item, form, $event) {
+			Log.l("Settings: Now in saveDownloadModal() ...");
+			$event.stopPropagation();
+			if (form && form.$invalid) {
+				return;
+			}
+			vm.submitted = true;
+			// if(!item.id) {
+	 	// 		Database.insert(userTable, [item.name, item.representative, item.street1, item.street2, item.city, item.state, item.postal, item.email, item.phone]).then(function(response) {
+	 	// 			item.id = response.insertId;
+			// 	});
+			// } else {
+			// 	Database.update(userTable, item.id, [item.name, item.representative, item.street1, item.street2, item.city, item.state, item.postal, item.email, item.phone]);
+			// }
+
+			// vm.activeTax = null;
+			// getTax ();
+			vm.downloadModal.remove();
+			vm.submitted = false;
+		}
+
+
+		
 		function createExportModal($scope) {
 			Log.l("Settings: now in createExportModal() ...");
-			$ionicModal.fromTemplateUrl('Settings/templates/export.html', {
+			return $ionicModal.fromTemplateUrl('Settings/templates/export.html', {
 				scope: $scope
 			}).then(function (modal) {
 				Log.l("Settings: created, now setting vm.exportModal ...");
+				$scope.exportModal = modal;
 				vm.exportModal = modal;
-				$scope.$on('$destroy', function() {
-					Log.l("Settings: now in scope.on('destroy')");
-					vm.exportModal.remove();
-				});
+				vm.scopes.exportModal = $scope;
+				// vm.modals.export = modal;
+				vm.modals.export.push(modal);
+				// $scope.$on('$destroy', function() {
+				// 	Log.l("Settings: now in scope.on('destroy')");
+				// 	vm.exportModal.remove();
+				// });
 				// vm.downloadModal.show();
 			});
 		}
 
 		function showExportModal() {
 			Log.l("Settings: now in showExportModal() ...");
-			vm.popover.hide();
-			vm.exportModal.show();
+			vm.popupMenu.hide();
+			// vm.exportModal.show();
+			createExportModal($scope);
 		}
 
 		function closeExportModal() {
 			Log.l("Settings: now in closeExportModal() ...");
-			vm.exportModal.hide();
+			// vm.exportModal.hide();
+			vm.exportModal.remove();
 		}
 
 		// Setttings model:
 		// user: 
 		function exportSettings() {
 			Log.l("Settings: now in exportSettings() ...");
+			// vm.popupMenu.remove();
+			closePopupMenu();
 			var sepidb = Database.getDB();
 			$cordovaSQLitePorter.exportJSON(sepidb).then(function(res) {
 				Log.l("exportSettings(): Successfully exported DB to JSON, got %d SQL statements.", res[1]);
@@ -679,6 +734,8 @@
 			var targetPath = fileDirectory + filename;
 			var trustHosts = true;
 			var options = {};
+			vm.downloadDone = false;
+			$scope.downloadDone = false;
 
 			$cordovaFileTransfer.download(url, targetPath, options, trustHosts)
 			.then(function(res) {
@@ -687,13 +744,14 @@
 				var fileURL = res.nativeURL;
 				vm.downloadProgress = 100;
 				$scope.downloadProgress = 100;
-				vm.downloadDone = true;
+				// vm.downloadDone = true;
 				$timeout(function() { $scope.$apply(); }, 100);
 				vm.readImportSpreadsheet();
 				// var workbook = XLSX.readFile(fileURL);
 				// win.workbook = workbook;
 			}, function(err) {
 				Log.l("Error downloading " + url);
+				Log.l(err);
 			}, function(progress) {
 				var prog = progress;
 				win.prog1 = progress;
@@ -747,8 +805,9 @@
 				win.jsonImport = jsonImport;
 				var sheet_name_list = workbook.SheetNames;
 				var sheetCount = 0;
-				sheet_name_list.forEach(function(i) {
-					var sheet = workbook.Sheets[i];
+				for(var i in sheet_name_list) {
+					var sheetname = sheet_name_list[i];
+					var sheet = workbook.Sheets[sheetname];
 					if(i == 'db_tables') {
 						for(var row = 0; row < 11; row++) {
 							var tableCell = XLS.utils.encode_cell({c:0, r:row});
@@ -774,8 +833,10 @@
 						}
 						jsonImport.data.inserts[i] = jsonSheet;
 					}
-				});
+				}
 				Log.l("Done processing worksheets. Total of %d sheets loaded.", sheetCount);
+				vm.downloadDone = true;
+				$scope.downloadDone = true;
 				// Log.l(jsonImport);
 			});
 		}
@@ -795,6 +856,8 @@
 
 		function importOldSettings() {
 			Log.l("Settings: now in importOldSettings(). Checking for jsonImport status...");
+			// vm.popupMenu.remove();
+			closePopupMenu();
 			var title = $filter('translate')("str_import_settings").toUpperCase();
 			var text = $filter('translate')("str_import_warning");
 			rs.code.showPopupYesNo(title, text).then(function(yesOrNo) {
@@ -862,23 +925,27 @@
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("Settings: now in function after ionicPopover.fromTemplateUrl(SettingsPopupMenu) ...");
-				$scope.popover = popover;
-				vm.popover = popover;
-				vm.popover.show('.settings-menu-icon');
-				// popover.show(".income-statement-menu")
+				$scope.popupMenu = popover;
+				vm.scopes.popupMenu = $scope;
+				vm.popupMenu = popover;
+				// vm.modals.popupMenu = popover;
+				vm.modals.popupMenu.push(popover);
+				// vm.popupMenu.show('.settings-menu-icon');
+				// vm.popupMenu.show('.settings-menu-icon');
 				//Cleanup the popover when we're done with it!
 				$scope.$on('$destroy', function() {
 					Log.l("Settings: now in scope.on('destroy')");
-					vm.popover.remove();
+					vm.popupMenu.remove();
 				});
 				// Execute action on hidden popover
 				$scope.$on('popover.hidden', function() {
-					Log.l("Settings: now in scope.on('popover.hidden')");
+					Log.l("Settings: now in scope.on('popupMenu.hidden')");
+					// vm.popupMenu.remove();
 					// Execute action
 				});
 				// Execute action on remove popover
 				$scope.$on('popover.removed', function() {
-					Log.l("Settings: now in scope.on('popover.removed')");
+					Log.l("Settings: now in scope.on('popupMenu.removed')");
 					// Execute action
 				});
 			});
@@ -887,30 +954,17 @@
 
 		function showPopupMenu($event) {
 			Log.l("Settings: now in scope.openPopupMenu()")
-			// vm.popover.show($event);
-			vm.createPopupMenu($scope);
-			/*
-			vm.popover.show('.ion-more');
-			var headerbar = angular.element(".income-statement-bar");
-			var hbar = $("ion-header-bar");
-			var hbarheight = hbar.height();
-			// var barHeight = headerbar.height();
-			Log.l("Settings: Menu bar height is %d px", hbarheight);
-			var elPopover = $("#PopupMenu003");
-			var popTop = elPopover.position().top;
-			Log.l("elPopover has top " + popTop);
-			var newPopTop = hbarheight + "px";
-			elPopover.css("top", newPopTop);
-			Log.l("elPopover now has top " + newPopTop);
-			// vm.popover.positionView(".ion-android-menu", vm.popover);
-			// vm.popover.show(".ion-android-menu");
-			// vm.popover.positionView(".ion-android-menu", vm.popover);
-			*/
+			// createPopupMenu($scope);
+			// createPopupMenu(vm.scopes.settings);
+			// vm.popupMenu.show($event);
+				vm.popupMenu.show('.settings-menu-icon');
+			// vm.createPopupMenu($scope);
 		}
 
 		function closePopupMenu() {
 			Log.l("Settings: now in scope.closePopupMenu()")
-			vm.popover.hide();
+			vm.popupMenu.hide();
+			// vm.popupMenu.remove();
 		}
 
 		function login () {

@@ -1,31 +1,15 @@
 <ion-popover-view id="PopupMenu003" class="category-menu-popup fit">
-<!-- 	<ion-header-bar>
-		<h1 class="title">Menu</h1>
-	</ion-header-bar> -->
+	</ion-header-bar>
 	<ion-content class="menucontent">
-		<!-- <div class="card"> -->
-<!-- 			<ion-list>
-				<ion-item class="item item-icon-right" ng-click="income.generatePDF()">
-					<button class="button button-icon icon ion-android-document button-generate-pdf-text">
-						<span class="button-generate-pdf-text">{{"str_generate_pdf" | translate}}</span>
-					</button>
-				</ion-item>
-			</ion-list> -->
-
 		<ion-list class="menulist">
 			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
-				<!-- <button class="button button-block button-icon icon fa-download" ng-click="settings.showDownloadModal()">{{"str_download_settings" | translate}}</button> -->
 				<button class="button button-block" ng-click="settings.importOldSettings()">
 				<i class="fa fa-download popup-menu-icon"></i> <span class="popup-menu-text">{{"str_import_settings" | translate}}</span></button>
 			</ion-item>
 			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
-				<!-- <button class="button button-block button-icon icon fa-download" ng-click="settings.showDownloadModal()">{{"str_download_settings" | translate}}</button> -->
 				<button class="button button-block" ng-click="settings.showDownloadModal()">
 				<i class="fa fa-cloud-download popup-menu-icon"></i> <span class="popup-menu-text">{{"str_download_settings" | translate}}</span></button>
 			</ion-item>
-<!-- 			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
-				<button class="button button-block button-icon icon fi-page-export" ng-click="settings.showExportModal()">Export Settings</button>
-			</ion-item> -->
 			<ion-item class="ionic-item-icon-left popup-menu-item">
 				<!-- <button class="button button-block" ng-click="settings.showExportModal()"> -->
 				<button class="button button-block" ng-click="settings.exportSettings()">
