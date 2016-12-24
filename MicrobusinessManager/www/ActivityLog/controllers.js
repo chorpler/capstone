@@ -45,7 +45,7 @@
 		vm.emailPDF = emailPDF;
 		vm.createPDFEmail = createPDFEmail;
 		vm.createPDFPopupMenu = createPDFPopupMenu;
-		vm.pdfMenuPopover = pdfMenuPopover;
+		vm.openPDFPopupMenu = openPDFPopupMenu;
 		vm.closePDFPopupMenu = closePDFPopupMenu;
 		vm.pdfMenuPopover = null;
 		vm.closeActivityLog = closeActivityLog;
