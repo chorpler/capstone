@@ -64,10 +64,13 @@
 		function init () {
 			vm.endingCash = calculateEndCash();
 			vm.getUserInfo();
-			vm.createPopupMenu($scope);
-			vm.createPDFModal($scope);
-			vm.createPDFPopupMenu($scope);
-			vm.initializeAllValues().then(function(res) {
+			vm.createPopupMenu($scope).then(function(res) {
+				return vm.createPDFModal($scope);
+			}).then(function(res) {
+				return vm.createPDFPopupMenu($scope);
+			}).then(function(res) {
+				return vm.initializeAllValues();
+			}).then(function(res) {
 				Log.l("AL: init() is done!");
 			});
 		}
@@ -292,7 +295,7 @@
 		function openPDFPopupMenu($event) {
 			Log.l("AL: now in pdfMenuPopover()")
 			// vm.pdfMenuPopover.show($event);
-			vm.pdfMenuPopover.show('.menu-button-pdf-viewer');
+			vm.pdfMenuPopover.show('.menu-button-pdf-viewer-activity-log');
 		}
 
 		function closePDFPopupMenu() {
