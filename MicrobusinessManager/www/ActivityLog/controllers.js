@@ -5,7 +5,7 @@
 
 	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
 	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, IonicNative, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
-	function ActivityLogController ($filter, $ionicPopover, $scope, $rootScope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
+	function ActivityLogController ($filter, $ionicPopover, $scope, $rootScope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $persist, IonicFiles, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
 		var vm = this;
 
 		var win = window;
@@ -341,7 +341,6 @@
 			});
 		}
 
-
 		function closeActivityLog() {
 			Log.l("AL: closing Activity Log ...");
 			$state.go('app.reports');
@@ -363,65 +362,65 @@
 			});
 		}
 
-		function convertToDataURL(cordovaURL) {
-			Log.l("AL: Now in convertToDataURL()...");
-			var dir = fileDirectory;
-			var fname = "ActivityLog.pdf";
-			var d = $q.defer();
-			convertToFileEntry(cordovaURL).then(function(res) {
-				var pdfFileEntry = res;
-				var fileName = pdfFileEntry.name;
-				vm.pdfFileName = fileName;
-				window.pdfFileName = fileName;
-				var fileDir  = pdfFileEntry.filesystem.root.toURL();
-				var localURL = pdfFileEntry.toURL();
-				Log.l("convertToDataURL(): Resolved cordova URL:\n%s\n%s", cordovaURL);
-				return $cordovaFile.readAsDataURL(fileDir, fileName);
-			}).then(function(res) {
-				Log.l("convertToDataURL(): Success converting %s, data url is length %d.", fname, res.length);
-				d.resolve(res);
-			}).catch(function(err) {
-				Log.l("convertToDataURL(): Error reading %s/%s.", dir, fname);
-				Log.l(err);
-				d.reject(err);
-			});
-			return d.promise;
-		}
+		// function convertToDataURL(cordovaURL) {
+		// 	Log.l("AL: Now in convertToDataURL()...");
+		// 	var dir = fileDirectory;
+		// 	var fname = "ActivityLog.pdf";
+		// 	var d = $q.defer();
+		// 	convertToFileEntry(cordovaURL).then(function(res) {
+		// 		var pdfFileEntry = res;
+		// 		var fileName = pdfFileEntry.name;
+		// 		vm.pdfFileName = fileName;
+		// 		window.pdfFileName = fileName;
+		// 		var fileDir  = pdfFileEntry.filesystem.root.toURL();
+		// 		var localURL = pdfFileEntry.toURL();
+		// 		Log.l("convertToDataURL(): Resolved cordova URL:\n%s\n%s", cordovaURL);
+		// 		return $cordovaFile.readAsDataURL(fileDir, fileName);
+		// 	}).then(function(res) {
+		// 		Log.l("convertToDataURL(): Success converting %s, data url is length %d.", fname, res.length);
+		// 		d.resolve(res);
+		// 	}).catch(function(err) {
+		// 		Log.l("convertToDataURL(): Error reading %s/%s.", dir, fname);
+		// 		Log.l(err);
+		// 		d.reject(err);
+		// 	});
+		// 	return d.promise;
+		// }
 
-		function convertToFileEntry(cordovaURL) {
-			Log.l("AL: Now in convertToLocalURL() ...");
-			var d = $q.defer();
-			resolveLocalFileSystemURL(cordovaURL, function(res) {
-				var fileEntry = res;
-				Log.l("Converted cordova URL to FileEntry:\n%s", cordovaURL);
-				Log.l(fileEntry);
-				win.localFileEntry = res;
-				d.resolve(fileEntry);
-			}, function(err) {
-				Log.l("Error during convertToLocalURL()!");
-				d.reject(err);
-			});
-			return d.promise;
-		}
+		// function convertToFileEntry(cordovaURL) {
+		// 	Log.l("AL: Now in convertToLocalURL() ...");
+		// 	var d = $q.defer();
+		// 	resolveLocalFileSystemURL(cordovaURL, function(res) {
+		// 		var fileEntry = res;
+		// 		Log.l("Converted cordova URL to FileEntry:\n%s", cordovaURL);
+		// 		Log.l(fileEntry);
+		// 		win.localFileEntry = res;
+		// 		d.resolve(fileEntry);
+		// 	}, function(err) {
+		// 		Log.l("Error during convertToLocalURL()!");
+		// 		d.reject(err);
+		// 	});
+		// 	return d.promise;
+		// }
 
-		function convertToLocalURL(cordovaURL) {
-			Log.l("AL: Now in convertToLocalURL() ...");
-			var d = $q.defer();
-			resolveLocalFileSystemURL(cordovaURL, function(res) {
-				var localURL = res.toURL();
-				Log.l("Converted cordova URL to local URL:\n%s\n%s", cordovaURL, localURL);
-				win.localFileEntry = res;
-				d.resolve(localURL);
-			}, function(err) {
-				Log.l("Error during convertToLocalURL()!");
-				d.reject(err);
-			});
-			return d.promise;
-		}
+		// function convertToLocalURL(cordovaURL) {
+		// 	Log.l("AL: Now in convertToLocalURL() ...");
+		// 	var d = $q.defer();
+		// 	resolveLocalFileSystemURL(cordovaURL, function(res) {
+		// 		var localURL = res.toURL();
+		// 		Log.l("Converted cordova URL to local URL:\n%s\n%s", cordovaURL, localURL);
+		// 		win.localFileEntry = res;
+		// 		d.resolve(localURL);
+		// 	}, function(err) {
+		// 		Log.l("Error during convertToLocalURL()!");
+		// 		d.reject(err);
+		// 	});
+		// 	return d.promise;
+		// }
 
 		function createReport() {
 			Log.l("AL: Now running createReport()...");
-			vm.popover.hide();
+			vm.popupMenu.hide();
 			vm.pdfModal.show();
 			vm.createActivityLogPdf(vm.incomeStatement, vm.user, vm.reportData).then(function(pdf) {
 				Log.l("AL: Now in function after createActivityLogPdf()...")
@@ -438,7 +437,7 @@
 					vm.pdfFile = res;
 					win.pdfFile = res;
 					var cordovaURL = res.target.localURL;
-					convertToDataURL(cordovaURL).then(function(res) {
+					IonicFiles.convertToDataURL(cordovaURL).then(function(res) {
 						vm.pdfLocalFileURL = res;
 						vm.pdfDataFileURL = res;
 						win.pdfLocalFileURL = res;

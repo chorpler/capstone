@@ -7,7 +7,7 @@
 	// function IncomeStatementController (startDate, endDate, timeFrame, incomeStatement, Database, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, user, IncomeStatementService) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, Database, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, user, IncomeStatementService) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, Database, user, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, IncomeStatementService) {
-	function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, ISpdfService, Database, user, formats, $filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist) {
+	function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, ISpdfService, IonicFiles, Database, user, formats, $filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist) {
 	// function IncomeStatementController(startDate, endDate, timeFrame, incomeStatement, createPdf, Database, user, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal) {
 		var vm = this;
 		var win = window;
@@ -25,7 +25,7 @@
 		win.sepi.fileDirectory = fileDirectory;
 
 		vm.vmScope = $scope;
-		vm.openPopover = openPopover;
+		vm.showPopupMenu = showPopupMenu;
 		vm.startDate = startDate;
 		vm.endDate = endDate;
 		vm.timeFrame = timeFrame;
@@ -40,7 +40,7 @@
 		vm.emailPDF = emailPDF;
 		vm.createPDFEmail = createPDFEmail;
 		vm.createPDFPopupMenu = createPDFPopupMenu;
-		vm.openPDFPopover = openPDFPopover;
+		vm.openPDFPopupMenu = openPDFPopupMenu;
 		vm.closePDFPopupMenu = closePDFPopupMenu;
 		vm.user = user;
 		vm.formats = formats;
@@ -48,7 +48,7 @@
 		vm.ionicPopover = $ionicPopover;
 		vm.getIncomeStatement = getIncomeStatement;
 		vm.Database = Database;
-		vm.createPDF = ISpdfService.createPdf;
+		vm.createIncomeStatementPdf = ISpdfService.createIncomeStatementPdf;
 		vm.pdfModal = {};
 		vm.reportData = {};
 		vm.pdfblob = null;
@@ -76,13 +76,13 @@
 			vm.incomeStatement.expenseItems.sort(sortByName);
 			calculateTotals();
 			// setDefaultsForPdfViewer($scope);
-			vm.createPopupMenu($scope);
-			vm.createPDFModal($scope);
-			vm.createPDFPopupMenu($scope);
-			$scope.$on('$destroy', function() {
-				Log.l("IncomeStatement.controller: Cleaning up scope and removing pdfModal...")
-				vm.pdfModal.remove();
-			});
+			vm.createPopupMenu($scope).then(function(res) {
+				return vm.createPDFModal($scope);
+			}).then(function(res) {
+				return vm.createPDFPopupMenu($scope);
+			}).then(function(res) {
+				Log.l("IAR: Init() now done!");
+			})
 		}
 
 		function change(startDate, timeFrame) {
@@ -164,7 +164,7 @@
 
 		function createPDFPopupMenu($scope) {
 			Log.l("IA: creating PDFPopup Menu ...");
-			$ionicPopover.fromTemplateUrl('templates/PDFPopupMenu.html', {
+			return $ionicPopover.fromTemplateUrl('IncomeStatement/templates/PDFPopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("IA: now in function after ionicPopover.fromTemplateUrl('PDFPopupMenu') ...");
@@ -189,10 +189,10 @@
 			});
 		}
 
-		function openPDFPopover($event) {
-			Log.l("IA: now in openPDFPopover()")
+		function openPDFPopupMenu($event) {
+			Log.l("IA: now in openPDFPopupMenu()")
 			// vm.popover.show($event);
-			vm.pdfMenuPopover.show('.menu-button-pdf-viewer');
+			vm.pdfMenuPopover.show('.menu-button-pdf-viewer-income-statement');
 			// var headerbar = angular.element(".income-statement-bar");
 			// var hbar = $("ion-header-bar");
 			// var hbarheight = hbar.height();
@@ -214,35 +214,35 @@
 
 		function createPopupMenu($scope) {
 			Log.l("IA: creating Popup Menu ...");
-			$ionicPopover.fromTemplateUrl('IncomeStatement/templates/PopupMenu.html', {
+			return $ionicPopover.fromTemplateUrl('IncomeStatement/templates/PopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("IA: now in function after ionicPopover.fromTemplateUrl(PopupMenu) ...");
-				$scope.popover = popover;
-				vm.popover = popover;
+				$scope.popupMenu = popover;
+				vm.popupMenu = popover;
 				// popover.show(".income-statement-menu")
 				//Cleanup the popover when we're done with it!
 				$scope.$on('$destroy', function() {
 					Log.l("IA: now in scope.on('destroy')");
-					vm.popover.remove();
+					vm.popupMenu.remove();
 				});
 				// Execute action on hidden popover
-				$scope.$on('popover.hidden', function() {
-					Log.l("IA: now in scope.on('popover.hidden')");
+				$scope.$on('popupMenu.hidden', function() {
+					Log.l("IA: now in scope.on('popupMenu.hidden')");
 					// Execute action
 				});
 				// Execute action on remove popover
-				$scope.$on('popover.removed', function() {
-					Log.l("IA: now in scope.on('popover.removed')");
+				$scope.$on('popupMenu.removed', function() {
+					Log.l("IA: now in scope.on('popupMenu.removed')");
 					// Execute action
 				});
 			});
 		}
 
-		function openPopover($event) {
-			Log.l("IA: now in scope.openPopover()")
+		function showPopupMenu($event) {
+			Log.l("IA: now in scope.showPopupMenu()")
 			// vm.popover.show($event);
-			vm.popover.show('.menu-button-income-statement');
+			vm.popupMenu.show('.menu-button-income-statement');
 /*
 			var headerbar = angular.element(".income-statement-bar");
 			var hbar = $("ion-header-bar");
@@ -262,7 +262,7 @@
 
 		function closePopupMenu() {
 			Log.l("IA: now in scope.closePopupMenu()")
-			vm.popover.hide();
+			vm.popupMenu.hide();
 		}
 
 		function closeIncomeStatement() {
@@ -282,71 +282,132 @@
 			vm.createPDFEmail();
 		}
 
+		// function createPDFEmail() {
+		// 	Log.l("IA: Now in createPDFEmail()...");
+		// 	$cordovaEmailComposer.isAvailable().then(function() {
+		// 		Log.l("IA: cordovaEmailComposer() is available!");
+		// 		var pdfmail = {
+		// 			to: '',
+		// 			attachments: [
+		// 			vm.pdfFileURL
+		// 			],
+		// 			subject: 'Income Statement PDF',
+		// 			body: 'Attached is the income statement PDF file from SEPI.',
+		// 			isHtml: true
+		// 		};
+		// 		$cordovaEmailComposer.open(pdfmail).then(function(success) {
+		// 			Log.l("User sent e-mail successfully!");
+		// 			Log.l("Now canceling PDF display!");
+		// 			vm.closePDFViewer();
+		// 		}, function(err) {
+		// 			Log.l("User canceled e-mail!");
+		// 			Log.l(err);
+		// 		})
+		// 	}, function() {
+		// 		Log.l("IA: cordovaEmailComposer() is NOT available.");
+		// 	});
+		// }
+
 		function createPDFEmail() {
 			Log.l("IA: Now in createPDFEmail()...");
-			$cordovaEmailComposer.isAvailable().then(function() {
-				Log.l("IA: cordovaEmailComposer() is available!");
-				var pdfmail = {
-					to: '',
-					attachments: [
-					vm.pdfFileURL
-					],
-					subject: 'Income Statement PDF',
-					body: 'Attached is the income statement PDF file from SEPI.',
-					isHtml: true
-				};
-				$cordovaEmailComposer.open(pdfmail).then(function(success) {
+			// $cordovaEmailComposer.isAvailable().then(function() {
+			var SocialSharing = IonicNative.SocialSharing;
+			SocialSharing.canShareViaEmail().then(function() {
+				Log.l("IA: SocialSharing() is available!");
+				var to = [];
+				var attachments = [ vm.pdfDataFileURL];
+				var subject = "Income Statement PDF";
+				var body = "Attached is the income statement PDF file from SEPI.";
+				Log.l("Now attempting to email file:\n%s", vm.pdfFileName);
+				SocialSharing.shareViaEmail(body, subject, to, [], [], attachments).then(function(res) {
+				// $cordovaEmailComposer.open(pdfmail).then(function(success) {
 					Log.l("User sent e-mail successfully!");
-					Log.l("Now canceling PDF display!");
+					Log.l("Now closing PDF display!");
 					vm.closePDFViewer();
-				}, function(err) {
+				}).catch(function(err) {
 					Log.l("User canceled e-mail!");
 					Log.l(err);
-				})
+				});
 			}, function() {
-				Log.l("IA: cordovaEmailComposer() is NOT available.");
+				Log.l("IA: SocialSharing() is NOT available.");
 			});
 		}
 
 		function createPDFModal($scope) {
 			Log.l("IA: Now in createPDFModal()");
 			// Initialize the modal view.
-			$ionicModal.fromTemplateUrl('templates/pdf-viewer.html', {
+			return $ionicModal.fromTemplateUrl('IncomeStatement/templates/pdf-viewer.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function(modal) {
 				$scope.modal = modal;
 				vm.modal = modal;
+				$scope.pdfModal = modal;
 				vm.pdfModal = modal;
+				$scope.$on('$destroy', function() {
+					Log.l("IncomeStatement.controller: Cleaning up scope and removing pdfModal...")
+					vm.pdfModal.remove();
+				});
 				setDefaultsForPdfViewer($scope);
 			});
 		}
 
+		// function createReport() {
+		// 	Log.l("IAR: Now running createReport()...");
+		// 	// vm.createPdf(vm.incomeStatement, vm.user).then(function(pdf) {
+		// 	vm.popupMenu.hide();
+		// 	vm.createPDF(vm.incomeStatement, vm.user, vm.reportData).then(function(pdf) {
+		// 		Log.l("IAR: Now in function after IncomeStatementService.createPDF()...")
+		// 		var blob = new Blob([pdf], { type: 'application/pdf' });
+		// 		vm.pdfblob = blob;
+		// 		win.pdfblob = blob;
+		// 		vm.pdfFileURL = URL.createObjectURL(blob);
+		// 		win.pdfFileURL = vm.pdfFileURL;
+		// 		// vm.vmScope.pdfUrl = URL.createObjectURL(blob);
+		// 		vm.vmScope.pdfUrl = vm.pdfFileURL;
+		// 		$cordovaFile.writeFile(fileDirectory, "IncomeStatement.pdf", blob, true).then(function(success) {
+		// 			Log.l("Success creating PDF file!");
+		// 			Log.l(success);
+		// 			vm.pdfFile = success;
+		// 			win.pdfFile = success;
+		// 		}, function(error) {
+		// 			Log.l("Failed creating PDF file!");
+		// 			Log.e(error);
+		// 		});
+		// 		// Display the modal view
+		// 		vm.pdfModal.show();
+		// 	});
+		// }
+
 		function createReport() {
-			Log.l("IAR: Now running createReport()...");
-			// vm.createPdf(vm.incomeStatement, vm.user).then(function(pdf) {
+			Log.l("IA: Now running createReport(). reformattedList is:\n%s",JSON.stringify(vm.reformattedList, false, 2));
 			vm.popover.hide();
-			vm.createPDF(vm.incomeStatement, vm.user, vm.reportData).then(function(pdf) {
-				Log.l("IAR: Now in function after IncomeStatementService.createPDF()...")
+			vm.pdfModal.show();
+			vm.createIncomeStatementPdf(vm.incomeStatement, vm.user, vm.reportData).then(function(pdf) {
+				Log.l("IA: Now in function after createIncomeStatementPdf()...")
 				var blob = new Blob([pdf], { type: 'application/pdf' });
 				vm.pdfblob = blob;
 				win.pdfblob = blob;
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
-				// vm.vmScope.pdfUrl = URL.createObjectURL(blob);
 				vm.vmScope.pdfUrl = vm.pdfFileURL;
-				$cordovaFile.writeFile(fileDirectory, "IncomeStatement.pdf", blob, true).then(function(success) {
-					Log.l("Success creating PDF file!");
-					Log.l(success);
-					vm.pdfFile = success;
-					win.pdfFile = success;
-				}, function(error) {
-					Log.l("Failed creating PDF file!");
-					Log.e(error);
-				});
-
-				// Display the modal view
-				vm.pdfModal.show();
+				return $cordovaFile.writeFile(fileDirectory, "IncomeStatement.pdf", blob, true);
+			}).then(function(res) {
+				Log.l("IA: Success creating PDF file!");
+				Log.l(res);
+				vm.pdfFile = res;
+				win.pdfFile = res;
+				var cordovaURL = res.target.localURL;
+				return IonicFiles.convertToDataURL(cordovaURL);
+			}).then(function(res) {
+				vm.pdfLocalFileURL = res;
+				vm.pdfDataFileURL = res;
+				win.pdfLocalFileURL = res;
+				win.pdfDataFileURL = res;
+				Log.l("Done generating PDF and creating local URL for PDF.");
+			}).catch(function(err) {
+				Log.l("Error converting cordova URL to local URL!");
+				Log.l(err);
 			});
 		}
 

@@ -3,7 +3,7 @@
 	// .controller('ExpenseLogController', ['ELpdfService', ExpenseLogController]);
 	.controller('ExpenseLogController', ExpenseLogController);
 
-	function ExpenseLogController (ELpdfService, Database, timeFrame, startDate, endDate, languages, CashBalance, $scope, $ionicModal, $ionicPopup, $filter, $ionicPopover, $q, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist) {
+	function ExpenseLogController (ELpdfService, Database, timeFrame, startDate, endDate, languages, CashBalance, $scope, $rootScope, $ionicModal, $ionicPopup, $filter, $ionicPopover, $q, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, IonicFiles) {
 		var vm = this;
 
 		var win = window;
@@ -52,7 +52,7 @@
 		vm.emailPDF = emailPDF;
 		vm.createPDFEmail = createPDFEmail;
 		vm.createPDFPopupMenu = createPDFPopupMenu;
-		vm.openPDFPopover = openPDFPopover;
+		vm.openPDFPopupMenu = openPDFPopupMenu;
 		vm.closePDFPopupMenu = closePDFPopupMenu;
 		vm.pdfMenuPopover = null;
 		vm.closeExpenseLog = closeExpenseLog;
@@ -75,13 +75,18 @@
 				for (var i = 0; i < languages.length; i++) {
 					language.type = languages[0].type;
 				}
-			vm.getUserInfo();
-			vm.createPopupMenu($scope);
-			vm.createPDFModal($scope);
-			vm.createPDFPopupMenu($scope);
 			}
-
-			loadExpenseItems(Database, startDate, endDate);
+			vm.getUserInfo().then(function(res) {
+				return vm.createPopupMenu($scope);
+			}).then(function(res) {
+				return vm.createPDFModal($scope);
+			}).then(function(res) {
+				return vm.createPDFPopupMenu($scope);
+			}).then(function(res) {
+				return loadExpenseItems(Database, startDate, endDate);
+			}).then(function(res) {
+				Log.l("EL: Init() finished!");
+			});
 		}
 
 		function showEditModal () {
@@ -281,7 +286,7 @@
 
 		function getUserInfo() {
 			Log.l("EL: in getUserInfo()...");
-			Database.select('user').then(function(response) {
+			return Database.select('user').then(function(response) {
 				var items = [];
 				Log.l("EL: getUserInfo() done, retrieved " + response.rows.length + " items.");
 				if (response.rows.length === 0) {
@@ -300,25 +305,26 @@
 
 		function createPopupMenu($scope) {
 			Log.l("EL: showing Popup Menu ...");
-			$ionicPopover.fromTemplateUrl('ExpenseLog/templates/PopupMenu.html', {
+			return $ionicPopover.fromTemplateUrl('ExpenseLog/templates/PopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("EL: now in function after ionicPopover.fromTemplateUrl(PopupMenu) ...");
 				$scope.popover = popover;
 				vm.popover = popover;
+				$scope.popupMenu = popover;
 				vm.popupMenu = popover;
 
 				$scope.$on('$destroy', function() {
 					Log.l("EL: now in scope.on('destroy')");
-					vm.popover.remove();
+					vm.popupMenu.remove();
 				});
 				// Execute action on hidden popover
-				$scope.$on('popover.hidden', function() {
+				$scope.$on('popupMenu.hidden', function() {
 					Log.l("EL: now in scope.on('popover.hidden')");
 					// Execute action
 				});
 				// Execute action on remove popover
-				$scope.$on('popover.removed', function() {
+				$scope.$on('popupMenu.removed', function() {
 					Log.l("EL: now in scope.on('popover.removed')");
 					// Execute action
 				});
@@ -326,19 +332,19 @@
 		}
 
 		function showPopupMenu($event) {
-			Log.l("EL: now in scope.openPopover()");
+			Log.l("EL: now in scope.showPopupMenu()");
 			vm.popupMenu.show('.menu-button-expense-log');
 		}
 
 
 		function closePopupMenu() {
 			Log.l("EL: now in scope.closePopupMenu()")
-			vm.popover.hide();
+			vm.popupMenu.hide();
 		}
 
 		function createPDFPopupMenu($scope) {
 			Log.l("EL: creating PDFPopupMenu ...");
-			$ionicPopover.fromTemplateUrl('templates/PDFPopupMenu.html', {
+			return $ionicPopover.fromTemplateUrl('ExpenseLog/templates/PDFPopupMenu.html', {
 				scope: $scope
 			}).then(function(popover) {
 				Log.l("EL: now in function after ionicPopover.fromTemplateUrl('PDFPopupMenu') ...");
@@ -364,10 +370,9 @@
 			});
 		}
 
-		function openPDFPopover($event) {
-			Log.l("EL: now in openPDFPopover()")
-			// vm.popover.show($event);
-			vm.pdfMenuPopover.show('.menu-button-pdf-viewer');
+		function openPDFPopupMenu($event) {
+			Log.l("EL: now in openPDFPopupMenu()")
+			vm.pdfMenuPopover.show('.menu-button-pdf-viewer-expense-log');
 			// var headerbar = angular.element(".income-statement-bar");
 			// var hbar = $("ion-header-bar");
 			// var hbarheight = hbar.height();
@@ -400,27 +405,26 @@
 
 		function createPDFEmail() {
 			Log.l("EL: Now in createPDFEmail()...");
-			$cordovaEmailComposer.isAvailable().then(function() {
-				Log.l("EL: cordovaEmailComposer() is available!");
-				var pdfmail = {
-					to: '',
-					attachments: [
-					vm.pdfFileURL
-					],
-					subject: 'Activity Log PDF',
-					body: 'Attached is the expense log PDF file from SEPI.',
-					isHtml: true
-				};
-				$cordovaEmailComposer.open(pdfmail).then(function(success) {
+			// $cordovaEmailComposer.isAvailable().then(function() {
+			var SocialSharing = IonicNative.SocialSharing;
+			SocialSharing.canShareViaEmail().then(function() {
+				Log.l("EL: SocialSharing() is available!");
+				var to = [];
+				var attachments = [ vm.pdfDataFileURL];
+				var subject = "Expense Log PDF";
+				var body = "Attached is the expense log PDF file from SEPI.";
+				Log.l("Now attempting to email file:\n%s", vm.pdfFileName);
+				SocialSharing.shareViaEmail(body, subject, to, [], [], attachments).then(function(res) {
+				// $cordovaEmailComposer.open(pdfmail).then(function(success) {
 					Log.l("User sent e-mail successfully!");
-					Log.l("Now canceling PDF display!");
+					Log.l("Now closing PDF display!");
 					vm.closePDFViewer();
-				}, function(err) {
+				}).catch(function(err) {
 					Log.l("User canceled e-mail!");
 					Log.l(err);
-				})
+				});
 			}, function() {
-				Log.l("EL: cordovaEmailComposer() is NOT available.");
+				Log.l("EL: SocialSharing() is NOT available.");
 			});
 		}
 
@@ -432,7 +436,7 @@
 		function createPDFModal($scope) {
 			Log.l("EL: Now in generatePDF()");
 			// Initialize the modal view.
-			$ionicModal.fromTemplateUrl('templates/pdf-viewer.html', {
+			return $ionicModal.fromTemplateUrl('ExpenseLog/templates/pdf-viewer.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function(modal) {
@@ -445,25 +449,33 @@
 
 		function createReport() {
 			Log.l("EL: Now running createReport(). reformattedList is:\n%s",JSON.stringify(vm.reformattedList, false, 2));
-			vm.popover.hide();
+			vm.popupMenu.hide();
 			vm.pdfModal.show();
 			vm.createExpenseLogPdf(vm.reformattedList, vm.user, vm.reportData).then(function(pdf) {
-				Log.l("EL: Now in function after createActivityLogPdf()...")
+				Log.l("EL: Now in function after createExpenseLogPdf()...")
 				var blob = new Blob([pdf], { type: 'application/pdf' });
 				vm.pdfblob = blob;
 				win.pdfblob = blob;
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
 				vm.vmScope.pdfUrl = vm.pdfFileURL;
-				$cordovaFile.writeFile(fileDirectory, "ExpenseLog.pdf", blob, true).then(function(res) {
-					Log.l("EL: Success creating PDF file!");
-					Log.l(res);
-					vm.pdfFile = res;
-					win.pdfFile = res;
-				}, function(err) {
-					Log.l("EL: Failed creating PDF file!");
-					Log.e(err);
-				});
+				return $cordovaFile.writeFile(fileDirectory, "ExpenseLog.pdf", blob, true);
+			}).then(function(res) {
+				Log.l("EL: Success creating PDF file!");
+				Log.l(res);
+				vm.pdfFile = res;
+				win.pdfFile = res;
+				var cordovaURL = res.target.localURL;
+				return IonicFiles.convertToDataURL(cordovaURL);
+			}).then(function(res) {
+				vm.pdfLocalFileURL = res;
+				vm.pdfDataFileURL = res;
+				win.pdfLocalFileURL = res;
+				win.pdfDataFileURL = res;
+				Log.l("Done generating PDF and creating local URL for PDF.");
+			}).catch(function(err) {
+				Log.l("Error converting cordova URL to local URL!");
+				Log.l(err);
 			});
 		}
 

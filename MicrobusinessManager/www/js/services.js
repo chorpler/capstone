@@ -2,6 +2,7 @@
 	angular.module('app')
 		.factory('Database', Database)
 		.factory('CashBalance', CashBalance)
+		.factory('IonicFiles', ['$q', '$window', '$cordovaFile', IonicFiles])
 		.factory('$cordovaSQLitePorter', ['$q', '$window', cordovaSQLitePorter]);
 	// .factory('ReportService', ['$q', ReportService]);
 
@@ -569,6 +570,84 @@
 				currentCashBalance = response.rows.item(0).total;
 			});
 		}
+
+		return service;
+	}
+
+	function IonicFiles($q, $window, $cordovaFile) {
+		function convertToDataURL(cordovaURL, filename, fileDirectory) {
+			Log.l("Now in convertToDataURL()...");
+			// var dir = fileDirectory || cordova.file.externalDataDirectory || cordova.file.dataDirectory;
+			var dir = fileDirectory || cordova.file.dataDirectory;
+			var filename = filename || cordovaURL.split('/').pop().split('#')[0].split('?')[0];
+			var d = $q.defer();
+			convertToFileEntry(cordovaURL).then(function(res) {
+				var pdfFileEntry = res;
+				var fileName = pdfFileEntry.name;
+				var fileDir = pdfFileEntry.filesystem.root.toURL();
+				window.pdfFile1 = {};
+				window.pdfFile1.filename = fileName;
+				window.pdfFile1.filedir = fileDir;
+				window.pdfFile1.file = pdfFileEntry;
+				var localURL = pdfFileEntry.toURL();
+				Log.l("convertToDataURL(): Resolved cordova URL:\n%s\n%s", cordovaURL);
+				return $cordovaFile.readAsDataURL(fileDir, fileName);
+			}).then(function(res) {
+				Log.l("convertToDataURL(): Success converting %s, data url is length %d.", filename, res.length);
+				window.pdfFile1.dataURL = res;
+				d.resolve(res);
+			}).catch(function(err) {
+				Log.l("convertToDataURL(): Error reading %s/%s.", dir, filename);
+				Log.l(err);
+				d.reject(err);
+			});
+			return d.promise;
+		}
+
+		function convertToFileEntry(cordovaURL) {
+			Log.l("Now in convertToLocalURL() ...");
+			var d = $q.defer();
+			resolveLocalFileSystemURL(cordovaURL, function(res) {
+				var fileEntry = res;
+				Log.l("Converted cordova URL to FileEntry:\n%s", cordovaURL);
+				// Log.l(fileEntry);
+				// win.localFileEntry = res;
+				d.resolve(fileEntry);
+			}, function(err) {
+				Log.l("Error during convertToLocalURL()!");
+				d.reject(err);
+			});
+			return d.promise;
+		}
+
+		function convertToLocalURL(cordovaURL) {
+			Log.l("Now in convertToLocalURL() ...");
+			var d = $q.defer();
+			resolveLocalFileSystemURL(cordovaURL, function(res) {
+				var localURL = res.toURL();
+				Log.l("Converted cordova URL to local URL:\n%s\n%s", cordovaURL, localURL);
+				// win.localFileEntry = res;
+				d.resolve(localURL);
+			}, function(err) {
+				Log.l("Error during convertToLocalURL()!");
+				d.reject(err);
+			});
+			return d.promise;
+		}
+
+		// window.IonicFiles = window.IonicFiles || {};
+		// window.IonicFiles.convertToDataURL = convertToDataURL;
+		// window.IonicFiles.convertToFileEntry = convertToFileEntry;
+		// window.IonicFiles.convertToLocalURL = convertToLocalURL;
+
+		var service = {
+			convertToDataURL: convertToDataURL,
+			convertToFileEntry: convertToFileEntry,
+			convertToLocalURL: convertToLocalURL,
+			cordovaFile: $cordovaFile
+		};
+
+		window.IonicFiles = window.IonicFiles || service;
 
 		return service;
 	}

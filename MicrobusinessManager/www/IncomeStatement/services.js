@@ -5,9 +5,9 @@
 
 	function ISpdfService($q, $filter) {
 		var cfilter = $filter;
-		function createPdf(report, user, reportData) {
+		function createIncomeStatementPdf(report, user, reportData) {
 			return $q(function(resolve, reject) {
-				Log.l("Now in pdfService.createPdf() ... report and user are:");
+				Log.l("Now in ISpdfService.createIncomeStatementPdf() ... report and user are:");
 				Log.l(JSON.stringify(report));
 				Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
@@ -22,7 +22,7 @@
 
 
 		var service = {
-			createPdf: createPdf
+			createIncomeStatementPdf: createIncomeStatementPdf
 		};
 		return service;
 	}
