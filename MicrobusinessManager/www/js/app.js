@@ -230,7 +230,8 @@
 		str_import_error: ["Import Error", "Error de Importación"],
 		str_import_error_message: ["No valid import data found", "No se han encontrado datos de importación válidos"],
 		str_import_canceled: ["Import canceled", "Importación cancelada"],
-		str_import_warning: ["Are you sure? This will erase all existing data!", "¿Estás seguro? ¡Esto borrará todos los datos existentes!"]
+		str_import_warning: ["Are you sure? This will erase all existing data!", "¿Estás seguro? ¡Esto borrará todos los datos existentes!"],
+		str_email_not_available: ["E-mail not available. You may need to set up your e-mail account.", "Correo electrónico no disponible. Es posible que deba configurar su cuenta de correo electrónico."]
 	};
 
 	function getStringSet(strings, index) {

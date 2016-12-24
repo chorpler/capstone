@@ -578,7 +578,7 @@
 		function convertToDataURL(cordovaURL, filename, fileDirectory) {
 			Log.l("Now in convertToDataURL()...");
 			// var dir = fileDirectory || cordova.file.externalDataDirectory || cordova.file.dataDirectory;
-			var dir = fileDirectory || cordova.file.dataDirectory;
+			var dir = fileDirectory || cordova.file.syncedDataDirectory || cordova.file.dataDirectory;
 			var filename = filename || cordovaURL.split('/').pop().split('#')[0].split('?')[0];
 			var d = $q.defer();
 			convertToFileEntry(cordovaURL).then(function(res) {

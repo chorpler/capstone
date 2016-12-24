@@ -8,10 +8,10 @@
 			Log.l("Now in createSalesLogPdf() ...");
 			return $q(function(resolve, reject) {
 				Log.l("AL: Now in pdfService.createPdf() ... report and user are:");
-				Log.l(JSON.stringify(report));
-				Log.l(JSON.stringify(user));
+				// Log.l(JSON.stringify(report));
+				// Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
-				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, false, 2));
+				// Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, false, 2));
 				var pdf = pdfMake.createPdf(dd);
 
 				pdf.getBase64(function(output) {
@@ -49,7 +49,7 @@
 		// expenses: id, name, amount, expType, comments, date, type
 		var slr = report;
 		var rdata = reportData;
-		Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
+		// Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
 		var rawTransactions = [], transactions = [], allSalesTables = [];
 
 		var time = rdata.timeFrame.value;
@@ -73,7 +73,7 @@
 		var postal = user.postal;
 		var email = user.email;
 		var phone = user.phone;
-		var title = afilter('translate')("reports_sales_rep") + ": " + afilter('translate')(timespan);
+		var title = afilter('translate')("reports_sales_reports") + ": " + afilter('translate')(timespan);
 		// title = titleCase(title);
 		var startDate = moment(rdata.startDate);
 		var endDate = moment(rdata.endDate);
@@ -116,7 +116,7 @@
 
 		// Log.l("userid: %s, orgname: %s, rep: %s, address: %s, email: %s, phone: %s, title: %s, dateRange: %s, totalI: %s, totalE: %s, totalP: %s", userid, orgname, representative, address, email, phone, title, dateRange, strIncome, strExpenses, strProfit);
 		var transTable = {};
-		Log.l("Checking transactions before building table. transactions is:\n%s", JSON.stringify(transactions, false, 2));
+		// Log.l("Checking transactions before building table. transactions is:\n%s", JSON.stringify(transactions, false, 2));
 
 		var grandTotalAllSales = 0;
 		var outerSalesTable = {}, singleSaleTable = {};
@@ -215,8 +215,8 @@
 			allSalesTables.push(grandTotalRow);
 		}
 
-		Log.l("allSalesTables is now:\n%s", JSON.stringify(allSalesTables, false, 2));
-		Log.l(allSalesTables);
+		// Log.l("allSalesTables is now:\n%s", JSON.stringify(allSalesTables, false, 2));
+		// Log.l(allSalesTables);
 
 		var fileHeader = [
 				{

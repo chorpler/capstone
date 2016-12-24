@@ -8,10 +8,10 @@
 		function createIncomeStatementPdf(report, user, reportData) {
 			return $q(function(resolve, reject) {
 				Log.l("Now in ISpdfService.createIncomeStatementPdf() ... report and user are:");
-				Log.l(JSON.stringify(report));
-				Log.l(JSON.stringify(user));
+				// Log.l(JSON.stringify(report));
+				// Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
-				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd));
+				// Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd));
 				var pdf = pdfMake.createPdf(dd);
 
 				pdf.getBase64(function(output) {
@@ -41,7 +41,7 @@
 		Log.l("Now in createDocumentDefinition() ...");
 		var isr = report;
 		var rdata = reportData;
-		Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
+		// Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
 		var items = isr.incomeItems.map(function(item) {
 			var arrItem = [];
 			var rtStyle = {"style": "rightAlign"};
@@ -60,17 +60,19 @@
 			var itemName = item.name;
 			var numAmt = item.amount;
 			var rtStyle = {"style": "rightAlign"};
+			var ltStyle = {"style": "leftAlign"};
 			var amt = afilter('currency')(numAmt, "$", 2);
 			rtStyle.text = amt;
-			arrItem.push(item.name);
+			ltStyle.text = item.name;
+			arrItem.push(ltStyle);
 			arrItem.push(rtStyle);
 			return arrItem;
 			// return [item.name, item.amount];
 		});
 
-		Log.l("items and expitems:");
-		Log.l(JSON.stringify(items));
-		Log.l(JSON.stringify(expitems));
+		// Log.l("items and expitems:");
+		// Log.l(JSON.stringify(items));
+		// Log.l(JSON.stringify(expitems));
 
 		var time = rdata.timeFrame.value;
 		var timespan = "";
@@ -139,12 +141,12 @@
 		if(isEmpty(expitems)) {
 			expensesTable = [ [ {"text": strNoExpenses, "colSpan": 2, "style": "emptyRow"} ] ];
 		} else {
-			expensesTable = items;
+			expensesTable = expitems;
 		}
 
 		var dd = {
 			"defaultStyle": {
-				"margin": [ 0, 5, 0, 0 ]
+				"margin": [ 0, 5, 0, 5 ]
 			},
 			"styles": {
 				"header": {

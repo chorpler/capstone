@@ -7,10 +7,10 @@
 		function createPdf(report, user, reportData) {
 			return $q(function(resolve, reject) {
 				Log.l("AL: Now in pdfService.createPdf() ... report and user are:");
-				Log.l(JSON.stringify(report));
-				Log.l(JSON.stringify(user));
+				// Log.l(JSON.stringify(report));
+				// Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
-				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, false, 2));
+				// Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, false, 2));
 				var pdf = pdfMake.createPdf(dd);
 
 				pdf.getBase64(function(output) {
@@ -46,7 +46,7 @@
 		// cashInfusions: id, amount, date
 		var alr = report;
 		var rdata = reportData;
-		Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
+		// Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
 		var transactions = null;
 		if(!report || !report.length) {
 			transactions = null;
@@ -151,7 +151,7 @@
 
 		// Log.l("userid: %s, orgname: %s, rep: %s, address: %s, email: %s, phone: %s, title: %s, dateRange: %s, totalI: %s, totalE: %s, totalP: %s", userid, orgname, representative, address, email, phone, title, dateRange, strIncome, strExpenses, strProfit);
 		var transTable = {};
-		Log.l("Checking transactions before building table. transactions is:\n%s", JSON.stringify(transactions, false, 2));
+		// Log.l("Checking transactions before building table. transactions is:\n%s", JSON.stringify(transactions, false, 2));
 
 		var bodyItems = [];
 
@@ -244,12 +244,12 @@
 		];
 
 
-		Log.l("BodyItems is:\n%s", JSON.stringify(bodyItems, false, 2));
+		// Log.l("BodyItems is:\n%s", JSON.stringify(bodyItems, false, 2));
 
 		transTable.table.body = transTable.table.body.concat(bodyItems).concat(endingCashRow);
 
-		Log.l("TransTable is now:\n%s", JSON.stringify(transTable, false, 2));
-		Log.l(transTable);
+		// Log.l("TransTable is now:\n%s", JSON.stringify(transTable, false, 2));
+		// Log.l(transTable);
 
 		var dd = {
 			"defaultStyle": {

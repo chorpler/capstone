@@ -1,52 +1,12 @@
 <ion-popover-view id="PopupMenu004" class="category-menu-popup fit">
-<!-- 	<ion-header-bar>
-		<h1 class="title">Menu</h1>
-	</ion-header-bar> -->
 	<ion-content class="menucontent">
-		<!-- <div class="card"> -->
-<!-- 			<ion-list>
-				<ion-item class="item item-icon-right" ng-click="income.generatePDF()">
-					<button class="button button-icon icon ion-android-document button-generate-pdf-text">
-						<span class="button-generate-pdf-text">{{"str_generate_pdf" | translate}}</span>
-					</button>
-				</ion-item>
-			</ion-list> -->
-
 		<ion-list class="menulist">
 			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
-				<!-- <icon class="icon ion-android-document"></icon><span class="popup-menu-item-text">{{"str_generate_pdf" | translate}}</span> -->
 				<button class="button button-full button-icon icon ion-android-document" ng-click="activity.createReport()">{{"str_generate_pdf" | translate}}</button>
 			</ion-item>
 			<ion-item class="ionic-item-icon-left popup-menu-item">
 			<button class="button button-full button-icon icon ion-close" ng-click="activity.closeActivityLog()">{{"close_button" | translate}}</button>
-				<!-- <icon class="icon ion-close"></icon><span class="popup-menu-item-text">{{"close_button" | translate}}</span> -->
 			</ion-item>
-<!-- 			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
-				<icon class="icon ion-android-document"></icon>
-				<a target="_blank" ng-click="income.createReport()">{{"str_generate_pdf" | translate}}</a>
-			</ion-item>
-			<ion-item class="ionic-item-icon-left popup-menu-item">
-				<icon class="icon ion-close"></icon>
-				<a target="_blank" ng-click="income.closeIncomeStatement()">{{"close_button" | translate}}</a>
-			</ion-item> -->
 		</ion-list>
-
-			<!-- <div class="list"> -->
-
-<!-- 				<a class="item" target="_blank" ng-click="income.createReport()">
-					<icon class="icon ion-android-document"></icon>
-					{{"str_generate_pdf" | translate}}
-				</a> -->
-				<!-- <div class="item popup-menu-item" ng-click="income.createReport()"> -->
-					<!-- <icon class="icon ion-android-document"></icon> -->
-					<!-- {{"str_generate_pdf" | translate}} -->
-					<!-- <button class="button button-block button-outline button-icon icon ion-android-document" ng-click="income.createReport()">{{"str_generate_pdf" | translate}}</button> -->
-				<!-- </div> -->
-				<!-- <div class="item popup-menu-item" ng-click="income.closeIncomeStatement()"> -->
-					<!-- <icon class="icon ion-close"></icon> -->
-					<!-- {{"close_button" | translate}} -->
-					<!-- <button class="button button-block button-outline button-icon icon ion-close" ng-click="income.closeIncomeStatement()">{{"close_button" | translate}}</button> -->
-				<!-- </div> -->
-			<!-- </div> -->
-		<!-- </div> -->
+	</ion-content>
 </ion-popover-view>

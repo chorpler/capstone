@@ -5,25 +5,27 @@
 
 	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
 	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, IonicNative, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
-	function ActivityLogController ($filter, $ionicPopover, $scope, $rootScope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $persist, IonicFiles, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
+	function ActivityLogController ($filter, $ionicPopover, $log, $scope, $rootScope, $state, $q, $ionicHistory, $ionicModal, $ionicPopup, $cordovaFile, $cordovaFileOpener2, $persist, IonicFiles, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, formats) {
 		var vm = this;
 
 		var win = window;
-
+		win.vm = vm;
 		var rs = $rootScope;
-
 		var code = rs.code || {};
-
 		win.sepi = win.sepi || {};
 
-		var fileDirectory = cordova.file.dataDirectory;
+		var fileDirectory = cordova.file.syncedDataDirectory || cordova.file.dataDirectory;
 		vm.fileDirectory = fileDirectory;
 
 		$scope.vm = vm;
-		win.vm = vm;
 		win.cFile = $cordovaFile;
 		win.sepi.fileDirectory = fileDirectory;
 
+		vm.scopes = vm.scopes || {};
+		vm.scopes.root = $rootScope;
+		vm.scopes.activitylog = $scope;
+
+		vm.formats = formats;
 		vm.startDate = startDate;
 		vm.timeFrame = timeFrame;
 		vm.endDate = endDate;
@@ -47,7 +49,7 @@
 		vm.createPDFPopupMenu = createPDFPopupMenu;
 		vm.openPDFPopupMenu = openPDFPopupMenu;
 		vm.closePDFPopupMenu = closePDFPopupMenu;
-		vm.pdfMenuPopover = null;
+		vm.pdfPopupMenu = null;
 		vm.closeActivityLog = closeActivityLog;
 		vm.setDefaultsForPdfViewer = setDefaultsForPdfViewer;
 		vm.initializeAllValues = initializeAllValues;
@@ -62,13 +64,15 @@
 		vm.pdfViewerNumber = 2;
 
 		function init () {
+			win.formats = vm.formats;
 			vm.endingCash = calculateEndCash();
-			vm.getUserInfo();
-			vm.createPopupMenu($scope).then(function(res) {
-				return vm.createPDFModal($scope);
+			vm.getUserInfo().then(function(res) {
+				return vm.createPopupMenu(vm.scopes.activitylog);
 			}).then(function(res) {
-				return vm.createPDFPopupMenu($scope);
-			}).then(function(res) {
+				// return vm.createPDFModal($scope);
+			// }).then(function(res) {
+				// return vm.createPDFPopupMenu($scope);
+			// }).then(function(res) {
 				return vm.initializeAllValues();
 			}).then(function(res) {
 				Log.l("AL: init() is done!");
@@ -77,7 +81,7 @@
 
 		function getUserInfo() {
 			Log.l("AL: in getUserInfo()...");
-			Database.select('user').then(function(response) {
+			return Database.select('user').then(function(response) {
 				var items = [];
 				Log.l("AL: getUserInfo() done, retrieved " + response.rows.length + " items.");
 				if (response.rows.length === 0) {
@@ -226,34 +230,39 @@
 
 		function createPopupMenu($scope) {
 			Log.l("AL: showing Popup Menu ...");
-			return $ionicPopover.fromTemplateUrl('ActivityLog/templates/PopupMenu.html', {
+			var d = $q.defer();
+		 $ionicPopover.fromTemplateUrl('ActivityLog/templates/PopupMenu.html', {
 				scope: $scope
-			}).then(function(popover) {
+			}).then(function(popupMenu) {
 				Log.l("AL: now in function after ionicPopover.fromTemplateUrl(PopupMenu) ...");
-				$scope.popover = popover;
-				vm.popover = popover;
-				$scope.popupMenu = popover;
-				vm.popupMenu = popover;
+				$scope.popupMenu = popupMenu;
+				vm.popupMenu = popupMenu;
 
 				$scope.$on('$destroy', function() {
 					Log.l("AL: now in scope.on('destroy')");
 					vm.popupMenu.remove();
 				});
-				// Execute action on hidden popover
+				// Execute action on hidden popupMenu
 				$scope.$on('popupMenu.hidden', function() {
 					Log.l("AL: now in scope.on('popupMenu.hidden')");
 					// Execute action
 				});
-				// Execute action on remove popover
+				// Execute action on remove popupMenu
 				$scope.$on('popupMenu.removed', function() {
 					Log.l("AL: now in scope.on('popupMenu.removed')");
 					// Execute action
 				});
+				d.resolve(vm.popupMenu);
+			}).catch(function(err) {
+				Log.l("AL: Error creating popupMenu!");
+				Log.l(err);
+				d.reject(err);
 			});
+			return d.promise;
 		}
 
 		function showPopupMenu($event) {
-			Log.l("AL: now in scope.openPopover()")
+			Log.l("AL: now in showPopupMenu()")
 			vm.popupMenu.show('.menu-button-activity-log');
 		}
 
@@ -264,51 +273,58 @@
 		}
 
 		function createPDFPopupMenu($scope) {
-			Log.l("AL: creating PDFPopupMenu ...");
-			return $ionicPopover.fromTemplateUrl('ActivityLog/templates/PDFPopupMenu.html', {
+			Log.l("AL: Now in createPDFPopupMenu() ...");
+			var d = $q.defer();
+			$ionicPopover.fromTemplateUrl('ActivityLog/templates/PDFPopupMenu.html', {
 				scope: $scope
-			}).then(function(popover) {
+			}).then(function(pdfPopupMenu) {
 				Log.l("AL: now in function after ionicPopover.fromTemplateUrl('PDFPopupMenu') ...");
-				$scope.pdfMenuPopover = popover;
-				vm.pdfMenuPopover = popover;
-				// popover.show(".income-statement-menu")
+				$scope.pdfPopupMenu = pdfPopupMenu;
+				vm.pdfPopupMenu = pdfPopupMenu;
+				// pdfPopupMenu.show(".income-statement-menu")
+				//Cleanup the pdfPopupMenu when we're done with it!
+				$scope.$on('$destroy', function() {
+					Log.l("AL: now in scope.on('destroy') for pdfPopupMenu");
+					vm.pdfPopupMenu.remove();
+				});
+				// Execute action on hidden pdfPopupMenu
+				$scope.$on('pdfPopupMenu.hidden', function() {
+					Log.l("AL: now in scope.on('pdfPopupMenu.hidden')");
+					// Execute action
+				});
+				// Execute action on remove pdfPopupMenu
+				$scope.$on('pdfPopupMenu.removed', function() {
+					Log.l("AL: now in scope.on('pdfPopupMenu.removed')");
+					// Execute action
+				});
+				Log.l("AL: Now done creating pdfPopupMenu.");
+				Log.l(vm.pdfPopupMenu);
+				d.resolve(vm.pdfPopupMenu);
+			}).catch(function(err) {
+				Log.l("AL: Error creating pdfPopupMenu!");
+				Log.l(err);
+				d.reject(err);
 			});
-
-			//Cleanup the popover when we're done with it!
-			$scope.$on('$destroy', function() {
-				Log.l("AL: now in scope.on('destroy') for pdfMenuPopover");
-				vm.pdfMenuPopover.remove();
-			});
-			// Execute action on hidden popover
-			$scope.$on('pdfMenuPopover.hidden', function() {
-				Log.l("AL: now in scope.on('pdfMenuPopover.hidden')");
-				// Execute action
-			});
-			// Execute action on remove popover
-			$scope.$on('pdfMenuPopover.removed', function() {
-				Log.l("AL: now in scope.on('pdfMenuPopover.removed')");
-				// Execute action
-			});
+			return d.promise;
 		}
 
-
 		function openPDFPopupMenu($event) {
-			Log.l("AL: now in pdfMenuPopover()")
-			// vm.pdfMenuPopover.show($event);
-			vm.pdfMenuPopover.show('.menu-button-pdf-viewer-activity-log');
+			Log.l("AL: now in openPDFPopupMenu(), pdfPopupmenu is:");
+			Log.l(vm.pdfPopupmenu);
+			vm.pdfPopupMenu.show('.menu-button-pdf-viewer-activity-log');
 		}
 
 		function closePDFPopupMenu() {
 			Log.l("AL: Now in closePDFMenu() ...");
-			vm.pdfMenuPopover.hide();
-			vm.closePDFViewer();
-			vm.closePopupMenu();
+			vm.pdfPopupMenu.hide();
 		}
 
 		function closePDFViewer() {
 			Log.l("AL: Now in closePDFViewer()...");
 			// vm.pdfModal.hide();
-			vm.pdfModal.hide();
+			vm.pdfPopupMenu.remove();
+			vm.pdfModal.remove();
+			vm.closePopupMenu();
 		}
 
 		function emailPDF() {
@@ -318,7 +334,6 @@
 
 		function createPDFEmail() {
 			Log.l("AL: Now in createPDFEmail()...");
-			// $cordovaEmailComposer.isAvailable().then(function() {
 			var SocialSharing = IonicNative.SocialSharing;
 			SocialSharing.canShareViaEmail().then(function() {
 				Log.l("AL: SocialSharing() is available!");
@@ -328,16 +343,18 @@
 				var body = "Attached is the activity log PDF file from SEPI.";
 				Log.l("Now attempting to email file:\n%s", vm.pdfFileName);
 				SocialSharing.shareViaEmail(body, subject, to, [], [], attachments).then(function(res) {
-				// $cordovaEmailComposer.open(pdfmail).then(function(success) {
 					Log.l("User sent e-mail successfully!");
 					Log.l("Now closing PDF display!");
-					vm.closePDFViewer();
+					// vm.closePDFPopupMenu();
 				}).catch(function(err) {
 					Log.l("User canceled e-mail!");
 					Log.l(err);
 				});
 			}, function() {
 				Log.l("AL: SocialSharing() is NOT available.");
+				var title = $filter('translate')("str_error").toUpperCase();
+				var text = $filter('translate')("str_email_not_available");
+				rs.code.showPopupAlert(title, text);
 			});
 		}
 
@@ -348,108 +365,74 @@
 		}
 
 		function createPDFModal($scope) {
-			Log.l("AL: Now in generatePDF()");
+			Log.l("AL: Now in createPDFModal()");
+			var d = $q.defer();
 			// Initialize the modal view.
-			return $ionicModal.fromTemplateUrl('ActivityLog/templates/pdf-viewer.html', {
+			$ionicModal.fromTemplateUrl('ActivityLog/templates/pdf-viewer.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
-			}).then(function(modal) {
-				$scope.modal = modal;
-				$scope.pdfModal = modal;
-				vm.modal = modal;
-				vm.pdfModal = modal;
-				vm.setDefaultsForPdfViewer($scope);
+			}).then(function(pdfModal) {
+				Log.l("AL: Now in function after ionicModal.fromTemplateUrl(pdfViewer)...");
+				$scope.pdfModal = pdfModal;
+				vm.pdfModal = pdfModal;
+				$scope.$on('$destroy', function() {
+					Log.l("AL: now in scope.on('destroy') for pdfModal");
+					vm.pdfModal.remove();
+				});
+				// Execute action on hidden popover
+				$scope.$on('pdfModal.hidden', function() {
+					Log.l("AL: now in scope.on('pdfModal.hidden')");
+					// Execute action
+				});
+				// Execute action on remove popover
+				$scope.$on('pdfModal.removed', function() {
+					Log.l("AL: now in scope.on('pdfModal.removed')");
+					// Execute action
+				});
+				return createPDFPopupMenu($scope);
+			}).then(function(res) {
+				setDefaultsForPdfViewer($scope);
+				Log.l("AL: Done creating pdfModal and pdfPopupMenu!");
+				d.resolve(res);
+			}).catch(function(err) {
+				Log.l("AL: Error creating PDF modal!");
+				Log.l(err);
+				d.reject(err);
 			});
+			return d.promise;
 		}
-
-		// function convertToDataURL(cordovaURL) {
-		// 	Log.l("AL: Now in convertToDataURL()...");
-		// 	var dir = fileDirectory;
-		// 	var fname = "ActivityLog.pdf";
-		// 	var d = $q.defer();
-		// 	convertToFileEntry(cordovaURL).then(function(res) {
-		// 		var pdfFileEntry = res;
-		// 		var fileName = pdfFileEntry.name;
-		// 		vm.pdfFileName = fileName;
-		// 		window.pdfFileName = fileName;
-		// 		var fileDir  = pdfFileEntry.filesystem.root.toURL();
-		// 		var localURL = pdfFileEntry.toURL();
-		// 		Log.l("convertToDataURL(): Resolved cordova URL:\n%s\n%s", cordovaURL);
-		// 		return $cordovaFile.readAsDataURL(fileDir, fileName);
-		// 	}).then(function(res) {
-		// 		Log.l("convertToDataURL(): Success converting %s, data url is length %d.", fname, res.length);
-		// 		d.resolve(res);
-		// 	}).catch(function(err) {
-		// 		Log.l("convertToDataURL(): Error reading %s/%s.", dir, fname);
-		// 		Log.l(err);
-		// 		d.reject(err);
-		// 	});
-		// 	return d.promise;
-		// }
-
-		// function convertToFileEntry(cordovaURL) {
-		// 	Log.l("AL: Now in convertToLocalURL() ...");
-		// 	var d = $q.defer();
-		// 	resolveLocalFileSystemURL(cordovaURL, function(res) {
-		// 		var fileEntry = res;
-		// 		Log.l("Converted cordova URL to FileEntry:\n%s", cordovaURL);
-		// 		Log.l(fileEntry);
-		// 		win.localFileEntry = res;
-		// 		d.resolve(fileEntry);
-		// 	}, function(err) {
-		// 		Log.l("Error during convertToLocalURL()!");
-		// 		d.reject(err);
-		// 	});
-		// 	return d.promise;
-		// }
-
-		// function convertToLocalURL(cordovaURL) {
-		// 	Log.l("AL: Now in convertToLocalURL() ...");
-		// 	var d = $q.defer();
-		// 	resolveLocalFileSystemURL(cordovaURL, function(res) {
-		// 		var localURL = res.toURL();
-		// 		Log.l("Converted cordova URL to local URL:\n%s\n%s", cordovaURL, localURL);
-		// 		win.localFileEntry = res;
-		// 		d.resolve(localURL);
-		// 	}, function(err) {
-		// 		Log.l("Error during convertToLocalURL()!");
-		// 		d.reject(err);
-		// 	});
-		// 	return d.promise;
-		// }
 
 		function createReport() {
 			Log.l("AL: Now running createReport()...");
 			vm.popupMenu.hide();
-			vm.pdfModal.show();
-			vm.createActivityLogPdf(vm.incomeStatement, vm.user, vm.reportData).then(function(pdf) {
+			createPDFModal(vm.scopes.activitylog).then(function(res) {
+				vm.pdfModal.show();
+				return vm.createActivityLogPdf(vm.incomeStatement, vm.user, vm.reportData);
+			}).then(function(pdf) {
 				Log.l("AL: Now in function after createActivityLogPdf()...")
 				var blob = new Blob([pdf], { type: 'application/pdf' });
 				vm.pdfblob = blob;
 				win.pdfblob = blob;
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
-				// vm.vmScope.pdfUrl = URL.createObjectURL(blob);
 				vm.vmScope.pdfUrl = vm.pdfFileURL;
-				$cordovaFile.writeFile(fileDirectory, "ActivityLog.pdf", blob, true).then(function(res) {
-					Log.l("AL: Success creating PDF file!");
-					Log.l(res);
-					vm.pdfFile = res;
-					win.pdfFile = res;
-					var cordovaURL = res.target.localURL;
-					IonicFiles.convertToDataURL(cordovaURL).then(function(res) {
-						vm.pdfLocalFileURL = res;
-						vm.pdfDataFileURL = res;
-						win.pdfLocalFileURL = res;
-						win.pdfDataFileURL = res;
-						Log.l("Done generating PDF and creating local URL for PDF.");
-					}).catch(function(err) {
-						Log.l("Error converting cordova URL to local URL!");
-					});
-				}, function(err) {
-					Log.l("AL: Failed creating PDF file!");
-					Log.e(err);
-				});
+				return $cordovaFile.writeFile(fileDirectory, "ActivityLog.pdf", blob, true);
+			}).then(function(res) {
+				Log.l("AL: Success creating PDF file!");
+				Log.l(res);
+				vm.pdfFile = res;
+				win.pdfFile = res;
+				var cordovaURL = res.target.localURL;
+				return IonicFiles.convertToDataURL(cordovaURL);
+			}).then(function(res) {
+				vm.pdfLocalFileURL = res;
+				vm.pdfDataFileURL = res;
+				win.pdfLocalFileURL = res;
+				win.pdfDataFileURL = res;
+				Log.l("Done generating PDF and creating local URL for PDF.");
+			}).catch(function(err) {
+				Log.l("AL: Failed creating PDF file!");
+				Log.l(err);
 			});
 		}
 
@@ -463,7 +446,7 @@
 
 			pdfScope.onError = function(err) {
 				Log.l("AL: Got pdfScope.onError!");
-				Log.e(err);
+				Log.l(err);
 			};
 
 			pdfScope.onLoad = function() {

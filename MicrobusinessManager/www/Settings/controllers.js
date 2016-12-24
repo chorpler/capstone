@@ -2,7 +2,7 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $rootScope, $q, $ionicModal, $filter, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user, formats, $cordovaFile, $cordovaFileTransfer, $timeout, $ionicPopover, $ionicPopup, $persist, $cordovaSQLitePorter) {
+	function SettingsController ($scope, $rootScope, $q, $log, $ionicModal, $filter, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user, formats, $cordovaFile, $cordovaFileTransfer, $timeout, $ionicPopover, $ionicPopup, $persist, $cordovaSQLitePorter) {
 		var vm = this;
 
 		var win = window;
@@ -25,7 +25,7 @@
 		win.vm = vm;
 
 		// var fileDirectory = fileDirectory;
-		var fileDirectory = cordova.file.dataDirectory;
+		var fileDirectory = cordova.file.syncedDataDirectory || cordova.file.dataDirectory;
 		vm.fileDirectory = fileDirectory;
 		win.sepi.fileDirectory = fileDirectory;
 
@@ -147,13 +147,14 @@
 
 			vm.DB = Database.getDB();
 			win.DB1 = vm.DB;
-			vm.createPopupMenu(vm.scopes.settings);
+			vm.createPopupMenu(vm.scopes.settings).then(function(res) {
+				Log.l("Settings: Init() finished!");
+			});
 			// vm.createPopupMenu($scope).then(function(res) {
 				// return vm.createDownloadModal($scope);
 			// }).then(function(res) {
 				// return vm.createExportModal($scope);
 			// }).then(function(res) {
-				Log.l("Settings: Init() finished!");
 			// });
 		}
 
@@ -504,6 +505,7 @@
 			// getTax ();
 			vm.formatsModal.remove();
 			vm.submitted = false;
+			win.formats = vm.formats;
 		}
 
 		function cancelFormatsEdit () {
@@ -511,6 +513,7 @@
 			vm.submitted = true;
 			vm.formats = {};
 			vm.formats.dateformat = vm.tempFormats.dateformat;
+			win.formats = vm.formats;
 			// vm.activeTax = null;
 			vm.formatsModal.remove();
 			vm.submitted = false;
@@ -518,22 +521,39 @@
 
 		function createDownloadModal($scope) {
 			Log.l("Settings: now in createDownloadModal() ...");
+			var d = $q.defer();
 			$ionicModal.fromTemplateUrl('Settings/templates/download.html', {
 				scope: $scope
-			}).then(function (modal) {
-				Log.l("Settings: created, now setting vm.downloadModal ...");
-				vm.downloadModal = modal;
-				$scope.downloadModal = modal;
+			}).then(function (downloadModal) {
+				Log.l("Settings: downloadModal created, now setting vm.downloadModal ...");
+				vm.downloadModal = downloadModal;
+				$scope.downloadModal = downloadModal;
 				vm.scopes.downloadModal = $scope;
-				// vm.modals.download = modal;
-				vm.modals.download.push(modal);
+				// vm.modals.download = downloadModal;
+				vm.modals.download.push(downloadModal);
 				vm.downloadModal.show();
 				$scope.$on('$destroy', function() {
 					Log.l("Settings: now in scope.on('destroy')");
 					vm.downloadModal.remove();
 				});
-				// vm.downloadModal.show();
+				// Execute action on hidden downloadModal
+				$scope.$on('downloadModal.hidden', function() {
+					Log.l("Settings: now in scope.on('downloadModal.hidden')");
+					// Execute action
+				});
+				// Execute action on remove downloadModal
+				$scope.$on('downloadModal.removed', function() {
+					Log.l("Settings: now in scope.on('downloadModal.removed')");
+					// Execute action
+				});
+				Log.l("Settings: Done creating downloadModal!");
+				d.resolve(vm.downloadModal);
+			}).catch(function(err) {
+				Log.l("Settings: Error creating PDF modal!");
+				Log.l(err);
+				d.reject(err);
 			});
+			return d.promise;
 		}
 
 		function showDownloadModal() {
@@ -546,7 +566,9 @@
 			// vm.popupMenu.hide();
 			// vm.popupMenu.remove();
 			Log.l("Settings: Now in showDownloadModal()...");
-			createDownloadModal($scope);
+			createDownloadModal($scope).then(function(res) {
+				Log.l("Settings: created download Modal, now showing it!");
+			});
 			// $ionicModal.fromTemplateUrl('Settings/templates/download.html', {
 			// 	scope: $scope
 			// }).then(function (modal) {
@@ -921,34 +943,41 @@
 
 		function createPopupMenu($scope) {
 			Log.l("Settings: creating Popup Menu ...");
+			var d = $q.defer();
 			$ionicPopover.fromTemplateUrl('Settings/templates/SettingsPopupMenu.html', {
 				scope: $scope
-			}).then(function(popover) {
+			}).then(function(popupMenu) {
 				Log.l("Settings: now in function after ionicPopover.fromTemplateUrl(SettingsPopupMenu) ...");
-				$scope.popupMenu = popover;
+				$scope.popupMenu = popupMenu;
 				vm.scopes.popupMenu = $scope;
-				vm.popupMenu = popover;
-				// vm.modals.popupMenu = popover;
-				vm.modals.popupMenu.push(popover);
+				vm.popupMenu = popupMenu;
+				// vm.modals.popupMenu = popupMenu;
+				vm.modals.popupMenu.push(popupMenu);
 				// vm.popupMenu.show('.settings-menu-icon');
 				// vm.popupMenu.show('.settings-menu-icon');
-				//Cleanup the popover when we're done with it!
+				//Cleanup the popupMenu when we're done with it!
 				$scope.$on('$destroy', function() {
 					Log.l("Settings: now in scope.on('destroy')");
 					vm.popupMenu.remove();
 				});
-				// Execute action on hidden popover
-				$scope.$on('popover.hidden', function() {
+				// Execute action on hidden popupMenu
+				$scope.$on('popupMenu.hidden', function() {
 					Log.l("Settings: now in scope.on('popupMenu.hidden')");
 					// vm.popupMenu.remove();
 					// Execute action
 				});
-				// Execute action on remove popover
-				$scope.$on('popover.removed', function() {
+				// Execute action on remove popupMenu
+				$scope.$on('popupMenu.removed', function() {
 					Log.l("Settings: now in scope.on('popupMenu.removed')");
 					// Execute action
 				});
+				d.resolve(vm.popupMenu);
+			}).catch(function(err) {
+				Log.l("Settings: Error creating popupMenu!");
+				Log.l(err);
+				d.reject(err);
 			});
+			return d.promise;
 
 		}
 

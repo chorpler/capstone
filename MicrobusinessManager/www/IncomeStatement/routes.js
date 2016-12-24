@@ -53,8 +53,8 @@
 						// organization = items;
 						return items[0];
 					});
-				},
-				formats: function (Database) {
+				}
+				,formats: function (Database) {
 					return Database.select('formats').then(function (response) {
 						var items = [];
 						if (response.rows.length === 0) {
