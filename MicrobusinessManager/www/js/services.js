@@ -583,8 +583,11 @@
 			var d = $q.defer();
 			convertToFileEntry(cordovaURL).then(function(res) {
 				var pdfFileEntry = res;
-				var fileName = pdfFileEntry.name;
+				var fileName = pdfFileEntry.fullPath;
 				var fileDir = pdfFileEntry.filesystem.root.toURL();
+				if(fileDir.slice(-1) == '/') {
+					fileDir = fileDir.slice(0,-1);
+				}
 				window.pdfFile1 = {};
 				window.pdfFile1.filename = fileName;
 				window.pdfFile1.filedir = fileDir;
