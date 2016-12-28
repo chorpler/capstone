@@ -86,17 +86,29 @@
 
 		var dateFormat = win.formats.dateformat;
 
-		var userid = user.id;
-		var orgname = user.name;
-		var representative = user.representative;
-		var address = user.address;
-		var street1 = user.street1;
-		var street2 = user.street2;
-		var city = user.city;
-		var state = user.state;
-		var postal = user.postal;
-		var email = user.email;
-		var phone = user.phone;
+		// var userid = user.id;
+		// var orgname = user.name;
+		// var representative = user.representative;
+		// var address = user.address;
+		// var street1 = user.street1;
+		// var street2 = user.street2;
+		// var city = user.city;
+		// var state = user.state;
+		// var postal = user.postal;
+		// var email = user.email;
+		// var phone = user.phone;
+		var organizationHeader = { "style": "organizationheader", "stack": [] };
+		if(user) {
+			var address = "";
+			if(street2) {
+				address = street1 + "\n" + street2 + "\n" + city + " " + state + " " + postal;
+			} else {
+				address = street1 + "\n" + city + " " + state + " " + postal;
+			}
+			organizationHeader.stack.push(user.orgname);
+			organizationHeader.stack.push(user.representative);
+			organizationHeader.stack.push(user.address);
+		}
 		var reportTitle = afilter('translate')("reports_income_statement");
 		var title = reportTitle + ": " + timespan;
 		// title = titleCase(title);
@@ -118,14 +130,7 @@
 		var strAmountHeader = afilter('translate')("str_amount");
 		var strCashHeader = afilter('translate')("str_cash");
 
-		var address = "";
-		if(street2) {
-			address = street1 + "\n" + street2 + "\n" + city + " " + state + " " + postal;
-		} else {
-			address = street1 + "\n" + city + " " + state + " " + postal;
-		}
-
-		Log.l("userid: %s, orgname: %s, rep: %s, address: %s, email: %s, phone: %s, title: %s, dateRange: %s, totalI: %s, totalE: %s, totalP: %s", userid, orgname, representative, address, email, phone, title, dateRange, strTotalIncome, strTotalExpenses, strTotalProfit);
+		// Log.l("userid: %s, orgname: %s, rep: %s, address: %s, email: %s, phone: %s, title: %s, dateRange: %s, totalI: %s, totalE: %s, totalP: %s", userid, orgname, representative, address, email, phone, title, dateRange, strTotalIncome, strTotalExpenses, strTotalProfit);
 
 		var strNoIncome = "(" + afilter('translate')("str_time_period_no_income") + ")";
 		var strNoExpenses = "(" + afilter('translate')("str_time_period_no_expenses") + ")";
@@ -235,13 +240,7 @@
 					"text": dateRange,
 					"style": "header"
 				},
-				{ "style": "organizationheader",
-					"stack": [
-					orgname,
-					representative,
-					address,
-					]
-				},
+				organizationHeader,
 				{
 					"text": strIncomeHeader,
 					"style": "subheader"

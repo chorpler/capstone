@@ -766,11 +766,8 @@
 				var fileURL = res.nativeURL;
 				vm.downloadProgress = 100;
 				$scope.downloadProgress = 100;
-				// vm.downloadDone = true;
 				$timeout(function() { $scope.$apply(); }, 100);
 				vm.readImportSpreadsheet();
-				// var workbook = XLSX.readFile(fileURL);
-				// win.workbook = workbook;
 			}, function(err) {
 				Log.l("Error downloading " + url);
 				Log.l(err);
@@ -816,12 +813,14 @@
 		function readImportSpreadsheet() {
 			Log.l("Settings: now in readImportSpreadsheet() ...");
 			var filename = "importdata.xlsx";
+			var d = $q.defer();
 			$cordovaFile.readAsBinaryString(fileDirectory, filename).then(function(res) {
 				Log.l("Successfully read file %s.", filename);
 				win.file1 = res;
 				var workbook = XLSX.read(res, {type: 'binary'});
 				vm.workbook = workbook;
 				win.workbook1 = workbook;
+				win.allsheets = [];
 				var jsonImport = {structure: { tables: {}, otherSQL: []}, data: {inserts: {}}};
 				vm.jsonImport = jsonImport;
 				win.jsonImport = jsonImport;
@@ -831,6 +830,7 @@
 					var sheetname = sheet_name_list[i];
 					var sheet = workbook.Sheets[sheetname];
 					if(i == 'db_tables') {
+						win.allsheets.push(XLS.utils.make_json(sheet));
 						for(var row = 0; row < 11; row++) {
 							var tableCell = XLS.utils.encode_cell({c:0, r:row});
 							var structureCell = XLS.utils.encode_cell({c:1, r:row});
@@ -840,6 +840,7 @@
 							jsonImport.structure.tables[tableName] = tableStructure;
 						}
 					} else {
+						win.allsheets.push(XLS.utils.make_json(sheet));
 						sheetCount++;
 						// var range = sheet['!ref'];
 						// for(var cell in sheet) {
@@ -860,18 +861,28 @@
 				vm.downloadDone = true;
 				$scope.downloadDone = true;
 				// Log.l(jsonImport);
+				d.resolve(jsonImport);
+			}).catch(function(err) {
+				Log.l("readImportSpreadsheet(): Error reading spreadsheet input!");
+				Log.l(err);
+				d.reject(err);
 			});
+			return d.promise;
 		}
 
 		function jsonImportIsGood(jsonImport) {
+			Log.l("Now testing jsonImport structure...");
 			if(jsonImport &&
 				jsonImport.structure &&
 				jsonImport.structure.tables &&
 				jsonImport.data &&
 				jsonImport.data.inserts &&
+				Object.keys(jsonImport.structure.tables).length > 0 &&
 				Object.keys(jsonImport.data.inserts).length > 0) {
+				Log.l("jsonImport is good.");
 				return true;
 			} else {
+				Log.l("jsonImport is bad.");
 				return false;
 			}
 		}
@@ -886,42 +897,44 @@
 				if(yesOrNo) {
 					/* User chose yes */
 					Log.l("importOldSettings() show yes/no popup: User chose yes. Proceeding.");
-					if(jsonImportIsGood(vm.jsonImport)) {
-						// cordova.plugins.sqlitePorter.wipeDb(vm.DB, wipeFunctions);
-						$cordovaSQLitePorter.wipeDB(vm.DB).then(function(res) {
-							Log.l("$cordovaSQLitePorter.wipeDB(): Successfully wiped DB.");
-							Log.l(res);
-							$cordovaSQLitePorter.importJSON(vm.DB, vm.jsonImport).then(function(res) {
-								Log.l("$cSQLP.importJSON(): Imported %d SQL statements successfully.", res);
-								$timeout(function() { $scope.$apply(); }, 100);
-							}).catch(function(err) {
-								Log.l("$cSQLP.importJSON(): Error importing!");
+					readImportSpreadsheet().then(function(res) {
+						if(jsonImportIsGood(vm.jsonImport)) {
+							// cordova.plugins.sqlitePorter.wipeDb(vm.DB, wipeFunctions);
+							$cordovaSQLitePorter.wipeDB(vm.DB).then(function(res) {
+								Log.l("$cordovaSQLitePorter.wipeDB(): Successfully wiped DB.");
+								Log.l(res);
+								$cordovaSQLitePorter.importJSON(vm.DB, vm.jsonImport).then(function(res) {
+									Log.l("$cSQLP.importJSON(): Imported %d SQL statements successfully.", res);
+									$timeout(function() { $scope.$apply(); }, 100);
+								}).catch(function(err) {
+									Log.l("$cSQLP.importJSON(): Error importing!");
+									Log.l(err);
+								});
+							}, function(err) {
+								Log.l("$cordovaSQLitePorter.wipeDB(): Error received!");
 								Log.l(err);
+							}, function(prog) {
+								if(!(prog && prog.length)) {
+									Log.l("$cordovaSQLitePorter.wipeDB(): Progress received with improper progress event!");
+									Log.l(prog);
+								} else {
+									var count = prog[0];
+									var total = prog[1];
+									var percent = (count / total) * 100;
+									Log.l("$cordovaSQLitePorter.wipeDB(): Wiped %d / %d tables (%d%).", count, total, percent);
+								}
 							});
-						}, function(err) {
-							Log.l("$cordovaSQLitePorter.wipeDB(): Error received!");
-							Log.l(err);
-						}, function(prog) {
-							if(!(prog && prog.length)) {
-								Log.l("$cordovaSQLitePorter.wipeDB(): Progress received with improper progress event!");
-								Log.l(prog);
-							} else {
-								var count = prog[0];
-								var total = prog[1];
-								var percent = (count / total) * 100;
-								Log.l("$cordovaSQLitePorter.wipeDB(): Wiped %d / %d tables (%d%).", count, total, percent);
-							}
-						});
-					} else {
-						/* JSON data to import is not good */
-						Log.l("importOldSettings(): No proper JSON data exists!");
-						// var title = "IMPORT ERROR";
-						var title = $filter('translate')("str_import_settings").toUpperCase();
-						var text = $filter('translate')("str_import_error_message");
-						rs.code.showPopupAlertPromise(title, text).then(function(res) {
-							Log.l("Done showing popup alert about invalid import data source.");
-						});
-					}
+						} else {
+							/* JSON data to import is not good */
+							Log.l("importOldSettings(): No proper JSON data exists!");
+							// var title = "IMPORT ERROR";
+							var title = $filter('translate')("str_import_settings").toUpperCase();
+							var text = $filter('translate')("str_import_error_message");
+							rs.code.showPopupAlertPromise(title, text).then(function(res) {
+								Log.l("Done showing popup alert about invalid import data source.");
+							});
+						}
+					});
 				} else {
 					/* User chose no */
 					Log.l("importOldSettings(): User chose no. Canceling wipe and import.");

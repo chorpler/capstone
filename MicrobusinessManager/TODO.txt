@@ -6,6 +6,7 @@ BUGS
 * Hard-coded English/Spanish translations (Salary/controllers.js, etc.)
 
 NEW FEATURES
+* Add button to make sale with/without tax
 * Add supplier to product/inventory
 * Optional receipt for sale (text/email/?)
 * Optional server synchronization

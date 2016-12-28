@@ -98,17 +98,29 @@
 			timespan = afilter('translate')("str_monthly");
 		}
 
-		var userid = user.id;
-		var orgname = user.name;
-		var representative = user.representative;
-		var address = user.address;
-		var street1 = user.street1;
-		var street2 = user.street2;
-		var city = user.city;
-		var state = user.state;
-		var postal = user.postal;
-		var email = user.email;
-		var phone = user.phone;
+		// var userid = user.id;
+		// var orgname = user.name;
+		// var representative = user.representative;
+		// var address = user.address;
+		// var street1 = user.street1;
+		// var street2 = user.street2;
+		// var city = user.city;
+		// var state = user.state;
+		// var postal = user.postal;
+		// var email = user.email;
+		// var phone = user.phone;
+		var organizationHeader = { "style": "organizationheader", "stack": [] };
+		if(user) {
+			var address = "";
+			if(street2) {
+				address = street1 + "\n" + street2 + "\n" + city + " " + state + " " + postal;
+			} else {
+				address = street1 + "\n" + city + " " + state + " " + postal;
+			}
+			organizationHeader.stack.push(user.orgname);
+			organizationHeader.stack.push(user.representative);
+			organizationHeader.stack.push(user.address);
+		}
 		var reportTitle = afilter('translate')("reports_activity_log");
 		var title = reportTitle + ": " + timespan;
 		// var title = timespan + " Activity Log";
@@ -140,13 +152,6 @@
 		var strTotalExpensesHeader = afilter('translate')("str_total_expenses");
 
 		Log.l("Total income: %s. Total expenses: %s.", strTotalIncome, strTotalExpenses);
-
-		var address = "";
-		if(street2) {
-			address = street1 + "\n" + street2 + "\n" + city + " " + state + " " + postal;
-		} else {
-			address = street1 + "\n" + city + " " + state + " " + postal;
-		}
 
 		// Log.l("userid: %s, orgname: %s, rep: %s, address: %s, email: %s, phone: %s, title: %s, dateRange: %s, totalI: %s, totalE: %s, totalP: %s", userid, orgname, representative, address, email, phone, title, dateRange, strIncome, strExpenses, strProfit);
 		var transTable = {};
@@ -341,13 +346,7 @@
 					"text": strDateRange,
 					"style": "header"
 				},
-				{ "style": "organizationheader",
-					"stack": [
-						orgname,
-						representative,
-						address
-					]
-				},
+				organizationHeader,
 				transTable,
 				{
 					"style": "totalsTable",

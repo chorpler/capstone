@@ -13,23 +13,7 @@
 		var dbparams = { name: dbname, iosDatabaseLocation: 'default' };
 		var deferred = $q.defer();
 		$ionicPlatform.ready(function() {
-			db = $cordovaSQLite.openDB(dbparams);
-			window.sepidb = db;
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
-				'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
-				'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
-				'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
-			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
-			deferred.resolve();
+			initializeDB();
 		});
 
 		var service = {
@@ -43,7 +27,9 @@
 			getCommission: getCommission,
 			getDB: getDB,
 			getDBNew: getDBNew,
-			getFormats: getFormats
+			getFormats: getFormats,
+			getUserInfo: getUserInfo,
+			initializeDB: initializeDB
 		};
 
 		var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
@@ -117,6 +103,26 @@
 		var WHERE_TYPE = 'type = ? ';
 
 		return service;
+
+		function initializeDB() {
+			db = $cordovaSQLite.openDB(dbparams);
+			window.sepidb = db;
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
+				'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
+				'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
+				'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
+			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
+			deferred.resolve();
+		}
 
 		function insert(table, params) {
 			var query;
@@ -572,7 +578,30 @@
 					});
 			});
 		}
-	};
+
+		function getUserInfo() {
+			var d = $q.defer();
+			var db = 'user';
+			var query = SELECT_USER;
+			return d.promise.then(function() {
+				return $cordovaSQLite.execute(db, query, params)
+					.then(function(res) {
+							var items = [];
+							if (!res || !res.rows || !res.rows.length || res.rows.length === 0) {
+								return items;
+							}
+							for (var i = res.rows.length - 1; i >= 0; i--) {
+								var item = res.rows.item(i);
+								/* id, dateformat */
+								items.push(item);
+							}
+							return items[0];
+					}, function(err) {
+						Log.l(err);
+					});
+			});
+		}
+	}
 
 	function CashBalance(Database, $q) {
 		var my = this;
