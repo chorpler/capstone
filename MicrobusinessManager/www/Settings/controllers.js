@@ -256,9 +256,10 @@
 		function changeLanguage (language) {
 			$translate.use(language.type).then(function (data) {
 				if (language.type === 'es') {
-					tmhDynamicLocale.set('es-ec');
-				}
-				else if (language.type === 'en') {
+					tmhDynamicLocale.set('es-mx');
+				} else if(language.type === 'pt') {
+					tmhDynamicLocale.set('pt-br');
+				} else if (language.type === 'en') {
 					tmhDynamicLocale.set('en-us');
 				}
 				Database.select(languageTable).then(function (response) {
@@ -397,18 +398,21 @@
 		}
 
 		function saveUserEdit (item, form, $event) {
-			Log.l("Settings: Now in saveUserEdit() ...");
+			Log.l("Settings: Now in saveUserEdit(item, form, $event). Item is:");
+			Log.l(item);
+			window.item1 = item;
 			$event.stopPropagation();
 			if (form && form.$invalid) {
 				return;
 			}
 			vm.submitted = true;
+			var insertData = [item.name, item.representative, item.street1, item.street2, item.city, item.state, item.postal, item.email, item.phone];
 			if(!item.id) {
-	 			Database.insert(userTable, [item.name, item.representative, item.street1, item.street2, item.city, item.state, item.postal, item.email, item.phone]).then(function(response) {
+	 			Database.insert(userTable, insertData).then(function(response) {
 	 				item.id = response.insertId;
 				});
 			} else {
-				Database.update(userTable, item.id, [item.name, item.representative, item.street1, item.street2, item.city, item.state, item.postal, item.email, item.phone]);
+				Database.update(userTable, item.id, insertData);
 			}
 
 			// vm.activeTax = null;
@@ -840,7 +844,7 @@
 				for(var i in sheet_name_list) {
 					var sheetname = sheet_name_list[i];
 					var sheet = workbook.Sheets[sheetname];
-					if(i == 'db_tables') {
+					if(sheetname == 'db_tables') {
 						// for(var row = 0; row < 11; row++) {
 						// 	var tableCell = XLS.utils.encode_cell({c:0, r:row});
 						// 	var structureCell = XLS.utils.encode_cell({c:1, r:row});
@@ -865,7 +869,7 @@
 								}
 							}
 						}
-						jsonImport.data.inserts[i] = jsonSheet;
+						jsonImport.data.inserts[sheetname] = jsonSheet;
 					}
 				}
 				Log.l("Done processing worksheets. Total of %d sheets loaded.", sheetCount);

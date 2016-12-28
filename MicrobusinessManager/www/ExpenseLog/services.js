@@ -99,17 +99,16 @@
 		// var postal = user.postal;
 		// var email = user.email;
 		// var phone = user.phone;
-		var organizationHeader = { "style": "organizationheader", "stack": [] };
-		if(user) {
+		var organizationHeader = { "style": "organizationheader", "text": "" };
+		if(user && user.length) {
 			var address = "";
-			if(street2) {
-				address = street1 + "\n" + street2 + "\n" + city + " " + state + " " + postal;
+			if(user.street2) {
+				address = user.street1 + "\n" + user.street2 + "\n" + user.city + " " + user.state + " " + user.postal;
 			} else {
-				address = street1 + "\n" + city + " " + state + " " + postal;
+				address = user.street1 + "\n" + user.city + " " + user.state + " " + user.postal;
 			}
-			organizationHeader.stack.push(user.orgname);
-			organizationHeader.stack.push(user.representative);
-			organizationHeader.stack.push(user.address);
+			delete organizationHeader.text;
+			organizationHeader.stack = [user.orgname, user.representative, address];
 		}
 		var title = afilter('translate')("reports_expense_log") + ": " + afilter('translate')(timespan);
 		// title = titleCase(title);

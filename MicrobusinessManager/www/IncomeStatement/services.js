@@ -11,7 +11,7 @@
 				// Log.l(JSON.stringify(report));
 				// Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
-				// Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd));
+				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, null, 2));
 				var pdf = pdfMake.createPdf(dd);
 
 				pdf.getBase64(function(output) {
@@ -41,6 +41,10 @@
 		Log.l("Now in createDocumentDefinition() ...");
 		var isr = report;
 		var rdata = reportData;
+		Log.l("IAR: Now in createDocumentDefinition(). report, user, and reportData are:");
+		Log.l(report);
+		Log.l(user);
+		Log.l(reportData);
 		// Log.l(" report: %s\n user: %s\n reportData: %s", JSON.stringify(report), JSON.stringify(user), JSON.stringify(reportData));
 		var items = isr.incomeItems.map(function(item) {
 			var arrItem = [];
@@ -97,17 +101,16 @@
 		// var postal = user.postal;
 		// var email = user.email;
 		// var phone = user.phone;
-		var organizationHeader = { "style": "organizationheader", "stack": [] };
-		if(user) {
+		var organizationHeader = { "style": "organizationheader", "text": "" };
+		if(user && user.length) {
 			var address = "";
-			if(street2) {
-				address = street1 + "\n" + street2 + "\n" + city + " " + state + " " + postal;
+			if(user.street2) {
+				address = user.street1 + "\n" + user.street2 + "\n" + user.city + " " + user.state + " " + user.postal;
 			} else {
-				address = street1 + "\n" + city + " " + state + " " + postal;
+				address = user.street1 + "\n" + user.city + " " + user.state + " " + user.postal;
 			}
-			organizationHeader.stack.push(user.orgname);
-			organizationHeader.stack.push(user.representative);
-			organizationHeader.stack.push(user.address);
+			delete organizationHeader.text;
+			organizationHeader.stack = [user.orgname, user.representative, address];
 		}
 		var reportTitle = afilter('translate')("reports_income_statement");
 		var title = reportTitle + ": " + timespan;

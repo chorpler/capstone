@@ -2,6 +2,8 @@ BUGS
 * (2016-12-27 fixed) Fix settings user won't open
 * (2016-12-27 fixed) Expenses won't take input after add
 * (2016-12-27 fixed) Change input types to numbers where appropriate
+* (2016-12-28 fixed) Income Statement not creating PDF report when user info not entered
+* (2016-12-28 fixed) Import spreadsheet not working
 * Popup Menus are not wide enough for Spanish text
 * Hard-coded English/Spanish translations (Salary/controllers.js, etc.)
 

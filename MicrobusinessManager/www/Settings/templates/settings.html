@@ -12,10 +12,11 @@
 					{{"settings_language_options" | translate}}
 				</div>
 				<select ng-model="settings.language.type" ng-change="settings.changeLanguage(settings.language)">
-					<option value="en">{{"english_language" | translate}}</option>
-					<option value="es">{{"spanish_language" | translate}}</option>
-					<!-- <option value="en">Inglés</option> -->
-					<!-- <option value="es">Español</option> -->
+					<!-- <option value="en">{{"english_language" | translate}}</option> -->
+					<!-- <option value="es">{{"spanish_language" | translate}}</option> -->
+					<option value="en">English</option>
+					<option value="es">Español</option>
+					<option value="es">Português</option>
 				</select>
 			</label>
 			<div class="item item-divider">
@@ -27,7 +28,7 @@
 						<i class="icon ion-chevron-right"></i>
 						<div class="row">
 							<div class="col">
-								<span class="amount-container">{{"str_date" | translate}}: {{settings.formats.dateformat}}</span>
+								<span class="amount-container">{{"str_date" | translate}}: {{settings.formats.dateformat || "YYYY-MM-DD"}}</span>
 							</div>
 						</div>
 					</a>

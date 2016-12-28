@@ -1,21 +1,13 @@
 <ion-modal-view class="pdf-viewer">
-<!-- 	<ion-nav-buttons side="right">
-		<button class="button button-icon icon ion-android-menu" ng-click="income.openPDFPopover($event)"></button>
-	</ion-nav-buttons> -->
 	<ion-header-bar>
 		<h1 class="title" ng-show="vm.pdfViewerNumber == 1">{{"reports_income_statement" | translate}}</h1>
 		<h1 class="title" ng-show="vm.pdfViewerNumber == 2">{{"reports_activity_log" | translate}}</h1>
 		<h1 class="title" ng-show="vm.pdfViewerNumber == 3">{{"reports_sales_reports" | translate}}</h1>
 		<h1 class="title" ng-show="vm.pdfViewerNumber == 4">{{"reports_expense_log" | translate}}</h1>
-		<!-- <button ng-click="income.pdfModal.hide()" class="button button-icon icon ion-android-close"></button> -->
-		<!-- <button ng-click="income.closePDFViewer()" class="button button-icon icon ion-android-close"></button> -->
 		<button class="button button-icon icon ion-more menu-button-pdf-viewer" ng-click="vm.openPDFPopover($event)"></button>
 	</ion-header-bar>
 	<ion-content>
-		<!-- <h1 class="alert" ng-if="!pdfURL">{{vm.loading}}</h1> -->
 		<h1 class="alert" ng-show="!(pdfLoaded == true)">{{loadingVar}}</h1>
-		<!-- <h1 class="title" ng-hide="vm.pdfLoaded">Loading...</h1> -->
-		<!-- <ng-pdf ng-if="pdfUrl" template-url="templates/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf> -->
 		<ng-pdf ng-if="pdfUrl" template-url="templates/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>
 	</ion-content>
 </ion-modal-view>

@@ -2,9 +2,23 @@
 	angular.module('app.sales')
 	.controller('SalesController', SalesController);
 
-	function SalesController ($scope, $ionicModal, $q, products, Database, categories, CashBalance, $filter, tax) {
+	function SalesController ($scope, $rootScope, $ionicModal, $q, $persist, products, Database, categories, CashBalance, $filter, tax) {
 
 		var vm = this;
+		var win = window;
+		win.sepi = {};
+		win.sepi.persist = $persist;
+		win.sepi.scope = $scope;
+		win.sepi.db = Database;
+		var rs = $rootScope;
+		rs = $rootScope;
+		vm.code = rs.code;
+		win.sepi.code = $rootScope.code;
+		win.sepi.rs = $rootScope;
+		vm.scopes = vm.scopes || {};
+		vm.scopes.root = $rootScope;
+		vm.scopes.sales = $scope;
+		win.vm = vm;
 
 		vm.products            = products;
 		vm.categories          = categories;
