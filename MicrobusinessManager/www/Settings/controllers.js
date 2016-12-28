@@ -95,7 +95,7 @@
 		vm.jsonImport = {};
 		vm.workbook = null;
 		// vm.modals = vm.modals || {};
-		vm.modals = vm.modals || {popupMenu: [], download: [], formats: [], export: []};
+		vm.modals = vm.modals || {popupMenu: [], download: [], formats: [], export: [], user:[]};
 		win.modals = vm.modals;
 
 		// win.showPopupYesNo = vm.showPopupYesNo;
@@ -826,19 +826,30 @@
 				win.jsonImport = jsonImport;
 				var sheet_name_list = workbook.SheetNames;
 				var sheetCount = 0;
+				var dbsheet = workbook.Sheets.db_tables;
+				win.allsheets.push(XLS.utils.make_json(dbsheet));
+				for(var row = 0; row < 11; row++) {
+					var tableCell = XLS.utils.encode_cell({c:0, r:row});
+					var structureCell = XLS.utils.encode_cell({c:1, r:row});
+					Log.l("Now checking db_tables!%s and %s ...", tableCell, structureCell);
+					var tableName = workbook.Sheets.db_tables[tableCell].v;
+					var tableStructure = workbook.Sheets.db_tables[structureCell].v;
+					jsonImport.structure.tables[tableName] = tableStructure;
+				}
+
 				for(var i in sheet_name_list) {
 					var sheetname = sheet_name_list[i];
 					var sheet = workbook.Sheets[sheetname];
 					if(i == 'db_tables') {
-						win.allsheets.push(XLS.utils.make_json(sheet));
-						for(var row = 0; row < 11; row++) {
-							var tableCell = XLS.utils.encode_cell({c:0, r:row});
-							var structureCell = XLS.utils.encode_cell({c:1, r:row});
-							Log.l("Now checking db_tables!%s and %s ...", tableCell, structureCell);
-							var tableName = workbook.Sheets.db_tables[tableCell].v;
-							var tableStructure = workbook.Sheets.db_tables[structureCell].v;
-							jsonImport.structure.tables[tableName] = tableStructure;
-						}
+						// for(var row = 0; row < 11; row++) {
+						// 	var tableCell = XLS.utils.encode_cell({c:0, r:row});
+						// 	var structureCell = XLS.utils.encode_cell({c:1, r:row});
+						// 	Log.l("Now checking db_tables!%s and %s ...", tableCell, structureCell);
+						// 	var tableName = workbook.Sheets.db_tables[tableCell].v;
+						// 	var tableStructure = workbook.Sheets.db_tables[structureCell].v;
+						// 	jsonImport.structure.tables[tableName] = tableStructure;
+						// }
+						continue;
 					} else {
 						win.allsheets.push(XLS.utils.make_json(sheet));
 						sheetCount++;
