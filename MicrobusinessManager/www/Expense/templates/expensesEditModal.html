@@ -3,8 +3,9 @@
 		<h1 class="title">{{expenses.editviewOpen ? "edit_title" : "new_title" | translate}} {{"expenses_new_expense" | translate}}</h1>
 		<div class="buttons">
 			<button class="button button-clear button-positive" ng-click="expenses.showConfirm()" ng-show="expenses.editviewOpen">
-				<i class="icon ion-trash-b"></i></button>
-  	</div>
+				<i class="icon ion-trash-b"></i>
+			</button>
+		</div>
 	</ion-header-bar>
 	<ion-content class="expensesEdit">
 		<div class="list">
@@ -20,13 +21,7 @@
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"expense_amount" | translate}}</span>
-					<input type="text"
-						   smart-float
-						   name="amount"
-						   ng-pattern="numberPattern"
-						   step="0.01"
-						   placeholder="{{'expense_amount' | translate}}*"
-						   ng-model="expenses.activeExpense.amount" required="required">
+					<input type="number" smart-float name="amount" ng-pattern="numberPattern" step="0.01" placeholder="{{'expense_amount' | translate}}*" ng-model="expenses.activeExpense.amount" required="required" />
 					<div ng-show="(expenseForm.name.$touched || expenseForm.$submitted) && !expenses.submitted">
 						<span ng-show="expenseForm.amount.$error.pattern" class="form-error">
 							{{"invalid_number_error" | translate}}
@@ -58,8 +53,8 @@
 				</label>
 				<label class="item item-input">
 					<span class="input-label">{{"inv_exp_sal_date" | translate}}<span ng-show="!expenses.editviewOpen">*</span></span>
-		    		<input placeholder="{{'inv_exp_sal_date' | translate}}" type="date" ng-model="expenses.activeExpense.date" required="required">
-	  			</label>
+					<input id="expensesDateInput" class="expensesDateInput" placeholder="{{'inv_exp_sal_date' | translate}}" type="date" ng-model="expenses.activeExpense.date" required="required">
+				</label>
 				<input type="submit" class="button button-block button-balanced" ng-click="expenses.save(expenses.activeExpense, expenseForm, $event)" value="{{'save_button' | translate}}">
 				</input>
 				<button class="button button-block button-assertive" ng-click="expenses.cancel(expenses.activeExpense)">

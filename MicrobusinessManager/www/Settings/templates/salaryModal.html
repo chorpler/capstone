@@ -16,7 +16,7 @@
 			<label class="item item-input inline-container">
 				<div class="input-container">
 					<span class="input-label">{{settings.activeSalary.type === 'salary' ? "payment_amount": "salary_percentage" | translate}}</span>
-					<input 	type="text"
+					<input type="number"
 							name="amount"
 							smart-float
 							ng-pattern="numberPattern"
@@ -35,7 +35,7 @@
 					</span>
 				</div>
 			</label>
-			<input 	type="submit"
+			<input type="submit"
 					class="button button-block button-balanced"
 					ng-click="settings.save(settings.activeSalary, salaryForm, $event)"
 					value="{{'save_button' | translate}}">

@@ -468,7 +468,6 @@
 				}
 			}
 		}
-
 		setHashKey(dst, h);
 		return dst;
 	}
@@ -658,7 +657,9 @@
 		return csvOut;
 	}
 
-
+	function getKeys(obj) {
+		return isDef(obj) ? Object.keys(obj) : null;
+	}
 
 	u.isFunc    = isFunction     ;
 	u.isNum     = isNumber       ;
@@ -680,6 +681,7 @@
 	u.titleCase = titleCase      ;
 	u.csv2json  = csv2json       ;
 	u.json2csv  = json2csv       ;
+	u.getKeys   = getKeys        ;
 
 	Object.defineProperty(u, "toScript", {
 		"configurable": true,
@@ -699,7 +701,7 @@ function globalizeFunc(funcName) {
 	}
 }
 
-var fns = ['isFunc', 'isNum', 'isBool', 'isStr', 'isArr', 'isObj', 'isUndef', 'isDef', 'sizeOf', 'isEmpty', 'merge', 'blankOut', 'slice', 'rotate', 'salength', 'last', 'toArray', 'titleCase', 'csv2json', 'json2csv'];
+var fns = ['isFunc', 'isNum', 'isBool', 'isStr', 'isArr', 'isObj', 'isUndef', 'isDef', 'sizeOf', 'isEmpty', 'merge', 'blankOut', 'slice', 'rotate', 'salength', 'last', 'toArray', 'titleCase', 'csv2json', 'json2csv', 'getKeys'];
 
 for(var name in fns) {
 	globalizeFunc(fns[name]);

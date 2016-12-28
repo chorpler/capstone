@@ -21,7 +21,7 @@
 				</label>
 				<label class="item item-input item-floating-label">
 					<span class="input-label">{{"product_sales_price" | translate}}</span>
-					<input 	type="text"
+					<input 	type="number"
 							name="salesPrice"
 							step="0.01"
 							smart-float
@@ -65,7 +65,7 @@
 				<ion-checkbox ng-model="products.activeItem.linkInventory">{{"product_add_inventory" | translate}}</ion-checkbox>
 				<label class="item item-input item-floating-label" ng-show="products.activeItem.linkInventory">
 					<span class="input-label">{{"inventory_quantity" | translate}}</span>
-					<input 	type="text"
+					<input 	type="number"
 							name="quantity"
 							smart-field
 							ng-pattern="numberPattern"
@@ -84,7 +84,7 @@
 				</label>
 				<label class="item item-input item-floating-label" ng-if="!products.activeItem.inventoryid && products.activeItem.linkInventory">
 					<span class="input-label">{{"inventory_total_cost" | translate}}</span>
-					<input 	type="text"
+					<input 	type="number"
 							name="cost"
 							smart-field
 							ng-pattern="numberPattern"

@@ -59,7 +59,7 @@
 
 		var INSERT_EXPENSE = 'INSERT INTO expense (name, amount, expType, comments, date, type) VALUES (?, ?, ?, ?, ?, ?)';
 		var SELECT_EXPENSE = 'SELECT id, name, amount, expType, comments, date, type FROM expense';
-		var SELECT_EXP = 'SELECT name, amount, expType, type FROM expense  WHERE type = \'other\' GROUP BY name';
+		var SELECT_EXP = 'SELECT id, name, amount, expType, type FROM expense WHERE type = \'other\' GROUP BY name';
 		var UPDATE_EXPENSE = 'UPDATE expense set name = ?, amount = ?, expType = ?, comments = ?, date = ?, type = ? ';
 		var REMOVE_EXPENSE = 'DELETE FROM expense';
 
@@ -369,6 +369,7 @@
 		}
 
 		function calculateCashOnHand(startDate, endDate) {
+			var d = $q.defer();
 			var queryStart = 'SELECT total(amount) as total FROM ';
 			var queryExpense = '(SELECT total(amount) * -1 as amount FROM expense ';
 			var queryUnion = ' UNION ';
@@ -412,12 +413,22 @@
 			params = params.concat(params).concat(params);
 
 			return deferred.promise.then(function() {
-				return $cordovaSQLite.execute(db, query, params).then(function(response) {
-					return response;
-				}, function(err) {
-					console.log(err);
-				});
+				return $cordovaSQLite.execute(db, query, params);
+			}).then(function(res) {
+					// d.resolve(res);
+					return res;
+			}).catch(function(err) {
+				Log.l("Error in calculateCashOnHand()!");
+				Log.l(err);
+				d.reject(err);
 			});
+			// return deferred.promise.then(function() {
+			// 	return $cordovaSQLite.execute(db, query, params).then(function(response) {
+			// 		return response;
+			// 	}, function(err) {
+			// 		console.log(err);
+			// 	});
+			// });
 		}
 
 		function generateIncomeStatement(startDate, endDate, groupBy) {
@@ -546,7 +557,8 @@
 		}
 	};
 
-	function CashBalance(Database) {
+	function CashBalance(Database, $q) {
+		var my = this;
 		var currentCashBalance;
 
 		var service = {
@@ -557,9 +569,17 @@
 				return currentCashBalance = val;
 			},
 			updateCashBalance: function() {
-				return Database.calculateCashOnHand().then(function(response) {
-					return currentCashBalance = response.rows.item(0).total;
+				var d = $q.defer();
+				Database.calculateCashOnHand().then(function(response) {
+					var curBal = response.rows.item(0).total;
+					currentCashBalance = curBal;
+					d.resolve(curBal);
+				}).catch(function(err) {
+					Log.l("Error with CashBalance.updateCashBalance()");
+					Log.l(err);
+					d.reject(err);
 				});
+				return d.promise;
 			}
 		};
 

@@ -1,43 +1,43 @@
 <ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">{{"register_button" | translate}}</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="settings.closeRegistration()">
-        <span class="back-color">{{'close_button' | translate}}</span></button>
-    </div>
-  </ion-header-bar>
-  <ion-content>
-    <div class="card" ng-show="settings.userRegistration.error">
-      <div class="item item-text-wrap assertive">
-        Error: {{settings.userRegistration.error}}
-      </div>
-    </div>
-    <form name = "registerform" ng-submit="settings.submitRegistrationRequest()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">{{"settings_username" | translate}}*</span>
-          <input type="text" ng-model="settings.userRegistration.username" required="required">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">{{"settings_password" | translate}}*</span>
-          <input type="password" ng-model="settings.userRegistration.password" required="required">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">{{"settings_confirm_password" | translate}}*</span>
-          <input type="password" ng-model="settings.userRegistration.confirmPassword" required="required">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">{{"settings_email" | translate}}</span>
-          <input type="email" ng-model="settings.userRegistration.email">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">{{"settings_phone" | translate}}</span>
-          <input type="text" ng-model="settings.userRegistration.phone">
-        </label>
-        <label class="item">
-          <button class="button button-block button-positive" type="submit" ng-disabled="registerform.$invalid">{{"register_button" | translate}}</button>
-        </label>
-      </div>
-    </form>
-  </ion-content>
+	<ion-header-bar>
+		<h1 class="title">{{"register_button" | translate}}</h1>
+		<div class="buttons">
+			<button class="button button-clear" ng-click="settings.closeRegistration()">
+				<span class="back-color">{{'close_button' | translate}}</span></button>
+		</div>
+	</ion-header-bar>
+	<ion-content>
+		<div class="card" ng-show="settings.userRegistration.error">
+			<div class="item item-text-wrap assertive">
+				Error: {{settings.userRegistration.error}}
+			</div>
+		</div>
+		<form name = "registerform" ng-submit="settings.submitRegistrationRequest()">
+			<div class="list">
+				<label class="item item-input">
+					<span class="input-label">{{"settings_username" | translate}}*</span>
+					<input type="text" ng-model="settings.userRegistration.username" required="required">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_password" | translate}}*</span>
+					<input type="password" ng-model="settings.userRegistration.password" required="required">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_confirm_password" | translate}}*</span>
+					<input type="password" ng-model="settings.userRegistration.confirmPassword" required="required">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_email" | translate}}</span>
+					<input type="email" ng-model="settings.userRegistration.email">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">{{"settings_phone" | translate}}</span>
+					<input type="text" ng-model="settings.userRegistration.phone">
+				</label>
+				<label class="item">
+					<button class="button button-block button-positive" type="submit" ng-disabled="registerform.$invalid">{{"register_button" | translate}}</button>
+				</label>
+			</div>
+		</form>
+	</ion-content>
 </ion-modal-view>

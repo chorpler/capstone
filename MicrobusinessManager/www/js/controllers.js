@@ -3,7 +3,7 @@
 	// .controller('AppController', ['$scope', '$q', '$ionicModal', 'ReportService', AppController]);
 	.controller('AppController', AppController);
 
-	function AppController (CashBalance, $q, $scope, $rootScope, $ionicPopover, $cordovaSQLite, $ionicPopup, $timeout, Database, $cordovaSQLitePorter, $cordovaFile) {
+	function AppController (CashBalance, $q, $scope, $rootScope, $filter, $ionicPopover, $cordovaSQLite, $ionicPopup, $timeout, Database, $cordovaSQLitePorter, $cordovaFile) {
 		var vm = this;
 		var win = window;
 		
@@ -12,16 +12,16 @@
 		win.cSQL = $cordovaSQLite;
 		win.cSQLP = $cordovaSQLitePorter;
 		win.cFile = $cordovaFile;
-		win.rs = $rootScope;
 		rs = $rootScope;
-		win.rs.code = {};
-		win.rs.code.getDateFormat = getDateFormat;
-		win.rs.code.showPopupAlert = showPopupAlert;
-		win.rs.code.showPopupAlertPromise = showPopupAlertPromise;
-		win.rs.code.showPopupConfirm = showPopupConfirm;
-		win.rs.code.showPopupCustomConfirm = showPopupCustomConfirm;
-		win.rs.code.showPopupYesNo = showPopupYesNo;
-		win.rs.code.showInnerPopupYesNo = showInnerPopupYesNo;
+		win.rs = rs;
+		rs.code = {};
+		rs.code.getDateFormat = getDateFormat;
+		rs.code.showPopupAlert = showPopupAlert;
+		rs.code.showPopupAlertPromise = showPopupAlertPromise;
+		rs.code.showPopupConfirm = showPopupConfirm;
+		rs.code.showPopupCustomConfirm = showPopupCustomConfirm;
+		rs.code.showPopupYesNo = showPopupYesNo;
+		rs.code.showInnerPopupYesNo = showInnerPopupYesNo;
 
 		var formats = Database.getFormats();
 
@@ -213,10 +213,11 @@
 		}
 
 		function showPopupYesNo(title, text) {
-			$scope = rs = scope1 = scope = rscope = $rootScope;
+			var btnYes = $filter('translate')("str_yes");
+			var btnNo = $filter('translate')("str_no");
 			var arrButtons = [
-				{text: 'No', type: 'button-calm', onTap: function(e) { return false;}},
-				{text: 'Yes', type: 'button-assertive', onTap: function(e) { return true;}}
+				{text: btnNo, type: 'button-calm', onTap: function(e) { return false;}},
+				{text: btnYes, type: 'button-assertive', onTap: function(e) { return true;}}
 			];
 			var yesnopopup = $ionicPopup.show({
 				title: title,
@@ -229,10 +230,11 @@
 		}
 
 		function showInnerPopupYesNo(title, text) {
-			$scope = rs = scope1 = scope = rscope = $rootScope;
+			var btnYes = $filter('translate')("str_yes");
+			var btnNo = $filter('translate')("str_no");
 			var arrButtons = [
-				{text: 'No', type: 'button-calm', onTap: function(e) { return false;}},
-				{text: 'Yes', type: 'button-assertive', onTap: function(e) { return true;}}
+				{text: btnNo, type: 'button-calm', onTap: function(e) { return false;}},
+				{text: btnYes, type: 'button-assertive', onTap: function(e) { return true;}}
 			];
 			var yesnoconfirm = $ionicPopup.confirm({
 				title: title,
