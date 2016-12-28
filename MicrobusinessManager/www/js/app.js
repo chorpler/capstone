@@ -337,7 +337,7 @@
 		$translateProvider.fallbackLanguage("en");
 
 		// Enable sanitization via escaping of HTML
-		$translateProvider.useSanitizeValueStrategy('sanitize');
+		$translateProvider.useSanitizeValueStrategy('escape');
 
 
 		// if none of the above states are matched, use this as the fallback
