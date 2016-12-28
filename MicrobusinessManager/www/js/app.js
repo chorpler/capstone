@@ -167,7 +167,7 @@
 		commission_too_high_error: ["Commission cannot be higher than 100%", "La Comisión no puede ser superior al 100%"],
 		user_options: ["Organization Info", "Información de la Organización"],
 		org_title: ["Organization", "Organización"],
-		org_name: ["Organization Name", "Nombre de la Organización"],
+		org_name: ["Organization Name", "Negocio"],
 		org_rep: ["Representative", "Representante"],
 		org_address: ["Address", "Dirección"],
 		org_street1: ["Street Address 1", "Dirección 1"],

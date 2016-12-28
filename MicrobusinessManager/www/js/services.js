@@ -78,6 +78,11 @@
 		var UPDATE_SALARY = 'UPDATE salary set amount = ?, type = ? ';
 		var REMOVE_SALARY = 'DELETE FROM salary';
 
+		var INSERT_SALARY_DATED = 'INSERT INTO salary (amount, type, date) VALUES (?, ?, ?)';
+		var SELECT_SALARY_DATED = 'SELECT id, amount, type, date FROM salary';
+		var UPDATE_SALARY_DATED = 'UPDATE salary set amount = ?, type = ?, date= ? ';
+		var REMOVE_SALARY_DATED = 'DELETE FROM salary';
+
 		var INSERT_LANGUAGES = 'INSERT INTO languages (type) VALUES (?)';
 		var SELECT_LANGUAGES = 'SELECT id, type FROM languages';
 		var UPDATE_LANGUAGES = 'UPDATE languages set type = ? ';
@@ -134,6 +139,9 @@
 				case 'salary':
 					query = INSERT_SALARY;
 					break;
+				case 'salary_dated':
+					query = INSERT_SALARY_DATED;
+					break;
 				case 'languages':
 					query = INSERT_LANGUAGES;
 					break;
@@ -185,6 +193,9 @@
 					break;
 				case 'salary':
 					query = SELECT_SALARY;
+					break;
+				case 'salary_dated':
+					query = INSERT_SALARY_DATED;
 					break;
 				case 'languages':
 					query = SELECT_LANGUAGES;
@@ -271,6 +282,9 @@
 				case 'salary':
 					query = UPDATE_SALARY;
 					break;
+				case 'salary_dated':
+					query = INSERT_SALARY_DATED;
+					break;
 				case 'languages':
 					query = UPDATE_LANGUAGES;
 					break;
@@ -326,6 +340,9 @@
 					break;
 				case 'salary':
 					query = REMOVE_SALARY;
+					break;
+				case 'salary_dated':
+					query = INSERT_SALARY_DATED;
 					break;
 				case 'languages':
 					query = REMOVE_LANGUAGES;

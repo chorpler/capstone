@@ -95,7 +95,7 @@
 		vm.jsonImport = {};
 		vm.workbook = null;
 		// vm.modals = vm.modals || {};
-		vm.modals = vm.modals || {popupMenu: [], download: [], formats: [], export: [], user: []};
+		vm.modals = vm.modals || {popupMenu: [], download: [], formats: [], export: []};
 		win.modals = vm.modals;
 
 		// win.showPopupYesNo = vm.showPopupYesNo;
@@ -349,7 +349,7 @@
 			Log.l("Settings: Now in userEdit()");
 			getUserData().then(function() {
 				if (vm.organization && vm.organization.name) {
-					vm.activeOrg = organization;
+					vm.activeOrg = vm.organization;
 				} else {
 					vm.activeOrg = {};
 				}
@@ -617,7 +617,7 @@
 		}
 
 
-
+		
 		function createExportModal($scope) {
 			Log.l("Settings: now in createExportModal() ...");
 			return $ionicModal.fromTemplateUrl('Settings/templates/export.html', {
@@ -651,7 +651,7 @@
 		}
 
 		// Setttings model:
-		// user:
+		// user: 
 		function exportSettings() {
 			Log.l("Settings: now in exportSettings() ...");
 			// vm.popupMenu.remove();
@@ -743,7 +743,7 @@
 			// });
 
 		}
-
+		
 		function downloadCSVFile() {
 			Log.l("Settings: now in downloadCSVFile() ...");
 			if (!vm.downloadFile.fileurl) {

@@ -19,7 +19,6 @@
 			});
 		}
 
-
 		var service = {
 			createActivityLogPdf: createPdf
 		};
