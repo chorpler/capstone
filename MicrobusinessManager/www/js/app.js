@@ -241,7 +241,8 @@
 		str_delete_expense_text: ["Are you sure you want to delete this expense?", "¿Seguro que quieres borrar este gasto?", "Tem certeza de que deseja excluir essa despesa?"],
 		str_delete: ["Delete", "Borrar", "Excluir"],
 		str_yes: ["Yes", "Si", "Sim"],
-		str_no: ["No", "No", "Não"]
+		str_no: ["No", "No", "Não"],
+		str_not_implemented: ["Feature not implemented in this version.", "Característica no implementada en esta versión.", "Recurso não implementado nesta versão."]
 	};
 
 	function getStringSet(strings, index) {

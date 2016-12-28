@@ -86,6 +86,7 @@
 		vm.importOldSettings = importOldSettings;
 		vm.wipeLocalDatabase = wipeLocalDatabase;
 		vm.saveExportSpreadsheet = saveExportSpreadsheet;
+		vm.notImplemented = notImplemented;
 		// vm.showPopupYesNo = showPopupYesNo;
 		vm.downloadModal = null;
 		vm.exportModal = null;
@@ -156,6 +157,12 @@
 				// return vm.createExportModal($scope);
 			// }).then(function(res) {
 			// });
+		}
+
+		function notImplemented() {
+			var title = $filter('translate')("str_error");
+			var text = $filter('translate')("str_not_implemented");
+			rs.code.showPopupAlert(title, text);
 		}
 
 		function showLoginModal () {

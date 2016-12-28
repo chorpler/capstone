@@ -12,7 +12,6 @@
 		var db = null;
 		var dbname = 'my.db';
 		var dbparams = { name: dbname, iosDatabaseLocation: 'default' };
-		// var dbparams = { name: dbname, location: 'default' };
 		var deferred = $q.defer();
 		var SQLite = null;
 		$ionicPlatform.ready(function() {
@@ -37,21 +36,6 @@
 			Log.l("Database: done making sure tables exist!");
 			deferred.resolve();
 		});
-
-
-		// 	db = new IonicNative.SQLite();
-		// 	window.SEPIDB = db;
-		// 	Log.l("Database: ionicPlatform ready fired, now initializing database...");
-		// 	initializeDB().then(function(res) {
-		// 		Log.l("Database: initialization complete.");
-		// 		deferred.resolve(res);
-		// 	}).catch(function(err) {
-		// 		Log.l("Database: initialization error!");
-		// 		Log.l(err);
-		// 		win.err1 = err;
-		// 		deferred.reject(err);
-		// 	});
-		// });
 
 		var service = {
 			insert: insert,
