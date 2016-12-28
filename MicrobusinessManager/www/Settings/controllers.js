@@ -145,7 +145,7 @@
 			// vm.downloadFile.fileurl = "https://docs.google.com/spreadsheets/d/17SAlhDDJXnb60X6xZwKx7BGiaoVsnl6uEtqNCJo_Mv4/pub?output=xlsx";
 			vm.downloadFile.fileurl = "https://docs.google.com/spreadsheets/d/11KQKk92RJFsi7N7EC6pzXtxwEXhXWhrxaIaoyrhri6U/pub?output=xlsx";
 
-			vm.DB = Database.getDB();
+			vm.DB = Database.getDB();vm
 			win.DB1 = vm.DB;
 			vm.createPopupMenu(vm.scopes.settings).then(function(res) {
 				Log.l("Settings: Init() finished!");
@@ -915,29 +915,29 @@
 					readImportSpreadsheet().then(function(res) {
 						if(jsonImportIsGood(vm.jsonImport)) {
 							// cordova.plugins.sqlitePorter.wipeDb(vm.DB, wipeFunctions);
-							$cordovaSQLitePorter.wipeDB(vm.DB).then(function(res) {
-								Log.l("$cordovaSQLitePorter.wipeDB(): Successfully wiped DB.");
+							// $cordovaSQLitePorter.wipeDB(vm.DB).then(function(res) {
+							Database.wipeDatabase().then(function(res) {
+								Log.l("importSettings(): Successfully wiped DB.");
 								Log.l(res);
 								$cordovaSQLitePorter.importJSON(vm.DB, vm.jsonImport).then(function(res) {
 									Log.l("$cSQLP.importJSON(): Imported %d SQL statements successfully.", res);
 									$timeout(function() { $scope.$apply(); }, 100);
-								}).catch(function(err) {
-									Log.l("$cSQLP.importJSON(): Error importing!");
-									Log.l(err);
 								});
-							}, function(err) {
-								Log.l("$cordovaSQLitePorter.wipeDB(): Error received!");
+							// }, function(err) {
+							}).catch(function(err) {
+								Log.l("importSettings(): While blanking database, error received!");
 								Log.l(err);
-							}, function(prog) {
-								if(!(prog && prog.length)) {
-									Log.l("$cordovaSQLitePorter.wipeDB(): Progress received with improper progress event!");
-									Log.l(prog);
-								} else {
-									var count = prog[0];
-									var total = prog[1];
-									var percent = (count / total) * 100;
-									Log.l("$cordovaSQLitePorter.wipeDB(): Wiped %d / %d tables (%d%).", count, total, percent);
-								}
+							// }
+							// , function(prog) {
+							// 	if(!(prog && prog.length)) {
+							// 		Log.l("$cordovaSQLitePorter.wipeDB(): Progress received with improper progress event!");
+							// 		Log.l(prog);
+							// 	} else {
+							// 		var count = prog[0];
+							// 		var total = prog[1];
+							// 		var percent = (count / total) * 100;
+							// 		Log.l("$cordovaSQLitePorter.wipeDB(): Wiped %d / %d tables (%d%).", count, total, percent);
+							// 	}
 							});
 						} else {
 							/* JSON data to import is not good */

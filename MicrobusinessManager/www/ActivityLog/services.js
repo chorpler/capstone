@@ -38,7 +38,7 @@
 	function createDocumentDefinition(report, user, reportData, afilter) {
 		Log.l("Now in createDocumentDefinition() ...");
 
-		var dateFormat = win.dateFormat || "YYYY-MM-DD";
+		var dateFormat = win.dateFormat || "MMM D, YYYY";
 		// report consists of sales, expenses, and cashInfusions, concatenated into one array
 		// sales: id, amount, date
 		// expenses: id, name, amount, expType, comments, date, type

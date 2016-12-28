@@ -88,7 +88,7 @@
 			timespan = afilter('translate')("str_monthly");
 		}
 
-		var dateFormat = win.formats.dateformat;
+		var dateFormat = win.formats.dateformat || "MMM D, YYYY";
 
 		// var userid = user.id;
 		// var orgname = user.name;
