@@ -243,6 +243,7 @@
 		"str_yes": ["Yes", "Si", "Sim", "Oui"],
 		"str_no": ["No", "No", "Não", "Non"],
 		"str_not_implemented": ["Feature not implemented in this version.", "Característica no implementada en esta versión.", "Recurso não implementado nesta versão.", "Fonction non implémentée dans cette version."],
+		"str_no_products_in_sale": ["This sale had no products", "Esta venta no tiene productos", "Esta venda não tem produtos", "Cette vente n'a pas de produits"],
 		"str_currency_icon": ["ion-social-usd", "ion-social-usd", "ion-social-usd", "ion-social-usd"]
 	};
 

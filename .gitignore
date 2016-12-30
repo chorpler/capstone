@@ -1,4 +1,5 @@
 /.idea
+.gitignore
 MicrobusinessManager/hooks/
 node_modules/
 MicrobusinessManager/node_modules/
@@ -8,3 +9,4 @@ MicrobusinessManager/resources/
 ../MicrobusinessManagerAPI/
 my-release-key.keystore
 *.keystore
+MicrobusinessManager/.gitignore

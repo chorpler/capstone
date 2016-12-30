@@ -102,7 +102,7 @@
 		// var postal = user.postal;
 		// var email = user.email;
 		// var phone = user.phone;
-		var organizationHeader = { "style": "organizationheader", "text": "" };
+		var organizationHeader = { "style": "organizationheader", "text": "Interweave MBS" };
 		if(user && user.length) {
 			var address = "";
 			if(user.street2) {

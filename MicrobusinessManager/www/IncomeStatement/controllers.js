@@ -341,10 +341,11 @@
 		}
 
 		function createReport() {
-			Log.l("IA: Now running createReport(). reformattedList is:\n%s",JSON.stringify(vm.reformattedList, false, 2));
+			Log.l("IA: Now running createReport(). incomeStatement is:\n%s",JSON.stringify(vm.incomeStatement, false, 2));
 			vm.popupMenu.hide();
 			createPDFModal(vm.scopes.incomestatement).then(function(res) {
-				// vm.pdfModal.show();
+				return vm.pdfModal.show();
+			}).then(function(res) {
 				return vm.createIncomeStatementPdf(vm.incomeStatement, vm.user, vm.reportData);
 			}).then(function(pdf) {
 				Log.l("IA: Now in function after createIncomeStatementPdf()...")
@@ -367,7 +368,7 @@
 				win.pdfLocalFileURL = res;
 				win.pdfDataFileURL = res;
 				vm.scopes.incomestatement.pdfUrl = vm.pdfFileURL;
-				vm.pdfModal.show();
+				vm.pdfUrl = vm.pdfFileURL;
 				Log.l("Done generating PDF and creating local URL for PDF.");
 			}).catch(function(err) {
 				Log.l("IA: Failed creating PDF file!");

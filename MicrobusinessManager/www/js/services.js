@@ -803,12 +803,16 @@
 	}
 
 	function IonicFiles($q, $window, $cordovaFile) {
+		var self = this;
 		function convertToDataURL(cordovaURL, filename, fileDirectory) {
-			Log.l("Now in convertToDataURL()...");
+			Log.l("IonicFiles.convertToDataURL() starting...");
 			// var dir = fileDirectory || cordova.file.externalDataDirectory || cordova.file.dataDirectory;
 			var dir = fileDirectory || cordova.file.syncedDataDirectory || cordova.file.dataDirectory;
 			var filename = filename || cordovaURL.split('/').pop().split('#')[0].split('?')[0];
 			var d = $q.defer();
+			// return d.promise.then(function() {
+			Log.l("IonicFiles.convertToDataURL(): Now converting local file to data URL!");
+			// return convertToFileEntry(cordovaURL);
 			convertToFileEntry(cordovaURL).then(function(res) {
 				var pdfFileEntry = res;
 				var fileName = pdfFileEntry.fullPath;
@@ -824,48 +828,56 @@
 				window.pdfFile1.filedir = fileDir;
 				window.pdfFile1.file = pdfFileEntry;
 				var localURL = pdfFileEntry.toURL();
-				Log.l("convertToDataURL(): Resolved cordova URL:\n%s\n%s", cordovaURL);
+				Log.l("IonicFiles.convertToDataURL(): Resolved cordova URL:\n%s\n%s", cordovaURL);
 				return $cordovaFile.readAsDataURL(fileDir, fileName);
 			}).then(function(res) {
-				Log.l("convertToDataURL(): Success converting %s, data url is length %d.", filename, res.length);
+				Log.l("IonicFiles.convertToDataURL(): Success converting %s, data url is length %d.", filename, res.length);
 				window.pdfFile1.dataURL = res;
 				d.resolve(res);
 			}).catch(function(err) {
-				Log.l("convertToDataURL(): Error reading %s/%s.", dir, filename);
-				Log.l(err);
+				Log.l("IonicFiles.convertToDataURL(): Error reading %s/%s.", dir, filename);
+				Log.e(err);
 				d.reject(err);
 			});
 			return d.promise;
 		}
 
 		function convertToFileEntry(cordovaURL) {
-			Log.l("Now in convertToLocalURL() ...");
+			Log.l("IonicFiles.convertToFileEntry() starting ...");
 			var d = $q.defer();
-			resolveLocalFileSystemURL(cordovaURL, function(res) {
-				var fileEntry = res;
-				Log.l("Converted cordova URL to FileEntry:\n%s", cordovaURL);
-				// Log.l(fileEntry);
-				// win.localFileEntry = res;
-				d.resolve(fileEntry);
-			}, function(err) {
-				Log.l("Error during convertToLocalURL()!");
-				d.reject(err);
-			});
+			// return d.promise.then(function() {
+				Log.l("IonicFiles.convertToFileEntry(): Now converting local file to FileEntry...");
+				resolveLocalFileSystemURL(cordovaURL, function(res) {
+					var fileEntry = res;
+					Log.l("IonicFiles.convertToFileEntry(): Converted cordova URL to FileEntry:\n%s", cordovaURL);
+					// Log.l(fileEntry);
+					// win.localFileEntry = res;
+					d.resolve(fileEntry);
+				}, function(err) {
+					Log.l("IonicFiles.convertToFileEntry(): Error during convertToLocalURL()!");
+					Log.e(err);
+					d.reject(err);
+				});
+			// });
 			return d.promise;
 		}
 
 		function convertToLocalURL(cordovaURL) {
 			Log.l("Now in convertToLocalURL() ...");
 			var d = $q.defer();
-			resolveLocalFileSystemURL(cordovaURL, function(res) {
-				var localURL = res.toURL();
-				Log.l("Converted cordova URL to local URL:\n%s\n%s", cordovaURL, localURL);
-				// win.localFileEntry = res;
-				d.resolve(localURL);
-			}, function(err) {
-				Log.l("Error during convertToLocalURL()!");
-				d.reject(err);
-			});
+			// return d.promise.then(function() {
+				Log.l("IonicFiles.convertToLocalURL(): Conerting cordova file URL to local URL...");
+				resolveLocalFileSystemURL(cordovaURL, function(res) {
+					var localURL = res.toURL();
+					Log.l("IonicFiles.convertToLocalURL(): Converted cordova URL to local URL:\n%s\n%s", cordovaURL, localURL);
+					// win.localFileEntry = res;
+					d.resolve(localURL);
+				}, function(err) {
+					Log.l("IonicFiles.convertToLocalURL(): Error during convertToLocalURL()!");
+					Log.e(err);
+					d.reject(err);
+				});
+			// });
 			return d.promise;
 		}
 

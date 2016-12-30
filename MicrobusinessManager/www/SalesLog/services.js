@@ -73,7 +73,7 @@
 		// var postal = user.postal;
 		// var email = user.email;
 		// var phone = user.phone;
-		var organizationHeader = { "style": "organizationheader", "text": "" };
+		var organizationHeader = { "style": "organizationheader", "text": "Interweave MBS" };
 		if(user && user.length) {
 			var address = "";
 			if(user.street2) {
@@ -102,6 +102,7 @@
 		var strTotalPriceHeader = afilter('translate')("str_total_price");
 		var strGrandTotalHeader = afilter('translate')("str_grand_total");
 		var strNoSales = "(" + afilter('translate')("str_time_period_no_sales") + ")";
+		var noProductsInSale = "(" + afilter('translate')("str_no_products_in_sale") + ")";
 
 		var outsideBorderOnly = {
 			"hLineWidth": function(i, node) {
@@ -136,8 +137,9 @@
 							{"text": strNoSales, "style": "noSales"}
 						]
 					]
-				},
-				"layout": "noBorders"
+				}
+				// ,
+				// "layout": "noBorders"
 			};
 			allSalesTables = [noSaleTable];
 			win.outerSalesTable = allSalesTables;
@@ -192,22 +194,27 @@
 				var currentTableIndex = internalTable.length - 1;
 				var singleSaleTable = saleTable.table.body[currentTableIndex][0].table;
 				win.singleSaleTable = singleSaleTable;
-				for(var idx2 in products) {
-					var oneProductRow = [];
-					var product = products[idx2];
-					var item = product.name;
-					var qty = Number(product.quantity);
-					var unitprice = Number(product.saleprice);
-					var totalitemprice = qty * unitprice;
-					var col1 = {"text": item, "style": "internalCell", "alignment": "left"};
-					var col2 = {"text": qty, "style": "internalCell", "alignment": "center"};
-					var col3 = {"text": afilter('currency')(unitprice), "style": "internalCell", "alignment": "right"};
-					var col4 = {"text": afilter('currency')(totalitemprice), "style": "internalCell", "alignment": "right"};
-					oneProductRow.push(col1);
-					oneProductRow.push(col2);
-					oneProductRow.push(col3);
-					oneProductRow.push(col4);
+				if(!products.length) {
+					var col1 = [{"text": strNoProductsInSale, "colSpan": 4, "style": "noProductsInSale"}];
 					singleSaleTable.body.push(oneProductRow);
+				} else {
+					for(var idx2 in products) {
+						var oneProductRow = [];
+						var product = products[idx2];
+						var item = product.name;
+						var qty = Number(product.quantity);
+						var unitprice = Number(product.saleprice);
+						var totalitemprice = qty * unitprice;
+						var col1 = {"text": item, "style": "internalCell", "alignment": "left"};
+						var col2 = {"text": qty, "style": "internalCell", "alignment": "center"};
+						var col3 = {"text": afilter('currency')(unitprice), "style": "internalCell", "alignment": "right"};
+						var col4 = {"text": afilter('currency')(totalitemprice), "style": "internalCell", "alignment": "right"};
+						oneProductRow.push(col1);
+						oneProductRow.push(col2);
+						oneProductRow.push(col3);
+						oneProductRow.push(col4);
+						singleSaleTable.body.push(oneProductRow);
+					}
 				}
 				allSalesTables.push(saleTable);
 			}
@@ -321,7 +328,15 @@
 			"noSales": {
 				"bold": true,
 				"alignment": "center",
-				"fontSize": 18
+				"fontSize": 18,
+				"fillColor": "lightgrey",
+				"margin": [ 5, 5, 5, 5 ]
+			},
+			"noProductsInSale": {
+				"bold": false,
+				"alignment": "center",
+				"fontSize": 14,
+				"margin": [ 5, 5, 5, 5 ]
 			},
 			"saleDateCell": {
 				"fontSize": 20,
