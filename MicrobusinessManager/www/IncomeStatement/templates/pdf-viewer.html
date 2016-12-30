@@ -4,7 +4,7 @@
 		<button class="button button-icon icon ion-more menu-button-pdf-viewer-income-statement" ng-click="income.openPDFPopupMenu($event)"></button>
 	</ion-header-bar>
 	<ion-content>
-		<h1 class="alert" ng-show="!(pdfLoaded == true)">{{loadingVar}}</h1>
+		<!-- <h1 class="alert" ng-show="!(pdfLoaded == true)">{{loadingVar}}</h1> -->
 		<ng-pdf ng-if="pdfUrl" template-url="IncomeStatement/templates/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>
 	</ion-content>
 </ion-modal-view>

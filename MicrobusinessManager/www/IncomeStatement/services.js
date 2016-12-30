@@ -11,7 +11,7 @@
 				// Log.l(JSON.stringify(report));
 				// Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
-				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, null, 2));
+				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd.content, null, 2));
 				var pdf = pdfMake.createPdf(dd);
 
 				pdf.getBase64(function(output) {
@@ -49,11 +49,12 @@
 		var items = isr.incomeItems.map(function(item) {
 			var arrItem = [];
 			var rtStyle = {"style": "rightAlign"};
-			var itemName = "";
-			var itemName = item.name == 'reports_cash' ? afilter('translate')(item.name) : item.name;
+			var nameElement = {"style": "leftAlign"};
+			var itemName = item.name == 'reports_cash' ? afilter('translate')(item.name) : item.name == null ? "Sale" : item.name;
 			var numAmt = item.amount;
-			var amt = afilter('currency')(numAmt, "$", 2);
+			var amt = afilter('currency')(numAmt);
 			rtStyle.text = amt;
+			nameElement.text = itemName;
 			arrItem.push(itemName);
 			arrItem.push(rtStyle);
 			return arrItem;
@@ -65,7 +66,7 @@
 			var numAmt = item.amount;
 			var rtStyle = {"style": "rightAlign"};
 			var ltStyle = {"style": "leftAlign"};
-			var amt = afilter('currency')(numAmt, "$", 2);
+			var amt = afilter('currency')(numAmt);
 			rtStyle.text = amt;
 			ltStyle.text = item.name;
 			arrItem.push(ltStyle);
@@ -152,88 +153,89 @@
 			expensesTable = expitems;
 		}
 
-		var dd = {
-			"defaultStyle": {
+		var defaultStyle = { "margin": [ 0, 5, 0, 5 ] };
+		var styleInfo = {
+			"header": {
+				"fontSize": 20,
+				"bold": true,
+				"alignment": "right",
+				"margin": [ 0, 0, 0, 10 ]
+			},
+			"subheader": {
+				"fontSize": 16,
+				"bold": true,
+				"margin": [ 0, 15, 0, 5 ]
+			},
+			"organizationheader": {
+				"fontSize": 14,
+				"bold": false,
 				"margin": [ 0, 5, 0, 5 ]
 			},
-			"styles": {
-				"header": {
-					"fontSize": 20,
-					"bold": true,
-					"alignment": "right",
-					"margin": [ 0, 0, 0, 10 ]
-				},
-				"subheader": {
-					"fontSize": 16,
-					"bold": true,
-					"margin": [ 0, 15, 0, 5 ]
-				},
-				"organizationheader": {
-					"fontSize": 14,
-					"bold": false,
-					"margin": [ 0, 5, 0, 5 ]
-				},
-				"emptyRow": {
-					"alignment": "center",
-					"bold": true,
-					"margin": [ 0, 5, 0, 5 ]
-				},
-				"itemsTable": {
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"itemsTableHeader": {
-					"bold": true,
-					"fontSize": 13,
-					"color": "black",
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"rightAlign": {
-					"alignment": "right",
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"totalsRow": {
-					"alignment": "right",
-					"bold": "true",
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"headerLabel" : {
-					"alignment": "right",
-					"color": "black",
-					"bold": true,
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"incomeCell": {
-					"alignment": "right",
-					"color": "black",
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"expenseCell": {
-					"alignment": "right",
-					"color": "red",
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"cashCell": {
-					"alignment": "right",
-					"color": "black",
-					"bold": true,
-					"margin": [ 0, 0, 20, 0 ]
-				},
-				"totalCell": {
-					"alignment": "right",
-					"bold": true,
-					"margin": [ 0, 5, 0, 0 ]
-				},
-				"totalsTable": {
-					"alignment": "right",
-					"bold": true,
-					"margin": [ 0, 5, 5, 0]
-				},
-				"finalTotalsTable": {
-					"alignment": "right",
-					"bold": true,
-					"margin": [ 0, 40, 0, 0 ]
-				}
+			"emptyRow": {
+				"alignment": "center",
+				"bold": true,
+				"margin": [ 0, 5, 0, 5 ]
 			},
+			"itemsTable": {
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"itemsTableHeader": {
+				"bold": true,
+				"fontSize": 13,
+				"color": "black",
+				"fillColor": "gainsboro",
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"rightAlign": {
+				"alignment": "right",
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"totalsRow": {
+				"alignment": "right",
+				"bold": "true",
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"headerLabel" : {
+				"alignment": "right",
+				"color": "black",
+				"bold": true,
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"incomeCell": {
+				"alignment": "right",
+				"color": "black",
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"expenseCell": {
+				"alignment": "right",
+				"color": "red",
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"cashCell": {
+				"alignment": "right",
+				"color": "black",
+				"bold": true,
+				"margin": [ 0, 0, 20, 0 ]
+			},
+			"totalCell": {
+				"alignment": "right",
+				"bold": true,
+				"margin": [ 0, 5, 0, 0 ]
+			},
+			"totalsTable": {
+				"alignment": "right",
+				"bold": true,
+				"margin": [ 0, 5, 5, 0]
+			},
+			"finalTotalsTable": {
+				"alignment": "right",
+				"bold": true,
+				"margin": [ 0, 40, 0, 0 ]
+			}
+		};
+
+		var dd = { "defaultStyle": defaultStyle,
+			"styles": styleInfo,
 			"content": [
 				{
 					"text": title,

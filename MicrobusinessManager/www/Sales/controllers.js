@@ -31,6 +31,8 @@
 		vm.checkout            = checkout;
 		vm.cancelCheckout      = cancelCheckout;
 		vm.overrideSaleTotal   = overrideSaleTotal;
+		vm.saleTotalFocus   = saleTotalFocus;
+		vm.getCurrencyIconClasses   = getCurrencyIconClasses;
 		vm.saveSale            = saveSale;
 		vm.resetSale           = resetSale;
 		vm.editSaleProduct     = editSaleProduct;
@@ -122,6 +124,21 @@
 			vm.displayTotal = Math.round(	vm.saleTotal * 100) / 100;
 
 			showCheckoutModal();
+		}
+
+		function getCurrencyIconClasses() {
+			var strClasses = "icon ";
+			strClasses += $filter('translate')('str_currency_icon');
+			strClasses += " placeholder-icon";
+			return strClasses;
+		}
+
+		function saleTotalFocus() {
+			Log.l("saleTotal got focus! Checking for zero value...");
+			if(Number(vm.displayTotal) == 0) {
+				Log.l("saleTotal had zero value! Blanking it out...");
+				vm.displayTotal = '';
+			}
 		}
 
 		function cancelCheckout () {

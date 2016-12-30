@@ -666,9 +666,15 @@
 		function exportSettings() {
 			Log.l("Settings: now in exportSettings() ...");
 			// vm.popupMenu.remove();
+			var sepidb = null;
 			closePopupMenu();
-			var sepidb = Database.getDB();
-			$cordovaSQLitePorter.exportJSON(sepidb).then(function(res) {
+			Database.getDB().then(function(res) {
+				sepidb = res;
+				Log.l("Settings: Got DB for jsonExport, DB is:");
+				Log.l(sepidb);
+				win.exportdb = sepidb;
+				return $cordovaSQLitePorter.exportJSON(sepidb);
+			}).then(function(res) {
 				Log.l("exportSettings(): Successfully exported DB to JSON, got %d SQL statements.", res[1]);
 				var jsonExport = res[0];
 				window.jsonExport = jsonExport;
@@ -1021,7 +1027,10 @@
 			// createPopupMenu($scope);
 			// createPopupMenu(vm.scopes.settings);
 			// vm.popupMenu.show($event);
-				vm.popupMenu.show('.settings-menu-icon');
+				// vm.popupMenu.show('.settings-menu-icon');
+				var menuElement = document.querySelector('.settings-menu-icon');
+				vm.popupMenu.show(menuElement);
+				// vm.popupMenu.show('.settings-menu-icon');
 			// vm.createPopupMenu($scope);
 		}
 

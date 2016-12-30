@@ -192,7 +192,7 @@
 			vm.activeItem.date = new Date();
 			tempItem = {};
 			getCategories();
-			showEditModal();
+			showEditModal(vm.scopes.product);
 		}
 		function clearProduct () {
 			vm.activeItem.category = '';

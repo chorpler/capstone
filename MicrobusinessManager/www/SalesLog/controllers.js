@@ -290,7 +290,10 @@
 
 		function showPopupMenu($event) {
 			Log.l("SL: now in scope.showPopupMenu()");
-			vm.popupMenu.show('.menu-button-sales-log');
+			// var menuElement = angular.element(document).find('.menu-button-sales-log');
+			var menuElement = document.querySelector('.menu-button-sales-log');
+			vm.popupMenu.show(menuElement);
+			// vm.popupMenu.show('.menu-button-sales-log');
 		}
 
 		function closePopupMenu() {
@@ -337,7 +340,10 @@
 		function openPDFPopupMenu($event) {
 			Log.l("SL: now in openPDFPopupMenu(), pdfPopupmenu is:");
 			Log.l(vm.pdfPopupmenu);
-			vm.pdfPopupMenu.show('.menu-button-pdf-viewer-sales-log');
+			// var menuElement = angular.element(document).find('.menu-button-pdf-viewer-sales-log');
+			var menuElement = document.querySelector('.menu-button-pdf-viewer-sales-log');
+			vm.pdfPopupMenu.show(menuElement);
+			// vm.pdfPopupMenu.show('.menu-button-pdf-viewer-sales-log');
 		}
 
 		function closePDFPopupMenu() {

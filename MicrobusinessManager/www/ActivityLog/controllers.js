@@ -263,7 +263,10 @@
 
 		function showPopupMenu($event) {
 			Log.l("AL: now in showPopupMenu()")
-			vm.popupMenu.show('.menu-button-activity-log');
+			// var menuElement = angular.element(document).find('.menu-button-activity-log');
+			var menuElement = document.querySelector('.menu-button-activity-log');
+			vm.popupMenu.show(menuElement);
+			// vm.popupMenu.show('.menu-button-activity-log');
 		}
 
 
@@ -311,7 +314,10 @@
 		function openPDFPopupMenu($event) {
 			Log.l("AL: now in openPDFPopupMenu(), pdfPopupmenu is:");
 			Log.l(vm.pdfPopupmenu);
-			vm.pdfPopupMenu.show('.menu-button-pdf-viewer-activity-log');
+			// var menuElement = angular.element(document).find('.menu-button-pdf-viewer-activity-log');
+			var menuElement = document.querySelector('.menu-button-pdf-viewer-activity-log');
+			vm.pdfPopupMenu.show(menuElement);
+			// vm.pdfPopupMenu.show('.menu-button-pdf-viewer-activity-log');
 		}
 
 		function closePDFPopupMenu() {

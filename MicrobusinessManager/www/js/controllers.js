@@ -15,7 +15,7 @@
 		rs = $rootScope;
 		win.rs = rs;
 		rs.code = {};
-		rs.code.getDateFormat = getDateFormat;
+		// rs.code.getDateFormat = getDateFormat;
 		rs.code.showPopupAlert = showPopupAlert;
 		rs.code.showPopupAlertPromise = showPopupAlertPromise;
 		rs.code.showPopupConfirm = showPopupConfirm;
@@ -34,27 +34,29 @@
 		vm.submitted = false;
 
 		function init () {
-			getDateFormat().then(function(res) {
-				Log.l("Init(): Done with getDateFormat(), result is:\n%s", JSON.stringify(res));
-				win.formats = res;
-				win.dateFormat = res.dateformat || "YYYY-MM-DD";
-			});
+			win.formats = {dateformat:"MMM D, YYYY"};
+			win.dateformat = win.formats.dateformat;
+			// getDateFormat().then(function(res) {
+			// 	Log.l("Init(): Done with getDateFormat(), result is:\n%s", JSON.stringify(res));
+			// 	win.formats = res;
+			// 	win.dateFormat = res.dateformat || "YYYY-MM-DD";
+			// });
 		}
 
-		function getDateFormat() {
-			return Database.select('formats').then(function (res) {
-				var formats = [];
-				if (res.rows.length === 0) {
-					return {id: 1, dateformat: "YYYY-MM-DD"};
-				}
-				for (var i = res.rows.length - 1; i >= 0; i--) {
-					var item = res.rows.item(i);
-					formats.push(item);
-				}
-				Log.l("SEPI: formats configured as %s.", JSON.stringify(formats[0]));
-				return formats[0];
-			});
-		}
+		// function getDateFormat() {
+		// 	return Database.select('formats').then(function (res) {
+		// 		var formats = [];
+		// 		if (res.rows.length === 0) {
+		// 			return {id: 1, dateformat: "YYYY-MM-DD"};
+		// 		}
+		// 		for (var i = res.rows.length - 1; i >= 0; i--) {
+		// 			var item = res.rows.item(i);
+		// 			formats.push(item);
+		// 		}
+		// 		Log.l("SEPI: formats configured as %s.", JSON.stringify(formats[0]));
+		// 		return formats[0];
+		// 	});
+		// }
 
 		function showCash ($event) {
 			vm.cashInfusion.date = new Date();

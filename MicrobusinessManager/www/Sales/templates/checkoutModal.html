@@ -19,12 +19,16 @@
 
 				<ion-item>
 					<label class="item item-input">
-						<i class="icon ion-social-usd placeholder-icon"></i>
+						<!-- <i class="icon ion-social-usd placeholder-icon"></i> -->
+						<i ng-class="sales.getCurrencyIconClasses()"></i>
 						<input  type="number"
 								name="saleTotal"
 								smart-float
+								step="0.01"
 								ng-pattern="numberPattern"
 								ng-model="sales.displayTotal"
+								ng-model-options="{debounce: 200}"
+								ng-focus="sales.saleTotalFocus()"
 								ng-change="sales.overrideSaleTotal(sales.displayTotal)"
 								required="required">
 						<div ng-show="(salesRegisterForm.name.$touched || salesRegisterForm.$submitted) && !sales.submitted">
@@ -39,19 +43,33 @@
 				</ion-item>
 
 				<ion-item>
-					<input 	type="submit"
+<!-- 					<input 	type="submit"
 							ng-disabled="sales.invalidTotal"
 							class="button button-block button-balanced"
 							ng-click="sales.saveSale(salesRegisterForm, $event)"
 							ng-if="sales.activeTax"
 							value="{{'sales_record' | translate}} $ {{!sales.invalidTotal ? sales.saleTotal + (sales.saleTotal * sales.tax_rate/100) : 0 | number:2}}">
-
-					<input 	type="submit"
+ -->
+<!-- 					<input 	type="submit"
 							ng-disabled="sales.invalidTotal"
 							class="button button-block button-balanced"
 							ng-click="sales.saveSale(salesRegisterForm, $event)"
 							ng-if="!sales.activeTax"
 							value="{{'sales_record' | translate}} $ {{!sales.invalidTotal ? sales.saleTotal : 0 | number:2}}">
+ -->
+
+						<input 	type="submit"
+							ng-disabled="sales.invalidTotal"
+							class="button button-block button-balanced"
+							ng-click="sales.saveSale(salesRegisterForm, $event)"
+							ng-if="sales.activeTax"
+							value="{{'sales_record' | translate}} {{(!sales.invalidTotal ? sales.saleTotal + (sales.saleTotal * sales.tax_rate/100) : 0) | currency}}">
+						<input 	type="submit"
+							ng-disabled="sales.invalidTotal"
+							class="button button-block button-balanced"
+							ng-click="sales.saveSale(salesRegisterForm, $event)"
+							ng-if="!sales.activeTax"
+							value="{{'sales_record' | translate}} {{(!sales.invalidTotal ? sales.saleTotal : 0 ) | currency}}">
 
 					<div class="center" ng-show="sales.activeTax">
 						{{"including_tax" | translate}}

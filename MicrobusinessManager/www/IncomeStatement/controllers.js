@@ -196,7 +196,10 @@
 
 		function showPopupMenu($event) {
 			Log.l("IA: now in scope.showPopupMenu()")
-			vm.popupMenu.show('.menu-button-income-statement');
+			// var menuElement = angular.element(document).find('.menu-button-income-statement');
+			var menuElement = document.querySelector('.menu-button-income-statement');
+			vm.popupMenu.show(menuElement);
+			// vm.popupMenu.show('.menu-button-income-statement');
 		}
 
 		function closePopupMenu() {
@@ -249,7 +252,10 @@
 		function openPDFPopupMenu($event) {
 			Log.l("IA: now in openPDFPopupMenu(), pdfPopupmenu is:");
 			Log.l(vm.pdfPopupmenu);
-			vm.pdfPopupMenu.show('.menu-button-pdf-viewer-income-statement');
+			// var menuElement = angular.element(document).find('.menu-button-pdf-viewer-income-statement');
+			var menuElement = document.querySelector('.menu-button-pdf-viewer-income-statement');
+			vm.pdfPopupMenu.show(menuElement);
+			// vm.pdfPopupMenu.show('.menu-button-pdf-viewer-income-statement');
 		}
 
 		function closePDFPopupMenu() {
@@ -338,7 +344,7 @@
 			Log.l("IA: Now running createReport(). reformattedList is:\n%s",JSON.stringify(vm.reformattedList, false, 2));
 			vm.popupMenu.hide();
 			createPDFModal(vm.scopes.incomestatement).then(function(res) {
-				vm.pdfModal.show();
+				// vm.pdfModal.show();
 				return vm.createIncomeStatementPdf(vm.incomeStatement, vm.user, vm.reportData);
 			}).then(function(pdf) {
 				Log.l("IA: Now in function after createIncomeStatementPdf()...")
@@ -347,7 +353,6 @@
 				win.pdfblob = blob;
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
-				vm.vmScope.pdfUrl = vm.pdfFileURL;
 				return $cordovaFile.writeFile(fileDirectory, "IncomeStatement.pdf", blob, true);
 			}).then(function(res) {
 				Log.l("IA: Success creating PDF file!");
@@ -361,6 +366,8 @@
 				vm.pdfDataFileURL = res;
 				win.pdfLocalFileURL = res;
 				win.pdfDataFileURL = res;
+				vm.scopes.incomestatement.pdfUrl = vm.pdfFileURL;
+				vm.pdfModal.show();
 				Log.l("Done generating PDF and creating local URL for PDF.");
 			}).catch(function(err) {
 				Log.l("IA: Failed creating PDF file!");

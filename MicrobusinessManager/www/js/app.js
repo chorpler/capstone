@@ -242,7 +242,8 @@
 		"str_delete": ["Delete", "Borrar"],
 		"str_yes": ["Yes", "Si"],
 		"str_no": ["No", "No"],
-		"str_not_implemented": ["Feature not implemented in this version.", "Característica no implementada en esta versión."]
+		"str_not_implemented": ["Feature not implemented in this version.", "Característica no implementada en esta versión."],
+		"str_currency_icon": ["ion-social-usd", "ion-social-usd"]
 	};
 
 	function getStringSet(strings, index) {

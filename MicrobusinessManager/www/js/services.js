@@ -2,8 +2,8 @@
 	angular.module('app')
 		.factory('Database', Database)
 		.factory('CashBalance', CashBalance)
-		.factory('IonicFiles', ['$q', '$window', '$cordovaFile', IonicFiles])
-		.factory('$cordovaSQLitePorter', ['$q', '$window', cordovaSQLitePorter]);
+		.factory('IonicFiles', IonicFiles)
+		.factory('$cordovaSQLitePorter', cordovaSQLitePorter);
 	// .factory('ReportService', ['$q', ReportService]);
 
 	// function Database($ionicPlatform, $cordovaSQLite, $q) {
@@ -13,10 +13,10 @@
 		var dbname = 'my.db';
 		var dbparams = { name: dbname, iosDatabaseLocation: 'default' };
 		var deferred = $q.defer();
-		var SQLite = null;
+		// var SQLite = null;
 		$ionicPlatform.ready(function() {
-			SQLite = IonicNative.SQLite;
-			window.NativeSQLite = SQLite;
+			// SQLite = IonicNative.SQLite;
+			// window.NativeSQLite = SQLite;
 			window.sepidb = db;
 			db = $cordovaSQLite.openDB(dbparams);
 			$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
@@ -47,11 +47,11 @@
 			generateIncomeStatement: generateIncomeStatement,
 			getCommission: getCommission,
 			getDB: getDB,
-			getDBNew: getDBNew,
+			// getDBNew: getDBNew,
 			getFormats: getFormats,
-			getUserInfo: getUserInfo,
-			initializeDB: initializeDB,
-			wipeDatabase: wipeDatabase
+			getUserInfo: getUserInfo
+			// ,initializeDB: initializeDB
+			// ,wipeDatabase: wipeDatabase
 		};
 
 		var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
@@ -126,44 +126,44 @@
 
 		return service;
 
-		function initializeDB() {
-			Log.l("Database.initializeDB(): Started function...");
-			var d = $q.defer();
-			// db = $cordovaSQLite.openDB(dbparams);
-			Log.l("Database.initializeDB(): Now attempting to open database:\n%s", JSON.stringify(dbparams));
-			db.openDatabase(dbparams).then(function(res) {
-				Log.l("Database.initializeDB(): db is:");
-				Log.l(db);
-				db = res;
-				window.sepidb = db;
-				var statements = [], sqlPromises = [];
-				statements.push('CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
-				statements.push('CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-				statements.push('CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
-				statements.push('CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
-				statements.push('CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
-				statements.push('CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
-				statements.push('CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
-				statements.push('CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
-				statements.push('CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
-				statements.push('CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
-				statements.push('CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
-				Log.l("Now attempting to execute SQLite statements:\n%s", JSON.stringify(statements));
-				for(var idx in statements) {
-					sqlPromises.push(db.executeSql(db, statements[idx]));
-				}
-				return $q.all(sqlPromises).then(function(res) {
-					Log.l("Database.initializeDB(): All tables are created.");
-					d.resolve(db);
-				}).catch(function(err) {
-					Log.l("Database.initializeDB(): Error while creating tables!");
-					Log.l(err);
-					window.err1 = err;
-					d.reject(err);
-				});
-			});
-			return d.promise;
-		}
+		// function initializeDB() {
+		// 	Log.l("Database.initializeDB(): Started function...");
+		// 	var d = $q.defer();
+		// 	// db = $cordovaSQLite.openDB(dbparams);
+		// 	Log.l("Database.initializeDB(): Now attempting to open database:\n%s", JSON.stringify(dbparams));
+		// 	db.openDatabase(dbparams).then(function(res) {
+		// 		Log.l("Database.initializeDB(): db is:");
+		// 		Log.l(db);
+		// 		db = res;
+		// 		window.sepidb = db;
+		// 		var statements = [], sqlPromises = [];
+		// 		statements.push('CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
+		// 		statements.push('CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
+		// 		Log.l("Now attempting to execute SQLite statements:\n%s", JSON.stringify(statements));
+		// 		for(var idx in statements) {
+		// 			sqlPromises.push(db.executeSql(db, statements[idx]));
+		// 		}
+		// 		return $q.all(sqlPromises).then(function(res) {
+		// 			Log.l("Database.initializeDB(): All tables are created.");
+		// 			d.resolve(db);
+		// 		}).catch(function(err) {
+		// 			Log.l("Database.initializeDB(): Error while creating tables!");
+		// 			Log.l(err);
+		// 			window.err1 = err;
+		// 			d.reject(err);
+		// 		});
+		// 	});
+		// 	return d.promise;
+		// }
 
 			// 	window.sepidb = db;
 			// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
@@ -233,9 +233,9 @@
 			}
 
 			return deferred.promise.then(function() {
-				Log.l("Database.insert(): db and query are:");
-				Log.l(db);
-				Log.l(query);
+				// Log.l("Database.insert(): db and query are:");
+				// Log.l(db);
+				// Log.l(query);
 				return $cordovaSQLite.execute(db, query, params).then(function(response) {
 					return response;
 				}, function(err) {
@@ -325,9 +325,9 @@
 			}
 
 			return deferred.promise.then(function() {
-				Log.l("Database.select(): db and query are:");
-				Log.l(db);
-				Log.l(query);
+				// Log.l("Database.select(): db and query are:");
+				// Log.l(db);
+				// Log.l(query);
 				return $cordovaSQLite.execute(db, query, params)
 					.then(function(response) {
 						return response;
@@ -388,9 +388,9 @@
 			}
 
 			return deferred.promise.then(function() {
-				Log.l("Database.update(): db and query are:");
-				Log.l(db);
-				Log.l(query);
+				// Log.l("Database.update(): db and query are:");
+				// Log.l(db);
+				// Log.l(query);
 				return $cordovaSQLite.execute(db, query, params).then(function(response) {
 					return response;
 				}, function(err) {
@@ -449,9 +449,9 @@
 			var params = id ? [id] : [];
 
 			return deferred.promise.then(function() {
-				Log.l("Database.remove(): db and query are:");
-				Log.l(db);
-				Log.l(query);
+				// Log.l("Database.remove(): db and query are:");
+				// Log.l(db);
+				// Log.l(query);
 				return $cordovaSQLite.execute(db, query, params).then(function(response) {
 					return response;
 				}, function(err) {
@@ -472,7 +472,7 @@
 		}
 
 		function calculateCashOnHand(startDate, endDate) {
-			var d = $q.defer();
+			// var d = $q.defer();
 			var queryStart = 'SELECT total(amount) as total FROM ';
 			var queryExpense = '(SELECT total(amount) * -1 as amount FROM expense ';
 			var queryUnion = ' UNION ';
@@ -520,11 +520,12 @@
 			}).then(function(res) {
 					// d.resolve(res);
 					return res;
-			}).catch(function(err) {
-				Log.l("Error in calculateCashOnHand()!");
-				Log.l(err);
-				d.reject(err);
-			});
+			})
+			// .catch(function(err) {
+			// 	Log.l("Error in calculateCashOnHand()!");
+			// 	Log.l(err);
+			// 	// d.reject(err);
+			// });
 			// return deferred.promise.then(function() {
 			// 	return $cordovaSQLite.execute(db, query, params).then(function(response) {
 			// 		return response;
@@ -535,11 +536,15 @@
 		}
 
 		function generateIncomeStatement(startDate, endDate, groupBy) {
+			Log.l("Now in Database.generateIncomeStatement() ...");
 			var incomeStatement = {
 				incomeItems: [],
 				expenseItems: []
 			};
 			var promises = [];
+
+			var queryProductlessSales =
+			"SELECT \"Sale \" || s.id as name, s.amount as amount, s.date as date FROM sale s ";
 
 			var querySales = 'SELECT p.name as name, SUM(sp.saleprice * sp.quantity) as amount FROM product p ' +
 				'INNER JOIN saleproduct sp ON p.id = sp.productid ' +
@@ -549,13 +554,26 @@
 			var queryUnion = ' UNION ';
 			var queryGroupBy = ' GROUP BY ';
 			var groupByName = ' name ';
-
-			querySales = querySales + ((startDate || endDate) ?
+			var queryAnd = ' AND ' ;
+			var queryExcludeSalesWithProducts = " NOT EXISTS ( SELECT 1 FROM saleproduct sp WHERE sp.saleid = s.id ) ";
+			Log.l("queryProductlessSales is:");
+			Log.l(queryProductlessSales);
+			querySales += ((startDate || endDate) ?
 				WHERE +
 				(startDate != null ? 'date >= ? ' +
 					(endDate != null ? AND + 'date <= ? ' : '') :
 					(endDate != null ? 'date <= ?' : '')
 				) : '');
+
+			queryProductlessSales += ((startDate || endDate) ?
+				WHERE +
+				(startDate != null ? 'date >= ? ' +
+					(endDate != null ? AND + 'date <= ? ' : '') :
+					(endDate != null ? 'date <= ?' : '')
+				) : '');
+
+			Log.l("queryProductlessSales is now:");
+			Log.l(queryProductlessSales);
 
 			queryCash = queryCash + ((startDate || endDate) ?
 				WHERE +
@@ -573,9 +591,12 @@
 
 			var queryIncomeItems = querySales + queryGroupBy + groupByName + queryUnion + queryCash + queryGroupBy + groupByName;
 			var queryExpenseItems = queryExpenses + queryGroupBy + groupBy;
-
+			var queryProductlessSalesItems = queryProductlessSales + queryAnd + queryExcludeSalesWithProducts;
+			Log.l("queryProductlessSalesItems is:");
+			Log.l(queryProductlessSalesItems);
 			var paramsIncome = [];
 			var paramsExpense = [];
+			// var paramsProductlessSales = [];
 
 			if (startDate) {
 				paramsIncome.push(moment(startDate).format('YYYY-MM-DD HH:mm:ss'));
@@ -587,10 +608,28 @@
 				paramsExpense.push(moment(endDate).format('YYYY-MM-DD HH:mm:ss'));
 			}
 
-			paramsIncome = paramsIncome.concat(paramsIncome);
+			// paramsIncome = paramsIncome.concat(paramsIncome);
+
+			Log.l("generateIncomeStatement(): pushing income query and params:");
+			Log.l(queryIncomeItems);
+			Log.l(paramsIncome);
+			Log.l("generateIncomeStatement(): pushing productlessSales query and params:");
+			Log.l(queryProductlessSales);
+			Log.l(paramsIncome);
+			Log.l("generateIncomeStatement(): pushing expense query and params:");
+			Log.l(queryExpenseItems);
+			Log.l(paramsExpense);
 
 			return deferred.promise.then(function() {
 				promises.push($cordovaSQLite.execute(db, queryIncomeItems, paramsIncome).then(function(response) {
+					for (var i = response.rows.length - 1; i >= 0; i--) {
+						incomeStatement.incomeItems.push(response.rows.item(i));
+					}
+				}, function(err) {
+					console.log(err);
+				}));
+
+				promises.push($cordovaSQLite.execute(db, queryProductlessSales, paramsIncome).then(function(response) {
 					for (var i = response.rows.length - 1; i >= 0; i--) {
 						incomeStatement.incomeItems.push(response.rows.item(i));
 					}
@@ -605,6 +644,8 @@
 				}, function(err) {
 					console.log(err);
 				}));
+
+
 
 				return $q.all(promises).then(function() {
 					return incomeStatement;
@@ -629,54 +670,59 @@
 		}
 
 		function getDB() {
-			return db;
-		}
-
-		function getDBNew() {
-			return dbparams;
-		}
-
-		function wipeDatabase() {
-			return deferred.promise.then(function(res) {
-				$cordovaSQLite.execute(db, "DROP TABLE product");
-				$cordovaSQLite.execute(db, "DROP TABLE inventory");
-				$cordovaSQLite.execute(db, "DROP TABLE expense");
-				$cordovaSQLite.execute(db, "DROP TABLE sale");
-				$cordovaSQLite.execute(db, "DROP TABLE saleproduct");
-				$cordovaSQLite.execute(db, "DROP TABLE salary");
-				$cordovaSQLite.execute(db, "DROP TABLE languages");
-				$cordovaSQLite.execute(db, "DROP TABLE cashInfusion");
-				$cordovaSQLite.execute(db, "DROP TABLE tax");
-				$cordovaSQLite.execute(db, "DROP TABLE user");
-				$cordovaSQLite.execute(db, "DROP TABLE formats");
-				Log.l("Database.wipeDatabase(): Done dropping tables, now re-creating...");
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
-					'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
-					'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
-					'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
-				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
-				Log.l("Database.wipeDatabase(): done re-creating tables!");
-			}).catch(function(err) {
-				Log.l("Database.wipeDatabase(): error wiping and re-creating tables.");
-				Log.l(err);
-				win.err1 = err;
+			return deferred.promise.then(function() {
+				Log.l("Database.getDB(): Returning db:");
+				Log.l(db);
+				return db;
 			});
 		}
 
+		// function getDBNew() {
+		// 	return dbparams;
+		// }
+
+		// function wipeDatabase() {
+		// 	return deferred.promise.then(function(res) {
+		// 		$cordovaSQLite.execute(db, "DROP TABLE product");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE inventory");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE expense");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE sale");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE saleproduct");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE salary");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE languages");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE cashInfusion");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE tax");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE user");
+		// 		$cordovaSQLite.execute(db, "DROP TABLE formats");
+		// 		Log.l("Database.wipeDatabase(): Done dropping tables, now re-creating...");
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
+		// 			'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
+		// 			'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
+		// 			'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
+		// 		$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
+		// 		Log.l("Database.wipeDatabase(): done re-creating tables!");
+		// 	}).catch(function(err) {
+		// 		Log.l("Database.wipeDatabase(): error wiping and re-creating tables.");
+		// 		Log.l(err);
+		// 		win.err1 = err;
+		// 	});
+		// }
+
 		function getFormats() {
-			var d = $q.defer();
-			var db = 'formats';
+			// var d = $q.defer();
+			// var db = 'formats';
 			var query = 'SELECT id, dateformat FROM formats';
-			return d.promise.then(function() {
+			var params = [];
+			return deferred.promise.then(function() {
 				return $cordovaSQLite.execute(db, query, params)
 					.then(function(res) {
 							var items = [];
@@ -696,10 +742,10 @@
 		}
 
 		function getUserInfo() {
-			var d = $q.defer();
-			var db = 'user';
+			// var db = 'user';
 			var query = SELECT_USER;
-			return d.promise.then(function() {
+			var params = [];
+			return deferred.promise.then(function() {
 				return $cordovaSQLite.execute(db, query, params)
 					.then(function(res) {
 							var items = [];
@@ -840,12 +886,13 @@
 		return service;
 	}
 
-	function cordovaSQLitePorter($q, $window) {
-
-		var cdv = $window.cordova;
-		var plugins = cdv.plugins;
-		var sqlitePorter = plugins.sqlitePorter;
-
+	function cordovaSQLitePorter($ionicPlatform, $q, $window) {
+		var cdv, plugins, sqlitePorter;
+		$ionicPlatform.ready(function() {
+			cdv = $window.cordova;
+			plugins = cdv.plugins;
+			sqlitePorter = plugins.sqlitePorter;
+		});
 		function checkDB(db) {
 			if(isObj(db) && db.transaction) {
 				return true;
