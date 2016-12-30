@@ -1,12 +1,18 @@
 <ion-popover-view id="PopupMenu004" class="category-menu-popup fit">
-	<ion-content class="menucontent">
-		<ion-list class="menulist">
-			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
-				<button class="button button-full button-icon icon ion-android-document" ng-click="activity.createReport()">{{"str_generate_pdf" | translate}}</button>
-			</ion-item>
-			<ion-item class="ionic-item-icon-left popup-menu-item">
-			<button class="button button-full button-icon icon ion-close" ng-click="activity.closeActivityLog()">{{"close_button" | translate}}</button>
-			</ion-item>
-		</ion-list>
+	<ion-content class="menucontent" scroll="false">
+		<!-- <ion-list class="menulist"> -->
+			<!-- <ion-item class="ionic-item-icon-left popup-menu-item notbottom"> -->
+			<button class="button button-block reports-popup-menu-button" ng-click="activity.createReport()">
+				<i class="icon ion-android-document"></i> <span class="popup-menu-text">{{"str_generate_pdf" | translate}}</span>
+			</button>
+				<!-- <button class="button button-block button-icon icon ion-android-document" ng-click="activity.createReport()">{{"str_generate_pdf" | translate}}</button> -->
+			<!-- </ion-item> -->
+			<!-- <ion-item class="ionic-item-icon-left popup-menu-item"> -->
+			<!-- <button class="button button-block button-icon icon ion-close" ng-click="activity.closeActivityLog()">{{"close_button" | translate}}</button> -->
+			<button class="button button-block reports-popup-menu-button" ng-click="activity.closeActivityLog()">
+				<i class="icon ion-close"></i> <span class="popup-menu-text">{{"close_button" | translate}}</span>
+			</button>
+			<!-- </ion-item> -->
+		<!-- </ion-list> -->
 	</ion-content>
 </ion-popover-view>

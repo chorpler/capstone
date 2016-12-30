@@ -504,70 +504,91 @@ ion-popover-view .cash-popover {
 */
 
 .category-menu-popup {
-	display: flex;
-	/* height: 106px !important; */
-	/* width: 250px !important; */
-	/* top: 75px !important; */
+	display: flex !important;
 	right: 0px !important;
-	/* border: thin solid black; */
-	text-align: right !important;
+	left: auto !important;
+	/* text-align: right !important; */
 	margin-left: auto !important;
-	z-index: 10000;
+	padding: 1px !important;
+	/* z-index: 10000; */
+	flex: 1 0 auto !important;
+	background-color: gainsboro;
 }
 
 .category-menu-popup .menucontent {
-	display: flex;
-	flex: 1;
+	display: flex !important;
+	flex: 1 0 auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	background-color: gainsboro;
 }
 
-.category-menu-popup .menucontent .scroll {
-	display: flex;
-	flex: 1;
+.category-menu-popup .menucontent, .category-menu-popup .menucontent .scroll {
+	display: flex !important;
+	flex: 1 1 auto !important;
+	flex-direction: column !important;
+	flex-wrap: nowrap !important;
+	justify-content: flex-start !important;
+	align-items: flex-start !important;
+	align-content: center !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	width: 100% !important;
+	background-color: gainsboro;
+	/* width: auto !important; */
 }
 
+.settings-menu-button {
+	
+}
+
+.category-menu-popup .menucontent button, .category-menu-popup .menucontent .scroll button {
+	flex: 1 1 auto !important;
+	/* height: 40px !important; */
+	margin: 0px 0px 0px 0px !important;
+	padding: 0 !important;
+	text-align: left !important;
+	min-width: 150px !important;
+}
 .button-generate-pdf-text {
-	font-size: 1em;
-	font-weight: normal;
+	font-size: 1em !important;
+	font-weight: normal !important;
 }
 
 .menucontent {
-	width: 120px;
-	padding: 2px;
+	padding: 2px !important;
 }
 
 .menulist {
-	/* border: thin solid black; */
-	width: 100%;
+	width: 100% !important;
 }
 
 .menulist .list {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	justify-content: flex-start;
-	align-items: flex-start;
-	align-content: center;
+	flex: 1 !important;
+	display: flex !important;
+	flex-direction: column !important;
+	flex-wrap: nowrap !important;
+	justify-content: flex-start !important;
+	align-items: flex-start !important;
+	align-content: center !important;
 	padding: 0 !important;
-	width: 100%;
+	width: 100% !important;
 }
 
 .menulist .item {
-	/* border: 1px solid black !important; */
 }
 
 .popup-menu-item {
- 	flex: 1 1 auto;
-	height: 50px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding: 2px;
-	text-align: left;
+ 	flex: 1 1 auto !important;
+	height: 50px !important;
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+	padding: 2px !important;
+	text-align: left !important;
 	font-size: 21px !important;
-	font-weight: normal;
+	font-weight: normal !important;
 	vertical-align: middle !important;
-	width: 100%;
-	/* border: thin solid black !important; */
+	width: 100% !important;
 }
 
 .popup-menu-item.notbottom {
@@ -598,22 +619,22 @@ ion-popover-view .cash-popover {
 	text-align: center;
 }
  */
-ion-popover-view.fit {
-  height: auto !important;
-}
 
-ion-popover-view.fit ion-content {
-  position: relative !important;
+
+/*ion-popover-view.fit ion-content {
+	position: relative !important;
 }
 
 .platform-android ion-popover-view.fit {
-  margin-top: 10px !important;
+	margin-top: 10px !important;
 }
+*/
 
 .popup-menu-item button {
-	flex: 1;
+	flex: 1 !important;
 	height: 40px !important;
 	margin: 0 !important;
+	text-align: left !important;
 }
 
 .download-progress-card {
@@ -647,3 +668,29 @@ ion-popover-view.fit ion-content {
 	width: 100%;
 	margin: 5px 0px;
 }
+
+ion-popover-view.fit {
+	width: auto !important;
+	height: auto !important;
+}
+
+ion-popover-view.fit ion-content {
+	position: relative;
+}
+
+.platform-android ion-popover-view.fit {
+	margin-top: 5px;
+}
+
+.platform-ios ion-popover-view.fit .item:first-child {
+	border-top-radius: 5px;
+}
+
+.platform-ios ion-popover-view.fit .item:last-child {
+	border-top-radius: 5px;
+}
+
+ion-popover-view.fit {
+	height: auto !important;
+}
+

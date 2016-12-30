@@ -1,6 +1,6 @@
 <ion-popover-view id="PopupMenu006" class="category-menu-popup fit">
-	<ion-content class="menucontent">
-		<ion-list class="menulist">
+	<ion-content class="menucontent" scroll="false">
+<!-- 		<ion-list class="menulist">
 			<ion-item class="ionic-item-icon-left popup-menu-item notbottom">
 				<button class="button button-full button-icon icon ion-android-document" ng-click="saleslog.createReport()">{{"str_generate_pdf" | translate}}</button>
 			</ion-item>
@@ -8,5 +8,14 @@
 			<button class="button button-full button-icon icon ion-close" ng-click="saleslog.closeSalesLog()">{{"close_button" | translate}}</button>
 			</ion-item>
 		</ion-list>
+ -->
+			<button class="button button-block reports-popup-menu-button" ng-click="saleslog.createReport()">
+				<i class="icon ion-android-document"></i> <span class="popup-menu-text">{{"str_generate_pdf" | translate}}</span>
+			</button>
+
+			<button class="button button-block reports-popup-menu-button" ng-click="saleslog.closeSalesLog()">
+				<i class="icon ion-close"></i> <span class="popup-menu-text">{{"close_button" | translate}}</span>
+			</button>
+
 	</ion-content>
 </ion-popover-view>
