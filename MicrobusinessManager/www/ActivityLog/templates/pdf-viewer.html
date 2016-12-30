@@ -4,6 +4,6 @@
 		<button class="button button-icon icon ion-more menu-button-pdf-viewer-activity-log" ng-click="activity.openPDFPopupMenu($event)"></button>
 	</ion-header-bar>
 	<ion-content>
-		<ng-pdf ng-if="pdfUrl" template-url="ActivityLog/templates/viewer.html" canvasid="pdf-canvas" scale="page-fit"></ng-pdf>
+		<ng-pdf ng-if="activity.pdfUrl" template-url="ActivityLog/templates/viewer.html" canvasid="pdf-canvas" scale="page-fit"></ng-pdf>
 	</ion-content>
 </ion-modal-view>

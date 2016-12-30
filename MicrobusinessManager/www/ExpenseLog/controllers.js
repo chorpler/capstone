@@ -3,7 +3,7 @@
 	// .controller('ExpenseLogController', ['ELpdfService', ExpenseLogController]);
 	.controller('ExpenseLogController', ExpenseLogController);
 
-	function ExpenseLogController (ELpdfService, Database, timeFrame, startDate, endDate, languages, formats, CashBalance, $scope, $rootScope, $ionicModal, $ionicPopup, $filter, $ionicPopover, $q, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, IonicFiles) {
+	function ExpenseLogController (ELpdfService, Database, timeFrame, startDate, endDate, languages, formats, CashBalance, $state, $scope, $rootScope, $ionicModal, $ionicPopup, $filter, $ionicPopover, $q, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, IonicFiles) {
 		var vm = this;
 
 		var win = window;
@@ -492,7 +492,8 @@
 			Log.l("EL: Now running createReport(). reformattedList is:\n%s",JSON.stringify(vm.reformattedList, false, 2));
 			vm.popupMenu.hide();
 			createPDFModal(vm.scopes.expenselog).then(function(res) {
-				vm.pdfModal.show();
+				return vm.pdfModal.show();
+			}).then(function(res) {
 				return vm.createExpenseLogPdf(vm.reformattedList, vm.user, vm.reportData);
 			}).then(function(pdf) {
 				Log.l("EL: Now in function after createExpenseLogPdf()...")
@@ -501,7 +502,6 @@
 				win.pdfblob = blob;
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
-				vm.vmScope.pdfUrl = vm.pdfFileURL;
 				return $cordovaFile.writeFile(fileDirectory, "ExpenseLog.pdf", blob, true);
 			}).then(function(res) {
 				Log.l("EL: Success creating PDF file!");
@@ -515,6 +515,8 @@
 				vm.pdfDataFileURL = res;
 				win.pdfLocalFileURL = res;
 				win.pdfDataFileURL = res;
+				vm.scopes.expenselog.pdfUrl = vm.pdfFileURL;
+				vm.pdfUrl = vm.pdfFileURL;
 				Log.l("Done generating PDF and creating local URL for PDF.");
 			}).catch(function(err) {
 				Log.l("EL: Failed creating PDF file!");

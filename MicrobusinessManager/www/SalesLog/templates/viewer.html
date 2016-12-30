@@ -1,1 +1,10 @@
 <canvas ng-show="pdfLoaded == true" id="pdf" class="rotate0"></canvas>
+<ion-footer-bar>
+	<div class="buttons">
+		<button class="button button-icon icon ion-arrow-left-b" ng-click="goPrevious()"></button>
+	</div>
+	<div class="title center"><span>{{"str_page" | translate}}: {{pageNum}} / {{pageCount}}</span></div>
+	<div class="buttons">
+		<button class="button button-icon icon ion-arrow-right-b" ng-click="goNext()"></button>
+	</div>
+</ion-footer-bar>

@@ -5,6 +5,6 @@
 	</ion-header-bar>
 	<ion-content>
 		<!-- <h1 class="alert" ng-show="!(pdfLoaded == true)">{{loadingVar}}</h1> -->
-		<ng-pdf ng-if="pdfUrl" template-url="ExpenseLog/templates/viewer.html" canvasid="pdf-canvas" scale="page-fit"></ng-pdf>
+		<ng-pdf ng-if="expenselog.pdfUrl" template-url="ExpenseLog/templates/viewer.html" canvasid="pdf-canvas" scale="page-fit"></ng-pdf>
 	</ion-content>
 </ion-modal-view>

@@ -8,10 +8,10 @@
 			Log.l("Now in createSalesLogPdf() ...");
 			return $q(function(resolve, reject) {
 				Log.l("AL: Now in pdfService.createPdf() ... report and user are:");
-				// Log.l(JSON.stringify(report));
-				// Log.l(JSON.stringify(user));
+				Log.l(JSON.stringify(report));
+				Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
-				// Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, false, 2));
+				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd));
 				var pdf = pdfMake.createPdf(dd);
 
 				pdf.getBase64(function(output) {
@@ -102,7 +102,7 @@
 		var strTotalPriceHeader = afilter('translate')("str_total_price");
 		var strGrandTotalHeader = afilter('translate')("str_grand_total");
 		var strNoSales = "(" + afilter('translate')("str_time_period_no_sales") + ")";
-		var noProductsInSale = "(" + afilter('translate')("str_no_products_in_sale") + ")";
+		var strNoProductsInSale = "(" + afilter('translate')("str_no_products_in_sale") + ")";
 
 		var outsideBorderOnly = {
 			"hLineWidth": function(i, node) {
@@ -152,7 +152,8 @@
 				var saleDate = moment(sale.date);
 				var saleNumber = sale.id;
 				var strSaleTotalAmount = afilter('currency')(grandtotal);
-				var strSaleTotal = afilter('translate')("str_sale_total") + ": " + strSaleTotalAmount;
+				// var strSaleTotal = afilter('translate')("str_sale_total") + ": " + strSaleTotalAmount;
+				var strSaleTotal = afilter('translate')("str_total") + ": " + strSaleTotalAmount;
 				var strSaleDate = saleDate.format(dateFormat);
 				var strSaleID = afilter('translate')("str_sale") + " #" + saleNumber;
 				var products = sale.products;
@@ -196,7 +197,7 @@
 				win.singleSaleTable = singleSaleTable;
 				if(!products.length) {
 					var col1 = [{"text": strNoProductsInSale, "colSpan": 4, "style": "noProductsInSale"}];
-					singleSaleTable.body.push(oneProductRow);
+					singleSaleTable.body.push(col1);
 				} else {
 					for(var idx2 in products) {
 						var oneProductRow = [];
@@ -250,7 +251,7 @@
 				"margin": [ 0, 0, 0, 10 ]
 			},
 			"outerHeader": {
-				"fontSize": 16,
+				"fontSize": 15,
 				"bold": true,
 				"fillColor": "lightgrey",
 				"margin": [ 2, 2, 2, 2 ]

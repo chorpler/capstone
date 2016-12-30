@@ -213,7 +213,7 @@
 			}
 		};
 
-		var strNoTransactions = "(" + afilter('translate')("str_time_period_no_transactions");
+		var strNoTransactions = "(" + afilter('translate')("str_time_period_no_transactions") + ")";
 
 		if(transactions == null) {
 			Log.l("transactions is null, setting bodyItems to 'no transactions'");

@@ -3,8 +3,6 @@
 	angular.module('app.activitylog')
 	.controller('ActivityLogController', ActivityLogController);
 
-	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
-	// function ActivityLogController ($filter, $ionicPopover, $scope, $state, $q, $ionicHistory, $ionicModal, $cordovaFile, $cordovaFileOpener2, IonicNative, $persist, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, $q) {
 	function ActivityLogController ($filter, $ionicPopover, $log, $scope, $rootScope, $state, $q, $ionicHistory, $ionicModal, $ionicPopup, $cordovaFile, $cordovaFileOpener2, $persist, IonicFiles, ALpdfService, timeFrame, startDate, endDate, startingCash, expenses, sales, cashInfusions, Database, formats) {
 		var vm = this;
 
@@ -412,7 +410,8 @@
 			Log.l("AL: Now running createReport()...");
 			vm.popupMenu.hide();
 			createPDFModal(vm.scopes.activitylog).then(function(res) {
-				vm.pdfModal.show();
+				return vm.pdfModal.show();
+			}).then(function(res) {
 				return vm.createActivityLogPdf(vm.incomeStatement, vm.user, vm.reportData);
 			}).then(function(pdf) {
 				Log.l("AL: Now in function after createActivityLogPdf()...")
@@ -421,7 +420,6 @@
 				win.pdfblob = blob;
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
-				vm.vmScope.pdfUrl = vm.pdfFileURL;
 				return $cordovaFile.writeFile(fileDirectory, "ActivityLog.pdf", blob, true);
 			}).then(function(res) {
 				Log.l("AL: Success creating PDF file!");
@@ -435,6 +433,8 @@
 				vm.pdfDataFileURL = res;
 				win.pdfLocalFileURL = res;
 				win.pdfDataFileURL = res;
+				vm.scopes.activitylog.pdfUrl = vm.pdfFileURL;
+				vm.pdfUrl = vm.pdfFileURL;
 				Log.l("Done generating PDF and creating local URL for PDF.");
 			}).catch(function(err) {
 				Log.l("AL: Failed creating PDF file!");

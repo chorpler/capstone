@@ -2,7 +2,7 @@
 	angular.module('app.saleslog')
 	.controller('SalesLogController', SalesLogController);
 
-	function SalesLogController (SLpdfService, Database, timeFrame, startDate, endDate, languages, formats, $filter, $ionicPopover, $q, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, $scope, $rootScope, $ionicModal, $ionicPopup, $ionicLoading, $timeout, IonicFiles) {
+	function SalesLogController (SLpdfService, Database, timeFrame, startDate, endDate, languages, formats, $state, $filter, $ionicPopover, $q, $cordovaFile, $cordovaFileOpener2, $cordovaEmailComposer, $persist, $scope, $rootScope, $ionicModal, $ionicPopup, $ionicLoading, $timeout, IonicFiles) {
 		var vm = this;
 		var win = window;
 		win.vm = vm;
@@ -437,7 +437,9 @@
 			Log.l("SL: Now running createReport(). reformattedList is:\n%s",JSON.stringify(vm.reformattedList, false, 2));
 			vm.popupMenu.hide();
 			createPDFModal(vm.scopes.saleslog).then(function(res) {
-				vm.pdfModal.show();
+				return vm.pdfModal.show();
+			}).then(function(res) {
+				// vm.pdfModal.show();
 				return vm.createSalesLogPdf(vm.sales, vm.user, vm.reportData);
 			}).then(function(pdf) {
 				Log.l("SL: Now in function after createSalesLogPdf()...")
@@ -446,7 +448,6 @@
 				win.pdfblob = blob;
 				vm.pdfFileURL = URL.createObjectURL(blob);
 				win.pdfFileURL = vm.pdfFileURL;
-				vm.vmScope.pdfUrl = vm.pdfFileURL;
 				return $cordovaFile.writeFile(fileDirectory, "IncomeStatement.pdf", blob, true);
 			}).then(function(res) {
 				Log.l("SL: Success creating PDF file!");
@@ -460,6 +461,8 @@
 				vm.pdfDataFileURL = res;
 				win.pdfLocalFileURL = res;
 				win.pdfDataFileURL = res;
+				vm.scopes.saleslog.pdfUrl = vm.pdfFileURL;
+				vm.pdfUrl = vm.pdfFileURL;
 				Log.l("Done generating PDF and creating local URL for PDF.");
 			}).catch(function(err) {
 				Log.l("SL: Failed creating PDF file!");

@@ -11,7 +11,7 @@
 				// Log.l(JSON.stringify(report));
 				// Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
-				// Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, false, 2));
+				Log.l("PDF Design Document looks like:\n%s\n", JSON.stringify(dd, null, 1));
 				var pdf = pdfMake.createPdf(dd);
 
 				pdf.getBase64(function(output) {
