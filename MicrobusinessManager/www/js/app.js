@@ -316,7 +316,7 @@
 				Database.getFormats().then(function(res) {
 					var formats = res;
 					window.formats = formats;
-					window.dateFormat = formats.dateFormat || "DDD M, YYYY";
+					window.dateFormat = formats.dateFormat || "MMM D, YYYY";
 				});
 			});
 
