@@ -313,6 +313,11 @@
 					$translate.use(selectedLanguage.type);
 					Database.update(languageTable, selectedLanguage.id, [selectedLanguage.type]);
 				}
+				Database.getFormats().then(function(res) {
+					var formats = res;
+					window.formats = formats;
+					window.dateFormat = formats.dateFormat || "DDD M, YYYY";
+				});
 			});
 
 			if (window.cordova && window.cordova.plugins.Keyboard) {

@@ -17,7 +17,8 @@
 				var select = $element.find('select');
 				select.bind('blur', function() {
 					if(cordova && cordova.plugins && cordova.plugins.Keyboard) {
-						cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+						// cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+						cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 					}
 				});
 			}

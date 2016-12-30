@@ -310,8 +310,8 @@
 				vm.show = false;
 				vm.activeItem = null;
 				if(cordova && cordova.plugins && cordova.plugins.Keyboard) {
-					Log.l("Product.cancel(): Keyboard plugin exists, hiding it...");
-					cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+					// Log.l("Product.cancel(): Keyboard plugin exists, hiding it...");
+					cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 				}
 			}
 

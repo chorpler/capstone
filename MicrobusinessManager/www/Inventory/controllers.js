@@ -174,7 +174,8 @@
 				vm.activeItem = null;
 				vm.pick = '';
 				vm.show = false;
-				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+				// cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 			}
 
 			vm.editModal.remove();
