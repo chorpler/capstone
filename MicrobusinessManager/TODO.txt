@@ -19,3 +19,5 @@ NEW FEATURES
 Lamoni iPhone:
 Lamonito
 10.0.2 (14A456)
+UDID: 31884e4c8ba755eabc26fe36f8b4a1f0cf50dffa
+ECID: 190CA438F3E026
