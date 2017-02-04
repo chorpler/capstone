@@ -1,0 +1,5 @@
+keytool -genkey -v -keystore interweave-mbs-release-key.keystore -alias interweave-mbs -keyalg RSA -keysize 2048 -validity 10000
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore interweave-mbs-release-key.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk interweave-mbs
+zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk MBS1.apk
+
+MBS4androidK3y50%
