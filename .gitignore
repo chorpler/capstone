@@ -10,3 +10,4 @@ MicrobusinessManager/resources/
 my-release-key.keystore
 *.keystore
 MicrobusinessManager/.gitignore
+MBS1.apk
