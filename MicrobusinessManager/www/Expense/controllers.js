@@ -79,7 +79,8 @@
 		function save(item, form, $event) {
 			Log.l("Expense: Now in save() ...");
 			$event.stopPropagation();
-			var dateField = $('#expensesDateInput');
+			// var dateField = $('#expensesDateInput');
+			var dateField = document.querySelector('#expensesDateInput');
 			dateField.blur();
 			if (form && form.$invalid) {
 				Log.l("Expense.save(): Form invalid!");
