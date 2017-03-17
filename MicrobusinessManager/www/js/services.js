@@ -556,8 +556,8 @@
 			var groupByName = ' name ';
 			var queryAnd = ' AND ' ;
 			var queryExcludeSalesWithProducts = " NOT EXISTS ( SELECT 1 FROM saleproduct sp WHERE sp.saleid = s.id ) ";
-			Log.l("queryProductlessSales is:");
-			Log.l(queryProductlessSales);
+			// Log.l("queryProductlessSales is:");
+			// Log.l(queryProductlessSales);
 			querySales += ((startDate || endDate) ?
 				WHERE +
 				(startDate != null ? 'date >= ? ' +
@@ -572,8 +572,8 @@
 					(endDate != null ? 'date <= ?' : '')
 				) : '');
 
-			Log.l("queryProductlessSales is now:");
-			Log.l(queryProductlessSales);
+			// Log.l("queryProductlessSales is now:");
+			// Log.l(queryProductlessSales);
 
 			queryCash = queryCash + ((startDate || endDate) ?
 				WHERE +
@@ -592,8 +592,8 @@
 			var queryIncomeItems = querySales + queryGroupBy + groupByName + queryUnion + queryCash + queryGroupBy + groupByName;
 			var queryExpenseItems = queryExpenses + queryGroupBy + groupBy;
 			var queryProductlessSalesItems = queryProductlessSales + queryAnd + queryExcludeSalesWithProducts;
-			Log.l("queryProductlessSalesItems is:");
-			Log.l(queryProductlessSalesItems);
+			// Log.l("queryProductlessSalesItems is:");
+			// Log.l(queryProductlessSalesItems);
 			var paramsIncome = [];
 			var paramsExpense = [];
 			// var paramsProductlessSales = [];
@@ -614,7 +614,7 @@
 			Log.l(queryIncomeItems);
 			Log.l(paramsIncome);
 			Log.l("generateIncomeStatement(): pushing productlessSales query and params:");
-			Log.l(queryProductlessSales);
+			Log.l(queryProductlessSalesItems);
 			Log.l(paramsIncome);
 			Log.l("generateIncomeStatement(): pushing expense query and params:");
 			Log.l(queryExpenseItems);
@@ -629,7 +629,7 @@
 					console.log(err);
 				}));
 
-				promises.push($cordovaSQLite.execute(db, queryProductlessSales, paramsIncome).then(function(response) {
+				promises.push($cordovaSQLite.execute(db, queryProductlessSalesItems, paramsIncome).then(function(response) {
 					for (var i = response.rows.length - 1; i >= 0; i--) {
 						incomeStatement.incomeItems.push(response.rows.item(i));
 					}
