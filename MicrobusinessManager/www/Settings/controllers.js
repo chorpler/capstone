@@ -2,7 +2,7 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $rootScope, $q, $log, $ionicModal, $filter, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user, formats, $cordovaFile, $cordovaFileTransfer, $timeout, $ionicPopover, $ionicPopup, $persist, $cordovaSQLitePorter) {
+	function SettingsController ($scope, $rootScope, $q, $log, $ionicModal, $filter, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user, formats, $cordovaFile, $cordovaFileTransfer, $timeout, $ionicPopover, $ionicPopup, $persist, $cordovaSQLitePorter, AppVersion) {
 		var vm = this;
 
 		var win = window;
@@ -87,6 +87,7 @@
 		vm.wipeLocalDatabase = wipeLocalDatabase;
 		vm.saveExportSpreadsheet = saveExportSpreadsheet;
 		vm.notImplemented = notImplemented;
+		vm.AppVersion = AppVersion;
 		// vm.showPopupYesNo = showPopupYesNo;
 		vm.downloadModal = null;
 		vm.exportModal = null;
