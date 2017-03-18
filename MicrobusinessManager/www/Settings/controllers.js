@@ -2,7 +2,7 @@
 	angular.module('app.settings')
 	.controller('SettingsController', SettingsController);
 
-	function SettingsController ($scope, $rootScope, $q, $log, $ionicModal, $filter, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user, formats, $cordovaFile, $cordovaFileTransfer, $timeout, $ionicPopover, $ionicPopup, $persist, $cordovaSQLitePorter, AppVersion) {
+	function SettingsController ($scope, $rootScope, $q, $log, $ionicModal, $filter, $http, Database, salary, $translate, languages, tmhDynamicLocale, tax, user, formats, $cordovaFile, $cordovaFileTransfer, $timeout, $ionicPopover, $ionicPopup, $persist, $cordovaSQLitePorter) {
 		var vm = this;
 
 		var win = window;
@@ -87,7 +87,9 @@
 		vm.wipeLocalDatabase = wipeLocalDatabase;
 		vm.saveExportSpreadsheet = saveExportSpreadsheet;
 		vm.notImplemented = notImplemented;
-		vm.AppVersion = AppVersion;
+		vm.AppVersion = IonicNative.AppVersion;
+		vm.getAppName = getAppName;
+		// vm.getAppVersion = getAppVersion;
 		// vm.showPopupYesNo = showPopupYesNo;
 		vm.downloadModal = null;
 		vm.exportModal = null;
@@ -150,6 +152,9 @@
 			vm.DB = Database.getDB();vm
 			win.DB1 = vm.DB;
 			vm.createPopupMenu(vm.scopes.settings).then(function(res) {
+				Log.l("Settings: now getting App Name and Version...");
+				return vm.getAppName();
+			}).then(function(res) {
 				Log.l("Settings: Init() finished!");
 			});
 			// vm.createPopupMenu($scope).then(function(res) {
@@ -1125,6 +1130,22 @@
 					vm.userRegistration.error = response.data.error;
 				}
 			);
+		}
+
+		function getAppName() {
+			var AV = vm.AppVersion;
+			vm.AppData = {name: "", version: ""};
+			return AV.getAppName().then(function(res) {
+				vm.AppData.name = res;
+				Log.l("Settings: got App Name of: %s", vm.AppData.name);
+				return AV.getVersionNumber();
+			}).then(function(res) {
+				vm.AppData.version = res;
+				Log.l("Settings: got App Version of: %s", vm.AppData.version);
+			}).catch(function(err) {
+				Log.l("Settings: error getting app name and/or version!");
+				Log.l(err);
+			});
 		}
 
 		init();
