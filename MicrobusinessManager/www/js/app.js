@@ -246,7 +246,12 @@
 		"str_no_products_in_sale": ["This sale had no products", "Esta venta no tiene productos", "Esta venda não tem produtos", "Cette vente n'a pas de produits"],
 		"str_total": ["Total", "Total", "Total", "Total"],
 		"str_page": ["Page", "Página", "Página", "Page"],
-		"str_currency_icon": ["ion-social-usd", "ion-social-usd", "ion-social-usd", "ion-social-usd"]
+		"str_currency_icon": ["ion-social-usd", "ion-social-usd", "ion-social-usd", "ion-social-usd"],
+		"str_taxable": ["Taxable", "Imponible", "Tributável", "Imposable"],
+		"str_debug_mode": ["Debug", "Depurar", "Depurar", "Déboguer"],
+		"str_debug_title": ["Debug Mode", "Modo de Depuración", "Modo de Depuração", "Mode Débogage"],
+		"str_debug_text": ["This mode is for developers to use to debug the app. Please enter the code to enable debugging mode.", "Este modo es para que los desarrolladores lo utilicen para depurar la aplicación. Introduzca el código para habilitar el modo de depuración.", "Este modo é para que os desenvolvedores usem para depurar o aplicativo. Introduza o código para activar o modo de depuração.", "Ce mode permet aux développeurs d'utiliser pour déboguer l'application. Veuillez entrer le code pour activer le mode de débogage."],
+		"str_debug_mode_disabled": ["Debug mode disabled", "Modo de depuración desactivado", "Modo de depuração desativado", "Mode de débogage désactivé"]
 	};
 
 	function getStringSet(strings, index) {

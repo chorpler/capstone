@@ -3,3 +3,10 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore interweave-mbs-
 zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk InterweaveSolutionsMBS.apk
 
 MBS4androidK3y50%
+
+
+ionic build android --release & jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore interweave-mbs-release-key.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk interweave-mbs & ren InterweaveSolutionsMBS.apk old001_InterweaveSolutionsMBS.apk & zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk InterweaveSolutionsMBS.apk
+
+
+ionic platform update android@6.1.0
+

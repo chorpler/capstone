@@ -2,9 +2,12 @@
 	angular.module('app.inventory')
 	.controller('InventoryController', InventoryController);
 
-	function InventoryController ($scope, $ionicModal, $q, $ionicPopup, Database, inventoryItems, languages, categories, $ionicPopover, CashBalance) {
+	function InventoryController ($scope, $rootScope, $ionicModal, $q, $ionicPopup, Database, inventoryItems, languages, categories, $ionicPopover, CashBalance) {
 
 		var vm = this;
+		vm.scopes = vm.scopes || {};
+		vm.scopes.inventory = $scope;
+		var rs = $rootScope;
 
 		vm.categories = categories;
 		vm.items = inventoryItems;
@@ -193,8 +196,9 @@
 			vm.activeItem.date = new Date();
 			tempItem = {};
 			getCategories();
-			showEditModal(vm.scopes.product);
+			showEditModal(vm.scopes.inventory);
 		}
+		
 		function clearProduct () {
 			vm.activeItem.category = '';
 			vm.activeItem.price = null;

@@ -121,8 +121,9 @@
 			<p>Oscar Villordo</p>
 			<p>Amy Sargeant Limón</p>
 		</div>
-		<div class="item item-divider center" ng-if="settings.AppData && settings.AppData.name != ''">
+		<div class="item item-divider center" ng-if="settings.AppData && settings.AppData.name != ''" ng-click="settings.checkDebugMode()">
 			<span class="name-container">{{settings.AppData.name}} v{{settings.AppData.version}}</span>
+			<span class="name-container" ng-if="settings.debugData && settings.debugData.debugMode">({{"str_debug_title" | translate}})</span>
 		</div>
 			<!-- <button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.login()">
 				{{"login_button" | translate}}
@@ -130,7 +131,7 @@
 			<button class="button button-block button-positive" ng-hide="settings.userAccount.token" ng-click="settings.register()">
 				{{"register_button" | translate}}
 			</button> -->
-		</div>
+		<!-- </div> -->
 
 		<!-- <div class="card" ng-show="settings.userAccount.token"> -->
 			<!-- <ion-list>

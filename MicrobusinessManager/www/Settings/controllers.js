@@ -87,9 +87,12 @@
 		vm.wipeLocalDatabase = wipeLocalDatabase;
 		vm.saveExportSpreadsheet = saveExportSpreadsheet;
 		vm.notImplemented = notImplemented;
+		vm.debugMode = debugMode;
+		vm.checkDebugMode = checkDebugMode;
+		vm.debugData = {debugMode: false, debugCode: 0};
 		vm.AppVersion = IonicNative.AppVersion;
 		vm.getAppName = getAppName;
-		// vm.getAppVersion = getAppVersion;
+		vm.debugCheck = {timers: [], clicks:0};
 		// vm.showPopupYesNo = showPopupYesNo;
 		vm.downloadModal = null;
 		vm.exportModal = null;
@@ -149,7 +152,7 @@
 			// vm.downloadFile.fileurl = "https://docs.google.com/spreadsheets/d/17SAlhDDJXnb60X6xZwKx7BGiaoVsnl6uEtqNCJo_Mv4/pub?output=xlsx";
 			vm.downloadFile.fileurl = "https://docs.google.com/spreadsheets/d/11KQKk92RJFsi7N7EC6pzXtxwEXhXWhrxaIaoyrhri6U/pub?output=xlsx";
 
-			vm.DB = Database.getDB();vm
+			vm.DB = Database.getDB();
 			win.DB1 = vm.DB;
 			vm.createPopupMenu(vm.scopes.settings).then(function(res) {
 				Log.l("Settings: now getting App Name and Version...");
@@ -169,6 +172,70 @@
 			var title = $filter('translate')("str_error");
 			var text = $filter('translate')("str_not_implemented");
 			rs.code.showPopupAlert(title, text);
+		}
+
+		function checkDebugMode() {
+			if(vm.debugCheck.timers.length > 2) {
+				// vm.debugCheck.clicks = 0;
+				while(vm.debugCheck.timers.length > 0) {
+					$timeout.cancel(vm.debugCheck.timers.pop());
+				}
+				vm.debugCheck.clicks = 0;
+				Log.l("checkDebugMode(): Debug mode startup initiated...");
+				debugMode();
+			} else {
+				Log.l("checkDebugMode(): Waiting for further clicks to start debug mode check...");
+				vm.debugCheck.timers.push($timeout(function() {
+					vm.debugCheck.clicks++;
+					Log.l("checkDebugMode(): Debug mode startup canceled.");
+				}, 500));
+			}
+		}
+
+		function debugMode() {
+			var title = $filter('translate')("str_debug_title");
+			var text = $filter('translate')("str_debug_text");
+			var strCancel = $filter('translate')("str_cancel");
+			var strOK = $filter('translate')("str_ok");
+			var inputTemplate = '<input id="debugCodeInput" type="number" ng-model="settings.debugData.debugCode" autofocus />';
+			vm.debugData.debugCode = null;
+			if(vm.debugData.debugMode) {
+				vm.debugData.debugMode = false;
+				vm.debugData.debugCode = null;
+				title = $filter('translate')("str_debug_mode");
+				text = $filter('translate')("str_debug_mode_disabled");
+				rs.code.showPopupAlert(title, text);
+			} else {
+				var btnTextOK = "<b>" + strOK + "</b>";
+				var debugTemplate = {
+					template: inputTemplate,
+					title: title,
+					subTitle: text,
+					scope: $scope,
+					buttons: [
+						{ text: strCancel },
+						{
+							text: btnTextOK,
+							type: 'button-positive',
+							onTap: function(e) {
+								if(!vm.debugData.debugCode) {
+									e.preventDefault();
+								} else {
+									if(vm.debugData.debugCode == 1397) {
+										vm.debugData.debugMode = true;
+									} else {
+										vm.debugData.debugMode = false;
+									}
+								}
+							}
+						}
+					]
+				};
+				var debugPopup = $ionicPopup.show(debugTemplate);
+				debugPopup.then(function(res) {
+					Log.l("Finished setting debug mode, mode is: %s", vm.debugData.debugMode);
+				});
+			}
 		}
 
 		function showLoginModal () {
@@ -935,16 +1002,22 @@
 						if(jsonImportIsGood(vm.jsonImport)) {
 							// cordova.plugins.sqlitePorter.wipeDb(vm.DB, wipeFunctions);
 							// $cordovaSQLitePorter.wipeDB(vm.DB).then(function(res) {
-							Database.wipeDatabase().then(function(res) {
+							Database.getDB().then(function(res) {
+								var sepidb = res;
+								Log.l("Database.getDB() returned sepidb:");
+								Log.l(sepidb);
+								vm.sepiPorterDB = sepidb;
+								Log.l("Now attempting database wipe...");
+								return Database.wipeDatabase();
+							}).then(function(res) {
 								Log.l("importSettings(): Successfully wiped DB.");
 								Log.l(res);
-								$cordovaSQLitePorter.importJSON(vm.DB, vm.jsonImport).then(function(res) {
-									Log.l("$cSQLP.importJSON(): Imported %d SQL statements successfully.", res);
-									$timeout(function() { $scope.$apply(); }, 100);
-								});
-							// }, function(err) {
+								return $cordovaSQLitePorter.importJSON(vm.sepiPorterDB, vm.jsonImport);
+							}).then(function(res) {
+								Log.l("$cSQLP.importJSON(): Imported %d SQL statements successfully.", res);
+								$timeout(function() { $scope.$apply(); }, 100);
 							}).catch(function(err) {
-								Log.l("importSettings(): While blanking database, error received!");
+								Log.l("importSettings(): While blanking database or importing JSON, error received!");
 								Log.l(err);
 							// }
 							// , function(prog) {

@@ -100,7 +100,7 @@
 		// var email = user.email;
 		// var phone = user.phone;
 		var organizationHeader = { "style": "organizationheader", "text": "Interweave MBS" };
-		if(user && user.length) {
+		if(user && !isEmpty(user)) {
 			var address = "";
 			if(user.street2) {
 				address = user.street1 + "\n" + user.street2 + "\n" + user.city + " " + user.state + " " + user.postal;
@@ -108,7 +108,7 @@
 				address = user.street1 + "\n" + user.city + " " + user.state + " " + user.postal;
 			}
 			delete organizationHeader.text;
-			organizationHeader.stack = [user.orgname, user.representative, address];
+			organizationHeader.stack = [user.name, user.representative, address];
 		}
 		var title = afilter('translate')("reports_expense_log") + ": " + afilter('translate')(timespan);
 		// title = titleCase(title);

@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="org.interweavesolutions.mbs1" version="0.0.17" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.interweavesolutions.mbs" version="0.0.20" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>MBS</name>
-  <description>&#xD;
-&#xD;
-&#xD;
-    Interweave Solutions MBS&#xD;
-&#xD;
-&#xD;
+  <description>
+
+
+
+
+
+    Interweave Solutions MBS
+
+
+
+
+
   </description>
-  <author email="starmobiledevelopers@gmail.com" href="https://www.interweavesolutions.org">&#xD;
-&#xD;
-&#xD;
-      David Sargeant&#xD;
-&#xD;
-&#xD;
+  <author email="starmobiledevelopers@gmail.com" href="https://www.interweavesolutions.org">
+
+
+
+
+
+      David Sargeant
+
+
+
+
+
   </author>
   <content src="index.html"/>
   <access origin="*"/>

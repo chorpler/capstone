@@ -7,7 +7,7 @@
 		function createSalesLogPdf(report, user, reportData) {
 			Log.l("Now in createSalesLogPdf() ...");
 			return $q(function(resolve, reject) {
-				Log.l("AL: Now in pdfService.createPdf() ... report and user are:");
+				Log.l("SL: Now in pdfService.createPdf() ... report and user are:");
 				Log.l(JSON.stringify(report));
 				Log.l(JSON.stringify(user));
 				var dd = createDocumentDefinition(report, user, reportData, cfilter);
@@ -74,7 +74,9 @@
 		// var email = user.email;
 		// var phone = user.phone;
 		var organizationHeader = { "style": "organizationheader", "text": "Interweave MBS" };
-		if(user && user.length) {
+		Log.l("SL: User is:");
+		Log.l(user);
+		if(user && !isEmpty(user)) {
 			var address = "";
 			if(user.street2) {
 				address = user.street1 + "\n" + user.street2 + "\n" + user.city + " " + user.state + " " + user.postal;
@@ -82,7 +84,7 @@
 				address = user.street1 + "\n" + user.city + " " + user.state + " " + user.postal;
 			}
 			delete organizationHeader.text;
-			organizationHeader.stack = [user.orgname, user.representative, address];
+			organizationHeader.stack = [user.name, user.representative, address];
 		}
 		var title = afilter('translate')("reports_sales_reports") + ": " + afilter('translate')(timespan);
 		// title = titleCase(title);
@@ -203,7 +205,8 @@
 						var oneProductRow = [];
 						var product = products[idx2];
 						var item = product.name;
-						var qty = Number(product.quantity);
+						// var qty = Number(product.quantity);
+						var qty = sprintf("%0.2f", Number(product.quantity));
 						var unitprice = Number(product.saleprice);
 						var totalitemprice = qty * unitprice;
 						var col1 = {"text": item, "style": "internalCell", "alignment": "left"};
