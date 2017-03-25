@@ -694,26 +694,26 @@
 				$cordovaSQLite.execute(db, "DROP TABLE tax");
 				$cordovaSQLite.execute(db, "DROP TABLE user");
 				$cordovaSQLite.execute(db, "DROP TABLE formats");
-				Log.l("Database.wipeDatabase(): Done dropping tables.");
-				// Log.l("Database.wipeDatabase(): Done dropping tables, now re-creating...");
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
-				// 	'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
-				// 	'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
-				// 	'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
-				// $cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
-				// Log.l("Database.wipeDatabase(): done re-creating tables!");
+				// Log.l("Database.wipeDatabase(): Done dropping tables.");
+				Log.l("Database.wipeDatabase(): Done dropping tables, now re-creating...");
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS product (id integer primary key, name text UNIQUE, price text, ' +
+					'category text, inventoryid integer, FOREIGN KEY(inventoryid) REFERENCES inventory(id))');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS inventory (id integer primary key, name text UNIQUE, quantity integer, ' +
+					'productid integer, FOREIGN KEY(productid) REFERENCES product(id))');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS expense (id integer primary key, name text, amount real, expType text, comments text, date text, type text)');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS sale (id integer primary key, amount real, date text)');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS saleproduct (id integer primary key, productid integer, saleid integer, ' +
+					'quantity integer, saleprice real, FOREIGN KEY(productid) REFERENCES product(id), FOREIGN KEY(saleid) REFERENCES sale(id))');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS salary (id integer primary key, amount real, type text)');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS languages (id integer primary key, type text)');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS cashInfusion (id integer primary key, amount real, date text)');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS tax (id integer primary key, active integer, percentage text)');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS user (id integer primary key, name text, representative text, street1 text, street2 text, city text, state text, postal text, email text, phone text)');
+				$cordovaSQLite.execute(db, 'CREATE TABLE IF NOT EXISTS formats (id integer primary key, dateformat text)');
+				Log.l("Database.wipeDatabase(): done re-creating tables!");
 			}).catch(function(err) {
-				// Log.l("Database.wipeDatabase(): error wiping and re-creating tables.");
-				Log.l("Database.wipeDatabase(): error dropping tables!");
+				Log.l("Database.wipeDatabase(): error wiping and re-creating tables.");
+				// Log.l("Database.wipeDatabase(): error dropping tables!");
 				Log.l(err);
 				win.err1 = err;
 			});
