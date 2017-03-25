@@ -51,7 +51,7 @@
 			getFormats: getFormats,
 			getUserInfo: getUserInfo
 			// ,initializeDB: initializeDB
-			// ,wipeDatabase: wipeDatabase
+			,wipeDatabase: wipeDatabase
 		};
 
 		var INSERT_PRODUCT = 'INSERT INTO product (name, price, category, inventoryid) VALUES (?,?,?,?)';
